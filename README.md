@@ -16,7 +16,7 @@ Slikoo is an Android application that aims to be the ultimate platform for culin
 
 To use Slikoo, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/your-username/slikoo.git`
+1. Clone the repository: `git clone https://github.com/KvRae/Slikoo-Android.git`
 2. Open the project in Android Studio.
 3. Build and run the project on an Android device or emulator.
 
