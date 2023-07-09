@@ -19,12 +19,16 @@ import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import slikoo.kvrae.slikoo.ui.components.Content
+import slikoo.kvrae.slikoo.ui.components.AreaFilterCard
 import slikoo.kvrae.slikoo.ui.components.RatingCard
 import slikoo.kvrae.slikoo.ui.components.RecipeCard
+import slikoo.kvrae.slikoo.ui.components.SearchBar
+import slikoo.kvrae.slikoo.ui.theme.PrimaryBlackText
 import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
 
 
@@ -38,8 +42,10 @@ fun HomeScreenPreview() {
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Column(modifier = Modifier.background(ScreenBackground)
+    Column(modifier = Modifier
+        .background(ScreenBackground)
         .fillMaxSize()) {
+        SearchBar(onSearch ={})
         OnlineRecipes()
         RecipesCategorySection()
         RatingListSection()
@@ -73,16 +79,14 @@ fun RecipesCategorySection() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .fillMaxHeight(0.6f)
+            .fillMaxHeight(0.7f)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             SectionHeader(title = "Recipes Category")
             Spacer(modifier = Modifier.padding(8.dp))
             LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
-                    items(6) {
-                        RecipeCard {
-                            Content()
-                        }
+                    items(3) {
+                            AreaFilterCard()
                     }
                 }
             )
@@ -115,7 +119,11 @@ fun SectionHeader(title: String) {
     Row(modifier = Modifier
         .padding(start = 8.dp, end = 8.dp)
         .fillMaxWidth()) {
-        Text(text = title)
+        Text(text = title,style = androidx.compose.ui.text.TextStyle(
+            color = PrimaryBlackText,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        ))
         Spacer(modifier = Modifier.weight(1f))
         if (title != "Recipes Category")
             Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription ="")
