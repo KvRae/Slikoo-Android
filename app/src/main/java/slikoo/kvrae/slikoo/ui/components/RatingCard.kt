@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -28,36 +31,56 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.DefautBlueElement
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
 fun RatingCard() {
     val rating = remember {
         mutableStateOf(3)
     }
-        Column (
+    Card(
+        modifier = Modifier.padding(8.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = 4.dp,
+        onClick = { /*TODO*/ }
+    ) {
+        Column(
             modifier = Modifier
-                .background(White)
-                ) {
+                .background(White).padding(16.dp)
+        ) {
             Row(modifier = Modifier.padding(4.dp))
             {
-                Image(painter = painterResource(id = R.drawable.avatar)
-                    , contentDescription ="avatar",
-                    modifier = Modifier.size(40.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.avatar),
+                    contentDescription = "avatar",
+                    modifier = Modifier.size(40.dp)
+                )
                 Column {
-                    Text(text = "Name", modifier = Modifier.padding(4.dp),
-                        style = TextStyle(fontSize = 10.sp))
+                    Text(
+                        text = "Name", modifier = Modifier.padding(4.dp),
+                        style = TextStyle(fontSize = 10.sp)
+                    )
                     Row {
-                        RatingBar(onRatingChanged = { rating.value = it }, currentRating = rating.value)
+                        RatingBar(
+                            onRatingChanged = { rating.value = it },
+                            currentRating = rating.value
+                        )
                         Spacer(modifier = Modifier.padding(8.dp))
-                        Text(text = "23/12/2021", modifier = Modifier.padding(4.dp),
-                            style = TextStyle(fontSize = 8.sp))
+                        Text(
+                            text = "23/12/2021", modifier = Modifier.padding(4.dp),
+                            style = TextStyle(fontSize = 8.sp)
+                        )
                     }
                 }
             }
-            Text(text = "Description",
+            Text(
+                text = "Description",
                 style = TextStyle(fontSize = 10.sp),
-                modifier = Modifier.padding(4.dp))
+                modifier = Modifier.padding(4.dp)
+            )
         }
+
+    }
 }
 
 @Composable

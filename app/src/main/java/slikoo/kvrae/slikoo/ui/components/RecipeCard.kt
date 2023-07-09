@@ -3,6 +3,7 @@ package slikoo.kvrae.slikoo.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -22,13 +23,13 @@ fun RecipeCard(
     content: @Composable () -> Unit,
     ) {
         Card(
-            modifier = modifier.padding(8.dp),
+            modifier = modifier.padding(16.dp),
             shape = RoundedCornerShape(16.dp),
             elevation = 4.dp,
             onClick = { /*TODO*/ }
         ) {
 
-            Column(modifier = Modifier.padding(1.dp)) {
+            Column(modifier = Modifier.padding(1.dp).size(100.dp)) {
                 content()
             }
         }
