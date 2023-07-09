@@ -18,16 +18,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
+import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
 
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", actionIcon: ImageVector) {
     Card(
-        modifier = Modifier.padding(16.dp),
+         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(16.dp),
         onClick = { /*TODO*/ },
         elevation = 4.dp){
@@ -44,10 +46,10 @@ fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", act
             actions = {
                 if (subtitle != "Null")
                     Button(onClick = { /*TODO*/ },
-                        modifier = Modifier.padding(4.dp)
-                        .background(color = ButtonsAndIcons,
-                            shape = RoundedCornerShape(32.dp))) {
-                        Text(text = "Voir profile")}
+                        modifier = Modifier.background(color = ButtonsAndIcons, shape = RoundedCornerShape(32.dp)
+                        )
+                    ) {
+                        Text(text = "Voir profile", style = TextStyle(color = SecondaryWhiteText))}
                 else
                     Icon(imageVector = actionIcon, contentDescription = "")
                 },

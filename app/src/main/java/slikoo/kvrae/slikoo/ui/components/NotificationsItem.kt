@@ -28,9 +28,10 @@ import slikoo.kvrae.slikoo.R
 @Composable
 fun NotificationItem(content : @Composable () -> Unit) {
     Card(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.padding(12.dp),
         shape = RoundedCornerShape(16.dp),
-        elevation = 4.dp,
+        elevation = 8.dp,
+        enabled = false,
         onClick = { /*TODO*/ }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

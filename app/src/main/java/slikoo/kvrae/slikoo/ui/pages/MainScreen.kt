@@ -52,7 +52,7 @@ fun MainScreen(navController: NavController) {
                  title.value = it})
      },
      content = {
-         Box(modifier = Modifier.padding(top = 50.dp, bottom = 50.dp)) {
+         Box(modifier = Modifier.padding(top = 70.dp, bottom = 50.dp)) {
              MainScreenNavigation(navController = menuNavController)
          }
      }
