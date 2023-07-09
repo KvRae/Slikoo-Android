@@ -21,13 +21,13 @@ val DarkError = Color(0xFFCF6679)
 
 
 // Light Theme
-val SecondaryWhiteText = Color(0xFBEAEBFF)
-val ButtonsAndIcons = Color(0xFFD0BCFF)
-val ScreenBackground = Color(0xFFE5E5E5)
-val InactiveIcons = Color(0xFFBDBDBD)
-val PrimaryBlackText = Color(0xFF000000)
+val SecondaryWhiteText = Color(0xFFFBEAEB)
+val ButtonsAndIcons = Color(0xFFDB003C)
+val ScreenBackground = Color(0xFFF8F5F5)
+val InactiveIcons = Color(0xFFF1DBE2)
+val PrimaryBlackText = Color(0xFF212121)
 val PrimaryWhiteTextsAndCards = Color(0xFFFFFFFF)
-val DefautBlueElement = Color(0xFF3F51B5)
+val DefautBlueElement = Color(0xFF16ABDB)
 val InactivDots = Color(0xFFE0E0E0)
 val DividerColor = Color(0xFFE0E0E0)
 
