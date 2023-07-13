@@ -2,7 +2,6 @@ package slikoo.kvrae.slikoo.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -96,7 +95,7 @@ fun RatingBar(
                 contentDescription = null,
                 tint = if (index < currentRating) DefautBlueElement else Color.Gray,
                 modifier = Modifier
-                    .clickable { onRatingChanged(index + 1) }
+                    //.clickable { onRatingChanged(index + 1) }
                     .size(12.dp)
             )
         }
