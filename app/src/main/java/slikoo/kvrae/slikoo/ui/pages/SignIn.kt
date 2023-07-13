@@ -17,15 +17,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,12 +38,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
 import slikoo.kvrae.slikoo.ui.theme.DividerColor
+import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
 import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
 
 
@@ -106,7 +106,7 @@ fun LoginForm(navController: NavController) {
             }
             Surface(
                 color = Color.White,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                border = BorderStroke(1.dp, ScreenBackground),
                 shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -119,31 +119,13 @@ fun LoginForm(navController: NavController) {
                         .clip(shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Text(text = "Se connecter", style = MaterialTheme.typography.headlineLarge)
+                    Text(text = "Se connecter", style = MaterialTheme.typography.h5)
                     Spacer(modifier = Modifier.height(16.dp))
-                    TextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    label = { Text("Username") },
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp)
-
-                )
+                    CustomTextField(onChange ={} , value = "" , label = "Email" )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                TextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = { Text("Password") },
-                    placeholder = { Text("Password") },
-                    visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp)
-
-                )
+                CustomTextField(onChange = {}, value = "", label = "Mot de passe")
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -155,9 +137,9 @@ fun LoginForm(navController: NavController) {
                         .fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
                         contentColor = SecondaryWhiteText,
-                        containerColor = ButtonsAndIcons
-
-                    )
+                        backgroundColor = ButtonsAndIcons
+                    ),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
                     Text("Se connecter")
                 }

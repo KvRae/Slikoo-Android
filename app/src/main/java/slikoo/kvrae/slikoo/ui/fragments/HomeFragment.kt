@@ -25,9 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.AreaFilterCard
-import slikoo.kvrae.slikoo.ui.components.Content
 import slikoo.kvrae.slikoo.ui.components.RatingCard
-import slikoo.kvrae.slikoo.ui.components.RecipeCard
+import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBar
 import slikoo.kvrae.slikoo.ui.theme.PrimaryBlackText
 import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
@@ -65,9 +64,7 @@ fun OnlineRecipes() {
             SectionHeader(title ="Online Recipes")
             LazyRow(modifier = Modifier.fillMaxWidth()) {
                 items(3) {
-                    RecipeCard {
-                        Content()
-                    }
+                        RecipeCardContent()
                 }
             }
         }
@@ -80,7 +77,7 @@ fun RecipesCategorySection() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .fillMaxHeight(0.6f)
+            .fillMaxHeight(0.5f)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             SectionHeader(title = "Recipes Category")

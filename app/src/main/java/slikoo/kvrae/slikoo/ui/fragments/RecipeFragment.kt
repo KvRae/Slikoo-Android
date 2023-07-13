@@ -12,8 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import slikoo.kvrae.slikoo.ui.components.Content
-import slikoo.kvrae.slikoo.ui.components.RecipeCard
+import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
+import slikoo.kvrae.slikoo.ui.components.SearchBarWithFilter
 
 
 @Composable
@@ -29,9 +29,10 @@ fun RecipeScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
 
         ){
+            SearchBarWithFilter({})
             LazyVerticalGrid(columns = GridCells.Fixed(2), content ={
                 items(10){
-                    RecipeCard(){ Content() }
+                    RecipeCardContent()
                 }
             })
         }
