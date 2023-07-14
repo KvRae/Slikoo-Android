@@ -52,7 +52,8 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                                     Box(
                                         contentAlignment = Alignment.Center,
                                         modifier = Modifier
-                                            .background(ButtonsAndIcons,
+                                            .background(
+                                                ButtonsAndIcons,
                                                 shape = RoundedCornerShape(12.dp)
                                             )
                                             .padding(4.dp)
@@ -68,8 +69,10 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                                 Box(
                                     contentAlignment = Alignment.Center,
                                     modifier = Modifier
-                                        .background(if (selected) Color.White else ButtonsAndIcons,
-                                            shape = RoundedCornerShape(12.dp))
+                                        .background(
+                                            if (selected) Color.White else ButtonsAndIcons,
+                                            shape = RoundedCornerShape(12.dp)
+                                        )
                                         .padding(8.dp)
 
                                 ) {

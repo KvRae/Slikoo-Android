@@ -1,27 +1,27 @@
 package slikoo.kvrae.slikoo.ui.pages
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import slikoo.kvrae.slikoo.ui.components.CustomTextField
-
+import androidx.navigation.compose.rememberNavController
+import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
+import slikoo.kvrae.slikoo.utils.SignUpNavigation
 
 @Preview
 @Composable
@@ -33,52 +33,52 @@ fun SignUpPreview() {
 
 @Composable
 fun SignUp(navController: NavController) {
+    val signUpNavController = rememberNavController()
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
-            .verticalScroll(rememberScrollState())
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = "Sign Up",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold)
-            CustomTextField(onChange = {}, value = "", label = "Nom")
+        Image(
+            painter = painterResource(id = slikoo.kvrae.slikoo.R.drawable.loginback),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
 
-            CustomTextField(onChange = {}, value = "", label = "Prenom")
+        Column {
+            SignUpHeader()
 
-            CustomTextField(onChange = {}, value = "", label = "Adresse Electronique")
+            Box(
+                modifier = Modifier
+                    .clip(shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+                    .background(color = ScreenBackground)
+                    .border(
+                        width = 1.dp,
+                        color = ScreenBackground,
+                        shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
 
-            CustomTextField(onChange = {}, value = "", label = "Numero de telephone")
-
-            CustomTextField(onChange = {}, value = "", label = "Mot de passe")
-
-            CustomTextField(onChange = {}, value = "", label = "Confirmer le mot de passe")
-
-            CustomTextField(onChange = {}, value = "", label = "Code postal")
-
-            CustomTextField(
-                onChange = {},
-                value = "",
-                label = "Description profil",
-                modifier = Modifier.fillMaxSize())
-
-            Spacer(modifier = Modifier.padding(8.dp))
-
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "S'inscrire")
+            ) {
+                SignUpNavigation(navController = signUpNavController)
             }
-            TextButton(onClick = { /*TODO*/ }) {
-                Text(text = "Se connecter")
-            }
-
-
         }
     }
 }
 
+
+@Composable
+fun SignUpHeader() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp),
+        contentAlignment = androidx.compose.ui.Alignment.Center
+
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.slikoo_white),
+            contentDescription = null,
+            modifier = Modifier.size(150.dp)
+        )
+
+    }
+}

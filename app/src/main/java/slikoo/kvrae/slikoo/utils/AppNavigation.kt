@@ -6,11 +6,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import slikoo.kvrae.slikoo.ui.fragments.EventScreen
-import slikoo.kvrae.slikoo.ui.fragments.HomeScreen
-import slikoo.kvrae.slikoo.ui.fragments.NotificationScreen
-import slikoo.kvrae.slikoo.ui.fragments.RecipeScreen
-import slikoo.kvrae.slikoo.ui.fragments.SettingsScreen
+import slikoo.kvrae.slikoo.ui.fragments.main_screen.EventScreen
+import slikoo.kvrae.slikoo.ui.fragments.main_screen.HomeScreen
+import slikoo.kvrae.slikoo.ui.fragments.main_screen.NotificationScreen
+import slikoo.kvrae.slikoo.ui.fragments.main_screen.RecipeScreen
+import slikoo.kvrae.slikoo.ui.fragments.main_screen.SettingsScreen
+import slikoo.kvrae.slikoo.ui.fragments.signup.ProfilePictureSection
+import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpCidForm
+import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpForm
 import slikoo.kvrae.slikoo.ui.pages.AnimatedSplashScreen
 import slikoo.kvrae.slikoo.ui.pages.EmailInput
 import slikoo.kvrae.slikoo.ui.pages.LoginForm
@@ -33,14 +36,6 @@ sealed class ScreenNavigator(val route: String){
     object ForgotPasswordScreen: ScreenNavigator("forgot_password_screen")
     object VerifyEmailScreen: ScreenNavigator("verify_email_screen")
     object ResetPasswordScreen: ScreenNavigator("reset_password_screen")
-}
-
-sealed class MainScreenNavigator(val route: String){
-    object HomeScreen: MainScreenNavigator("home_screen")
-    object RecipeScreen: MainScreenNavigator("recipe_screen")
-    object SettingsScreen: MainScreenNavigator("settings_screen")
-    object NotificationScreen: MainScreenNavigator("notification_screen")
-    object EventScreen: MainScreenNavigator("event_screen")
 }
 
 @Composable
@@ -88,8 +83,30 @@ fun Navigation() {
         composable(route = MainScreenNavigator.EventScreen.route) {
             EventScreen(navController = navController)
         }
+
+        // Sign Up Fragments Navigation
+        composable(route = SignUpNavigator.SignUpFormFragment.route) {
+            SignUpForm(navController = navController)
+        }
+        composable(route = SignUpNavigator.SignUpIDCFragment.route) {
+            SignUpCidForm(navController = navController)
+        }
+        composable(route = SignUpNavigator.SignUpProfilePictureFragment.route) {
+            ProfilePictureSection(navController = navController)
+        }
+
     }
 }
+
+
+sealed class MainScreenNavigator(val route: String){
+    object HomeScreen: MainScreenNavigator("home_screen")
+    object RecipeScreen: MainScreenNavigator("recipe_screen")
+    object SettingsScreen: MainScreenNavigator("settings_screen")
+    object NotificationScreen: MainScreenNavigator("notification_screen")
+    object EventScreen: MainScreenNavigator("event_screen")
+}
+
 
 @Composable
 fun MainScreenNavigation(navController: NavHostController) {
@@ -109,7 +126,31 @@ fun MainScreenNavigation(navController: NavHostController) {
         composable("Events") {
             EventScreen(navController = navController)
         }
+    }
+}
 
+
+
+
+sealed class SignUpNavigator(val route: String){
+    object SignUpFormFragment: SignUpNavigator("sign_up_form")
+    object SignUpIDCFragment: SignUpNavigator("sign_up_idc")
+    object SignUpProfilePictureFragment: SignUpNavigator("sign_up_profile_picture")
+
+}
+
+@Composable
+fun SignUpNavigation(navController: NavHostController) {
+    NavHost(navController = navController, startDestination =  SignUpNavigator.SignUpFormFragment.route){
+        composable(SignUpNavigator.SignUpFormFragment.route) {
+            SignUpForm(navController = navController)
+        }
+        composable(SignUpNavigator.SignUpIDCFragment.route) {
+            SignUpCidForm(navController = navController)
+        }
+        composable(SignUpNavigator.SignUpProfilePictureFragment.route) {
+            ProfilePictureSection(navController = navController)
+        }
     }
 }
 

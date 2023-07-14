@@ -41,8 +41,8 @@ fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", act
                 .fillMaxSize(),
             title = {
                 Column( modifier = Modifier.padding(8.dp)) {
-                    Text(text = title)
-                    if (subtitle != "Null") Text(text = subtitle)
+                    Text(text = title, style = TextStyle(color =if (subtitle != "Null") Color.White else Color.Black))
+                    if (subtitle != "Null") Text(text = subtitle, style = TextStyle(color = Color.White))
 
                 }
             },
@@ -84,7 +84,7 @@ fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", act
                     )
                 }
                 else
-                    Icon(imageVector = icon, contentDescription = "" )
+                    Icon(imageVector = icon, contentDescription = "" , tint = ButtonsAndIcons)
 
             }
         )

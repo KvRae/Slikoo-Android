@@ -37,6 +37,15 @@ fun RatingCard() {
     val rating = remember {
         mutableStateOf(3)
     }
+    val description = """
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. 
+        Sed nisi. Nulla quis sem at nibh elementum imperdiet. 
+        Duis sagittis ipsum. Praesent mauris. 
+        Fusce nec tellus sed augue semper porta. 
+        Mauris massa. Vestibulum lacinia arcu eget nulla. 
+        Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+    """.trimIndent()
     Card(
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(16.dp),
@@ -73,7 +82,7 @@ fun RatingCard() {
                 }
             }
             Text(
-                text = "Description",
+                text = if (description.length > 37) description.substring(0, 37) + "..." else description,
                 style = TextStyle(fontSize = 10.sp),
                 modifier = Modifier.padding(4.dp)
             )
