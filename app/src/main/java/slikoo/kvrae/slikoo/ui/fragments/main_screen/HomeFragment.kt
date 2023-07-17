@@ -1,24 +1,22 @@
 package slikoo.kvrae.slikoo.ui.fragments.main_screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.Icon
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.KeyboardArrowDown
-import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,7 +27,6 @@ import slikoo.kvrae.slikoo.ui.components.RatingCard
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBar
 import slikoo.kvrae.slikoo.ui.theme.PrimaryBlackText
-import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
 
 
 @Preview
@@ -42,13 +39,19 @@ fun HomeScreenPreview() {
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Column(modifier = Modifier
-        .background(ScreenBackground)
-        .fillMaxSize()) {
-        SearchBar(onSearch ={})
-        OnlineRecipes()
-        RecipesCategorySection()
-        RatingListSection()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            SearchBar(onSearch = {})
+            OnlineRecipes()
+            RecipesCategorySection()
+            RatingListSection()
+        }
     }
 }
 
@@ -77,13 +80,15 @@ fun RecipesCategorySection() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .fillMaxHeight(0.5f)
+            .height((230 * 5).dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             SectionHeader(title = "Recipes Category")
             Spacer(modifier = Modifier.padding(8.dp))
-            LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
-                    items(3) {
+            LazyVerticalGrid(columns = GridCells.Fixed(2),
+                userScrollEnabled = false,
+                content = {
+                    items(10) {
                             AreaFilterCard()
                     }
                 }
@@ -115,15 +120,11 @@ fun SectionHeader(title: String) {
     Row(modifier = Modifier
         .padding(start = 8.dp, end = 8.dp)
         .fillMaxWidth()) {
-        Text(text = title,style = androidx.compose.ui.text.TextStyle(
+        Text(text = title,style = TextStyle(
             color = PrimaryBlackText,
             fontWeight = FontWeight.Bold,
-            fontSize = 16.sp
-        ))
-        Spacer(modifier = Modifier.weight(1f))
-        if (title != "Recipes Category")
-            Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription ="")
-        else
-            Icon(imageVector = Icons.Rounded.KeyboardArrowDown, contentDescription ="")
+            fontSize = 16.sp)
+        )
+
     }
 }

@@ -8,7 +8,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.TextField
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-
+import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
 
 
 @Composable
@@ -37,9 +37,10 @@ fun SearchBarWithFilter(onSearch: (String) -> Unit, modifier: Modifier = Modifie
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Search Bar
-        TextField(
-            value = "",
-            onValueChange = { /* Handle search query change */ },
+        OutlinedTextField(
+            value = searchText,
+            onValueChange = { text ->
+                onSearch(text)},
             modifier = Modifier.weight(1f),
             leadingIcon = {
                 Icon(
@@ -50,7 +51,7 @@ fun SearchBarWithFilter(onSearch: (String) -> Unit, modifier: Modifier = Modifie
             placeholder = { /* Handle placeholder */ },
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = ButtonsAndIcons,
                 unfocusedIndicatorColor = Color.Transparent
             ),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -74,4 +75,9 @@ fun SearchBarWithFilter(onSearch: (String) -> Unit, modifier: Modifier = Modifie
             )
         }
     }
+}
+
+@Composable
+fun FilterDialog() {
+
 }

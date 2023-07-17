@@ -45,9 +45,9 @@ fun Navigation() {
         navController = navController,
         // Set start destination
         startDestination = ScreenNavigator.SplashScreen.route) {
+
         composable(route = ScreenNavigator.SignInScreen.route) {
            LoginForm(navController = navController)
-
         }
         composable(route = ScreenNavigator.SignUpScreen.route) {
             SignUp(navController = navController)
@@ -67,33 +67,44 @@ fun Navigation() {
         composable(route = ScreenNavigator.ResetPasswordScreen.route) {
             PasswordReset(navController = navController)
         }
+
         // Main Screen Fragments Navigation
-        composable(route = MainScreenNavigator.HomeScreen.route) {
-            HomeScreen(navController = navController)
-        }
-        composable(route = MainScreenNavigator.RecipeScreen.route) {
-            RecipeScreen(navController = navController)
-        }
-        composable(route = MainScreenNavigator.SettingsScreen.route) {
-            SettingsScreen(navController = navController)
-        }
-        composable(route = MainScreenNavigator.NotificationScreen.route) {
-            NotificationScreen(navController = navController)
-        }
-        composable(route = MainScreenNavigator.EventScreen.route) {
-            EventScreen(navController = navController)
+       /* navigation(
+            route = MainScreenNavigator.HomeScreen.route,
+            startDestination = MainScreenNavigator.HomeScreen.route
+        ) {
+            composable(route = MainScreenNavigator.HomeScreen.route) {
+                HomeScreen(navController = navController)
+            }
+            composable(route = MainScreenNavigator.RecipeScreen.route) {
+                RecipeScreen(navController = navController)
+            }
+            composable(route = MainScreenNavigator.SettingsScreen.route) {
+                SettingsScreen(navController = navController)
+            }
+            composable(route = MainScreenNavigator.NotificationScreen.route) {
+                NotificationScreen(navController = navController)
+            }
+            composable(route = MainScreenNavigator.EventScreen.route) {
+                EventScreen(navController = navController)
+            }
         }
 
         // Sign Up Fragments Navigation
-        composable(route = SignUpNavigator.SignUpFormFragment.route) {
-            SignUpForm(navController = navController)
-        }
-        composable(route = SignUpNavigator.SignUpIDCFragment.route) {
-            SignUpCidForm(navController = navController)
-        }
-        composable(route = SignUpNavigator.SignUpProfilePictureFragment.route) {
-            ProfilePictureSection(navController = navController)
-        }
+        navigation(
+            route = SignUpNavigator.SignUpFormFragment.route,
+            startDestination = SignUpNavigator.SignUpFormFragment.route
+        ) {
+            composable(route = SignUpNavigator.SignUpFormFragment.route) {
+                SignUpForm(navController = navController)
+            }
+            composable(route = SignUpNavigator.SignUpIDCFragment.route) {
+                SignUpCidForm(navController = navController)
+            }
+            composable(route = SignUpNavigator.SignUpProfilePictureFragment.route) {
+                ProfilePictureSection(navController = navController)
+            }
+        }*/
 
     }
 }
@@ -141,7 +152,9 @@ sealed class SignUpNavigator(val route: String){
 
 @Composable
 fun SignUpNavigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination =  SignUpNavigator.SignUpFormFragment.route){
+    NavHost(navController = navController,
+        startDestination =  SignUpNavigator.SignUpFormFragment.route
+        ){
         composable(SignUpNavigator.SignUpFormFragment.route) {
             SignUpForm(navController = navController)
         }
@@ -151,7 +164,9 @@ fun SignUpNavigation(navController: NavHostController) {
         composable(SignUpNavigator.SignUpProfilePictureFragment.route) {
             ProfilePictureSection(navController = navController)
         }
+
     }
+
 }
 
 

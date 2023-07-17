@@ -14,21 +14,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Call
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import slikoo.kvrae.slikoo.ui.components.ImageInputField
 import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
 
 
 @Composable
 fun EventScreen(navController: NavController) {
+
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(8.dp)
@@ -96,17 +95,7 @@ fun EventScreen(navController: NavController) {
                             .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        OutlinedTextField(
-                            value = "",
-                            placeholder = { Icon(
-                                imageVector = Icons.Rounded.Call,
-                                contentDescription = "Camera"
-                            ) },
-                            onValueChange = { /* handle value change */ },
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(120.dp) // Adjust the height value as needed
-                        )
+                        ImageInputField()
                     }
 
                     Spacer(modifier = Modifier.weight(1f))

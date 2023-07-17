@@ -1,6 +1,8 @@
 package slikoo.kvrae.slikoo.ui.fragments.signup
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
+import slikoo.kvrae.slikoo.ui.components.ImageInputField
 
 @Composable
 fun SignUpCidForm(navController: NavController) {
@@ -26,7 +29,13 @@ fun SignUpCidForm(navController: NavController) {
         Text(text = "Carte D'identité", style = MaterialTheme.typography.h4)
         Spacer(modifier = Modifier.size(8.dp))
         CustomSlider(maxSlide = 3, currentSlide = 2)
-        ProfileImagePicker()
+        Row(
+            modifier = Modifier
+                .padding(24.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            ImageInputField()
+        }
         CustomButton(text = "Suivant", onClick = { navController.navigate("sign_up_profile_picture") })
 
     }

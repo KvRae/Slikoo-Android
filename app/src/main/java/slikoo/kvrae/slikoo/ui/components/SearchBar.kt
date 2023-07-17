@@ -36,7 +36,7 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .height(65.dp)
             .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
-        elevation = 8.dp,
+        elevation = 4.dp,
         shape = RoundedCornerShape(16.dp)
 
 

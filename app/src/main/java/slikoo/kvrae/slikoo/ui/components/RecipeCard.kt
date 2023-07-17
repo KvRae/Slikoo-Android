@@ -38,7 +38,7 @@ import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
 fun RecipeCardContent() {
     Card(
         modifier = Modifier.padding(16.dp)
-            .size(120.dp),
+            .size(170.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 4.dp,
         onClick = { /*TODO*/ }

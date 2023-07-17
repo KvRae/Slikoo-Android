@@ -29,11 +29,11 @@ import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
 fun AreaFilterCard() {
     Card(
         modifier = Modifier.padding(8.dp),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         elevation = 4.dp,
         onClick = { /*TODO*/ }
     ) {
-        Box(Modifier.height(100.dp).fillMaxSize()) {
+        Box(Modifier.height(200.dp).fillMaxSize()) {
             Image(
                 painter = painterResource(R.drawable.loginback),
                 contentDescription = "null",
