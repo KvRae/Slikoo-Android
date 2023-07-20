@@ -22,6 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.data.models.Notification
+import slikoo.kvrae.slikoo.viewmodel.NotificationViewModel
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -44,22 +46,23 @@ fun NotificationItem(content : @Composable () -> Unit) {
 
 
 @Composable
-fun NotificationItemContent(profileImage : Int , title : String, description : String, time : String ) {
+fun NotificationItemContent(notification: Notification ) {
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Row {
             Image(
                 modifier = Modifier.weight(0.2f),
                 painter = painterResource(id = R.drawable.avatar),
                 contentDescription = "" )
-            Text(text = title, modifier = Modifier.padding(start = 8.dp))
+            Text(text = notification.title, modifier = Modifier.padding(start = 8.dp))
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { NotificationViewModel().removeNotification(notification = notification) }) {
                 Icon(imageVector = Icons.Default.Close,
                     contentDescription = "",
                     tint = Color.Gray,
                     modifier = Modifier.size(15.dp))
             }
         }
-        Text(text = description)
+        Text(text = notification.description)
     }
 }

@@ -34,10 +34,7 @@ fun NotificationScreen(navController: NavController) {
             items(notifications.size) {
                 NotificationItem(){
                     NotificationItemContent(
-                        profileImage = notifications[it].profileImage,
-                        title = notifications[it].title,
-                        description = notifications[it].description,
-                        time = notifications[it].time
+                        notification = notifications[it],
                     )
                 }
             }

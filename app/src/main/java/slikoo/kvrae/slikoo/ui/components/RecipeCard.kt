@@ -26,10 +26,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.data.models.Area
 import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
 
 
@@ -37,7 +37,7 @@ import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun RecipeCardContent() {
+fun RecipeCardContent( area : Area) {
     Card(
         modifier = Modifier
             .padding(16.dp)
@@ -68,7 +68,7 @@ fun RecipeCardContent() {
                             .padding(start = 8.dp),
                         tint = SecondaryWhiteText
                     )
-                    Text(text = "Location", modifier = Modifier.padding(start = 4.dp),
+                    Text(text = area.name, modifier = Modifier.padding(start = 4.dp),
                         style = TextStyle(fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
                         ),
@@ -77,7 +77,7 @@ fun RecipeCardContent() {
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Text(text = "4", modifier = Modifier.padding(start = 4.dp),
+                    Text(text = area.nbPerson.toString(), modifier = Modifier.padding(start = 4.dp),
                         style = TextStyle(fontSize = 12.sp,
                             fontWeight = FontWeight.Bold),
                         color = SecondaryWhiteText
@@ -91,7 +91,7 @@ fun RecipeCardContent() {
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Row {
-                    Text(text = "Lun 20 juin 14:30",
+                    Text(text = area.date.toString(),
                         modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 10.sp,
                             fontWeight = FontWeight.Bold),
@@ -99,7 +99,7 @@ fun RecipeCardContent() {
                         )
                 }
                 Row {
-                    Text(text = "Degustation de vin",
+                    Text(text = area.description,
                         modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 16.sp,
                             fontWeight = FontWeight.Bold),
@@ -107,13 +107,13 @@ fun RecipeCardContent() {
                         )
                 }
                 Row {
-                    Text(text = "Le cinema", modifier = Modifier.padding(start = 8.dp),
+                    Text(text = area.place, modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 10.sp,
                             fontWeight = FontWeight.Bold),
                         color = SecondaryWhiteText
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Text(text = "20$", modifier = Modifier.padding(end = 8.dp),
+                    Text(text = "${area.price} $", modifier = Modifier.padding(end = 8.dp),
                         style = TextStyle(fontSize = 10.sp,
                             fontWeight = FontWeight.Medium),
                         color = SecondaryWhiteText)
@@ -123,9 +123,5 @@ fun RecipeCardContent() {
         }
     }
 
-@Preview
-@Composable
-fun RecipeCardPreview() {
-    RecipeCardContent()
-}
+
 

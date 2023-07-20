@@ -14,10 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBarWithFilter
+import slikoo.kvrae.slikoo.viewmodel.AreaViewModel
 
 
 @Composable
 fun RecipeScreen(navController: NavController) {
+    val areas = AreaViewModel().getAreas()
     val scrollState = rememberScrollState()
     Box(modifier = Modifier
         .fillMaxSize(),
@@ -27,12 +29,11 @@ fun RecipeScreen(navController: NavController) {
             .fillMaxSize()
             .scrollable(scrollState, orientation = Orientation.Vertical, enabled = true),
             horizontalAlignment = Alignment.CenterHorizontally,
-
         ){
             SearchBarWithFilter({})
             LazyVerticalGrid(columns = GridCells.Fixed(2), content ={
-                items(10){
-                    RecipeCardContent()
+                items(areas.size){
+                    RecipeCardContent( area = areas[it])
                 }
             })
         }

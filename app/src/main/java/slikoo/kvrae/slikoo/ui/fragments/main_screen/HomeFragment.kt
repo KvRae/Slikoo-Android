@@ -27,6 +27,7 @@ import slikoo.kvrae.slikoo.ui.components.RatingCard
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBar
 import slikoo.kvrae.slikoo.ui.theme.PrimaryBlackText
+import slikoo.kvrae.slikoo.viewmodel.AreaViewModel
 import slikoo.kvrae.slikoo.viewmodel.CategoryViewModel
 
 
@@ -59,6 +60,7 @@ fun HomeScreen(navController: NavController) {
 
 @Composable
 fun OnlineRecipes() {
+    var areas = AreaViewModel().getAreas()
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -67,8 +69,8 @@ fun OnlineRecipes() {
         Column(modifier = Modifier.fillMaxWidth()) {
             SectionHeader(title ="Online Recipes")
             LazyRow(modifier = Modifier.fillMaxWidth()) {
-                items(3) {
-                        RecipeCardContent()
+                items(areas.size) {
+                        RecipeCardContent(areas[it])
                 }
             }
         }
