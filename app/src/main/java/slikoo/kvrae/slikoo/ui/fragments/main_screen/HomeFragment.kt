@@ -27,6 +27,7 @@ import slikoo.kvrae.slikoo.ui.components.RatingCard
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBar
 import slikoo.kvrae.slikoo.ui.theme.PrimaryBlackText
+import slikoo.kvrae.slikoo.viewmodel.CategoryViewModel
 
 
 @Preview
@@ -76,11 +77,12 @@ fun OnlineRecipes() {
 
 @Composable
 fun RecipesCategorySection() {
+    val categories = CategoryViewModel().getCategories()
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .height((230 * 5).dp)
+            .height((160*categories.size ).dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             SectionHeader(title = "Recipes Category")
@@ -88,8 +90,11 @@ fun RecipesCategorySection() {
             LazyVerticalGrid(columns = GridCells.Fixed(2),
                 userScrollEnabled = false,
                 content = {
-                    items(10) {
-                            AreaFilterCard()
+                    items(categories.size) {
+                        AreaFilterCard(name = categories[it].name, image = categories[it].image, imageUrl = "") {
+
+                        }
+
                     }
                 }
             )
@@ -125,6 +130,5 @@ fun SectionHeader(title: String) {
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp)
         )
-
     }
 }

@@ -5,8 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -23,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,23 +50,23 @@ fun RatingCard() {
         Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
     """.trimIndent()
     Card(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier.padding(8.dp).width(240.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 4.dp,
         onClick = { /*TODO*/ }
     ) {
         Column(
-            modifier = Modifier
+            modifier = Modifier.fillMaxWidth()
                 .background(White).padding(16.dp)
         ) {
-            Row(modifier = Modifier.padding(4.dp))
+            Row(modifier = Modifier.fillMaxWidth().padding(4.dp))
             {
                 Image(
                     painter = painterResource(id = R.drawable.avatar),
                     contentDescription = "avatar",
                     modifier = Modifier.size(40.dp)
                 )
-                Column {
+                Column( modifier = Modifier.fillMaxWidth()) {
                     Text(
                         text = "Name", modifier = Modifier.padding(4.dp),
                         style = TextStyle(fontSize = 10.sp)
@@ -73,7 +76,7 @@ fun RatingCard() {
                             onRatingChanged = { rating.value = it },
                             currentRating = rating.value
                         )
-                        Spacer(modifier = Modifier.padding(8.dp))
+                        Spacer(modifier = Modifier.weight(1f))
                         Text(
                             text = "23/12/2021", modifier = Modifier.padding(4.dp),
                             style = TextStyle(fontSize = 8.sp)
@@ -82,9 +85,11 @@ fun RatingCard() {
                 }
             }
             Text(
-                text = if (description.length > 37) description.substring(0, 37) + "..." else description,
+                text = description,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
                 style = TextStyle(fontSize = 10.sp),
-                modifier = Modifier.padding(4.dp)
+                modifier = Modifier.fillMaxWidth().padding(8.dp)
             )
         }
 

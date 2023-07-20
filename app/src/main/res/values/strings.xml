@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Slikoo</string>
+    <string name="warning_password_level">warning</string>
+
 </resources>

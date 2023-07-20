@@ -1,6 +1,7 @@
 package slikoo.kvrae.slikoo.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -37,7 +39,8 @@ import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
 @Composable
 fun RecipeCardContent() {
     Card(
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier
+            .padding(16.dp)
             .size(170.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 4.dp,
@@ -49,13 +52,20 @@ fun RecipeCardContent() {
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Gray.copy(0.5f))) {
+
+            }
 
             Column(modifier = Modifier.padding(4.dp)) {
                 Row(horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically) {
                     Icon(imageVector = Icons.Rounded.LocationOn,
                         contentDescription = "",
-                        modifier = Modifier.size(20.dp).padding(start = 8.dp),
+                        modifier = Modifier
+                            .size(20.dp)
+                            .padding(start = 8.dp),
                         tint = SecondaryWhiteText
                     )
                     Text(text = "Location", modifier = Modifier.padding(start = 4.dp),

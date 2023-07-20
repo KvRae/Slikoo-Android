@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,8 +54,11 @@ fun ProfilePictureSection(navController : NavController) {
             CustomSlider(maxSlide = 3, currentSlide = 3)
             ProfileImagePicker()
             CustomButton(text = "Terminer",
-                onClick = { navController.navigate("main_screen") }
+                onClick = { /*TODO*/ }
             )
+            TextButton(onClick = { navController.navigate("sign_up_idc") }) {
+                Text(text = "Precedent")
+            }
         }
 }
 

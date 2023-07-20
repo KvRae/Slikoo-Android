@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.fragments.main_screen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,16 +18,53 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import slikoo.kvrae.slikoo.ui.components.ExpandableCard
 import slikoo.kvrae.slikoo.ui.components.ImageInputField
 import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
 
 
 @Composable
 fun EventScreen(navController: NavController) {
+    val localistaion = remember {
+       mutableStateOf("")
+    }
+    val typeInvitation = remember {
+        mutableStateOf("")
+    }
+    val theme = remember {
+        mutableStateOf("")
+    }
+    val preferenceCulinaire = remember {
+        mutableStateOf("")
+    }
+    val norriture = remember {
+        mutableStateOf("")
+    }
+    val nombrePersonnes = remember {
+        mutableStateOf("")
+    }
+    val prix = remember {
+        mutableStateOf("")
+    }
+    val date = remember {
+        mutableStateOf("")
+    }
+    val heure = remember {
+        mutableStateOf("")
+    }
+    val description = remember {
+        mutableStateOf("")
+    }
+    var image = remember {
+        mutableStateOf("")
+    }
+
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -36,58 +74,39 @@ fun EventScreen(navController: NavController) {
     ){
                 Column(modifier = Modifier
                     .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally)
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Center)
                 {
                     Row(modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)) {
-                        OutlinedTextField(value = "Localisation", onValueChange = { /* handle value change */ },modifier = Modifier.weight(1f))
+                        OutlinedTextField(label = { Text(text = "Localistation") },value = localistaion.value , onValueChange = { it -> localistaion.value = it  },modifier = Modifier.weight(1f))
                         Spacer(modifier = Modifier.width(8.dp))
-                        OutlinedTextField(value = "Type invitation", onValueChange = { /* handle value change */ }, modifier = Modifier.weight(1f))
+                        OutlinedTextField(label = { Text(text = "Type D'invitation") },value = typeInvitation.value, onValueChange = {it -> typeInvitation.value = it }, modifier = Modifier.weight(1f))
                     }
                     Row(modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)) {
-                        OutlinedTextField(value = "Theme", onValueChange = { /* handle value change */ },modifier = Modifier.weight(1f))
+                        OutlinedTextField(label = { Text(text = "Theme") },value = theme.value , onValueChange = { it -> theme.value = it },modifier = Modifier.weight(1f))
                         Spacer(modifier = Modifier.width(8.dp))
-                        OutlinedTextField(value = "Preference  culinaire", onValueChange = { /* handle value change */ }, modifier = Modifier.weight(1f))
+                        OutlinedTextField(label = { Text(text = "Preference Culinaire") },value = preferenceCulinaire.value, onValueChange = { it -> preferenceCulinaire.value = it }, modifier = Modifier.weight(1f))
                     }
                     Row(modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)) {
-                        OutlinedTextField(value = "Norriture", onValueChange = { /* handle value change */ },modifier = Modifier.weight(1f))
-                        Spacer(modifier = Modifier.width(8.dp))
-                        OutlinedTextField(value = "Nombres de personnes", onValueChange = { /* handle value change */ }, modifier = Modifier.weight(1f))
-                    }
-
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)) {
-                        OutlinedTextField(value = "Prix", onValueChange = { /* handle value change */ },modifier = Modifier.weight(1f))
-                        Spacer(modifier = Modifier.width(8.dp))
-                        OutlinedTextField(value = "Heures", onValueChange = { /* handle value change */ }, modifier = Modifier.weight(1f))
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        OutlinedTextField(value = "Date", onValueChange = {})
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
                         OutlinedTextField(
-                            value = "Description du repas",
-                            onValueChange = { /* handle value change */ },
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(120.dp) // Adjust the height value as needed
-                        )
+                            label = { Text(text = "Norriture") },
+                            value = norriture.value, onValueChange = { it -> norriture.value =it },modifier = Modifier.weight(1f))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        OutlinedTextField(label = { Text(text = "Nombres Personnes") },value = nombrePersonnes.value, onValueChange = { it-> nombrePersonnes.value = it }, modifier = Modifier.weight(1f))
+                    }
+
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)) {
+                        OutlinedTextField(label = { Text(text = "Prix") }, value = prix.value, onValueChange = { it -> prix.value = it },modifier = Modifier.weight(1f))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        OutlinedTextField(label = { Text(text = "Heure") },value = heure.value, onValueChange = { it -> heure.value = it }, modifier = Modifier.weight(1f))
                     }
 
                     Row(
@@ -95,12 +114,41 @@ fun EventScreen(navController: NavController) {
                             .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        ImageInputField()
+                        OutlinedTextField(label = { Text(text = "Date") },value = date.value, onValueChange = {
+                            it -> date.value = it
+                        },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
                     }
+                   ExpandableCard(title = "Information detailé") {
+                       Row(
+                           modifier = Modifier
+                               .fillMaxWidth()
+                               .padding(8.dp)
+                       ) {
+                           OutlinedTextField(
+                               label = { Text(text = "Description") },
+                               value = description.value,
+                               onValueChange = { it -> description.value = it},
+                               modifier = Modifier
+                                   .weight(1f)
+                                   .height(120.dp) // Adjust the height value as needed
+                           )
+                       }
+
+                       Row(
+                           modifier = Modifier
+                               .fillMaxWidth()
+                               .padding(8.dp)
+                       ) {
+                           ImageInputField()
+                       }
+                   }
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Button(onClick = { /*TODO*/ }, modifier = Modifier
+                    Button(onClick = {  }, modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(),
                         colors = androidx.compose.material.ButtonDefaults.buttonColors(
@@ -114,4 +162,8 @@ fun EventScreen(navController: NavController) {
                     }
                 }
             }
+}
+
+fun onSubmit() {
+
 }

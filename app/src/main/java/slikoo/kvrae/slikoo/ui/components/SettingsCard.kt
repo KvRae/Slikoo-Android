@@ -32,7 +32,7 @@ import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
 @Composable
 fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", actionIcon: ImageVector) {
     Card(
-         modifier = Modifier.padding(12.dp),
+         modifier = Modifier.padding(10.dp),
         shape = RoundedCornerShape(16.dp),
         onClick = { /*TODO*/ },
         elevation = 4.dp){
@@ -52,7 +52,7 @@ fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", act
             actions = {
                 if (subtitle != "Null")
                     Button(onClick = { /*TODO*/ },
-                        modifier = Modifier.
+                        modifier = Modifier.padding(8.dp).
                         background(color = ButtonsAndIcons,
                             shape = RoundedCornerShape(32.dp),
                         ),
@@ -73,7 +73,7 @@ fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", act
                             )
                     }
                 else
-                    Icon(imageVector = actionIcon, contentDescription = "")
+                    Icon(imageVector = actionIcon, contentDescription = "", modifier = Modifier.padding(8.dp))
                 },
             navigationIcon = {
                 if (subtitle != "Null")
@@ -84,7 +84,8 @@ fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", act
                     )
                 }
                 else
-                    Icon(imageVector = icon, contentDescription = "" , tint = ButtonsAndIcons)
+                    Icon(imageVector = icon, contentDescription = "" ,
+                        tint = ButtonsAndIcons, modifier = Modifier.padding(8.dp))
 
             }
         )

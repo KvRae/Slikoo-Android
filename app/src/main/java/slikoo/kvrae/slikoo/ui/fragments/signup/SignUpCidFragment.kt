@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,6 +38,9 @@ fun SignUpCidForm(navController: NavController) {
             ImageInputField()
         }
         CustomButton(text = "Suivant", onClick = { navController.navigate("sign_up_profile_picture") })
+        TextButton(onClick = { navController.navigate("sign_up_form")}) {
+            androidx.compose.material.Text(text = "Precedent")
+        }
 
     }
 }

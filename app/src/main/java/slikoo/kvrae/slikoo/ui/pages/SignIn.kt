@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -41,8 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
-import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
 import slikoo.kvrae.slikoo.ui.theme.DividerColor
 import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
 import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
@@ -130,23 +128,11 @@ fun LoginForm(navController: NavController) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Submit button
-                Button(
-                    onClick = { onValidate(username, password,navController) },
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = SecondaryWhiteText,
-                        backgroundColor = ButtonsAndIcons
-                    ),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Text("Se connecter")
-                }
+                CustomButton(text = "Se connecter", onClick = { onSubmit(navController) })
                 Divider(
                     modifier = Modifier
                         .padding(8.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth().clip(shape =MaterialTheme.shapes.medium),
                     color = DividerColor,
                     thickness = 1.dp
                 )
