@@ -38,8 +38,7 @@ fun NotificationScreen(navController: NavController) {
                     )
                 }
             }
-
+        }
     }
-}
 }
 

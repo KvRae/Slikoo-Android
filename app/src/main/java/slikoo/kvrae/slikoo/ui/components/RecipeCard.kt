@@ -26,18 +26,21 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.models.Area
 import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
-
-
+import java.text.SimpleDateFormat
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RecipeCardContent( area : Area) {
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
+    val date = dateFormat.format(area.date)
+
     Card(
         modifier = Modifier
             .padding(16.dp)
@@ -47,7 +50,7 @@ fun RecipeCardContent( area : Area) {
         onClick = { /*TODO*/ }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Image(painter = painterResource(id = R.drawable.loginback),
+            Image(painter = painterResource(id = R.drawable.petit_dejeuner_sain_frais_fond_bois),
                 contentDescription = "",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
@@ -91,7 +94,7 @@ fun RecipeCardContent( area : Area) {
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Row {
-                    Text(text = area.date.toString(),
+                    Text(text = date,
                         modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 10.sp,
                             fontWeight = FontWeight.Bold),
@@ -103,7 +106,9 @@ fun RecipeCardContent( area : Area) {
                         modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 16.sp,
                             fontWeight = FontWeight.Bold),
-                        color = SecondaryWhiteText
+                        color = SecondaryWhiteText,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
                         )
                 }
                 Row {

@@ -8,7 +8,7 @@ data class Area(
     val nbPerson : Int,
     val description: String,
     val image: String,
-    val price: String,
+    val price: Double,
     val place: String,
     val date : Date
 )

@@ -60,7 +60,7 @@ fun HomeScreen(navController: NavController) {
 
 @Composable
 fun OnlineRecipes() {
-    var areas = AreaViewModel().getAreas()
+    val areas = AreaViewModel().getAreas()
     Box(
         modifier = Modifier
             .fillMaxWidth()
