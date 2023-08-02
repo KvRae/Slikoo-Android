@@ -3,6 +3,7 @@ package slikoo.kvrae.slikoo.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BadgedBox
@@ -14,13 +15,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
 import slikoo.kvrae.slikoo.ui.theme.InactiveIcons
+import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 
 
 //The class that will be used to create the bottom navigation bar
@@ -34,15 +35,16 @@ data class BottomNavItem(
 
 @Composable
 fun BottomNavigationBar(items : List<BottomNavItem>,
-                        navController: NavController,
                         modifier : Modifier = Modifier,
+                        route: String = "Home",
                         onItemClick : (route :String) -> Unit) {
-        val backStackEntry = navController.currentBackStackEntryAsState()
         val bottomNavBarColor = remember { mutableStateOf(Color.White) }
-        BottomNavigation(modifier = modifier,
-        backgroundColor = bottomNavBarColor.value, elevation = 10.dp) {
+        BottomNavigation(modifier = modifier.fillMaxWidth()
+            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+        backgroundColor = bottomNavBarColor.value,
+            elevation = 16.dp) {
         items.forEach { item ->
-            val selected = item.route == backStackEntry.value?.destination?.route
+            val selected = item.route == route
             BottomNavigationItem(
                 icon = {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -65,7 +67,7 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                         }
                         else{
                             item.badgeCount = 0
-                            if (item.name == "Event"){
+                            if (item.name == MainScreenNavigator.EventScreen.route){
                                 Box(
                                     contentAlignment = Alignment.Center,
                                     modifier = Modifier

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +25,8 @@ import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
 
 @Composable
-fun SignUpForm(onChange: (String) -> Unit) {
+fun SignUpSecondForm( onChange: (String) -> Unit) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -40,38 +42,28 @@ fun SignUpForm(onChange: (String) -> Unit) {
             Text(
                 text = "Sign Up",
                 fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-            CustomSlider(maxSlide = 4, currentSlide = 1)
+                fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.size(8.dp))
+                CustomSlider(maxSlide = 4, currentSlide = 2)
+
+                CustomTextField(onChange = {}, value = "", label = "Numero de telephone")
+
+                CustomTextField(onChange = {}, value = "", label = "Code postal")
+
+                CustomTextField(
+                    onChange = {},
+                    value = "",
+                    label = "Description profil",
+                    modifier = Modifier.fillMaxSize())
 
 
-            CustomTextField(onChange = {}, value = "", label = "Nom")
+            Spacer(modifier = Modifier.padding(8.dp))
 
-            CustomTextField(onChange = {}, value = "", label = "Prenom")
+            CustomButton(text = "Suivant", onClick = { onChange(SignUpNavigator.SignUpIDCFragment.route)})
 
-            CustomTextField(onChange = {}, value = "", label = "Adresse Electronique")
-
-            CustomTextField(onChange = {}, value = "", label = "Mot de passe")
-
-            CustomTextField(onChange = {}, value = "", label = "Confirmer le mot de passe")
-
-//            ExpandableCard(title = "Aditionnel") {
-//                CustomTextField(onChange = {}, value = "", label = "Numero de telephone")
-//
-//                CustomTextField(onChange = {}, value = "", label = "Code postal")
-//
-//                CustomTextField(
-//                    onChange = {},
-//                    value = "",
-//                    label = "Description profil",
-//                    modifier = Modifier.fillMaxSize()
-//                )
-//            }
-
-            Spacer(modifier = Modifier.padding(4.dp))
-
-            CustomButton(text = "Suivant", onClick = { onChange(SignUpNavigator.SignUpSecondFormFragment.route)})
+            TextButton(onClick = { onChange(SignUpNavigator.SignUpFormFragment.route)}) {
+                androidx.compose.material3.Text(text = "Precedent")
+            }
 
         }
     }

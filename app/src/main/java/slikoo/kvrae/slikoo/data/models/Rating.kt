@@ -4,7 +4,7 @@ import java.util.Date
 
 data class Rating(
     val id: Int,
-    val rating: Int,
+    var rate: Int,
     val comment: String,
     val date: Date,
     val user: String

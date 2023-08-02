@@ -9,18 +9,23 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBarWithFilter
 import slikoo.kvrae.slikoo.viewmodel.AreaViewModel
 
 
 @Composable
-fun RecipeScreen(navController: NavController) {
+fun RecipeScreen() {
     val areas = AreaViewModel().getAreas()
     val scrollState = rememberScrollState()
+    val showBottomSheet by remember {
+        mutableStateOf(false)
+    }
     Box(modifier = Modifier
         .fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -31,11 +36,14 @@ fun RecipeScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ){
             SearchBarWithFilter({})
-            LazyVerticalGrid(columns = GridCells.Fixed(2), content ={
+            LazyVerticalGrid(columns = GridCells.Fixed(2),
+                content ={
                 items(areas.size){
                     RecipeCardContent( area = areas[it])
                 }
             })
+
         }
     }
 }
+

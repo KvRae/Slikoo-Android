@@ -2,18 +2,9 @@ package slikoo.kvrae.slikoo.utils
 
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import slikoo.kvrae.slikoo.ui.fragments.main_screen.EventScreen
-import slikoo.kvrae.slikoo.ui.fragments.main_screen.HomeScreen
-import slikoo.kvrae.slikoo.ui.fragments.main_screen.NotificationScreen
-import slikoo.kvrae.slikoo.ui.fragments.main_screen.RecipeScreen
-import slikoo.kvrae.slikoo.ui.fragments.main_screen.SettingsScreen
-import slikoo.kvrae.slikoo.ui.fragments.signup.ProfilePictureSection
-import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpCidForm
-import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpForm
 import slikoo.kvrae.slikoo.ui.pages.AnimatedSplashScreen
 import slikoo.kvrae.slikoo.ui.pages.EmailInput
 import slikoo.kvrae.slikoo.ui.pages.LoginForm
@@ -28,15 +19,33 @@ fun App() {
     Navigation()
 }
 
-sealed class ScreenNavigator(val route: String){
-    object SplashScreen: ScreenNavigator("splash_screen")
-    object SignInScreen: ScreenNavigator("sign_in_screen")
-    object SignUpScreen: ScreenNavigator("sign_up_screen")
-    object MainScreen: ScreenNavigator("main_screen")
-    object ForgotPasswordScreen: ScreenNavigator("forgot_password_screen")
-    object VerifyEmailScreen: ScreenNavigator("verify_email_screen")
-    object ResetPasswordScreen: ScreenNavigator("reset_password_screen")
+sealed class AppScreenNavigator(val route: String){
+    object SplashAppScreen: AppScreenNavigator("splash_screen")
+    object SignInAppScreen: AppScreenNavigator("sign_in_screen")
+    object SignUpAppScreen: AppScreenNavigator("sign_up_screen")
+    object MainAppScreen: AppScreenNavigator("main_screen")
+    object ForgotPasswordAppScreen: AppScreenNavigator("forgot_password_screen")
+    object VerifyEmailAppScreen: AppScreenNavigator("verify_email_screen")
+    object ResetPasswordAppScreen: AppScreenNavigator("reset_password_screen")
 }
+
+sealed class SignUpNavigator(val route: String){
+    object SignUpFormFragment: SignUpNavigator("sign_up_form")
+    object SignUpSecondFormFragment: SignUpNavigator("sign_up_sec_form")
+    object SignUpIDCFragment: SignUpNavigator("sign_up_idc")
+    object SignUpProfilePictureFragment: SignUpNavigator("sign_up_profile_picture")
+
+}
+
+
+sealed class MainScreenNavigator(val route: String){
+    object HomeScreen: MainScreenNavigator("Home")
+    object RecipeScreen: MainScreenNavigator("Repas")
+    object SettingsScreen: MainScreenNavigator("Parametres")
+    object NotificationScreen: MainScreenNavigator("Notifications")
+    object EventScreen: MainScreenNavigator("Organiser")
+}
+
 
 @Composable
 fun Navigation() {
@@ -44,130 +53,33 @@ fun Navigation() {
     NavHost(
         navController = navController,
         // Set start destination
-        startDestination = ScreenNavigator.SplashScreen.route) {
+        startDestination = AppScreenNavigator.SplashAppScreen.route) {
 
-        composable(route = ScreenNavigator.SignInScreen.route) {
+        composable(route = AppScreenNavigator.SignInAppScreen.route) {
            LoginForm(navController = navController)
         }
-        composable(route = ScreenNavigator.SignUpScreen.route) {
+        composable(route = AppScreenNavigator.SignUpAppScreen.route) {
             SignUp(navController = navController)
         }
-        composable(route = ScreenNavigator.MainScreen.route) {
+        composable(route = AppScreenNavigator.MainAppScreen.route) {
             MainScreen(navController = navController)
         }
-        composable(route = ScreenNavigator.SplashScreen.route) {
+        composable(route = AppScreenNavigator.SplashAppScreen.route) {
             AnimatedSplashScreen(navController = navController)
         }
-        composable(route = ScreenNavigator.ForgotPasswordScreen.route) {
+        composable(route = AppScreenNavigator.ForgotPasswordAppScreen.route) {
             EmailInput(navController = navController)
         }
-        composable(route = ScreenNavigator.VerifyEmailScreen.route) {
+        composable(route = AppScreenNavigator.VerifyEmailAppScreen.route) {
             OtpInput(navController = navController)
         }
-        composable(route = ScreenNavigator.ResetPasswordScreen.route) {
+        composable(route = AppScreenNavigator.ResetPasswordAppScreen.route) {
             PasswordReset(navController = navController)
         }
-
-        // Main Screen Fragments Navigation
-       /* navigation(
-            route = MainScreenNavigator.HomeScreen.route,
-            startDestination = MainScreenNavigator.HomeScreen.route
-        ) {
-            composable(route = MainScreenNavigator.HomeScreen.route) {
-                HomeScreen(navController = navController)
-            }
-            composable(route = MainScreenNavigator.RecipeScreen.route) {
-                RecipeScreen(navController = navController)
-            }
-            composable(route = MainScreenNavigator.SettingsScreen.route) {
-                SettingsScreen(navController = navController)
-            }
-            composable(route = MainScreenNavigator.NotificationScreen.route) {
-                NotificationScreen(navController = navController)
-            }
-            composable(route = MainScreenNavigator.EventScreen.route) {
-                EventScreen(navController = navController)
-            }
-        }
-
-        // Sign Up Fragments Navigation
-        navigation(
-            route = SignUpNavigator.SignUpFormFragment.route,
-            startDestination = SignUpNavigator.SignUpFormFragment.route
-        ) {
-            composable(route = SignUpNavigator.SignUpFormFragment.route) {
-                SignUpForm(navController = navController)
-            }
-            composable(route = SignUpNavigator.SignUpIDCFragment.route) {
-                SignUpCidForm(navController = navController)
-            }
-            composable(route = SignUpNavigator.SignUpProfilePictureFragment.route) {
-                ProfilePictureSection(navController = navController)
-            }
-        }*/
-
     }
 }
 
 
-sealed class MainScreenNavigator(val route: String){
-    object HomeScreen: MainScreenNavigator("home_screen")
-    object RecipeScreen: MainScreenNavigator("recipe_screen")
-    object SettingsScreen: MainScreenNavigator("settings_screen")
-    object NotificationScreen: MainScreenNavigator("notification_screen")
-    object EventScreen: MainScreenNavigator("event_screen")
-}
-
-
-@Composable
-fun MainScreenNavigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination =  "Home"){
-        composable("Home") {
-            HomeScreen(navController = navController)
-        }
-        composable("Recipes") {
-            RecipeScreen(navController = navController)
-        }
-        composable("Settings") {
-            SettingsScreen(navController = navController)
-        }
-        composable("Notifications") {
-            NotificationScreen(navController = navController)
-        }
-        composable("Events") {
-            EventScreen(navController = navController)
-        }
-    }
-}
-
-
-
-
-sealed class SignUpNavigator(val route: String){
-    object SignUpFormFragment: SignUpNavigator("sign_up_form")
-    object SignUpIDCFragment: SignUpNavigator("sign_up_idc")
-    object SignUpProfilePictureFragment: SignUpNavigator("sign_up_profile_picture")
-
-}
-
-@Composable
-fun SignUpNavigation(navController: NavHostController) {
-    NavHost(navController = navController,
-        startDestination =  SignUpNavigator.SignUpFormFragment.route
-        ){
-        composable(SignUpNavigator.SignUpFormFragment.route) {
-            SignUpForm(navController = navController)
-        }
-        composable(SignUpNavigator.SignUpIDCFragment.route) {
-            SignUpCidForm(navController = navController)
-        }
-        composable(SignUpNavigator.SignUpProfilePictureFragment.route) {
-            ProfilePictureSection(navController = navController)
-        }
-
-    }
-
-}
 
 
 

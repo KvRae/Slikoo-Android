@@ -16,30 +16,33 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.BottomNavItem
 import slikoo.kvrae.slikoo.ui.components.BottomNavigationBar
 import slikoo.kvrae.slikoo.ui.components.CustomTopBar
-import slikoo.kvrae.slikoo.utils.MainScreenNavigation
+import slikoo.kvrae.slikoo.ui.fragments.main_screen.EventScreen
+import slikoo.kvrae.slikoo.ui.fragments.main_screen.HomeScreen
+import slikoo.kvrae.slikoo.ui.fragments.main_screen.NotificationScreen
+import slikoo.kvrae.slikoo.ui.fragments.main_screen.RecipeScreen
+import slikoo.kvrae.slikoo.ui.fragments.main_screen.SettingsScreen
+import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavController) {
-    val menuNavController = rememberNavController()
+
     val title = remember {
         mutableStateOf("Home")
     }
     val bottomNavigationItems = listOf(
-        BottomNavItem("Home", "Home", Icons.Rounded.Home, 0),
-        BottomNavItem("Recipe", "Recipes", ImageVector.vectorResource(id = R.drawable.plat_icon), 0),
-        BottomNavItem("Event", "Events", Icons.Rounded.Add, 0),
-        BottomNavItem("Notification", "Notifications", Icons.Rounded.Notifications, 5),
-        BottomNavItem("Settings", "Settings", Icons.Rounded.Settings, 0),
+        BottomNavItem("Home", MainScreenNavigator.HomeScreen.route, Icons.Rounded.Home, 0),
+        BottomNavItem("Repas",MainScreenNavigator.RecipeScreen.route , ImageVector.vectorResource(id = R.drawable.plat_icon), 0),
+        BottomNavItem("Organiser", MainScreenNavigator.EventScreen.route, Icons.Rounded.Add, 0),
+        BottomNavItem("Notifications", MainScreenNavigator.NotificationScreen.route, Icons.Rounded.Notifications, 5),
+        BottomNavItem("Parametres", MainScreenNavigator.SettingsScreen.route, Icons.Rounded.Settings, 0),
     )
  Scaffold(
         topBar = {
@@ -47,22 +50,28 @@ fun MainScreen(navController: NavController) {
         },
      bottomBar = {
          BottomNavigationBar(items = bottomNavigationItems ,
-             navController= menuNavController,
-             onItemClick ={menuNavController.navigate(it)
+             route = title.value,
+             onItemClick ={
                  title.value = it})
      },
      content = {
          Box(modifier = Modifier.padding(top = 70.dp, bottom = 50.dp)) {
-             MainScreenNavigation(navController = menuNavController)
+             when(title.value)
+                {
+                    "Home" -> HomeScreen()
+
+                    "Repas" -> RecipeScreen()
+
+                    "Organiser" -> EventScreen()
+
+                    "Notifications" -> NotificationScreen()
+
+                    "Parametres" -> SettingsScreen()
+
+                }
          }
      }
   )
 }
 
-@Preview
-@Composable
-fun MainScreenPreview() {
-    val context = androidx.compose.ui.platform.LocalContext.current
- MainScreen(navController = NavController(context))
-}
 

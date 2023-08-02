@@ -14,13 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.components.ImageInputField
+import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
 @Composable
-fun SignUpCidForm(navController: NavController) {
+fun SignUpCidForm(onChange: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -29,7 +29,7 @@ fun SignUpCidForm(navController: NavController) {
     ) {
         Text(text = "Carte D'identité", style = MaterialTheme.typography.h4)
         Spacer(modifier = Modifier.size(8.dp))
-        CustomSlider(maxSlide = 3, currentSlide = 2)
+        CustomSlider(maxSlide = 4, currentSlide = 3)
         Row(
             modifier = Modifier
                 .padding(24.dp),
@@ -37,8 +37,8 @@ fun SignUpCidForm(navController: NavController) {
         ) {
             ImageInputField()
         }
-        CustomButton(text = "Suivant", onClick = { navController.navigate("sign_up_profile_picture") })
-        TextButton(onClick = { navController.navigate("sign_up_form")}) {
+        CustomButton(text = "Suivant", onClick = { onChange(SignUpNavigator.SignUpProfilePictureFragment.route) })
+        TextButton(onClick = { onChange(SignUpNavigator.SignUpSecondFormFragment.route)}) {
             androidx.compose.material.Text(text = "Precedent")
         }
 

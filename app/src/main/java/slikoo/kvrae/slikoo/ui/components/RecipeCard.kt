@@ -38,7 +38,7 @@ import java.text.SimpleDateFormat
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RecipeCardContent( area : Area) {
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", java.util.Locale.getDefault())
     val date = dateFormat.format(area.date)
 
     Card(
@@ -50,14 +50,14 @@ fun RecipeCardContent( area : Area) {
         onClick = { /*TODO*/ }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Image(painter = painterResource(id = R.drawable.petit_dejeuner_sain_frais_fond_bois),
+            Image(painter = painterResource(id = R.drawable.login),
                 contentDescription = "",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
             Column(modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Gray.copy(0.5f))) {
+                .background(Color.Black.copy(0.4f))) {
 
             }
 

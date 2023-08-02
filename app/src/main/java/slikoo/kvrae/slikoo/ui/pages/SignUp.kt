@@ -16,6 +16,8 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -23,11 +25,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.fragments.signup.ProfilePictureSection
+import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpCidForm
+import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpForm
+import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpSecondForm
 import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
 import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
-import slikoo.kvrae.slikoo.utils.SignUpNavigation
+import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
 @Preview
 @Composable
@@ -39,7 +44,9 @@ fun SignUpPreview() {
 
 @Composable
 fun SignUp(navController: NavController) {
-    val signUpNavController = rememberNavController()
+    val route = remember {
+        mutableStateOf(SignUpNavigator.SignUpFormFragment.route )
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -79,7 +86,16 @@ fun SignUp(navController: NavController) {
                     )
 
             ) {
-                SignUpNavigation(navController = signUpNavController)
+                when(route.value){
+                    SignUpNavigator.SignUpFormFragment.route -> SignUpForm(onChange = { route.value = it })
+
+                    SignUpNavigator.SignUpSecondFormFragment.route -> SignUpSecondForm(onChange = { route.value = it })
+
+                    SignUpNavigator.SignUpIDCFragment.route -> SignUpCidForm(onChange = { route.value = it })
+
+                    SignUpNavigator.SignUpProfilePictureFragment.route -> ProfilePictureSection(onChange = { route.value = it }, navController = navController)
+
+                }
             }
         }
     }

@@ -20,9 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
 
 data class TextField(
     val label: String,
@@ -40,13 +42,17 @@ fun CustomTextField(onChange : (String) -> Unit,
                     value : String, label : String,
                     modifier: Modifier = Modifier,
                     placeHolder: String = "",
-                    leadingIcon: Icon? = null,
-                    trailingIcon: Icon? = null,
+                    leadingIcon: ImageVector? = null,
+                    trailingIcon: ImageVector? = null,
 ) {
     var searchText by remember { mutableStateOf("") }
-    OutlinedTextField(value = searchText,
-        onValueChange = {
-            text -> searchText = text
+    val isFocused by remember {
+        mutableStateOf(false)
+    }
+    OutlinedTextField(
+        value = searchText,
+        onValueChange = { text ->
+            searchText = text
         },
         shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -56,7 +62,9 @@ fun CustomTextField(onChange : (String) -> Unit,
         ),
         placeholder = { Text(text = placeHolder) },
         label = { Text(text = label, overflow = TextOverflow.Ellipsis, maxLines = 1) },
-        modifier = Modifier.padding(8.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
         singleLine = true,
         visualTransformation = VisualTransformation.None,
         isError = false,
@@ -70,10 +78,14 @@ fun CustomTextField(onChange : (String) -> Unit,
                 }
             }
         },
-        //leadingIcon = { leadingIcon},
+        leadingIcon = { if (leadingIcon != null) Icon(imageVector = leadingIcon
+            , contentDescription = "",
+            tint = if (isFocused) Color.Gray else ButtonsAndIcons
+
+            ) },
         keyboardOptions = KeyboardOptions( /*TODO*/),
         keyboardActions = KeyboardActions( /*TODO*/),
-        )
+    )
 }
 /*
 @Composable

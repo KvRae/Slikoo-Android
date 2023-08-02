@@ -1,5 +1,10 @@
 package slikoo.kvrae.slikoo.ui.fragments.main_screen
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.widget.DatePicker
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,15 +27,48 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import slikoo.kvrae.slikoo.ui.components.ExpandableCard
 import slikoo.kvrae.slikoo.ui.components.ImageInputField
 import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
+import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
+import java.util.Calendar
 
 
 @Composable
-fun EventScreen(navController: NavController) {
+fun EventScreen() {
+
+    val date = remember {
+        mutableStateOf("")
+    }
+    
+    val themes = listOf<String>("Theme 1", "THeme 2", "Theme 3")
+
+    val time = remember {
+        mutableStateOf("Heure")
+    }
+    val datePickerDialog = DatePickerDialog(
+        LocalContext.current,
+        { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
+            date.value = "$mDayOfMonth/${mMonth+1}/$mYear"
+        },
+        Calendar.getInstance().get(Calendar.YEAR),
+        Calendar.getInstance().get(Calendar.MONTH),
+        Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+    )
+
+    val timePickerDialog = TimePickerDialog(
+        LocalContext.current,
+//        android.R.style.Theme_DeviceDefault_Light,
+        {_, mHour : Int , mMinute: Int ->
+            time.value = "$mHour:$mMinute"
+        }, Calendar.getInstance().get(Calendar.HOUR),
+        Calendar.getInstance().get(Calendar.MINUTE),
+        false,
+    )
+
+
+
     val localistaion = remember {
        mutableStateOf("")
     }
@@ -52,12 +90,8 @@ fun EventScreen(navController: NavController) {
     val prix = remember {
         mutableStateOf("")
     }
-    val date = remember {
-        mutableStateOf("")
-    }
-    val heure = remember {
-        mutableStateOf("")
-    }
+
+
     val description = remember {
         mutableStateOf("")
     }
@@ -69,13 +103,14 @@ fun EventScreen(navController: NavController) {
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(8.dp)
+        .background(color = ScreenBackground)
         .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center
     ){
                 Column(modifier = Modifier
                     .fillMaxSize(),
                     horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Center)
+                    verticalArrangement = Arrangement.Top)
                 {
                     Row(modifier = Modifier
                         .fillMaxWidth()
@@ -106,7 +141,16 @@ fun EventScreen(navController: NavController) {
                         .padding(8.dp)) {
                         OutlinedTextField(label = { Text(text = "Prix") }, value = prix.value, onValueChange = { it -> prix.value = it },modifier = Modifier.weight(1f))
                         Spacer(modifier = Modifier.width(8.dp))
-                        OutlinedTextField(label = { Text(text = "Heure") },value = heure.value, onValueChange = { it -> heure.value = it }, modifier = Modifier.weight(1f))
+
+                        OutlinedTextField(label = { Text(text = "Heure") }
+                            ,value = time.value,
+                            onValueChange = { it -> time.value = it },
+                            enabled = false,
+
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable { timePickerDialog.show() }
+                        )
                     }
 
                     Row(
@@ -114,14 +158,17 @@ fun EventScreen(navController: NavController) {
                             .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        OutlinedTextField(label = { Text(text = "Date") },value = date.value, onValueChange = {
-                            it -> date.value = it
-                        },
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                        OutlinedTextField(label = { Text(text = "Date") }
+                            ,value = date.value,
+                            onValueChange = { it -> date.value = it },
+                            enabled = false,
 
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable { datePickerDialog.show() }
+                        )
                     }
-                   ExpandableCard(title = "Information detailé") {
+//                   ExpandableCard(title = "Information detailé") {
                        Row(
                            modifier = Modifier
                                .fillMaxWidth()
@@ -144,7 +191,7 @@ fun EventScreen(navController: NavController) {
                        ) {
                            ImageInputField()
                        }
-                   }
+//                   }
 
                     Spacer(modifier = Modifier.weight(1f))
 
@@ -162,7 +209,8 @@ fun EventScreen(navController: NavController) {
                     }
                 }
             }
-}
+    }
+
 
 fun onSubmit() {
 

@@ -27,16 +27,34 @@ fun SettingsScreen(navController: NavController) {
                 .fillMaxSize(),
             content = {
                 item {
-                    SettingCard(title = "Karam Mannai", subtitle = "Manage your account", actionIcon = Icons.Filled.Person, icon = Icons.Filled.Person)
+                    SettingCard(title = "Karam Mannai",
+                        subtitle = "Manage your account",
+                        actionIcon = Icons.Filled.Person, icon = Icons.Filled.Person,
+                        onClick = {
+                        navController.navigate("profile")
+                    })
                 }
                 item {
-                    SettingCard(title = "Modifier le profil ", actionIcon = Icons.Filled.KeyboardArrowRight, icon = Icons.Filled.Edit)
+                    SettingCard(title = "Modifier le profil ",
+                        actionIcon = Icons.Filled.KeyboardArrowRight, icon = Icons.Filled.Edit, onClick = {
+                            navController.navigate("edit_profile")
+                        })
                 }
                 item {
-                    SettingCard(title = "Mettre a jour le profil avancé",  actionIcon = Icons.Filled.KeyboardArrowRight, icon = Icons.Filled.Info)
+                    SettingCard(title = "Mettre a jour le profil avancé",
+                        actionIcon = Icons.Filled.KeyboardArrowRight, icon = Icons.Filled.Info, onClick = {
+                            navController.navigate("advanced_profile")
+                        })
                 }
                 item {
-                    SettingCard(title = "Se deconnecter", actionIcon = Icons.Filled.KeyboardArrowRight, icon = Icons.Filled.ExitToApp)
+                    SettingCard(title = "Se deconnecter",
+                        actionIcon = Icons.Filled.KeyboardArrowRight,
+                        icon = Icons.Filled.ExitToApp,
+                        onClick = {
+                            //navController.navigate("sign_in_screen")
+                        }
+                    )
+
                 }
         })
 

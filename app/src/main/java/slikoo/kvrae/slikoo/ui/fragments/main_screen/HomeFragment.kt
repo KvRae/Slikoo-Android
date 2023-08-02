@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.fragments.main_screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,29 +22,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.AreaFilterCard
 import slikoo.kvrae.slikoo.ui.components.RatingCard
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBar
 import slikoo.kvrae.slikoo.ui.theme.PrimaryBlackText
+import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
 import slikoo.kvrae.slikoo.viewmodel.AreaViewModel
 import slikoo.kvrae.slikoo.viewmodel.CategoryViewModel
+import slikoo.kvrae.slikoo.viewmodel.RatingViewModel
 
 
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    val context = androidx.compose.ui.platform.LocalContext.current
-    HomeScreen(navController = NavController(context))
+
+    HomeScreen()
 }
 
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = ScreenBackground)
             .verticalScroll(rememberScrollState())
     ) {
         Column(
@@ -106,6 +109,7 @@ fun RecipesCategorySection() {
 
 @Composable
 fun RatingListSection() {
+    var ratings = RatingViewModel().getRatings()
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -114,8 +118,8 @@ fun RatingListSection() {
         Column(modifier = Modifier.fillMaxWidth()) {
             SectionHeader(title = "Rating List")
             LazyRow(modifier = Modifier.fillMaxWidth()) {
-                items(3) {
-                        RatingCard()
+                items(ratings.size) {
+                        RatingCard(ratings[it])
                 }
             }
         }

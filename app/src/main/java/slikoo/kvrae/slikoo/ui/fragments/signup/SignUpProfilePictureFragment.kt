@@ -38,11 +38,12 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
+import slikoo.kvrae.slikoo.utils.AppScreenNavigator
+import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
 
 @Composable
-fun ProfilePictureSection(navController : NavController) {
-
+fun ProfilePictureSection(onChange : (String) -> Unit, navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -51,17 +52,18 @@ fun ProfilePictureSection(navController : NavController) {
         ) {
             Text(text = "Photo de profil", style = MaterialTheme.typography.h4)
             Spacer(modifier = Modifier.size(8.dp))
-            CustomSlider(maxSlide = 3, currentSlide = 3)
+            CustomSlider(maxSlide = 4, currentSlide = 4)
             ProfileImagePicker()
             CustomButton(text = "Terminer",
-                onClick = { /*TODO*/ }
+                onClick = {
+                    navController.navigate(AppScreenNavigator.SignInAppScreen.route)
+                }
             )
-            TextButton(onClick = { navController.navigate("sign_up_idc") }) {
+            TextButton(onClick = { onChange(SignUpNavigator.SignUpIDCFragment.route) }) {
                 Text(text = "Precedent")
             }
         }
-}
-
+    }
 
 
 @Composable
@@ -104,7 +106,8 @@ fun ProfileImagePicker() {
             Icon(imageVector = ImageVector.vectorResource(id = R.drawable.camera),
                 contentDescription = "",
                 tint = ButtonsAndIcons,
-                modifier = Modifier.size(50.dp))
+                modifier = Modifier.size(50.dp)
+            )
             else
                 AsyncImage(model = imageUrl,
                     contentDescription = "picture",
@@ -116,10 +119,10 @@ fun ProfileImagePicker() {
                             launcher.launch(
                                 PickVisualMediaRequest(
                                     ActivityResultContracts.PickVisualMedia.ImageOnly
-                                ))
+                                )
+                            )
                         }
-                )
-            
-        }
-    }
+                    )
+                }
+            }
 }

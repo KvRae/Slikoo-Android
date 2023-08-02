@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+
 
 package slikoo.kvrae.slikoo.ui.pages
 
@@ -22,7 +22,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Email
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -119,7 +120,7 @@ fun LoginForm(navController: NavController) {
                 ) {
                     Text(text = "Se connecter", style = MaterialTheme.typography.h5)
                     Spacer(modifier = Modifier.height(16.dp))
-                    CustomTextField(onChange ={} , value = "" , label = "Email" )
+                    CustomTextField(onChange ={} , value = "" , label = "Email", leadingIcon = Icons.Rounded.Email,  )
 
                 Spacer(modifier = Modifier.height(16.dp))
 

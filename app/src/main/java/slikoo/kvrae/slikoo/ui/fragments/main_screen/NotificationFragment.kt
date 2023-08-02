@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.NotificationItem
 import slikoo.kvrae.slikoo.ui.components.NotificationItemContent
 import slikoo.kvrae.slikoo.viewmodel.NotificationViewModel
@@ -19,7 +18,7 @@ import slikoo.kvrae.slikoo.viewmodel.NotificationViewModel
 
 
 @Composable
-fun NotificationScreen(navController: NavController) {
+fun NotificationScreen() {
     val notifications = remember { NotificationViewModel().getNotifications()}
     val scrollState = rememberScrollState()
     Box(modifier = Modifier

@@ -30,11 +30,11 @@ import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", actionIcon: ImageVector) {
+fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", actionIcon: ImageVector, onClick : () -> Unit) {
     Card(
          modifier = Modifier.padding(10.dp),
         shape = RoundedCornerShape(16.dp),
-        onClick = { /*TODO*/ },
+        onClick = { onClick() },
         elevation = 4.dp){
         TopAppBar(
             modifier = Modifier

@@ -1,6 +1,7 @@
 package slikoo.kvrae.slikoo.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -12,6 +13,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
 import slikoo.kvrae.slikoo.ui.theme.PrimaryBlackText
+import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,10 +31,9 @@ import slikoo.kvrae.slikoo.ui.theme.PrimaryBlackText
 @Composable
 fun CustomTopBar(title: String = "Slikoo") {
     TopAppBar(
-        modifier = Modifier.fillMaxWidth()
-        ,
+        modifier = Modifier.background(color = Color.Blue).fillMaxWidth(),
         title = {
-                if (title == "Home") {
+                if (title == MainScreenNavigator.HomeScreen.route) {
                     Image(
                         painter = painterResource(id = R.drawable.logo2),
                         contentDescription = "logo",

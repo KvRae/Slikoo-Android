@@ -1,6 +1,5 @@
 package slikoo.kvrae.slikoo.ui.components
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.models.Notification
 import slikoo.kvrae.slikoo.viewmodel.NotificationViewModel
@@ -40,7 +43,6 @@ fun NotificationItem(content : @Composable () -> Unit) {
             content()
         }
     }
-
 }
 
 
@@ -54,7 +56,9 @@ fun NotificationItemContent(notification: Notification ) {
                 modifier = Modifier.weight(0.2f),
                 painter = painterResource(id = R.drawable.avatar),
                 contentDescription = "" )
-            Text(text = notification.title, modifier = Modifier.padding(start = 8.dp))
+            Text(text = notification.title,
+                style = TextStyle(color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(start = 8.dp))
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = { NotificationViewModel().removeNotification(notification = notification) }) {
                 Icon(imageVector = Icons.Default.Close,
@@ -63,6 +67,8 @@ fun NotificationItemContent(notification: Notification ) {
                     modifier = Modifier.size(15.dp))
             }
         }
-        Text(text = notification.description)
+        Text(text = notification.description,
+        maxLines = 2,
+        overflow = TextOverflow.Ellipsis)
     }
 }
