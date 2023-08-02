@@ -5,7 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import slikoo.kvrae.slikoo.ui.pages.AdvancedEditProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.AnimatedSplashScreen
+import slikoo.kvrae.slikoo.ui.pages.EditProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.EmailInput
 import slikoo.kvrae.slikoo.ui.pages.LoginForm
 import slikoo.kvrae.slikoo.ui.pages.MainScreen
@@ -27,6 +29,8 @@ sealed class AppScreenNavigator(val route: String){
     object ForgotPasswordAppScreen: AppScreenNavigator("forgot_password_screen")
     object VerifyEmailAppScreen: AppScreenNavigator("verify_email_screen")
     object ResetPasswordAppScreen: AppScreenNavigator("reset_password_screen")
+    object EditProfileAppScreen: AppScreenNavigator("edit_profile_screen")
+    object AdvancedEditProfilesAppScreen: AppScreenNavigator("advanced_edit_profile_screen")
 }
 
 sealed class SignUpNavigator(val route: String){
@@ -75,6 +79,12 @@ fun Navigation() {
         }
         composable(route = AppScreenNavigator.ResetPasswordAppScreen.route) {
             PasswordReset(navController = navController)
+        }
+        composable(route = AppScreenNavigator.EditProfileAppScreen.route) {
+            EditProfileScreen()
+        }
+        composable(route = AppScreenNavigator.AdvancedEditProfilesAppScreen.route) {
+            AdvancedEditProfileScreen(navController = navController)
         }
     }
 }

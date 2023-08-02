@@ -30,7 +30,11 @@ import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", actionIcon: ImageVector, onClick : () -> Unit) {
+fun SettingCard(icon: ImageVector,
+                modifier: Modifier = Modifier,
+                title: String, subtitle: String = "Null",
+                actionIcon: ImageVector,
+                onClick : () -> Unit) {
     Card(
          modifier = Modifier.padding(10.dp),
         shape = RoundedCornerShape(16.dp),
@@ -41,8 +45,10 @@ fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", act
                 .fillMaxSize(),
             title = {
                 Column( modifier = Modifier.padding(8.dp)) {
-                    Text(text = title, style = TextStyle(color =if (subtitle != "Null") Color.White else Color.Black))
-                    if (subtitle != "Null") Text(text = subtitle, style = TextStyle(color = Color.White))
+                    Text(text = title,
+                        style = TextStyle(color =if (subtitle != "Null") Color.White else Color.Black))
+                    if (subtitle != "Null") Text(text = subtitle,
+                        style = TextStyle(color = Color.White))
 
                 }
             },
@@ -73,7 +79,9 @@ fun SettingCard(icon: ImageVector, title: String, subtitle: String = "Null", act
                             )
                     }
                 else
-                    Icon(imageVector = actionIcon, contentDescription = "", modifier = Modifier.padding(8.dp))
+                    Icon(imageVector = actionIcon,
+                        contentDescription = "",
+                        modifier = Modifier.padding(8.dp))
                 },
             navigationIcon = {
                 if (subtitle != "Null")

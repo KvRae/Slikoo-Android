@@ -32,10 +32,10 @@ import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(navController: NavController, currentScreen : String = "Home") {
 
     val title = remember {
-        mutableStateOf("Home")
+        mutableStateOf(currentScreen)
     }
     val bottomNavigationItems = listOf(
         BottomNavItem("Home", MainScreenNavigator.HomeScreen.route, Icons.Rounded.Home, 0),
@@ -66,7 +66,7 @@ fun MainScreen(navController: NavController) {
 
                     "Notifications" -> NotificationScreen()
 
-                    "Parametres" -> SettingsScreen()
+                    "Parametres" -> SettingsScreen(navController = navController)
 
                 }
          }

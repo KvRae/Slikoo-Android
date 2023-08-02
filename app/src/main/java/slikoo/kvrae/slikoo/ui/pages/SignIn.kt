@@ -45,6 +45,7 @@ import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.theme.DividerColor
 import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
 import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
+import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 
 @Composable
@@ -164,7 +165,8 @@ fun onNavigate(navController: NavController, route: String) {
 }
 
 fun onSubmit(navController: NavController) {
-    navController.navigate("main_screen")
+    navController.popBackStack()
+    navController.navigate(AppScreenNavigator.MainAppScreen.route)
 
 }
 
@@ -172,5 +174,14 @@ fun onValidate(username: String, password: String, navController: NavController)
     println("username: $username")
     println("password: $password")
     onSubmit(navController)
-
 }
+
+//fun getGoogleSignInClient(context: Context ): GoogleSignInClient {
+//    val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+////         Request id token if you intend to verify google user from your backend server
+////        .requestIdToken(context.getString(R.string.backend_client_id))
+//        .requestEmail()
+//        .build()
+//
+//    return GoogleSignIn.getClient(context, signInOptions)
+//}

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -28,16 +27,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
+import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 
-@Preview
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AdvancedEditProfileScreen() {
+fun AdvancedEditProfileScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,7 +63,10 @@ fun AdvancedEditProfileScreen() {
                     .padding(start = 16.dp, top = 50.dp)
                     .size(150.dp)
             )
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                navController.popBackStack()
+                navController.navigate(AppScreenNavigator.MainAppScreen.route)
+            }) {
                 Icon(imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = "",
                     tint = ScreenBackground,
@@ -106,11 +107,7 @@ fun AdvancedEditProfileScreen() {
                 Text(text = "A propos")
                 Text(text = "Description")
             }
-
-
-
         }
-
         Spacer(modifier = Modifier.height(16.dp))
         LazyRow(content = {
             items(5)
@@ -124,8 +121,6 @@ fun AdvancedEditProfileScreen() {
                 }
             }
         })
-
-
     }
 
 }
