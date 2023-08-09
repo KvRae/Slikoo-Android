@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
@@ -40,6 +42,7 @@ fun AdvancedEditProfileScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(ScreenBackground)
+            .verticalScroll(rememberScrollState())
     ) {
         Box(
             modifier = Modifier
@@ -51,7 +54,7 @@ fun AdvancedEditProfileScreen(navController: NavController) {
                 contentDescription = "Profile cover picture",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp),
+                    .height(120.dp),
                 contentScale = ContentScale.Crop
             )
             Image(
@@ -60,8 +63,8 @@ fun AdvancedEditProfileScreen(navController: NavController) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(shape = RoundedCornerShape(50))
-                    .padding(start = 16.dp, top = 50.dp)
-                    .size(150.dp)
+                    .padding(start = 16.dp, top = 60.dp,)
+                    .size(120.dp)
             )
             IconButton(onClick = {
                 navController.popBackStack()
@@ -99,10 +102,11 @@ fun AdvancedEditProfileScreen(navController: NavController) {
                     .width(1.dp)
 
             )
+            Spacer(modifier = Modifier.width(8.dp))
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(0.5f).padding(start = 16.dp)
+                    .fillMaxWidth(0.5f)
             ) {
                 Text(text = "A propos")
                 Text(text = "Description")
@@ -117,7 +121,7 @@ fun AdvancedEditProfileScreen(navController: NavController) {
                     .clip(shape = RoundedCornerShape(16.dp),)
                     .background(ScreenBackground),
                     ) {
-                    Text(text = "My Offres", modifier = Modifier.padding(8.dp))
+                    Text(text = "My Offres", modifier = Modifier.padding(12.dp))
                 }
             }
         })

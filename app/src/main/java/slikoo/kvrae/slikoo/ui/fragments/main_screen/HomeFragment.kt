@@ -52,6 +52,7 @@ fun HomeScreen() {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
+            Spacer(modifier = Modifier.padding(8.dp))
             SearchBar(onSearch = {})
             OnlineRecipes()
             RecipesCategorySection()
@@ -87,7 +88,7 @@ fun RecipesCategorySection() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .height((160*categories.size ).dp)
+            .height((160 * categories.size).dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             SectionHeader(title = "Recipes Category")

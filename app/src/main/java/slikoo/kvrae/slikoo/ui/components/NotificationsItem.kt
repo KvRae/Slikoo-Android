@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,7 +50,6 @@ fun NotificationItem(content : @Composable () -> Unit) {
 
 @Composable
 fun NotificationItemContent(notification: Notification ) {
-
     Column(modifier = Modifier.fillMaxWidth()) {
         Row {
             Image(
@@ -60,7 +60,12 @@ fun NotificationItemContent(notification: Notification ) {
                 style = TextStyle(color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(start = 8.dp))
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = { NotificationViewModel().removeNotification(notification = notification) }) {
+            IconButton(onClick =
+            { NotificationViewModel().removeNotification(notification = notification)
+                Log.d("Delete Item",NotificationViewModel().getNotifications().size.toString())
+
+            })
+            {
                 Icon(imageVector = Icons.Default.Close,
                     contentDescription = "",
                     tint = Color.Gray,

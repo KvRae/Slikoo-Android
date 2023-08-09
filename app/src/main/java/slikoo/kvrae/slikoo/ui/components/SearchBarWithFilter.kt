@@ -34,8 +34,11 @@ import slikoo.kvrae.slikoo.ui.theme.DefautBlueElement
 
 
 @Composable
-fun SearchBarWithFilter(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
+fun SearchBarWithFilter(onSearch: (String) -> Unit,
+                        modifier: Modifier = Modifier,
+                        onFilter: (Boolean) -> Unit) {
     var searchText by remember { mutableStateOf("") }
+    var isToggled by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     Row(
         modifier = Modifier
@@ -94,7 +97,10 @@ fun SearchBarWithFilter(onSearch: (String) -> Unit, modifier: Modifier = Modifie
 
         // Filter Button
         IconButton(
-            onClick = { /* Handle filter button click */ },
+            onClick = {
+                isToggled = !isToggled
+                onFilter(isToggled)
+            },
             modifier = Modifier.padding(start = 16.dp)
             .background(
                 color = Color.White,

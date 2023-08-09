@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -61,7 +62,7 @@ fun RecipeCardContent( area : Area) {
 
             }
 
-            Column(modifier = Modifier.padding(4.dp)) {
+            Column(modifier = Modifier.padding(8.dp)) {
                 Row(horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically) {
                     Icon(imageVector = Icons.Rounded.LocationOn,
@@ -111,7 +112,7 @@ fun RecipeCardContent( area : Area) {
                         overflow = TextOverflow.Ellipsis
                         )
                 }
-                Row {
+                Row(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                     Text(text = area.place, modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 10.sp,
                             fontWeight = FontWeight.Bold),
@@ -119,7 +120,7 @@ fun RecipeCardContent( area : Area) {
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(text = "${area.price} $", modifier = Modifier.padding(end = 8.dp),
-                        style = TextStyle(fontSize = 10.sp,
+                        style = TextStyle(fontSize = 12.sp,
                             fontWeight = FontWeight.Medium),
                         color = SecondaryWhiteText)
                 }

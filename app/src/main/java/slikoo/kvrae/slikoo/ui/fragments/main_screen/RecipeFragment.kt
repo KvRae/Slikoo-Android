@@ -19,23 +19,29 @@ import slikoo.kvrae.slikoo.ui.components.SearchBarWithFilter
 import slikoo.kvrae.slikoo.viewmodel.AreaViewModel
 
 
+
 @Composable
 fun RecipeScreen() {
     val areas = AreaViewModel().getAreas()
     val scrollState = rememberScrollState()
-    val showBottomSheet by remember {
+    val isFilterVisible by remember {
         mutableStateOf(false)
     }
+
     Box(modifier = Modifier
         .fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
         Column(modifier = Modifier
             .fillMaxSize()
-            .scrollable(scrollState, orientation = Orientation.Vertical, enabled = true),
+            .scrollable(
+                scrollState,
+                orientation = Orientation.Vertical,
+                enabled = true
+            ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ){
-            SearchBarWithFilter({})
+            SearchBarWithFilter(onSearch = {}, onFilter = {})
             LazyVerticalGrid(columns = GridCells.Fixed(2),
                 content ={
                 items(areas.size){

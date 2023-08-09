@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
+import slikoo.kvrae.slikoo.ui.components.PasswordTextField
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
 
@@ -46,28 +50,16 @@ fun SignUpForm(onChange: (String) -> Unit) {
             CustomSlider(maxSlide = 4, currentSlide = 1)
 
 
-            CustomTextField(onChange = {}, value = "", label = "Nom")
+            CustomTextField(onChange = {}, value = "", label = "Nom", leadingIcon = Icons.Rounded.Person)
 
-            CustomTextField(onChange = {}, value = "", label = "Prenom")
+            CustomTextField(onChange = {}, value = "", label = "Prenom", leadingIcon = Icons.Rounded.Person)
 
-            CustomTextField(onChange = {}, value = "", label = "Adresse Electronique")
+            CustomTextField(onChange = {}, value = "", label = "Adresse Electronique", leadingIcon = Icons.Rounded.Email)
 
-            CustomTextField(onChange = {}, value = "", label = "Mot de passe")
+            PasswordTextField(label = "Mot de passe", value = "", placeHolder = "entrer votre mot de passe", onChange = {})
 
-            CustomTextField(onChange = {}, value = "", label = "Confirmer le mot de passe")
+            PasswordTextField(label = "Repeter mot de passe", value = "", placeHolder = "repeter votre mot de passe", onChange = {})
 
-//            ExpandableCard(title = "Aditionnel") {
-//                CustomTextField(onChange = {}, value = "", label = "Numero de telephone")
-//
-//                CustomTextField(onChange = {}, value = "", label = "Code postal")
-//
-//                CustomTextField(
-//                    onChange = {},
-//                    value = "",
-//                    label = "Description profil",
-//                    modifier = Modifier.fillMaxSize()
-//                )
-//            }
 
             Spacer(modifier = Modifier.padding(4.dp))
 

@@ -6,14 +6,12 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -23,15 +21,18 @@ import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
 import slikoo.kvrae.slikoo.ui.theme.PrimaryBlackText
+import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
 import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Preview
 @Composable
 fun CustomTopBar(title: String = "Slikoo") {
     TopAppBar(
-        modifier = Modifier.background(color = Color.Blue).fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().background(ScreenBackground),
+        backgroundColor = ScreenBackground,
+        elevation = 0.dp,
         title = {
                 if (title == MainScreenNavigator.HomeScreen.route) {
                     Image(
@@ -45,9 +46,8 @@ fun CustomTopBar(title: String = "Slikoo") {
                     Text(title, style = TextStyle(fontSize = 24.sp,
                         color = PrimaryBlackText,
                         fontWeight = FontWeight.Bold))
-                }
-
-        },
+                    }
+                },
         actions = {
             if (title != "Settings") {
                 IconButton(onClick = { /*TODO*/ }) {
@@ -55,7 +55,7 @@ fun CustomTopBar(title: String = "Slikoo") {
                         painter = painterResource(id = R.drawable.avatar),
                         contentDescription = "avatar",
                         modifier = Modifier.clip(CircleShape)                       // clip to the circle shape
-                            .border(2.dp, ButtonsAndIcons, CircleShape)
+                            .border(2.dp, ButtonsAndIcons, CircleShape).size(40.dp)
                     )
                 }
             }

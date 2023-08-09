@@ -1,33 +1,89 @@
 package slikoo.kvrae.slikoo.ui.components
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
+import slikoo.kvrae.slikoo.ui.theme.DefautBlueElement
+import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
 
 
 @Composable
-fun CustomAlertDialog() {
-    var dialogState by remember { mutableStateOf(false) }
-    if (dialogState)
+fun CustomAlertDialog(state : Boolean = false,
+                      title: String = "title",
+                      text: String = "Body",
+                      confirmText: String = "Confirm",
+                      dismissText: String = "Dismiss",
+                      onConfirm: () -> Unit = {}) {
+
+    val dialogState = remember { mutableStateOf(state) }
+
+    if (dialogState.value){
     AlertDialog(
-        onDismissRequest = { dialogState = false },
+        onDismissRequest = { dialogState.value = false },
         title = {
-                 Text(text = "This is a title")},
+                Row(Modifier.fillMaxWidth(),
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                ) {
+                    Text(text = title,
+                        style = TextStyle(
+                            color = androidx.compose.ui.graphics.Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold))
+                }
+                 },
         text = {
-            Text(text = "This is a text")
+            Text(text = text)
         },
+        shape = RoundedCornerShape(16.dp),
         confirmButton = {
-                        Button(onClick = { dialogState = false }) {
-                Text(text = "Confirm")
+                        Button(onClick = {
+                            onConfirm();
+                            dialogState.value = false
+                        }, shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = ButtonsAndIcons,
+                                contentColor = androidx.compose.ui.graphics.Color.White
+                            )
+
+                        ) {
+                            Text(text = confirmText, style = TextStyle(
+                                color = SecondaryWhiteText,
+                                fontSize = 16.sp,
+                                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold))
                         }
         },
         dismissButton = {
-                         Button(onClick = { dialogState = false }) {
-                Text(text = "Dismiss") }
-                        })
+            TextButton(onClick = {
+                dialogState.value = false
+                                 },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = androidx.compose.ui.graphics.Color.Transparent,
+                    contentColor = DefautBlueElement)
+            ) {
+                Text(text = dismissText)
+            }
+
+        }
+    )}
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun AlertDialogPreview() {
+    CustomAlertDialog(state = true)
 }

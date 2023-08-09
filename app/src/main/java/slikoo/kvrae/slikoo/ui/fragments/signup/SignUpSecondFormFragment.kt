@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.LocationOn
+import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,6 +42,7 @@ fun SignUpSecondForm( onChange: (String) -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.size(16.dp))
             Text(
                 text = "Sign Up",
                 fontSize = 30.sp,
@@ -46,9 +50,9 @@ fun SignUpSecondForm( onChange: (String) -> Unit) {
                 Spacer(modifier = Modifier.size(8.dp))
                 CustomSlider(maxSlide = 4, currentSlide = 2)
 
-                CustomTextField(onChange = {}, value = "", label = "Numero de telephone")
+                CustomTextField(onChange = {}, value = "", label = "Numero de telephone", leadingIcon = Icons.Rounded.Phone)
 
-                CustomTextField(onChange = {}, value = "", label = "Code postal")
+                CustomTextField(onChange = {}, value = "", label = "Code postal", leadingIcon = Icons.Rounded.LocationOn)
 
                 CustomTextField(
                     onChange = {},
@@ -57,7 +61,7 @@ fun SignUpSecondForm( onChange: (String) -> Unit) {
                     modifier = Modifier.fillMaxSize())
 
 
-            Spacer(modifier = Modifier.padding(8.dp))
+            Spacer(modifier = Modifier.padding(32.dp))
 
             CustomButton(text = "Suivant", onClick = { onChange(SignUpNavigator.SignUpIDCFragment.route)})
 

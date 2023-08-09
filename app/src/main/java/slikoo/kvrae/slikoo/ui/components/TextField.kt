@@ -13,17 +13,24 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
 
 data class TextField(
@@ -33,7 +40,8 @@ data class TextField(
     val leadingIcon: Icon? = null,
     val trailingIcon: Icon? = null,
     val modifier: Modifier = Modifier,
-    val onChange: (String) -> Unit
+    val onChange: (String) -> Unit,
+    val keyboardType: KeyboardType = KeyboardType.Text,
 )
 
 
@@ -46,7 +54,7 @@ fun CustomTextField(onChange : (String) -> Unit,
                     trailingIcon: ImageVector? = null,
 ) {
     var searchText by remember { mutableStateOf("") }
-    val isFocused by remember {
+    var isFocused by remember {
         mutableStateOf(false)
     }
     OutlinedTextField(
@@ -56,15 +64,21 @@ fun CustomTextField(onChange : (String) -> Unit,
         },
         shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color.Blue,
+            focusedBorderColor = ButtonsAndIcons,
             unfocusedBorderColor = Color.Gray,
             disabledBorderColor = Color.Transparent,
         ),
         placeholder = { Text(text = placeHolder) },
-        label = { Text(text = label, overflow = TextOverflow.Ellipsis, maxLines = 1) },
+        label = { Text(text = label,
+            overflow = TextOverflow.Ellipsis,
+            style = TextStyle(color = if (!isFocused) Color.Gray else ButtonsAndIcons),
+            maxLines = 1) },
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .onFocusChanged { focusState ->
+                isFocused = focusState.isFocused }
+        ,
         singleLine = true,
         visualTransformation = VisualTransformation.None,
         isError = false,
@@ -73,125 +87,78 @@ fun CustomTextField(onChange : (String) -> Unit,
                 IconButton(onClick = { searchText = "" }) {
                     Icon(
                         imageVector = Icons.Rounded.Clear,
-                        contentDescription = "Clear Icon"
+                        contentDescription = "Clear Icon",
+                        tint = if (!isFocused) Color.Gray else ButtonsAndIcons
                     )
                 }
             }
         },
+
         leadingIcon = { if (leadingIcon != null) Icon(imageVector = leadingIcon
             , contentDescription = "",
-            tint = if (isFocused) Color.Gray else ButtonsAndIcons
+            tint = if (!isFocused) Color.Gray else ButtonsAndIcons
 
             ) },
         keyboardOptions = KeyboardOptions( /*TODO*/),
-        keyboardActions = KeyboardActions( /*TODO*/),
+        keyboardActions = KeyboardActions(
+
+        ),
+
+
     )
 }
-/*
+
+
 @Composable
 fun PasswordTextField(
-    text: String,
-    modifier: Modifier = Modifier,
-    semanticContentDescription: String = "",
-    labelText: String = "",
-    validateStrengthPassword: Boolean = false,
-    hasError: Boolean = false,
-    onHasStrongPassword: (isStrong: Boolean) -> Unit = {},
-    onTextChanged: (text: String) -> Unit,
+    label: String = "Password",
+    value: String,
+    placeHolder: String,
+    onChange: (String) -> Unit,
+    isError: Boolean = false,
 ) {
-    val focusManager = LocalFocusManager.current
-    val showPassword = remember { mutableStateOf(false) }
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        OutlinedTextField(
-            modifier = Modifier
-                .background(color = colorResource(id = R.color.colorVeryDarkDesaturatedBlue))
-                .fillMaxWidth()
-                .semantics { contentDescription = semanticContentDescription },
-            value = text,
-            onValueChange = onTextChanged,
-            placeholder = {
-                Text(
-                    text = labelText,
-                    color = Color.White,
-                    fontSize = 16.sp,
-//                    fontFamily = muliFontFamily
-                )
-            },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                autoCorrect = true,
-                keyboardType = KeyboardType.Text,
-                //imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focusManager.clearFocus()
-                }
-            ),
-            singleLine = true,
-            isError = hasError,
-            visualTransformation = if (showPassword.value) VisualTransformation.None else PasswordVisualTransformation(),
-            trailingIcon = {
-                val (icon, iconColor) = if (showPassword.value) {
-                    Pair(
-                        Icons.Filled.Visibility,
-                        colorResource(id = R.color.colorBrightViolet200)
-                    )
-                } else {
-                    Pair(Icons.Filled.VisibilityOff, colorResource(id = R.color.colorWhite))
-                }
-
-                IconButton(onClick = { showPassword.value = !showPassword.value }) {
-                    Icon(
-                        icon,
-                        contentDescription = "Visibility",
-                        tint = iconColor
-                    )
-                }
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.White,
-                unfocusedBorderColor = Color.White,
-                textColor = Color.White,
-                cursorColor = Color.White,
-            )
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        if (validateStrengthPassword && text != String.empty()) {
-            val strengthPasswordType = strengthChecker(text)
-            if (strengthPasswordType == StrengthPasswordTypes.STRONG) {
-                onHasStrongPassword(true)
-            } else {
-                onHasStrongPassword(false)
-            }
-            Text(
-                modifier = Modifier.semantics { contentDescription = "StrengthPasswordMessage" },
-                text = buildAnnotatedString {
-                    withStyle(
-                        style = SpanStyle(
-                            color = Color.White,
-                            fontSize = 10.sp,
-                            fontFamily = muliFontFamily
-                        )
-                    ) {
-                        append(stringResource(id = R.string.warning_password_level))
-                        withStyle(style = SpanStyle(color = colorResource(id = R.color.colorOrange100))) {
-                            when (strengthPasswordType) {
-                                StrengthPasswordTypes.STRONG ->
-                                    append(" ${stringResource(id = R.string.warning_password_level_strong)}")
-                                StrengthPasswordTypes.WEAK ->
-                                    append(" ${stringResource(id = R.string.warning_password_level_weak)}")
-                            }
-                        }
-                    }
-                }
-            )
-        }
+    var passwordVisibility by remember {
+        mutableStateOf(true)
     }
+    var isFocused by remember {
+        mutableStateOf(false)
+    }
+    OutlinedTextField(
+        value = value,
+        onValueChange = { onChange(it) },
+        label = { Text(text = label, style = TextStyle(color = if (!isFocused) Color.Gray else ButtonsAndIcons)) },
+        isError = isError,
+        placeholder = { Text(text = placeHolder) },
+        leadingIcon = { Icon(imageVector = Icons.Rounded.Lock,
+            contentDescription = "lock icon" ,
+            tint = if (!isFocused) Color.Gray else ButtonsAndIcons
+        ) },
+        trailingIcon = {
+                IconButton(onClick = {
+                        passwordVisibility = !passwordVisibility
+                }) {
+                    Icon(
+                        painter = if (passwordVisibility)painterResource(id = R.drawable.visibility_icon) else painterResource(id = R.drawable.visibility_off_icon),
+                        contentDescription = "Clear Icon",
+                        tint = if (!isFocused) Color.Gray else ButtonsAndIcons
+                    )
+
+                }
+        },
+        modifier = Modifier
+            .fillMaxWidth().padding(8.dp).onFocusChanged { focusState ->
+                isFocused = focusState.isFocused },
+        singleLine = true,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = ButtonsAndIcons,
+            unfocusedBorderColor = Color.Gray,
+            disabledBorderColor = Color.Transparent,
+        ),
+        shape = RoundedCornerShape(8.dp),
+        keyboardOptions = KeyboardOptions( keyboardType = KeyboardType.Password),
+        keyboardActions = KeyboardActions( /*TODO*/),
+        visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+
+    )
 }
 
-
-*/

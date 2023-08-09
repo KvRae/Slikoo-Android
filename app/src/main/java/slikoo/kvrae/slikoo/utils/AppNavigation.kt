@@ -2,6 +2,8 @@ package slikoo.kvrae.slikoo.utils
 
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -54,6 +56,9 @@ sealed class MainScreenNavigator(val route: String){
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+    val mainScreenIndex = remember {
+        mutableStateOf("Home")
+    }
     NavHost(
         navController = navController,
         // Set start destination
@@ -66,7 +71,7 @@ fun Navigation() {
             SignUp(navController = navController)
         }
         composable(route = AppScreenNavigator.MainAppScreen.route) {
-            MainScreen(navController = navController)
+            MainScreen(navController = navController, currentScreen = mainScreenIndex.value)
         }
         composable(route = AppScreenNavigator.SplashAppScreen.route) {
             AnimatedSplashScreen(navController = navController)
@@ -81,10 +86,12 @@ fun Navigation() {
             PasswordReset(navController = navController)
         }
         composable(route = AppScreenNavigator.EditProfileAppScreen.route) {
-            EditProfileScreen()
+            EditProfileScreen(navController = navController)
+            mainScreenIndex.value = MainScreenNavigator.SettingsScreen.route
         }
         composable(route = AppScreenNavigator.AdvancedEditProfilesAppScreen.route) {
             AdvancedEditProfileScreen(navController = navController)
+            mainScreenIndex.value = MainScreenNavigator.SettingsScreen.route
         }
     }
 }

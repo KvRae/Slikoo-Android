@@ -5,7 +5,6 @@ package slikoo.kvrae.slikoo.ui.pages
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +41,7 @@ import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
+import slikoo.kvrae.slikoo.ui.components.PasswordTextField
 import slikoo.kvrae.slikoo.ui.theme.DividerColor
 import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
 import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
@@ -50,7 +50,7 @@ import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 @Composable
 fun LoginForm(navController: NavController) {
-    val logo = if(isSystemInDarkTheme()) R.drawable.slikoo_white else R.drawable.slikoo_white
+    val logo = R.drawable.slikoo_white
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val largeText = """Bienvenue dans notre temple des saveurs
@@ -97,8 +97,10 @@ fun LoginForm(navController: NavController) {
                         contentDescription = "Logo",
                         modifier = Modifier.size(100.dp)
                     )
-                    Text(text = largeText, style = TextStyle(color = SecondaryWhiteText,
-                        fontWeight = FontWeight.Bold))
+                    Text(text = largeText,
+                        style = TextStyle(
+                            color = SecondaryWhiteText,
+                            fontWeight = FontWeight.Bold))
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(text = subDescription, style = TextStyle(color = SecondaryWhiteText))
 
@@ -121,11 +123,15 @@ fun LoginForm(navController: NavController) {
                 ) {
                     Text(text = "Se connecter", style = MaterialTheme.typography.h5)
                     Spacer(modifier = Modifier.height(16.dp))
-                    CustomTextField(onChange ={} , value = "" , label = "Email", leadingIcon = Icons.Rounded.Email,  )
+                    CustomTextField(onChange ={ username = it} , value = username , label = "Email", leadingIcon = Icons.Rounded.Email,  )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                CustomTextField(onChange = {}, value = "", label = "Mot de passe")
+                PasswordTextField(
+                    value = password,
+                    placeHolder = "entrer votre mot de pass",
+                    onChange = { password = it }
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -134,7 +140,8 @@ fun LoginForm(navController: NavController) {
                 Divider(
                     modifier = Modifier
                         .padding(8.dp)
-                        .fillMaxWidth().clip(shape =MaterialTheme.shapes.medium),
+                        .fillMaxWidth()
+                        .clip(shape = MaterialTheme.shapes.medium),
                     color = DividerColor,
                     thickness = 1.dp
                 )

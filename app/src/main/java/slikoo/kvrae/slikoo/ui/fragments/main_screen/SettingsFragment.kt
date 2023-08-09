@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.fragments.main_screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,17 +11,24 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.SettingCard
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 @Composable
 fun SettingsScreen(navController: NavController) {
+    val dialogState = remember {
+        mutableStateOf(false)
+    }
     Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
+        CustomAlertDialog(state = dialogState.value)
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
@@ -40,7 +48,7 @@ fun SettingsScreen(navController: NavController) {
                         })
                 }
                 item {
-                    SettingCard(title = "Mettre a jour le profil avancé",
+                    SettingCard(title = "Mettre a jour le profile avancé",
                         actionIcon = Icons.Filled.KeyboardArrowRight, icon = Icons.Filled.Info, onClick = {
                             navController.navigate(AppScreenNavigator.AdvancedEditProfilesAppScreen.route)
                         })
@@ -50,14 +58,17 @@ fun SettingsScreen(navController: NavController) {
                         actionIcon = Icons.Filled.KeyboardArrowRight,
                         icon = Icons.Filled.ExitToApp,
                         onClick = {
-                            // Delete user data from shared preferences
-                            navController.popBackStack()
+                            dialogState.value = true
+                            Log.d("clcik", dialogState.value.toString())
                             navController.navigate(AppScreenNavigator.SignInAppScreen.route)
+
                         }
                     )
 
                 }
+
             }
         )
+
     }
 }
