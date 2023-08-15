@@ -15,11 +15,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
@@ -29,6 +35,8 @@ import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
 @Composable
 fun SignUpForm(onChange: (String) -> Unit) {
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -50,15 +58,15 @@ fun SignUpForm(onChange: (String) -> Unit) {
             CustomSlider(maxSlide = 4, currentSlide = 1)
 
 
-            CustomTextField(onChange = {}, value = "", label = "Nom", leadingIcon = Icons.Rounded.Person)
+            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.name), leadingIcon = Icons.Rounded.Person)
 
-            CustomTextField(onChange = {}, value = "", label = "Prenom", leadingIcon = Icons.Rounded.Person)
+            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.familyName), leadingIcon = Icons.Rounded.Person)
 
-            CustomTextField(onChange = {}, value = "", label = "Adresse Electronique", leadingIcon = Icons.Rounded.Email)
+            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.email), leadingIcon = Icons.Rounded.Email)
 
-            PasswordTextField(label = "Mot de passe", value = "", placeHolder = "entrer votre mot de passe", onChange = {})
+            PasswordTextField(label = "Mot de passe", value = password, onChange = { password = it})
 
-            PasswordTextField(label = "Repeter mot de passe", value = "", placeHolder = "repeter votre mot de passe", onChange = {})
+            PasswordTextField(label = "Repeter mot de passe", value = confirmPassword, onChange = { confirmPassword = it})
 
 
             Spacer(modifier = Modifier.padding(4.dp))

@@ -28,7 +28,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
+import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +57,7 @@ fun ExpandableCard(
         }
     ) {
         Column(
-            modifier = Modifier.background(color = SecondaryWhiteText)
+            modifier = Modifier.background(color = LightPrimaryVariant)
                 .fillMaxWidth().padding(8.dp)) {
             Row(
                 modifier = Modifier

@@ -2,7 +2,6 @@ package slikoo.kvrae.slikoo.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,38 +19,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
-import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
+import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
+import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SettingCard(icon: ImageVector,
+                modifier: Modifier = Modifier,
                 title: String, subtitle: String = "Null",
                 actionIcon: ImageVector,
                 onClick : () -> Unit) {
     Card(
-        modifier = Modifier.padding(8.dp),
+        modifier = modifier.padding(8.dp),
         shape = RoundedCornerShape(16.dp),
         onClick = { onClick() },
         elevation = 4.dp){
         TopAppBar(
-            modifier = Modifier
-                .fillMaxSize(),
             title = {
-                Column( modifier = Modifier.padding(8.dp)) {
+                Column( modifier = Modifier.padding(16.dp)) {
                     Text(text = title,
-                        style = TextStyle(color =if (subtitle != "Null") Color.White else Color.Black))
+                        style = TextStyle(color =if (subtitle != "Null") Color.White else Color.Black,
+                            fontSize = TextUnit(14f, TextUnitType.Sp),
+                            fontWeight = FontWeight.Medium))
                     if (subtitle != "Null") Text(text = subtitle,
                         style = TextStyle(color = Color.White))
 
                 }
             },
             colors = TopAppBarDefaults.largeTopAppBarColors(
-                containerColor = if (subtitle != "Null") ButtonsAndIcons else Color.White,
+                containerColor = if (subtitle != "Null") LightPrimary else Color.White,
             ),
             actions = {
                 if (subtitle != "Null")
@@ -59,12 +64,12 @@ fun SettingCard(icon: ImageVector,
                         modifier = Modifier
                             .padding(8.dp)
                             .background(
-                                color = ButtonsAndIcons,
+                                color = LightPrimary,
                                 shape = RoundedCornerShape(32.dp),
                             ),
                         colors = ButtonDefaults.buttonColors(
-                            contentColor = SecondaryWhiteText,
-                            containerColor = ButtonsAndIcons,
+                            contentColor = LightPrimaryVariant,
+                            containerColor = LightPrimary,
 
                         ),
                         elevation = ButtonDefaults.elevatedButtonElevation(
@@ -73,9 +78,9 @@ fun SettingCard(icon: ImageVector,
                             disabledElevation = 0.dp
                         )
                     ) {
-                        Text(text = "Voir profile",
+                        Text(text = stringResource(R.string.voir_profile),
                             style = TextStyle(
-                                color = SecondaryWhiteText)
+                                color = LightPrimaryVariant)
                             )
                     }
                 else
@@ -90,16 +95,15 @@ fun SettingCard(icon: ImageVector,
                         contentDescription = "avatar",
                         modifier = Modifier.size(50.dp))*/
                 AsyncImage(model = "https://raw.githubusercontent.com/KvRae/Slikoo-JsonCollection/main/Assets/portrait-6054910_1280.jpg",
-                    contentDescription = "profile pic",
+                    contentDescription = stringResource(R.string.profile_pic),
                     onLoading = { /*TODO*/ },
-
                     modifier = Modifier
-                        .size(50.dp)
-                        .clip(RoundedCornerShape(25.dp))
+                        .size(50.dp).padding(top= 16.dp)
+                        .clip(shape = RoundedCornerShape(50.dp))
                 )
                 else
                     Icon(imageVector = icon, contentDescription = "" ,
-                        tint = ButtonsAndIcons, modifier = Modifier.padding(8.dp))
+                        tint = LightPrimary, modifier = Modifier.padding(8.dp))
 
             }
         )

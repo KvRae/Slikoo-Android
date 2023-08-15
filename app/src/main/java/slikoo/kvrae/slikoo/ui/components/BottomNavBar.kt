@@ -22,13 +22,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
-import slikoo.kvrae.slikoo.ui.theme.InactiveIcons
-import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
-import slikoo.kvrae.slikoo.utils.MainScreenNavigator
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
+import slikoo.kvrae.slikoo.ui.theme.LightSecondary
+import slikoo.kvrae.slikoo.ui.theme.LightSecondaryVariant
+import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 
-//The class that will be used to create the bottom navigation bar
+// The class that will be used
+// to create the bottom navigation bar
 data class BottomNavItem(
     val name :String,
     val route :String,
@@ -41,7 +42,8 @@ data class BottomNavItem(
 fun BottomNavigationBar(items : List<BottomNavItem>,
                         modifier : Modifier = Modifier,
                         route: String = "Home",
-                        onItemClick : (route :String) -> Unit) {
+                        onItemClick : (route :String) -> Unit
+) {
 
         val bottomNavBarColor = remember { mutableStateOf(Color.White) }
 
@@ -49,7 +51,7 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
-            .background(ScreenBackground),
+            .background(LightSecondary),
 
     ) {
         BottomNavigation(
@@ -76,7 +78,7 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                                             contentAlignment = Alignment.Center,
                                             modifier = Modifier
                                                 .background(
-                                                    ButtonsAndIcons,
+                                                    LightPrimary,
                                                     shape = RoundedCornerShape(12.dp)
                                                 )
                                                 .padding(5.dp)
@@ -92,12 +94,12 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                                 }
                             } else {
                                 item.badgeCount = 0
-                                if (item.name == MainScreenNavigator.EventScreen.route) {
+                                if (item.name == AppScreenNavigator.EventScreen.route) {
                                     Box(
                                         contentAlignment = Alignment.Center,
                                         modifier = Modifier
                                             .background(
-                                                if (selected) Color.White else ButtonsAndIcons,
+                                                if (selected) Color.White else LightPrimary,
                                                 shape = RoundedCornerShape(12.dp)
                                             )
                                             .padding(8.dp)
@@ -109,7 +111,7 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                                             modifier = Modifier.size(26.dp)
                                         ) // Event Icon
                                         bottomNavBarColor.value =
-                                            if (!selected) Color.White else ButtonsAndIcons
+                                            if (!selected) Color.White else LightPrimary
                                     }
 
                                 } else Icon(
@@ -121,8 +123,8 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                         }
                     },
                     selected = selected,
-                    selectedContentColor = ButtonsAndIcons,
-                    unselectedContentColor = InactiveIcons,
+                    selectedContentColor = LightPrimary,
+                    unselectedContentColor = LightSecondaryVariant,
                     onClick = {
                         onItemClick(item.route)
                     }

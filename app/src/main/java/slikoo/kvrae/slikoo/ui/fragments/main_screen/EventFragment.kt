@@ -3,6 +3,7 @@ package slikoo.kvrae.slikoo.ui.fragments.main_screen
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.widget.DatePicker
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,14 +30,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.ImageInputField
-import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
-import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
+import slikoo.kvrae.slikoo.ui.theme.LightSecondary
+import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import java.util.Calendar
 
 
 @Composable
-fun EventScreen() {
+fun EventScreen(title: String = "Home",
+                onBackPress: (String) -> Unit,
+                navController: NavController) {
 
     val date = remember {
         mutableStateOf("")
@@ -103,7 +108,7 @@ fun EventScreen() {
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(8.dp)
-        .background(color = ScreenBackground)
+        .background(color = LightSecondary)
         .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center
     ){
@@ -195,11 +200,11 @@ fun EventScreen() {
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Button(onClick = {  }, modifier = Modifier
+                    Button(onClick = { navController.navigate(AppScreenNavigator.AdvancedEditProfilesAppScreen.route) }, modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(),
                         colors = androidx.compose.material.ButtonDefaults.buttonColors(
-                            backgroundColor = ButtonsAndIcons,
+                            backgroundColor = LightPrimary,
                             contentColor = androidx.compose.ui.graphics.Color.White
                         ),
                         shape = RoundedCornerShape(16.dp),
@@ -209,9 +214,8 @@ fun EventScreen() {
                     }
                 }
             }
+
+    BackHandler() {
+        onBackPress(title)
     }
-
-
-fun onSubmit() {
-
 }

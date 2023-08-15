@@ -12,15 +12,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
@@ -44,7 +47,7 @@ fun SignUpSecondForm( onChange: (String) -> Unit) {
         ) {
             Spacer(modifier = Modifier.size(16.dp))
             Text(
-                text = "Sign Up",
+                text = stringResource(id = R.string.signUp),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.size(8.dp))
@@ -58,7 +61,7 @@ fun SignUpSecondForm( onChange: (String) -> Unit) {
                     onChange = {},
                     value = "",
                     label = "Description profil",
-                    modifier = Modifier.fillMaxSize())
+                    leadingIcon = Icons.Rounded.Info)
 
 
             Spacer(modifier = Modifier.padding(32.dp))

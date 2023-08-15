@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -30,8 +31,8 @@ import slikoo.kvrae.slikoo.ui.fragments.signup.ProfilePictureSection
 import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpCidForm
 import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpForm
 import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpSecondForm
-import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
-import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
+import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
 @Preview
@@ -60,15 +61,15 @@ fun SignUp(navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = ButtonsAndIcons.copy(alpha = 0.8f))) {
+                .background(color = LightPrimary.copy(alpha = 0.8f))) {
         }
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth().statusBarsPadding()) {
             IconButton(onClick = { navController.popBackStack()
 
             }) {
                 Icon(imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = "Back",
-                    tint = ScreenBackground)
+                    tint = LightSecondary)
             }
         }
 
@@ -78,10 +79,10 @@ fun SignUp(navController: NavController) {
             Box(
                 modifier = Modifier
                     .clip(shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
-                    .background(color = ScreenBackground)
+                    .background(color = LightSecondary)
                     .border(
                         width = 1.dp,
-                        color = ScreenBackground,
+                        color = LightSecondary,
                         shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
                     )
 

@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,10 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import slikoo.kvrae.slikoo.R
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -36,17 +38,20 @@ fun AreaFilterCard(name: String = "null", image: Int, imageUrl: String, onClick:
                 .height(200.dp)
                 .fillMaxSize()) {
 
-            /*Image(
+            Image(
                 painter = painterResource(R.drawable.paris),
                 contentDescription = "null",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
-            )*/
-            AsyncImage(model = imageUrl,
+            )
+
+            /*SubcomposeAsyncImage(
+                model = imageUrl,
                 contentDescription = "Image de $name",
+                loading = {CircularProgressIndicator()},
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
-            )
+            )*/
             Column(modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Gray.copy(0.3f))) {

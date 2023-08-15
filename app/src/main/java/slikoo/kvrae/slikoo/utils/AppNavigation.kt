@@ -24,6 +24,7 @@ fun App() {
 }
 
 sealed class AppScreenNavigator(val route: String){
+    object EventScreen: MainScreenNavigator("Organiser")
     object SplashAppScreen: AppScreenNavigator("splash_screen")
     object SignInAppScreen: AppScreenNavigator("sign_in_screen")
     object SignUpAppScreen: AppScreenNavigator("sign_up_screen")
@@ -43,15 +44,13 @@ sealed class SignUpNavigator(val route: String){
 
 }
 
-
 sealed class MainScreenNavigator(val route: String){
     object HomeScreen: MainScreenNavigator("Home")
     object RecipeScreen: MainScreenNavigator("Repas")
     object SettingsScreen: MainScreenNavigator("Parametres")
     object NotificationScreen: MainScreenNavigator("Notifications")
-    object EventScreen: MainScreenNavigator("Organiser")
-}
 
+}
 
 @Composable
 fun Navigation() {

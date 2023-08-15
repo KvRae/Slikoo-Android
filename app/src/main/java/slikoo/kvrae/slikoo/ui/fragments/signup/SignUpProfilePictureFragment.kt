@@ -4,9 +4,10 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -37,7 +39,7 @@ import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
-import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
@@ -67,9 +69,10 @@ fun ProfilePictureSection(onChange : (String) -> Unit, navController: NavControl
 
 
 @Composable
-fun ProfileImagePicker() {
+fun ProfileImagePicker(imageUri: Uri? = null,
+                       onImageSelected: (Uri) -> Unit = {}) {
     var imageUrl by remember {
-        mutableStateOf<Uri?>(null)
+        mutableStateOf<Uri?>(imageUri ?: null)
     }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -92,37 +95,46 @@ fun ProfileImagePicker() {
                 .padding(8.dp)
                 .fillMaxSize()
                 .clip(shape = RoundedCornerShape(50))
-                .border(
-                    1.dp, Color.Gray,
-                    RoundedCornerShape(50)
-                ),
+
+                .background(Color.White),
             colors = IconButtonDefaults.filledIconButtonColors(
                 containerColor = Color.Transparent,
-                contentColor = ButtonsAndIcons,
+                contentColor = LightPrimary,
 
             )
         ) {
             if (imageUrl == null)
             Icon(imageVector = ImageVector.vectorResource(id = R.drawable.camera),
                 contentDescription = "",
-                tint = ButtonsAndIcons,
+                tint = Color.Gray,
                 modifier = Modifier.size(50.dp)
             )
             else
-                AsyncImage(model = imageUrl,
-                    contentDescription = "picture",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(shape = RoundedCornerShape(50))
-                        .clickable {
-                            launcher.launch(
-                                PickVisualMediaRequest(
-                                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                BoxWithConstraints {
+                    AsyncImage(model = imageUrl,
+                        contentDescription = "picture",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(shape = RoundedCornerShape(50))
+                            .clickable {
+                                launcher.launch(
+                                    PickVisualMediaRequest(
+                                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    )
                                 )
-                            )
-                        }
+                            },
+                        )
+                    Icon(painter = painterResource(id = R.drawable.camera)
+                        , contentDescription = "Ajouter une photo",
+                        tint = LightPrimary.copy(alpha = 0.8f),
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(32.dp)
+                            .size(25.dp)
                     )
                 }
-            }
+
+        }
+    }
 }

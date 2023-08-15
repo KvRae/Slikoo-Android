@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.models.Rating
-import slikoo.kvrae.slikoo.ui.theme.DefautBlueElement
+import slikoo.kvrae.slikoo.ui.theme.LightSurface
 
 
 
@@ -107,7 +107,7 @@ fun RatingBar(
             Icon(
                 imageVector = if (index < currentRating) Icons.Filled.Star else Icons.Outlined.Star,
                 contentDescription = null,
-                tint = if (index < currentRating) DefautBlueElement else Color.Gray,
+                tint = if (index < currentRating) LightSurface else Color.Gray,
                 modifier = Modifier
                     //.clickable { onRatingChanged(index + 1) }
                     .size(12.dp)

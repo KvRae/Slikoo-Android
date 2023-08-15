@@ -10,20 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.ui.theme.DefautBlueElement
+import slikoo.kvrae.slikoo.ui.theme.LightSurface
 
 
-@Preview
-@Composable
-fun CustomSliderPreview() {
-    CustomSlider(
-        maxSlide = 3,
-        currentSlide = 1,
-    )
-}
 
 @Composable
 fun CustomSlider(
@@ -32,19 +23,16 @@ fun CustomSlider(
 ) {
     Row(Modifier.padding(4.dp)) {
         val icon= ImageVector.vectorResource(id = R.drawable.ellipse_22)
-
         repeat(maxSlide) { index ->
             Box(Modifier.padding(2.dp)) {
                 Icon(
                     imageVector =  icon,   //if (index < currentSlide) icon else icon,
                     contentDescription = null,
-                    tint = if (index < currentSlide) DefautBlueElement else Color.Gray,
+                    tint = if (index < currentSlide) LightSurface else Color.Gray,
                     modifier = Modifier
                         .size(8.dp)
                 )
             }
         }
-
-
     }
 }

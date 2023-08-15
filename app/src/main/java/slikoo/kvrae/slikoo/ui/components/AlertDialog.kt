@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -16,9 +17,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
-import slikoo.kvrae.slikoo.ui.theme.DefautBlueElement
-import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
+import slikoo.kvrae.slikoo.ui.theme.LightSurface
 
 
 @Composable
@@ -55,13 +54,13 @@ fun CustomAlertDialog(state : Boolean = false,
                             dialogState.value = false
                         }, shape = RoundedCornerShape(16.dp),
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = ButtonsAndIcons,
-                                contentColor = androidx.compose.ui.graphics.Color.White
+                                backgroundColor = MaterialTheme.colors.primary,
+                                contentColor = MaterialTheme.colors.primaryVariant
                             )
 
                         ) {
                             Text(text = confirmText, style = TextStyle(
-                                color = SecondaryWhiteText,
+                                color = MaterialTheme.colors.primaryVariant,
                                 fontSize = 16.sp,
                                 fontWeight = androidx.compose.ui.text.font.FontWeight.Bold))
                         }
@@ -72,7 +71,7 @@ fun CustomAlertDialog(state : Boolean = false,
                                  },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = androidx.compose.ui.graphics.Color.Transparent,
-                    contentColor = DefautBlueElement)
+                    contentColor = LightSurface)
             ) {
                 Text(text = dismissText)
             }

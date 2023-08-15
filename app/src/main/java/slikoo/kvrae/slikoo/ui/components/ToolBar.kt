@@ -19,9 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
-import slikoo.kvrae.slikoo.ui.theme.PrimaryBlackText
-import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
+import slikoo.kvrae.slikoo.ui.theme.LightBackground
+import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 
 
@@ -30,8 +30,8 @@ import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 @Composable
 fun CustomTopBar(title: String = "Slikoo") {
     TopAppBar(
-        modifier = Modifier.fillMaxWidth().background(ScreenBackground),
-        backgroundColor = ScreenBackground,
+        modifier = Modifier.fillMaxWidth().background(LightSecondary),
+        backgroundColor = LightSecondary,
         elevation = 0.dp,
         title = {
                 if (title == MainScreenNavigator.HomeScreen.route) {
@@ -44,18 +44,19 @@ fun CustomTopBar(title: String = "Slikoo") {
                 }
                 else {
                     Text(title, style = TextStyle(fontSize = 24.sp,
-                        color = PrimaryBlackText,
+                        color = LightBackground,
                         fontWeight = FontWeight.Bold))
                     }
                 },
         actions = {
             if (title != "Settings") {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = {
+                }) {
                     Image(
                         painter = painterResource(id = R.drawable.avatar),
                         contentDescription = "avatar",
                         modifier = Modifier.clip(CircleShape)                       // clip to the circle shape
-                            .border(2.dp, ButtonsAndIcons, CircleShape).size(40.dp)
+                            .border(2.dp, LightPrimary, CircleShape).size(40.dp)
                     )
                 }
             }

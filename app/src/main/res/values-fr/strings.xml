@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="app_name">Slikoo</string>
+    <string name="email">Adresse electronique</string>
+    <string name="password">Mot de passe</string>
+    <string name="confirmPassword">Répéter le mot de passe</string>
+    <string name="password_placeholder">Mot de passe</string>
+    <string name="connect">Se connecter</string>
+    <string name="signUp">S\'inscrire</string>
+    <string name="forgotPassword">Mot de passe oublié ?</string>
+    <string name="createAccount">Créer un compte</string>
+    <string name="name">Prénom</string>
+    <string name="familyName">Nom de famille</string>
+    <string name="phone">Numéro de téléphone</string>
+    <string name="address">Adresse</string>
+    <string name="description">Description de profil</string>
+    <string name="next">Suivant</string>
+    <string name="previous">Précédent</string>
+    <string name="finish">Terminer</string>
+    <string name="skip">Passer</string>
+    <string name="welcome">Bienvenue sur Slikoo</string>
+    <string name="welcome_description">Slikoo est un réseau social
+    qui vous permet de partager vos photos et vidéos avec vos amis et votre famille.
+</string>
+    <string name="welcome_sub_description">est un réseau social
+    qui vous permet de partager vos photos et vidéos avec vos amis et votre famille.
+</string>
+    <string name="enter_the_email_address_associated_with_your_account">Enter the email address associated with your account</string>
+    <string name="get_code">Get Code</string>
+    <string name="enter_the_code_sent_to_your_email_address">Enter the code sent to your email address</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="add_rib">Ajouter votre RIB</string>
+    <string name="advanced_profile">Profile avancé</string>
+    <string name="code">Obtenir code</string>
+    <string name="update">Mettre a jour</string>
+    <string name="online_recipes">Online Recipes</string>
+    <string name="recipes_category">Recipes Category</string>
+    <string name="rating_list">Rating List</string>
+    <string name="voir_profile">Voir profile</string>
+    <string name="profile_pic">profile pic</string>
+    <string name="background">Background</string>
+    <string name="mettre_a_jour_le_profile_avanc">Mettre a jour le profile avancé</string>
+    <string name="modifier_le_profil">"Modifier le profil "</string>
+    <string name="se_deconnecter">Se deconnecter</string>
+
+</resources>

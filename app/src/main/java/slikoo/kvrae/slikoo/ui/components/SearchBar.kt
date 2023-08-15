@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import slikoo.kvrae.slikoo.ui.theme.LightSecondaryVariant
 
 @Composable
 fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
@@ -57,6 +58,7 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
                 leadingIcon = { Icon(
                     imageVector = Icons.Rounded.Search,
                     contentDescription = "Search Icon",
+                    tint = LightSecondaryVariant
                 ) },
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,

@@ -13,10 +13,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -31,20 +31,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.PasswordTextField
-import slikoo.kvrae.slikoo.ui.theme.DividerColor
-import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
-import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
+import slikoo.kvrae.slikoo.ui.theme.LightBackground
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
+import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
+import slikoo.kvrae.slikoo.ui.theme.LightSecondary
+import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 
@@ -53,62 +56,64 @@ fun LoginForm(navController: NavController) {
     val logo = R.drawable.slikoo_white
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val largeText = """Bienvenue dans notre temple des saveurs
-        |et des affinités.
-        |Connectez-vous dès maintenant 
-        |sur Slikoo
-    """.trimMargin()
-    val subDescription = """
-                Vivez une expérience culinaire 
-                unique en rencontrant
-                d'autres amateur de cuisinepassionés sur Slikoo
-    """.trimIndent()
 
     Box(modifier = Modifier
-        .fillMaxSize()
+        .fillMaxSize().navigationBarsPadding()
+        .background(LightPrimary.copy(alpha = 1f))
     ){
-        Image(painter = painterResource(id = R.drawable.loginback),
-            contentDescription ="",
-            modifier = Modifier.fillMaxSize(),
-        )
         Column(
             modifier = Modifier
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White)
-                    .height(300.dp),
+                    .background(LightSecondary)
+                    .height(400.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.login), // Load the drawable resource
-                    contentDescription = "Background",
+                    contentDescription = stringResource(R.string.background),
                     modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.FillBounds
+                    contentScale = ContentScale.Crop
+                )
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .background(LightPrimary.copy(alpha = 0.9f))
                 )
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(32.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
                         painter = painterResource(id = logo), // Load the drawable resource
                         contentDescription = "Logo",
-                        modifier = Modifier.size(100.dp)
+                        modifier = Modifier.size(150.dp)
                     )
-                    Text(text = largeText,
+                    Text(text = stringResource(id = R.string.welcome_description),
                         style = TextStyle(
-                            color = SecondaryWhiteText,
-                            fontWeight = FontWeight.Bold))
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = subDescription, style = TextStyle(color = SecondaryWhiteText))
+                            color = LightPrimaryVariant,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(text = stringResource(id = R.string.welcome_sub_description),
+                        style = TextStyle(color = LightPrimaryVariant,
+                            fontSize = MaterialTheme.typography.body2.fontSize,
+                            fontWeight = FontWeight.Normal,
+                        )
+                    )
 
                 }
             }
             Surface(
-                color = Color.White,
-                border = BorderStroke(1.dp, ScreenBackground),
+                color = LightSecondary,
+                border = BorderStroke(1.dp, LightSecondary),
                 shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -118,50 +123,70 @@ fun LoginForm(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
-                        .clip(shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)),
+                        .clip(shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                        .background(LightSecondary),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Text(text = "Se connecter", style = MaterialTheme.typography.h5)
+                    Text(text = stringResource(id = R.string.connect),
+                        fontWeight = FontWeight.Bold,
+                        style = TextStyle(
+                            color = LightBackground,
+                            fontSize = MaterialTheme.typography.h5.fontSize,
+                        )
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
-                    CustomTextField(onChange ={ username = it} , value = username , label = "Email", leadingIcon = Icons.Rounded.Email,  )
+                    CustomTextField(onChange ={ username = it} ,
+                        value = username ,
+                        label = "Email",
+                        leadingIcon = Icons.Rounded.Email)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 PasswordTextField(
                     value = password,
-                    placeHolder = "entrer votre mot de pass",
+                    placeHolder = stringResource(id = R.string.password_placeholder),
                     onChange = { password = it }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Submit button
-                CustomButton(text = "Se connecter", onClick = { onSubmit(navController) })
-                Divider(
+                CustomButton(text = stringResource(id = R.string.connect),
+                    onClick = { onSubmit(navController) })
+               /*Divider(
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
                         .clip(shape = MaterialTheme.shapes.medium),
                     color = DividerColor,
                     thickness = 1.dp
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    TextButton(onClick = { onNavigate(navController,"sign_up_screen") }) {
-                        Text("S'inscrire")
-                    }
-                    TextButton(onClick = { onNavigate(navController,"forgot_password_screen") }) { Text("Mot de passe oublié ?") }
-                }
+                )*/
+                    Spacer(modifier = Modifier.weight(1f))
 
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                        TextButton(onClick = { onNavigate(navController,AppScreenNavigator.SignUpAppScreen.route) }) {
+                            Text(
+                                stringResource(id = R.string.signUp),
+                                color = LightSurface,
+                                fontSize = MaterialTheme.typography.body2.fontSize,
+                            )
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        TextButton(onClick = { onNavigate(navController,AppScreenNavigator.ForgotPasswordAppScreen.route) })
+                        { Text(
+                            stringResource(id = R.string.forgotPassword),
+                            color = LightSurface,
+                            fontSize = MaterialTheme.typography.body2.fontSize)
+                        }
+                   }
+                }
             }
         }
-        }
-
     }
-
 }
 
 
@@ -175,12 +200,6 @@ fun onSubmit(navController: NavController) {
     navController.popBackStack()
     navController.navigate(AppScreenNavigator.MainAppScreen.route)
 
-}
-
-fun onValidate(username: String, password: String, navController: NavController) {
-    println("username: $username")
-    println("password: $password")
-    onSubmit(navController)
 }
 
 //fun getGoogleSignInClient(context: Context ): GoogleSignInClient {

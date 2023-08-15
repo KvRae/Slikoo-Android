@@ -1,7 +1,7 @@
 package slikoo.kvrae.slikoo.ui.components
 
-import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,16 +27,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.models.Notification
-import slikoo.kvrae.slikoo.viewmodel.NotificationViewModel
+import slikoo.kvrae.slikoo.ui.theme.LightBackground
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NotificationItem(content : @Composable () -> Unit) {
     Card(
-        modifier = Modifier.padding(12.dp),
+        modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(16.dp),
-        elevation = 8.dp,
+        elevation = 6.dp,
         enabled = false,
         onClick = { /*TODO*/ }
     ) {
@@ -51,20 +51,22 @@ fun NotificationItem(content : @Composable () -> Unit) {
 @Composable
 fun NotificationItemContent(notification: Notification ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Row {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+        ) {
             Image(
-                modifier = Modifier.weight(0.2f),
+                modifier = Modifier.size(40.dp),
                 painter = painterResource(id = R.drawable.avatar),
                 contentDescription = "" )
             Text(text = notification.title,
-                style = TextStyle(color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.Bold),
+                style = TextStyle(color = LightBackground, fontSize = 14.sp, fontWeight = FontWeight.Medium),
                 modifier = Modifier.padding(start = 8.dp))
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick =
-            { NotificationViewModel().removeNotification(notification = notification)
-                Log.d("Delete Item",NotificationViewModel().getNotifications().size.toString())
-
-            })
+            IconButton(onClick = { /*TODO*/})
             {
                 Icon(imageVector = Icons.Default.Close,
                     contentDescription = "",
@@ -72,7 +74,9 @@ fun NotificationItemContent(notification: Notification ) {
                     modifier = Modifier.size(15.dp))
             }
         }
+        Spacer(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp))
         Text(text = notification.description,
+        style = TextStyle(color = LightBackground, fontSize = 12.sp),
         maxLines = 2,
         overflow = TextOverflow.Ellipsis)
     }

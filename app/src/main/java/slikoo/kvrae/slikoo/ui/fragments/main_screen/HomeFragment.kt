@@ -17,17 +17,19 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.AreaFilterCard
 import slikoo.kvrae.slikoo.ui.components.RatingCard
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBar
-import slikoo.kvrae.slikoo.ui.theme.PrimaryBlackText
-import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
+import slikoo.kvrae.slikoo.ui.theme.LightBackground
+import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.viewmodel.AreaViewModel
 import slikoo.kvrae.slikoo.viewmodel.CategoryViewModel
 import slikoo.kvrae.slikoo.viewmodel.RatingViewModel
@@ -36,7 +38,6 @@ import slikoo.kvrae.slikoo.viewmodel.RatingViewModel
 @Preview
 @Composable
 fun HomeScreenPreview() {
-
     HomeScreen()
 }
 
@@ -46,11 +47,13 @@ fun HomeScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = ScreenBackground)
+            .background(color = LightSecondary)
             .verticalScroll(rememberScrollState())
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
         ) {
             Spacer(modifier = Modifier.padding(8.dp))
             SearchBar(onSearch = {})
@@ -71,7 +74,8 @@ fun OnlineRecipes() {
             .padding(8.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            SectionHeader(title ="Online Recipes")
+            SectionHeader(title = stringResource(R.string.online_recipes))
+            Spacer(modifier = Modifier.padding(8.dp))
             LazyRow(modifier = Modifier.fillMaxWidth()) {
                 items(areas.size) {
                         RecipeCardContent(areas[it])
@@ -91,7 +95,7 @@ fun RecipesCategorySection() {
             .height((160 * categories.size).dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            SectionHeader(title = "Recipes Category")
+            SectionHeader(title = stringResource(R.string.recipes_category))
             Spacer(modifier = Modifier.padding(8.dp))
             LazyVerticalGrid(columns = GridCells.Fixed(2),
                 userScrollEnabled = false,
@@ -110,14 +114,15 @@ fun RecipesCategorySection() {
 
 @Composable
 fun RatingListSection() {
-    var ratings = RatingViewModel().getRatings()
+    val ratings = RatingViewModel().getRatings()
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            SectionHeader(title = "Rating List")
+            SectionHeader(title = stringResource(R.string.rating_list))
+            Spacer(modifier = Modifier.padding(8.dp))
             LazyRow(modifier = Modifier.fillMaxWidth()) {
                 items(ratings.size) {
                         RatingCard(ratings[it])
@@ -130,12 +135,12 @@ fun RatingListSection() {
 @Composable
 fun SectionHeader(title: String) {
     Row(modifier = Modifier
-        .padding(start = 8.dp, end = 8.dp)
+        .padding(start = 10.dp, end = 8.dp)
         .fillMaxWidth()) {
         Text(text = title,style = TextStyle(
-            color = PrimaryBlackText,
+            color = LightBackground,
             fontWeight = FontWeight.Bold,
-            fontSize = 16.sp)
+            fontSize = 18.sp)
         )
     }
 }

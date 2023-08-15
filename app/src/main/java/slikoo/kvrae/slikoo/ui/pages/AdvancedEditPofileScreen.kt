@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
@@ -32,7 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.ui.theme.ScreenBackground
+import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 
@@ -40,21 +42,21 @@ import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 fun AdvancedEditProfileScreen(navController: NavController) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(ScreenBackground)
+            .fillMaxSize().navigationBarsPadding()
+            .background(LightSecondary)
             .verticalScroll(rememberScrollState())
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(ScreenBackground)
+                .background(LightSecondary)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.loginback),
+                painter = painterResource(id = R.drawable.banner),
                 contentDescription = "Profile cover picture",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp),
+                    .height(160.dp),
                 contentScale = ContentScale.Crop
             )
             Image(
@@ -63,16 +65,17 @@ fun AdvancedEditProfileScreen(navController: NavController) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(shape = RoundedCornerShape(50))
-                    .padding(start = 16.dp, top = 60.dp,)
+                    .padding(start = 16.dp, top = 110.dp,)
                     .size(120.dp)
             )
-            IconButton(onClick = {
+            IconButton(modifier = Modifier.statusBarsPadding(),
+                onClick = {
                 navController.popBackStack()
                 navController.navigate(AppScreenNavigator.MainAppScreen.route)
             }) {
                 Icon(imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = "",
-                    tint = ScreenBackground,
+                    tint = LightSecondary,
                     modifier = Modifier
                         .padding(16.dp)
                         .size(24.dp)
@@ -83,7 +86,11 @@ fun AdvancedEditProfileScreen(navController: NavController) {
 
         Row(modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)) {
+            .clip(shape = RoundedCornerShape(bottomStart = 16.dp,
+                bottomEnd = 16.dp))
+            .padding(16.dp)
+
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
@@ -119,7 +126,7 @@ fun AdvancedEditProfileScreen(navController: NavController) {
                 Card(modifier = Modifier
                     .padding(8.dp)
                     .clip(shape = RoundedCornerShape(16.dp),)
-                    .background(ScreenBackground),
+                    .background(LightSecondary),
                     ) {
                     Text(text = "My Offres", modifier = Modifier.padding(12.dp))
                 }

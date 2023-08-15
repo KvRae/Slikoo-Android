@@ -29,8 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
-import slikoo.kvrae.slikoo.ui.theme.DefautBlueElement
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
+import slikoo.kvrae.slikoo.ui.theme.LightSurface
 
 
 @Composable
@@ -43,7 +43,7 @@ fun SearchBarWithFilter(onSearch: (String) -> Unit,
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Search Bar
@@ -70,7 +70,7 @@ fun SearchBarWithFilter(onSearch: (String) -> Unit,
             placeholder = { Text(text = "Rechercher")},
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
-                focusedIndicatorColor = ButtonsAndIcons,
+                focusedIndicatorColor = LightPrimary,
                 unfocusedIndicatorColor = Color.Gray
             ),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -110,7 +110,7 @@ fun SearchBarWithFilter(onSearch: (String) -> Unit,
             Icon(
                 imageVector = Icons.Default.List,
                 contentDescription = "Filter",
-                tint = DefautBlueElement
+                tint = LightSurface
             )
         }
     }

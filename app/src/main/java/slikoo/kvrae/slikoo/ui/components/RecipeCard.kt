@@ -32,19 +32,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.models.Area
-import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
+import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import java.text.SimpleDateFormat
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RecipeCardContent( area : Area) {
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", java.util.Locale.getDefault())
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm",
+        java.util.Locale.getDefault())
     val date = dateFormat.format(area.date)
 
     Card(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(8.dp)
             .size(170.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 4.dp,
@@ -70,13 +71,13 @@ fun RecipeCardContent( area : Area) {
                         modifier = Modifier
                             .size(20.dp)
                             .padding(start = 8.dp),
-                        tint = SecondaryWhiteText
+                        tint = LightPrimaryVariant
                     )
                     Text(text = area.name, modifier = Modifier.padding(start = 4.dp),
                         style = TextStyle(fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
                         ),
-                        color = SecondaryWhiteText
+                        color = LightPrimaryVariant
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -84,13 +85,13 @@ fun RecipeCardContent( area : Area) {
                     Text(text = area.nbPerson.toString(), modifier = Modifier.padding(start = 4.dp),
                         style = TextStyle(fontSize = 12.sp,
                             fontWeight = FontWeight.Bold),
-                        color = SecondaryWhiteText
+                        color = LightPrimaryVariant
                     )
                     Icon(imageVector = Icons.Rounded.Person, contentDescription = ""
                         , modifier = Modifier
                             .padding(start = 2.dp)
                             .size(16.dp),
-                        tint = SecondaryWhiteText
+                        tint = LightPrimaryVariant
                             )
                 }
                 Spacer(modifier = Modifier.weight(1f))
@@ -99,7 +100,7 @@ fun RecipeCardContent( area : Area) {
                         modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 10.sp,
                             fontWeight = FontWeight.Bold),
-                        color = SecondaryWhiteText
+                        color = LightPrimaryVariant
                         )
                 }
                 Row {
@@ -107,7 +108,7 @@ fun RecipeCardContent( area : Area) {
                         modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 16.sp,
                             fontWeight = FontWeight.Bold),
-                        color = SecondaryWhiteText,
+                        color = LightPrimaryVariant,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                         )
@@ -116,18 +117,18 @@ fun RecipeCardContent( area : Area) {
                     Text(text = area.place, modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 10.sp,
                             fontWeight = FontWeight.Bold),
-                        color = SecondaryWhiteText
+                        color = LightPrimaryVariant
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(text = "${area.price} $", modifier = Modifier.padding(end = 8.dp),
                         style = TextStyle(fontSize = 12.sp,
                             fontWeight = FontWeight.Medium),
-                        color = SecondaryWhiteText)
+                        color = LightPrimaryVariant)
                 }
             }
         }
-        }
     }
+}
 
 
 

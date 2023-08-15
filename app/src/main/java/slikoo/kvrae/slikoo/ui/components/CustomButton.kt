@@ -6,8 +6,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import slikoo.kvrae.slikoo.ui.theme.ButtonsAndIcons
-import slikoo.kvrae.slikoo.ui.theme.SecondaryWhiteText
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
+import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 
 
 @Composable
@@ -16,8 +16,8 @@ fun CustomButton(text : String, onClick: () -> Unit) {
         onClick = { onClick()},
         modifier = Modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
-            containerColor = ButtonsAndIcons,
-            contentColor = SecondaryWhiteText)
+            containerColor = LightPrimary,
+            contentColor = LightPrimaryVariant)
     ) {
         Text(text = text)
     }
