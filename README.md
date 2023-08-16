@@ -1,6 +1,8 @@
 # Slikoo
 
-Slikoo is an Android application that aims to be the ultimate platform for culinary encounters. We believe in the power of shared meals to create connections and promote cultural diversity. With Slikoo, you can discover new flavors, meet culinary enthusiasts, and expand your culinary horizons.
+Slikoo is an Android application that aims to be the ultimate platform for culinary encounters.
+We believe in the power of shared meals to create connections and promote cultural diversity. 
+With Slikoo, you can discover new flavors, meet culinary enthusiasts, and expand your culinary horizons.
 
 ## Features
 
@@ -20,13 +22,80 @@ To use Slikoo, follow these steps:
 2. Open the project in Android Studio.
 3. Build and run the project on an Android device or emulator.
 
+## Architecture
+
+Slikoo follows the [Model-View-ViewModel (MVVM)](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) architecture pattern. 
+The MVVM pattern is a software architectural pattern that facilitates the separation of the development of the graphical user interface (the view) 
+from the development of the business logic or back-end logic (the model) so that the view is not dependent on any specific model platform. 
+The view model of MVVM is a value converter, meaning the view model is responsible for exposing (converting) the data objects from the model in such a way 
+that objects are easily managed and presented. In this respect, the view model is more model than view, and handles most if not all of the view's display logic. 
+The view model may implement a mediator pattern, organizing access to the back-end logic around the set of use cases supported by the view.
+
+## Project tree
+
+```
+.
+├── app
+│   ├── build.gradle
+│   ├── proguard-rules.pro
+│   └── src
+│       ├── androidTest
+│       │   └── java
+│       │       └── com
+│       │           └── example
+│       │               └── slikoo
+│       │                   └── ExampleInstrumentedTest.kt
+│       ├── main
+│       │   ├── AndroidManifest.xml
+│       │   ├── java
+│       │   │   └── com
+│       │   │       └── example
+│       │   │           └── slikoo
+│       │   │               ├── data
+│       │   │               │   ├── api
+│       │   │               │   │   ├── ApiHelper.kt
+│       │   │               │   │   ├── ApiServiceImpl.kt
+│       │   │               │   │   └── model
+│       │   │               │   │       ├── Category.kt
+│       │   │               │   │       ├── CategoryResponse.kt
+│       │   │               │   │       ├── Recipe.kt
+│       │   │               │   │       ├── RecipeResponse.kt
+│       │   │               │   │       ├── RecipeSearchResponse.kt
+│       │   │               │   │       ├── RecipeSearchResult.kt
+│       │   │               ├── ui
+│       │   │               │   ├── base
+│       │   │               │   │   ├── BaseActivity.kt
+│       │   │               │   │   └── BaseFragment.kt
+│       │   │               │   ├── category
+│       │   │               │   │   ├── CategoryAdapter.kt
+```
+
+## Screenshots
+
+
+## Download the app
+
+You can download the latest version of Slikoo from both:
+[Google Play Store](https://play.google.com/store/apps/details?id=com.example.slikoo)  
+[HUAWEI AppGallery](https://www.amazon.com/dp/B08Z3JQZQD).
+
+
+
 ## Dependencies
 
 Slikoo relies on the following dependencies:
 
+- [Jetpack Compose](https://developer.android.com/jetpack/compose): A modern toolkit for building native Android UI.
+- [Room](https://developer.android.com/jetpack/androidx/releases/room): A persistence library that provides an abstraction layer over SQLite.
 - [Retrofit](https://square.github.io/retrofit/): A type-safe HTTP client for making API calls.
-- [Glide](https://github.com/bumptech/glide): A fast and efficient image loading library for Android.
+- [Courotines](https://developer.android.com/kotlin/coroutines): A library for asynchronous programming in Kotlin.
+- [Coil](https://github.com/bumptech/glide): A fast and efficient image loading library for Android.
 - [Gson](https://github.com/google/gson): A Java library for converting Java objects to JSON and vice-versa.
+- [Kotlin Coroutines]() A library for asynchronous programming in Kotlin.
+- [Dagger Hilt](https://dagger.dev/hilt/): A dependency injection library for Android.
+- [Jetpack Navigation](https://developer.android.com/guide/navigation): A library for implementing navigation in Android apps.
+- [accompanist]() A collection of extension libraries for Jetpack Compose.
+
 
 You can find the full list of dependencies and their versions in the `build.gradle` file.
 

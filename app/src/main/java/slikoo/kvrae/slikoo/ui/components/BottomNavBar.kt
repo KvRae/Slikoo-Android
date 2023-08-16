@@ -26,6 +26,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondaryVariant
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
+import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 
 
 // The class that will be used
@@ -41,7 +42,7 @@ data class BottomNavItem(
 @Composable
 fun BottomNavigationBar(items : List<BottomNavItem>,
                         modifier : Modifier = Modifier,
-                        route: String = "Home",
+                        route: String = MainScreenNavigator.HomeScreen.route,
                         onItemClick : (route :String) -> Unit
 ) {
 
