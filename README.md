@@ -77,9 +77,7 @@ package | description
 `data` | Contains the data accessing and manipulating components.
 `ui` | Contains classes related to the UI.
 `utils` | Contains utility classes.
-`di` | Contains classes related to dependency injection.
 `viewmodels` | Contains the ViewModels.
-`adapters` | Contains the Adapters.
 `models` | Contains the Models.
 `api` | Contains the API service and helper.
 `repositories` | Contains the Repositories.
