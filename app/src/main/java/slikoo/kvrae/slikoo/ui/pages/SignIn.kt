@@ -58,7 +58,8 @@ fun LoginForm(navController: NavController) {
     var password by remember { mutableStateOf("") }
 
     Box(modifier = Modifier
-        .fillMaxSize().navigationBarsPadding()
+        .fillMaxSize()
+        .navigationBarsPadding()
         .background(LightPrimary.copy(alpha = 1f))
     ){
         Column(
@@ -137,13 +138,14 @@ fun LoginForm(navController: NavController) {
                     Spacer(modifier = Modifier.height(16.dp))
                     CustomTextField(onChange ={ username = it} ,
                         value = username ,
-                        label = "Email",
+                        label = stringResource(id = R.string.email),
                         leadingIcon = Icons.Rounded.Email)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 PasswordTextField(
                     value = password,
+                    label = stringResource(id = R.string.password),
                     placeHolder = stringResource(id = R.string.password_placeholder),
                     onChange = { password = it }
                 )
@@ -164,7 +166,9 @@ fun LoginForm(navController: NavController) {
                     Spacer(modifier = Modifier.weight(1f))
 
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start
                 ) {

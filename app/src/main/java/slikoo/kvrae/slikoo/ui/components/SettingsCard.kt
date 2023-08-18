@@ -2,8 +2,10 @@ package slikoo.kvrae.slikoo.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -45,7 +47,9 @@ fun SettingCard(icon: ImageVector,
         elevation = 4.dp){
         TopAppBar(
             title = {
-                Column( modifier = Modifier.padding(16.dp)) {
+                Column( modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxHeight()) {
                     Text(text = title,
                         style = TextStyle(color =if (subtitle != "Null") Color.White else Color.Black,
                             fontSize = TextUnit(14f, TextUnitType.Sp),
@@ -90,16 +94,12 @@ fun SettingCard(icon: ImageVector,
                 },
             navigationIcon = {
                 if (subtitle != "Null")
-                    /*Image(
-                        painter = painterResource(id = R.drawable.avatar),
-                        contentDescription = "avatar",
-                        modifier = Modifier.size(50.dp))*/
                 AsyncImage(model = "https://raw.githubusercontent.com/KvRae/Slikoo-JsonCollection/main/Assets/portrait-6054910_1280.jpg",
                     contentDescription = stringResource(R.string.profile_pic),
-                    onLoading = { /*TODO*/ },
+                    onLoading = { },
                     modifier = Modifier
-                        .size(50.dp).padding(top= 16.dp)
-                        .clip(shape = RoundedCornerShape(50.dp))
+                        .size(50.dp)
+                        .clip(shape = CircleShape)
                 )
                 else
                     Icon(imageVector = icon, contentDescription = "" ,

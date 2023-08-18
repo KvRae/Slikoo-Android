@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,8 +27,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
@@ -55,8 +58,12 @@ fun ForgetPasswordTopBar() {
                 Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
             }
 
-            Text(text = stringResource(id = R.string.password_placeholder),
-                style = typography.headlineMedium)
+            Text(text = stringResource(id = R.string.forgotPassword),
+                fontWeight = FontWeight.Medium,
+                fontSize = 16.sp,
+                modifier = Modifier.padding(start = 16.dp)
+
+            )
 
 
         }
@@ -78,7 +85,7 @@ fun EmailInput(navController: NavController){
             Text(text = stringResource(R.string.enter_the_email_address_associated_with_your_account),
                 style = typography.titleLarge)
             Spacer(modifier = Modifier.padding(16.dp))
-            CustomTextField(onChange ={email = it} , value =email , label = stringResource(id = R.string.email) )
+            CustomTextField(onChange ={email = it} , value =email , label = stringResource(id = R.string.email), leadingIcon = Icons.Rounded.Email )
             Spacer(modifier = Modifier.padding(16.dp))
             Button(onClick = { onNavigateTo(navController,AppScreenNavigator.VerifyEmailAppScreen.route) }) {
                 Text(text = stringResource(R.string.get_code))

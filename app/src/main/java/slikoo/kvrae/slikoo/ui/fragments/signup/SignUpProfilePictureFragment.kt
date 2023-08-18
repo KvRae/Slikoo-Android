@@ -40,6 +40,7 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
+import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
@@ -62,7 +63,7 @@ fun ProfilePictureSection(onChange : (String) -> Unit, navController: NavControl
                 }
             )
             TextButton(onClick = { onChange(SignUpNavigator.SignUpIDCFragment.route) }) {
-                Text(text = "Precedent")
+                Text(text = "Precedent", color = LightSurface)
             }
         }
     }

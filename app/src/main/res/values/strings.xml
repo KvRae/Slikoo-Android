@@ -44,6 +44,7 @@
     <string name="mettre_a_jour_le_profile_avanc">Mettre a jour le profile avancé</string>
     <string name="modifier_le_profil">"Modifier le profil "</string>
     <string name="se_deconnecter">Se deconnecter</string>
+    <string name="a_propos">A propos</string>
 
 
 </resources>

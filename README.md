@@ -70,6 +70,23 @@ The view model may implement a mediator pattern, organizing access to the back-e
 │       │   │               │   │   ├── CategoryAdapter.kt
 ```
 
+## Project structure 
+The project is structured in the following way:
+package | description
+--- | ---
+`data` | Contains the data accessing and manipulating components.
+`ui` | Contains classes related to the UI.
+`utils` | Contains utility classes.
+`di` | Contains classes related to dependency injection.
+`viewmodels` | Contains the ViewModels.
+`adapters` | Contains the Adapters.
+`models` | Contains the Models.
+`api` | Contains the API service and helper.
+`repositories` | Contains the Repositories.
+`fragments` | Contains the Fragments.
+`pages` | Contains the Activities.
+`base` | Contains the base classes.
+
 ## Screenshots
 
 
@@ -95,6 +112,8 @@ Slikoo relies on the following dependencies:
 - [Dagger Hilt](https://dagger.dev/hilt/): A dependency injection library for Android.
 - [Jetpack Navigation](https://developer.android.com/guide/navigation): A library for implementing navigation in Android apps.
 - [accompanist]() A collection of extension libraries for Jetpack Compose.
+- [JUnit](https://junit.org/junit5/): A unit testing framework for Java and Kotlin.
+- [Espresso](https://developer.android.com/training/testing/espresso): A testing framework for testing Android apps.
 
 
 You can find the full list of dependencies and their versions in the `build.gradle` file.

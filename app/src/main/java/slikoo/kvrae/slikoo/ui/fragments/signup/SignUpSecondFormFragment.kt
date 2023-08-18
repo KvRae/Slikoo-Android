@@ -11,11 +11,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Phone
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +27,7 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
+import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
 
@@ -69,7 +70,7 @@ fun SignUpSecondForm( onChange: (String) -> Unit) {
             CustomButton(text = "Suivant", onClick = { onChange(SignUpNavigator.SignUpIDCFragment.route)})
 
             TextButton(onClick = { onChange(SignUpNavigator.SignUpFormFragment.route)}) {
-                androidx.compose.material3.Text(text = "Precedent")
+               Text(text = "Precedent", color = LightSurface)
             }
 
         }

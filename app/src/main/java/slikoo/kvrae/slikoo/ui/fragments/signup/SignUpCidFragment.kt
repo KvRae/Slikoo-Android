@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.components.ImageInputField
+import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
 @Composable
@@ -37,9 +38,10 @@ fun SignUpCidForm(onChange: (String) -> Unit) {
         ) {
             ImageInputField()
         }
-        CustomButton(text = "Suivant", onClick = { onChange(SignUpNavigator.SignUpProfilePictureFragment.route) })
+        CustomButton(text = "Suivant",
+            onClick = { onChange(SignUpNavigator.SignUpProfilePictureFragment.route) })
         TextButton(onClick = { onChange(SignUpNavigator.SignUpSecondFormFragment.route)}) {
-            androidx.compose.material.Text(text = "Precedent")
+            Text(text = "Precedent",color = LightSurface)
         }
 
     }

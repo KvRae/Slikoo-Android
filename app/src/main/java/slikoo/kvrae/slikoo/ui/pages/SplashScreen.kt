@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
-import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 
 
 @Composable
@@ -54,7 +54,7 @@ fun Splash(alpha: Float) {
     Box(
         modifier = Modifier
             .background(
-                if (isSystemInDarkTheme()) LightPrimary else LightPrimaryVariant
+                if (isSystemInDarkTheme()) LightPrimary else LightError
             )
             .fillMaxSize(),
         contentAlignment = Alignment.Center

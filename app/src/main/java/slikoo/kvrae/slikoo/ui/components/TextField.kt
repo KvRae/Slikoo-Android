@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 
@@ -85,12 +86,12 @@ fun CustomTextField(onChange : (String) -> Unit,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = LightPrimary,
             cursorColor = LightPrimary,
-            unfocusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = if (searchText.isEmpty())Color.Transparent else Color.Gray.copy(alpha = 0.3f),
             backgroundColor = LightError,
             disabledBorderColor = Color.Transparent,
         ),
         placeholder = { Text(text = placeHolder) },
-        label = { if(searchText.isEmpty()) Text(text = label,
+        label = { Text(text = label,
             overflow = TextOverflow.Ellipsis,
             style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary),
             maxLines = 1) },
@@ -105,7 +106,10 @@ fun CustomTextField(onChange : (String) -> Unit,
         isError = false,
         trailingIcon = {
             if (searchText.isNotEmpty()) {
-                IconButton(onClick = { searchText = "" }) {
+                IconButton(onClick = {
+                    searchText = ""
+
+                } ) {
                     Icon(
                         imageVector = Icons.Rounded.Clear,
                         contentDescription = "Clear Icon",
@@ -173,7 +177,7 @@ fun PasswordTextField(
             focusedBorderColor = LightPrimary,
             backgroundColor = LightError,
             cursorColor = LightPrimary,
-            unfocusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = if (value.isEmpty())Color.Transparent else Color.Gray.copy(alpha = 0.3f),
             disabledBorderColor = Color.Transparent,
         ),
         shape = RoundedCornerShape(8.dp),
@@ -194,7 +198,7 @@ const val PIN_VIEW_TYPE_BORDER = 1
 fun PinView(
     pinText: String,
     onPinTextChange: (String) -> Unit,
-    digitColor: Color = MaterialTheme.colors.onBackground,
+    digitColor: Color = LightBackground,
     digitSize: TextUnit = 16.sp,
     containerSize: Dp = digitSize.value.dp * 2,
     digitCount: Int = 4,
@@ -218,7 +222,7 @@ fun PinView(
 private fun DigitView(
     index: Int,
     pinText: String,
-    digitColor: Color = MaterialTheme.colors.onBackground,
+    digitColor: Color = LightBackground,
     digitSize: TextUnit,
     containerSize: Dp,
     type: Int = PIN_VIEW_TYPE_UNDERLINE,
