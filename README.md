@@ -90,6 +90,9 @@ package | description
 `base` | Contains the base classes.
 
 ## Screenshots
+![Screenshot_20230818_122001](https://github.com/KvRae/Slikoo-Android/assets/58667227/929b54c0-09d7-43e3-bec1-7d902c9885a2)
+![Screenshot_20230818_122103](https://github.com/KvRae/Slikoo-Android/assets/58667227/a5589b44-672c-456b-9d26-8e252d9d4c55)
+![Uploading Screenshot_20230818_122127.png…]()
 
 
 ## Download the app
