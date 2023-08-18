@@ -1,4 +1,8 @@
+
 # Slikoo
+
+
+![logo](https://github.com/KvRae/Slikoo-Android/assets/58667227/94fee035-631a-498e-93ca-22f6b113e490)
 
 Slikoo is an Android application that aims to be the ultimate platform for culinary encounters.
 We believe in the power of shared meals to create connections and promote cultural diversity. 
