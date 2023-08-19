@@ -49,7 +49,7 @@ fun EventScreen(title: String = stringResource(R.string.home),
         mutableStateOf("")
     }
     
-    val themes = listOf<String>("Theme 1", "THeme 2", "Theme 3")
+    val themes = listOf("Theme 1", "THeme 2", "Theme 3")
 
     val time = remember {
         mutableStateOf("Heure")
