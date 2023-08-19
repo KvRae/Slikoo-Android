@@ -65,7 +65,7 @@ fun EditProfileScreen(navController : NavController) {
             CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.familyName), leadingIcon = Icons.Filled.Person )
             CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.phone), leadingIcon = Icons.Filled.Phone )
             CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.address), leadingIcon = Icons.Filled.LocationOn )
-            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.code), leadingIcon = Icons.Filled.AccountCircle )
+            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.postal_code), leadingIcon = Icons.Filled.AccountCircle )
             CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.description) , leadingIcon = Icons.Filled.Info )
             ImageInputField()
             CustomButton(text = stringResource(id = R.string.update),

@@ -19,11 +19,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.tooling.preview.Preview
 
+@Preview
+@Composable
+fun DropDownPreview() {
+    val dropDownList = listOf("Item 1", "Item 2", "Item 3")
+
+    CustomDropDownMenu(dropDownList = dropDownList, onChange = {})
+}
 
 
 @Composable
-fun CustomDropDownMenu(dropDownList : List<String> , value : String = "" ,onChange : (String) -> Unit) {
+fun CustomDropDownMenu(dropDownList : List<String> ,
+                       value : String = "" ,
+                       onChange : (String) -> Unit) {
     var isExpanded by remember { mutableStateOf(false) }
     Box() {
         OutlinedButton(onClick = { isExpanded = !isExpanded },

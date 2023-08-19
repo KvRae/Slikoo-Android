@@ -113,7 +113,7 @@ fun OtpInput(navController: NavController) {
             PinView(pinText = "", onPinTextChange = {code = it})
             Spacer(modifier = Modifier.padding(16.dp))
             Button(onClick = { onNavigateTo(navController,AppScreenNavigator.ResetPasswordAppScreen.route) }) {
-                Text(text = stringResource(R.string.code))
+                Text(text = stringResource(R.string.postal_code))
             }
         }
     }

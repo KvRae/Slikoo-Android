@@ -1,4 +1,4 @@
-package slikoo.kvrae.slikoo.ui.fragments.main_screen
+package slikoo.kvrae.slikoo.ui.pages
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -29,8 +29,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.ImageInputField
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
@@ -39,7 +41,7 @@ import java.util.Calendar
 
 
 @Composable
-fun EventScreen(title: String = "Home",
+fun EventScreen(title: String = stringResource(R.string.home),
                 onBackPress: (String) -> Unit,
                 navController: NavController) {
 
@@ -215,7 +217,5 @@ fun EventScreen(title: String = "Home",
                 }
             }
 
-    BackHandler() {
-        onBackPress(title)
-    }
+    BackHandler(onBack = { navController.navigateUp() })
 }

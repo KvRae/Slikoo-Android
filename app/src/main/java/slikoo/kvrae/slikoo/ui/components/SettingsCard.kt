@@ -64,7 +64,7 @@ fun SettingCard(icon: ImageVector,
             ),
             actions = {
                 if (subtitle != "Null")
-                    Button(onClick = { /*TODO*/ },
+                    Button(onClick = { onClick()},
                         modifier = Modifier
                             .padding(8.dp)
                             .background(
@@ -82,7 +82,7 @@ fun SettingCard(icon: ImageVector,
                             disabledElevation = 0.dp
                         )
                     ) {
-                        Text(text = stringResource(R.string.voir_profile),
+                        Text(text = stringResource(R.string.see_profile),
                             style = TextStyle(
                                 color = LightPrimaryVariant)
                             )

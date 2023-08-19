@@ -7,10 +7,12 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import slikoo.kvrae.slikoo.ui.pages.EventScreen
 import slikoo.kvrae.slikoo.ui.pages.AdvancedEditProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.AnimatedSplashScreen
 import slikoo.kvrae.slikoo.ui.pages.EditProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.EmailInput
+import slikoo.kvrae.slikoo.ui.pages.EventDetailScreen
 import slikoo.kvrae.slikoo.ui.pages.LoginForm
 import slikoo.kvrae.slikoo.ui.pages.MainScreen
 import slikoo.kvrae.slikoo.ui.pages.OtpInput
@@ -34,6 +36,7 @@ sealed class AppScreenNavigator(val route: String){
     object ResetPasswordAppScreen: AppScreenNavigator("reset_password_screen")
     object EditProfileAppScreen: AppScreenNavigator("edit_profile_screen")
     object AdvancedEditProfilesAppScreen: AppScreenNavigator("advanced_edit_profile_screen")
+    object EventDetailsAppScreen: AppScreenNavigator("event_details_screen")
 }
 
 sealed class SignUpNavigator(val route: String){
@@ -91,6 +94,13 @@ fun Navigation() {
         composable(route = AppScreenNavigator.AdvancedEditProfilesAppScreen.route) {
             AdvancedEditProfileScreen(navController = navController)
             mainScreenIndex.value = MainScreenNavigator.SettingsScreen.route
+        }
+        composable(route = AppScreenNavigator.EventScreen.route){
+            EventScreen(onBackPress = {mainScreenIndex.value = it}, navController = navController )
+            mainScreenIndex.value = MainScreenNavigator.HomeScreen.route
+        }
+        composable(route = AppScreenNavigator.EventDetailsAppScreen.route){
+            EventDetailScreen(navController = navController)
         }
     }
 }

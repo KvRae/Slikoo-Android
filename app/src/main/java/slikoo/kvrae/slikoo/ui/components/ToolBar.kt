@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 
@@ -30,7 +30,9 @@ import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 @Composable
 fun CustomTopBar(title: String = "Slikoo") {
     TopAppBar(
-        modifier = Modifier.fillMaxWidth().background(LightSecondary),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(LightSecondary),
         backgroundColor = LightSecondary,
         elevation = 0.dp,
         title = {
@@ -55,8 +57,10 @@ fun CustomTopBar(title: String = "Slikoo") {
                     Image(
                         painter = painterResource(id = R.drawable.avatar),
                         contentDescription = "avatar",
-                        modifier = Modifier.clip(CircleShape)                       // clip to the circle shape
-                            .border(2.dp, LightPrimary, CircleShape).size(40.dp)
+                        modifier = Modifier
+                            .clip(CircleShape)                       // clip to the circle shape
+                            .border(2.dp, LightPrimary, CircleShape)
+                            .size(40.dp)
                     )
                 }
             }

@@ -30,15 +30,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.models.Area
 import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
+import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import java.text.SimpleDateFormat
+
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun RecipeCardContent( area : Area) {
+fun RecipeCardContent( area : Area, navController: NavController) {
     val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm",
         java.util.Locale.getDefault())
     val date = dateFormat.format(area.date)
@@ -49,7 +52,7 @@ fun RecipeCardContent( area : Area) {
             .size(170.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 4.dp,
-        onClick = { /*TODO*/ }
+        onClick = { navController.navigate(AppScreenNavigator.EventDetailsAppScreen.route) }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Image(painter = painterResource(id = R.drawable.login),
@@ -113,7 +116,9 @@ fun RecipeCardContent( area : Area) {
                         overflow = TextOverflow.Ellipsis
                         )
                 }
-                Row(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)) {
                     Text(text = area.place, modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 10.sp,
                             fontWeight = FontWeight.Bold),

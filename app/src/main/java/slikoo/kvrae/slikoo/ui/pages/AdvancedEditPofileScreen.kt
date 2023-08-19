@@ -137,7 +137,7 @@ fun AdvancedEditProfileScreen(navController: NavController) {
                             modifier = Modifier
                                 .fillMaxWidth(0.9f)
                         ) {
-                            Text(text = stringResource(R.string.a_propos),
+                            Text(text = stringResource(R.string.about),
                                 maxLines = 1,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold,
@@ -209,7 +209,7 @@ fun AdvancedEditProfileScreen(navController: NavController) {
             .background(LightError)
             .padding(16.dp)
         ) {
-            RecipeScreen()
+            RecipeScreen(navController = navController)
         }
     }
 

@@ -30,7 +30,7 @@
     <string name="enter_the_email_address_associated_with_your_account">Enter the email address associated with your account</string>
     <string name="get_code">Get Code</string>
     <string name="enter_the_code_sent_to_your_email_address">Enter the code sent to your email address</string>
-    <string name="code">Postal code</string>
+    <string name="postal_code">Postal code</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="update">Update Profile </string>
     <string name="add_rib">Add your RIB</string>
@@ -38,13 +38,14 @@
     <string name="online_recipes">Online Recipes</string>
     <string name="recipes_category">Recipes Category</string>
     <string name="rating_list">Rating List</string>
-    <string name="voir_profile">Voir profile</string>
-    <string name="profile_pic">profile pic</string>
+    <string name="see_profile">See_prfile</string>
+    <string name="profile_pic">profile picture</string>
     <string name="background">Background</string>
-    <string name="mettre_a_jour_le_profile_avanc">Mettre a jour le profile avancé</string>
+    <string name="update_advance_profile">Mettre a jour le profile avancé</string>
     <string name="modifier_le_profil">"Modifier le profil "</string>
-    <string name="se_deconnecter">Se deconnecter</string>
-    <string name="a_propos">A propos</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="about">About</string>
+    <string name="home">Home</string>
 
 
 </resources>

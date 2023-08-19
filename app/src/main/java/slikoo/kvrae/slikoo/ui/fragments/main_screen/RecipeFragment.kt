@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBarWithFilter
 import slikoo.kvrae.slikoo.viewmodel.AreaViewModel
@@ -20,7 +21,7 @@ import slikoo.kvrae.slikoo.viewmodel.AreaViewModel
 
 
 @Composable
-fun RecipeScreen() {
+fun RecipeScreen(navController: NavController) {
     val areas = AreaViewModel().getAreas()
     val scrollState = rememberLazyGridState()
 
@@ -40,7 +41,7 @@ fun RecipeScreen() {
                 state = scrollState,
                 content ={
                 items(areas.size){
-                    RecipeCardContent( area = areas[it])
+                    RecipeCardContent( area = areas[it], navController = navController)
                 }
             })
 

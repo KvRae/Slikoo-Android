@@ -1,6 +1,5 @@
 package slikoo.kvrae.slikoo.ui.fragments.main_screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -41,7 +40,7 @@ fun SettingsScreen(navController: NavController) {
                        // modifier = Modifier.height(100.dp),
                         actionIcon = Icons.Filled.Person, icon = Icons.Filled.Person,
                         onClick = {
-                        //navController.navigate("profile")
+                            navController.navigate(AppScreenNavigator.AdvancedEditProfilesAppScreen.route)
                     })
                 }
                 item {
@@ -51,18 +50,16 @@ fun SettingsScreen(navController: NavController) {
                         })
                 }
                 item {
-                    SettingCard(title = stringResource(R.string.mettre_a_jour_le_profile_avanc),
+                    SettingCard(title = stringResource(R.string.update_advance_profile),
                         actionIcon = Icons.Filled.KeyboardArrowRight, icon = Icons.Filled.Info, onClick = {
-                            navController.navigate(AppScreenNavigator.AdvancedEditProfilesAppScreen.route)
                         })
                 }
                 item {
-                    SettingCard(title = stringResource(R.string.se_deconnecter),
+                    SettingCard(title = stringResource(R.string.disconnect),
                         actionIcon = Icons.Filled.KeyboardArrowRight,
                         icon = Icons.Filled.ExitToApp,
                         onClick = {
                             dialogState.value = true
-                            Log.d("clcik", dialogState.value.toString())
                             navController.popBackStack()
                             navController.navigate(AppScreenNavigator.SignInAppScreen.route)
 

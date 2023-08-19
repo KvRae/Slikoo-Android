@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -20,11 +22,11 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.BottomNavItem
 import slikoo.kvrae.slikoo.ui.components.BottomNavigationBar
 import slikoo.kvrae.slikoo.ui.components.CustomTopBar
-import slikoo.kvrae.slikoo.ui.fragments.main_screen.EventScreen
 import slikoo.kvrae.slikoo.ui.fragments.main_screen.HomeScreen
 import slikoo.kvrae.slikoo.ui.fragments.main_screen.NotificationScreen
 import slikoo.kvrae.slikoo.ui.fragments.main_screen.RecipeScreen
 import slikoo.kvrae.slikoo.ui.fragments.main_screen.SettingsScreen
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.MainScreenNavigator
@@ -46,7 +48,9 @@ fun MainScreen(navController: NavController, currentScreen : String = "Home") {
         BottomNavItem("Parametres", MainScreenNavigator.SettingsScreen.route, ImageVector.vectorResource(id = R.drawable.settings_icon), 0),
     )
  Scaffold(
-     modifier = Modifier.navigationBarsPadding().statusBarsPadding(),
+     modifier = Modifier
+         .navigationBarsPadding()
+         .statusBarsPadding(),
      topBar = {
          if (title.value != AppScreenNavigator.EventScreen.route) CustomTopBar(title = title.value)
          else return@Scaffold
@@ -59,15 +63,28 @@ fun MainScreen(navController: NavController, currentScreen : String = "Home") {
          )
             else return@Scaffold
      },
+     floatingActionButton = {
+         if (title.value == MainScreenNavigator.RecipeScreen.route)
+             FloatingActionButton(
+                    onClick = { navController.navigate(AppScreenNavigator.EventScreen.route) },
+                    backgroundColor = LightPrimary
+             ) {
+                Icon(imageVector = Icons.Rounded.Add,
+                    contentDescription = "",
+                    tint = LightSecondary
+                )
+            }
+         else return@Scaffold
+     },
      content = {padding ->
          Box(modifier = Modifier
              .padding(padding)
              .background(LightSecondary)) {
              when(title.value)
              {
-                 "Home" -> HomeScreen()
+                 "Home" -> HomeScreen(navController = navController)
 
-                 "Repas" -> RecipeScreen ()
+                 "Repas" -> RecipeScreen (navController = navController)
 
                  "Organiser" -> EventScreen(onBackPress = {title.value = "Home"}, navController = navController)
 
@@ -79,13 +96,4 @@ fun MainScreen(navController: NavController, currentScreen : String = "Home") {
      }
  )
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewMAIN() {
-//    val context = androidx.compose.ui.platform.LocalContext.current
-//    MainScreen(navController = NavController(context))
-//}
-//
 

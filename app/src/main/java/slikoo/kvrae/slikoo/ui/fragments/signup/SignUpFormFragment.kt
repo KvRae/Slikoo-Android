@@ -50,7 +50,7 @@ fun SignUpForm(onChange: (String) -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Sign Up",
+                text = stringResource(id = R.string.signUp),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )

@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -53,11 +54,11 @@ fun ProfilePictureSection(onChange : (String) -> Unit, navController: NavControl
                 .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Photo de profil", style = MaterialTheme.typography.h4)
+            Text(text = stringResource(R.string.profile_pic), style = MaterialTheme.typography.h4)
             Spacer(modifier = Modifier.size(8.dp))
             CustomSlider(maxSlide = 4, currentSlide = 4)
             ProfileImagePicker()
-            CustomButton(text = "Terminer",
+            CustomButton(text = stringResource(R.string.finish),
                 onClick = {
                     navController.navigate(AppScreenNavigator.SignInAppScreen.route)
                 }
@@ -73,7 +74,7 @@ fun ProfilePictureSection(onChange : (String) -> Unit, navController: NavControl
 fun ProfileImagePicker(imageUri: Uri? = null,
                        onImageSelected: (Uri) -> Unit = {}) {
     var imageUrl by remember {
-        mutableStateOf<Uri?>(imageUri ?: null)
+        mutableStateOf<Uri?>(imageUri)
     }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
