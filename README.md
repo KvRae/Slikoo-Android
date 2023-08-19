@@ -29,11 +29,16 @@ To use Slikoo, follow these steps:
 ## Architecture
 
 Slikoo follows the [Model-View-ViewModel (MVVM)](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) architecture pattern. 
+![mvvm](https://github.com/KvRae/Slikoo-Android/assets/58667227/bdc86f23-7342-4016-abcb-6e584d1fe1bb)
+
 The MVVM pattern is a software architectural pattern that facilitates the separation of the development of the graphical user interface (the view) 
 from the development of the business logic or back-end logic (the model) so that the view is not dependent on any specific model platform. 
 The view model of MVVM is a value converter, meaning the view model is responsible for exposing (converting) the data objects from the model in such a way 
-that objects are easily managed and presented. In this respect, the view model is more model than view, and handles most if not all of the view's display logic. 
+that objects are easily managed and presented. In this respect, the view model is more model than view and handles most if not all of the view's display logic. 
 The view model may implement a mediator pattern, organizing access to the back-end logic around the set of use cases supported by the view.
+
+
+
 
 ## Project tree
 
