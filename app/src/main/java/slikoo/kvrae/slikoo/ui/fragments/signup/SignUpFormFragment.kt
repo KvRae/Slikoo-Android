@@ -60,45 +60,49 @@ fun SignUpForm(onChange: (String) -> Unit) {
             )
             Spacer(modifier = Modifier.size(8.dp))
 
-            CustomSlider(maxSlide = 4,
+            CustomSlider(
+                maxSlide = 4,
                 currentSlide = 1
             )
 
-            CustomTextField(onChange = { firstName = it },
+            CustomTextField(
+                onChange = { firstName = it },
                 value = firstName,
                 label = stringResource(id = R.string.name),
-                keyboardType= KeyboardType.Text,
+                keyboardType = KeyboardType.Text,
                 leadingIcon = Icons.Rounded.Person
             )
 
-            CustomTextField(onChange = {lastName = it},
+            CustomTextField(
+                onChange = { lastName = it },
                 value = lastName,
                 label = stringResource(id = R.string.familyName),
-                keyboardType= KeyboardType.Text,
+                keyboardType = KeyboardType.Text,
                 leadingIcon = Icons.Rounded.Person
             )
 
-            CustomTextField(onChange = {email = it},
+            CustomTextField(
+                onChange = { email = it },
                 value = email,
                 label = stringResource(id = R.string.email),
-                keyboardType= KeyboardType.Email,
+                keyboardType = KeyboardType.Email,
                 leadingIcon = Icons.Rounded.Email
             )
 
             PasswordTextField(label = stringResource(id = R.string.password),
                 value = password,
-                onChange = { password = it}
+                onChange = { password = it }
             )
 
             PasswordTextField(label = stringResource(id = R.string.confirmPassword),
                 value = confirmPassword,
-                onChange = { confirmPassword = it}
+                onChange = { confirmPassword = it }
             )
 
             Spacer(modifier = Modifier.padding(4.dp))
 
             CustomButton(text = stringResource(id = R.string.next),
-                onClick = { onChange(SignUpNavigator.SignUpSecondFormFragment.route)}
+                onClick = { onChange(SignUpNavigator.SignUpSecondFormFragment.route) }
             )
 
         }

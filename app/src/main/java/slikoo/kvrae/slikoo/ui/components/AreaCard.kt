@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
 
 
-
 @Composable
 fun AreaFilterCard(name: String = "null", image: Int, imageUrl: String, onClick: () -> Unit) {
     Card(
@@ -36,7 +35,8 @@ fun AreaFilterCard(name: String = "null", image: Int, imageUrl: String, onClick:
             Modifier
                 .height(200.dp)
                 .clickable(onClick = onClick)
-                .fillMaxSize()) {
+                .fillMaxSize()
+        ) {
 
             Image(
                 painter = painterResource(R.drawable.paris),
@@ -52,9 +52,11 @@ fun AreaFilterCard(name: String = "null", image: Int, imageUrl: String, onClick:
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
             )*/
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Gray.copy(0.3f))) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Gray.copy(0.3f))
+            ) {
 
             }
             Column(

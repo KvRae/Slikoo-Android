@@ -79,7 +79,7 @@ fun CustomMainMenuTopBar(title: String = stringResource(id = R.string.app_name))
                     }
                 },
         actions = {
-            if (title != "Settings") {
+            if (title != MainScreenNavigator.SettingsScreen.route) {
                 IconButton(onClick = {
                     isExpanded = !isExpanded
                 }) {

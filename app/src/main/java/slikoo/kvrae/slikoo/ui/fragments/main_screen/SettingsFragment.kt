@@ -10,8 +10,10 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,13 +25,23 @@ import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 @Composable
 fun SettingsScreen(navController: NavController) {
-    val dialogState = remember {
+    var dialogState by remember {
         mutableStateOf(false)
     }
-    Box(modifier = Modifier.fillMaxSize(),
+    Box(
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
-        CustomAlertDialog(state = dialogState.value)
+    ) {
+        CustomAlertDialog(showDialog = dialogState,
+            title = stringResource(R.string.disconnect),
+            message = stringResource(R.string.logout_message),
+            onDismiss = { dialogState = false },
+            onConfirm = {
+                dialogState = false
+                navController.popBackStack()
+                navController.navigate(AppScreenNavigator.SignInAppScreen.route)
+            }
+        )
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
@@ -37,21 +49,25 @@ fun SettingsScreen(navController: NavController) {
                 item {
                     SettingCard(title = "Karam Mannai",
                         subtitle = "Manage your account",
-                       // modifier = Modifier.height(100.dp),
+                        // modifier = Modifier.height(100.dp),
                         actionIcon = Icons.Filled.Person, icon = Icons.Filled.Person,
                         onClick = {
                             navController.navigate(AppScreenNavigator.AdvancedEditProfilesAppScreen.route)
-                    })
+                        })
                 }
                 item {
                     SettingCard(title = stringResource(R.string.modifier_le_profil),
-                        actionIcon = Icons.Filled.KeyboardArrowRight, icon = Icons.Filled.Edit, onClick = {
+                        actionIcon = Icons.Filled.KeyboardArrowRight,
+                        icon = Icons.Filled.Edit,
+                        onClick = {
                             navController.navigate(AppScreenNavigator.EditProfileAppScreen.route)
                         })
                 }
                 item {
                     SettingCard(title = stringResource(R.string.update_advance_profile),
-                        actionIcon = Icons.Filled.KeyboardArrowRight, icon = Icons.Filled.Info, onClick = {
+                        actionIcon = Icons.Filled.KeyboardArrowRight,
+                        icon = Icons.Filled.Info,
+                        onClick = {
                         })
                 }
                 item {
@@ -59,9 +75,8 @@ fun SettingsScreen(navController: NavController) {
                         actionIcon = Icons.Filled.KeyboardArrowRight,
                         icon = Icons.Filled.ExitToApp,
                         onClick = {
-                            dialogState.value = true
-                            navController.popBackStack()
-                            navController.navigate(AppScreenNavigator.SignInAppScreen.route)
+                            dialogState = true
+
 
                         }
                     )

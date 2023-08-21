@@ -16,22 +16,23 @@ import slikoo.kvrae.slikoo.ui.components.NotificationItemContent
 import slikoo.kvrae.slikoo.viewmodel.NotificationViewModel
 
 
-
 @Composable
 fun NotificationScreen() {
-    val notifications = remember { NotificationViewModel().getNotifications()}
+    val notifications = remember { NotificationViewModel().getNotifications() }
     val scrollState = rememberScrollState()
-    Box(modifier = Modifier
-        .fillMaxSize(),
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .scrollable(scrollState, Orientation.Vertical),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             items(notifications.size) {
-                NotificationItem(){
+                NotificationItem {
                     NotificationItemContent(
                         notification = notifications[it],
                     )

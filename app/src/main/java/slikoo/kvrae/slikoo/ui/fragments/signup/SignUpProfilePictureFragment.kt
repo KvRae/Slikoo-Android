@@ -47,33 +47,35 @@ import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
 
 @Composable
-fun ProfilePictureSection(onChange : (String) -> Unit, navController: NavController) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = stringResource(R.string.profile_pic), style = MaterialTheme.typography.h4)
-            Spacer(modifier = Modifier.size(8.dp))
-            CustomSlider(maxSlide = 4, currentSlide = 4)
-            ProfileImagePicker()
-            CustomButton(text = stringResource(R.string.finish),
-                onClick = {
-                    navController.popBackStack()
-                    navController.navigate(AppScreenNavigator.SignInAppScreen.route)
-                }
-            )
-            TextButton(onClick = { onChange(SignUpNavigator.SignUpIDCFragment.route) }) {
-                Text(text = stringResource(id = R.string.previous), color = LightSurface)
+fun ProfilePictureSection(onChange: (String) -> Unit, navController: NavController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = stringResource(R.string.profile_pic), style = MaterialTheme.typography.h4)
+        Spacer(modifier = Modifier.size(8.dp))
+        CustomSlider(maxSlide = 4, currentSlide = 4)
+        ProfileImagePicker()
+        CustomButton(text = stringResource(R.string.finish),
+            onClick = {
+                navController.popBackStack()
+                navController.navigate(AppScreenNavigator.SignInAppScreen.route)
             }
+        )
+        TextButton(onClick = { onChange(SignUpNavigator.SignUpIDCFragment.route) }) {
+            Text(text = stringResource(id = R.string.previous), color = LightSurface)
         }
     }
+}
 
 
 @Composable
-fun ProfileImagePicker(imageUri: Uri? = null,
-                       onImageSelected: (Uri) -> Unit = {}) {
+fun ProfileImagePicker(
+    imageUri: Uri? = null,
+    onImageSelected: (Uri) -> Unit = {}
+) {
     var imageUrl by remember {
         mutableStateOf<Uri?>(imageUri)
     }
@@ -83,17 +85,20 @@ fun ProfileImagePicker(imageUri: Uri? = null,
             imageUrl = uri
         })
 
-    Box(modifier = Modifier
-        .padding(8.dp)
-        .size(200.dp),
+    Box(
+        modifier = Modifier
+            .padding(8.dp)
+            .size(200.dp),
         contentAlignment = Alignment.Center,
-        ) {
-        IconButton(onClick = {
-            launcher.launch(
-                PickVisualMediaRequest(
-                    ActivityResultContracts.PickVisualMedia.ImageOnly
-                ))
-        },
+    ) {
+        IconButton(
+            onClick = {
+                launcher.launch(
+                    PickVisualMediaRequest(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
+                )
+            },
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxSize()
@@ -104,17 +109,19 @@ fun ProfileImagePicker(imageUri: Uri? = null,
                 containerColor = Color.Transparent,
                 contentColor = LightPrimary,
 
-            )
+                )
         ) {
             if (imageUrl == null)
-            Icon(imageVector = ImageVector.vectorResource(id = R.drawable.camera),
-                contentDescription = "",
-                tint = Color.Gray,
-                modifier = Modifier.size(50.dp)
-            )
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.camera),
+                    contentDescription = "",
+                    tint = Color.Gray,
+                    modifier = Modifier.size(50.dp)
+                )
             else
                 BoxWithConstraints {
-                    AsyncImage(model = imageUrl,
+                    AsyncImage(
+                        model = imageUrl,
                         contentDescription = "picture",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -127,9 +134,10 @@ fun ProfileImagePicker(imageUri: Uri? = null,
                                     )
                                 )
                             },
-                        )
-                    Icon(painter = painterResource(id = R.drawable.camera)
-                        , contentDescription = "Ajouter une photo",
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.camera),
+                        contentDescription = "Ajouter une photo",
                         tint = LightPrimary.copy(alpha = 0.8f),
                         modifier = Modifier
                             .align(Alignment.BottomEnd)

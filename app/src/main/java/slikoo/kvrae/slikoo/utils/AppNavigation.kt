@@ -25,33 +25,33 @@ fun App() {
     Navigation()
 }
 
-sealed class AppScreenNavigator(val route: String){
-    object EventScreen: MainScreenNavigator("Organiser")
-    object SplashAppScreen: AppScreenNavigator("splash_screen")
-    object SignInAppScreen: AppScreenNavigator("sign_in_screen")
-    object SignUpAppScreen: AppScreenNavigator("sign_up_screen")
-    object MainAppScreen: AppScreenNavigator("main_screen")
-    object ForgotPasswordAppScreen: AppScreenNavigator("forgot_password_screen")
-    object VerifyEmailAppScreen: AppScreenNavigator("verify_email_screen")
-    object ResetPasswordAppScreen: AppScreenNavigator("reset_password_screen")
-    object EditProfileAppScreen: AppScreenNavigator("edit_profile_screen")
-    object AdvancedEditProfilesAppScreen: AppScreenNavigator("advanced_edit_profile_screen")
-    object EventDetailsAppScreen: AppScreenNavigator("event_details_screen")
+sealed class AppScreenNavigator(val route: String) {
+    object EventScreen : MainScreenNavigator("Organiser")
+    object SplashAppScreen : AppScreenNavigator("splash_screen")
+    object SignInAppScreen : AppScreenNavigator("sign_in_screen")
+    object SignUpAppScreen : AppScreenNavigator("sign_up_screen")
+    object MainAppScreen : AppScreenNavigator("main_screen")
+    object ForgotPasswordAppScreen : AppScreenNavigator("forgot_password_screen")
+    object VerifyEmailAppScreen : AppScreenNavigator("verify_email_screen")
+    object ResetPasswordAppScreen : AppScreenNavigator("reset_password_screen")
+    object EditProfileAppScreen : AppScreenNavigator("edit_profile_screen")
+    object AdvancedEditProfilesAppScreen : AppScreenNavigator("advanced_edit_profile_screen")
+    object EventDetailsAppScreen : AppScreenNavigator("event_details_screen")
 }
 
-sealed class SignUpNavigator(val route: String){
-    object SignUpFormFragment: SignUpNavigator("sign_up_form")
-    object SignUpSecondFormFragment: SignUpNavigator("sign_up_sec_form")
-    object SignUpIDCFragment: SignUpNavigator("sign_up_idc")
-    object SignUpProfilePictureFragment: SignUpNavigator("sign_up_profile_picture")
+sealed class SignUpNavigator(val route: String) {
+    object SignUpFormFragment : SignUpNavigator("sign_up_form")
+    object SignUpSecondFormFragment : SignUpNavigator("sign_up_sec_form")
+    object SignUpIDCFragment : SignUpNavigator("sign_up_idc")
+    object SignUpProfilePictureFragment : SignUpNavigator("sign_up_profile_picture")
 
 }
 
-sealed class MainScreenNavigator(val route: String){
-    object HomeScreen: MainScreenNavigator("Home")
-    object RecipeScreen: MainScreenNavigator("Repas")
-    object SettingsScreen: MainScreenNavigator("Parametres")
-    object NotificationScreen: MainScreenNavigator("Notifications")
+sealed class MainScreenNavigator(val route: String) {
+    object HomeScreen : MainScreenNavigator("Home")
+    object RecipeScreen : MainScreenNavigator("Repas")
+    object SettingsScreen : MainScreenNavigator("Parametres")
+    object NotificationScreen : MainScreenNavigator("Notifications")
 
 }
 
@@ -64,7 +64,8 @@ fun Navigation() {
     NavHost(
         navController = navController,
         // Set start destination
-        startDestination = AppScreenNavigator.SplashAppScreen.route) {
+        startDestination = AppScreenNavigator.SplashAppScreen.route
+    ) {
 
         composable(route = AppScreenNavigator.SignInAppScreen.route) {
             LoginForm(navController = navController)
@@ -97,11 +98,11 @@ fun Navigation() {
             ProfileScreen(navController = navController)
             mainScreenIndex.value = MainScreenNavigator.SettingsScreen.route
         }
-        composable(route = AppScreenNavigator.EventScreen.route){
-            EventScreen(onBackPress = {mainScreenIndex.value = it}, navController = navController )
+        composable(route = AppScreenNavigator.EventScreen.route) {
+            EventScreen(onBackPress = { mainScreenIndex.value = it }, navController = navController)
             mainScreenIndex.value = MainScreenNavigator.RecipeScreen.route
         }
-        composable(route = AppScreenNavigator.EventDetailsAppScreen.route){
+        composable(route = AppScreenNavigator.EventDetailsAppScreen.route) {
             EventDetailScreen(navController = navController)
             mainScreenIndex.value = MainScreenNavigator.RecipeScreen.route
         }

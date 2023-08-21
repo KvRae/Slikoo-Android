@@ -73,6 +73,11 @@
     <string name="avatar">avatar</string>
     <string name="report">Report</string>
     <string name="send_feedback">Send Feedback</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="logout_message">You want really\ndisconnect ?</string>
+    <string name="title">Title</string>
+    <string name="message">Message</string>
 
 
 </resources>

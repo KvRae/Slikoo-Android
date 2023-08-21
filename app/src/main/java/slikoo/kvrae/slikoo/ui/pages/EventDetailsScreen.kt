@@ -42,49 +42,63 @@ import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 @Composable
 fun EventDetailScreen(navController: NavController) {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .verticalScroll(rememberScrollState())
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
 
     ) {
         // Heading Image
-        Image(painter = painterResource(id = R.drawable.petit_dejeuner_sain_frais_fond_bois),
+        Image(
+            painter = painterResource(id = R.drawable.petit_dejeuner_sain_frais_fond_bois),
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(400.dp))
-        AsyncImage(model = "",
-            contentDescription =""
+                .height(400.dp)
+        )
+        AsyncImage(
+            model = "",
+            contentDescription = ""
         )
 
         //Content
         Column(modifier = Modifier.fillMaxWidth()) {
             // TopAppBar
-            TopAppBar (
+            TopAppBar(
                 title = { /*TODO*/ },
-                navigationIcon = { IconButton(onClick = { navController.navigate(AppScreenNavigator.MainAppScreen.route) },
-                    modifier = Modifier
-                        .clip(shape = CircleShape)
-                        .background(LightError)
-                ) {
-                    Icon(imageVector = Icons.Rounded.ArrowBack,
-                        contentDescription = "ArrowBack",
-                        tint = LightPrimary)
-                    
-                } },
+                navigationIcon = {
+                    IconButton(
+                        onClick = { navController.navigate(AppScreenNavigator.MainAppScreen.route) },
+                        modifier = Modifier
+                            .clip(shape = CircleShape)
+                            .background(LightError)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowBack,
+                            contentDescription = "ArrowBack",
+                            tint = LightPrimary
+                        )
+
+                    }
+                },
                 backgroundColor = Color.Transparent,
                 elevation = 0.dp,
-                actions = { IconButton(onClick = { },
-                    modifier = Modifier
-                        .clip(shape = CircleShape)
-                        .background(LightError)
-                ) {
-                    Icon(imageVector = Icons.Outlined.FavoriteBorder,
-                        contentDescription = "Share",
-                        tint = LightPrimary)
-                    
-                }},
+                actions = {
+                    IconButton(
+                        onClick = { },
+                        modifier = Modifier
+                            .clip(shape = CircleShape)
+                            .background(LightError)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.FavoriteBorder,
+                            contentDescription = "Share",
+                            tint = LightPrimary
+                        )
+
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -101,17 +115,20 @@ fun EventDetailScreen(navController: NavController) {
                 elevation = 8.dp,
                 color = Color.White
             ) {
-                Column(Modifier.fillMaxSize().padding(16.dp)) {
+                Column(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)) {
                     // Event Name
-                    Text(text = "Baladé au Champ d'elysee",)
+                    Text(text = "Baladé au Champ d'elysee")
                     Row {
-                        RatingBar(onRatingChanged ={}, maxRating = 5, currentRating = 4,)
+                        RatingBar(onRatingChanged = {}, maxRating = 5, currentRating = 4)
                         Text(text = "${4.0} ")
                         Text(text = "(${100})")
                         Text(text = "Reviews")
                     }
-                    Row() {
-                        
+                    Row {
+
                     }
                     // Event Date
                     Text(text = "")
@@ -122,7 +139,7 @@ fun EventDetailScreen(navController: NavController) {
                     // Event Description
                     Text(text = "")
                 }
-                
+
             }
 
         }

@@ -17,16 +17,16 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-   /* primary = DarkPrimary,
-    secondary = DarkPrimaryVariant,
-    tertiary = DarkSurface,
-    background = DarkSecondary,
-    surface = DarkSecondary,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = DarkSecondaryVariant,
-    onBackground = DarkBackground,
-    onSurface = DarkBackground*/
+    /* primary = DarkPrimary,
+     secondary = DarkPrimaryVariant,
+     tertiary = DarkSurface,
+     background = DarkSecondary,
+     surface = DarkSecondary,
+     onPrimary = Color.White,
+     onSecondary = Color.White,
+     onTertiary = DarkSecondaryVariant,
+     onBackground = DarkBackground,
+     onSurface = DarkBackground*/
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -41,7 +41,7 @@ private val LightColorScheme = lightColorScheme(
     onBackground = LightBackground,
     onSurface = LightBackground,
 
-)
+    )
 
 @Composable
 fun SlikooTheme(

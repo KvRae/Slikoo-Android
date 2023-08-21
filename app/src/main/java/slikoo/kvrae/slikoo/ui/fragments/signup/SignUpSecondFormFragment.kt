@@ -33,7 +33,7 @@ import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
 
 @Composable
-fun SignUpSecondForm( onChange: (String) -> Unit) {
+fun SignUpSecondForm(onChange: (String) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -50,27 +50,42 @@ fun SignUpSecondForm( onChange: (String) -> Unit) {
             Text(
                 text = stringResource(id = R.string.signUp),
                 fontSize = 30.sp,
-                fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.size(8.dp))
-                CustomSlider(maxSlide = 4, currentSlide = 2)
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            CustomSlider(maxSlide = 4, currentSlide = 2)
 
-                CustomTextField(onChange = {}, value = "", label = stringResource(R.string.phone_number), keyboardType= KeyboardType.Phone, leadingIcon = Icons.Rounded.Phone)
+            CustomTextField(
+                onChange = {},
+                value = "",
+                label = stringResource(R.string.phone_number),
+                keyboardType = KeyboardType.Phone,
+                leadingIcon = Icons.Rounded.Phone
+            )
 
-                CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.postal_code),keyboardType= KeyboardType.Number, leadingIcon = Icons.Rounded.LocationOn)
+            CustomTextField(
+                onChange = {},
+                value = "",
+                label = stringResource(id = R.string.postal_code),
+                keyboardType = KeyboardType.Number,
+                leadingIcon = Icons.Rounded.LocationOn
+            )
 
-                CustomTextField(
-                    onChange = {},
-                    value = "",
-                    label = stringResource(R.string.profile_description),
-                    leadingIcon = Icons.Rounded.Info)
+            CustomTextField(
+                onChange = {},
+                value = "",
+                label = stringResource(R.string.profile_description),
+                leadingIcon = Icons.Rounded.Info
+            )
             Spacer(modifier = Modifier.padding(32.dp))
 
             CustomButton(text = stringResource(id = R.string.next),
-                onClick = { onChange(SignUpNavigator.SignUpIDCFragment.route)
+                onClick = {
+                    onChange(SignUpNavigator.SignUpIDCFragment.route)
                 })
 
-            TextButton(onClick = { onChange(SignUpNavigator.SignUpFormFragment.route)}) {
-               Text(text = stringResource(id = R.string.previous), color = LightSurface)
+            TextButton(onClick = { onChange(SignUpNavigator.SignUpFormFragment.route) }) {
+                Text(text = stringResource(id = R.string.previous), color = LightSurface)
             }
 
         }

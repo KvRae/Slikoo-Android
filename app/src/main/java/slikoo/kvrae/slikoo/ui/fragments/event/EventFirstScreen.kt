@@ -44,15 +44,41 @@ fun EventFirstFragment(onFragmentChange: (String) -> Unit) {
     var date by remember {
         mutableStateOf("date")
     }
-    Column(modifier = Modifier.fillMaxWidth(),
+    Column(
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CustomSlider(maxSlide = 2, currentSlide = 1)
-        ExpandableCard(items = items , title =item, onTitleChange = {item = it}, leadingIcon = Icons.Rounded.Info )
-        ExpandableCard(items = themes, title = theme, onTitleChange = {theme = it}, leadingIcon = Icons.Rounded.ThumbUp)
-        ExpandableCard(items = types , title = type, onTitleChange = {type = it}, leadingIcon = Icons.Rounded.List)
-        ExpandableCard(items = places , title = place, onTitleChange = {place = it}, leadingIcon = Icons.Rounded.LocationOn)
-        ExpandableCard(items = dates, title = date, onTitleChange = {date = it}, leadingIcon = Icons.Rounded.Close )
+        ExpandableCard(
+            items = items,
+            title = item,
+            onTitleChange = { item = it },
+            leadingIcon = Icons.Rounded.Info
+        )
+        ExpandableCard(
+            items = themes,
+            title = theme,
+            onTitleChange = { theme = it },
+            leadingIcon = Icons.Rounded.ThumbUp
+        )
+        ExpandableCard(
+            items = types,
+            title = type,
+            onTitleChange = { type = it },
+            leadingIcon = Icons.Rounded.List
+        )
+        ExpandableCard(
+            items = places,
+            title = place,
+            onTitleChange = { place = it },
+            leadingIcon = Icons.Rounded.LocationOn
+        )
+        ExpandableCard(
+            items = dates,
+            title = date,
+            onTitleChange = { date = it },
+            leadingIcon = Icons.Rounded.Close
+        )
         CustomButton(text = stringResource(id = R.string.next)) {
             onFragmentChange("second")
         }

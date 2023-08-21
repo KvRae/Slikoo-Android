@@ -34,9 +34,11 @@ import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 
 @Composable
-fun EventScreen(title: String = stringResource(R.string.home),
-                onBackPress: (String) -> Unit,
-                navController: NavController) {
+fun EventScreen(
+    title: String = stringResource(R.string.home),
+    onBackPress: (String) -> Unit,
+    navController: NavController
+) {
     var fragment by remember {
         mutableStateOf("first")
     }
@@ -100,11 +102,11 @@ fun EventScreen(title: String = stringResource(R.string.home),
             verticalArrangement = Arrangement.Top
         )
         {
-            EventScreenTopBar(navController,title)
+            EventScreenTopBar(navController, title)
             when (fragment) {
                 "first" -> EventFirstFragment { fragment = it }
                 "second" -> {
-                    EventSecondFragment ({ fragment = it }, navController = navController)
+                    EventSecondFragment({ fragment = it }, navController = navController)
 
                 }
             }
@@ -115,7 +117,7 @@ fun EventScreen(title: String = stringResource(R.string.home),
 
 
 @Composable
-fun EventScreenTopBar(navController : NavController,title: String) {
+fun EventScreenTopBar(navController: NavController, title: String) {
     TopAppBar(
         title = { Text(text = stringResource(R.string.organize)) },
         navigationIcon = {

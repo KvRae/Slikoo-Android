@@ -32,68 +32,92 @@ import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 
 
-
 @Composable
-fun MainScreen(navController: NavController, currentScreen : String = "Home") {
+fun MainScreen(navController: NavController, currentScreen: String = "Home") {
     val title = remember {
         mutableStateOf(currentScreen)
     }
 
-    
+
     val bottomNavigationItems = listOf(
-        BottomNavItem("Home", MainScreenNavigator.HomeScreen.route, ImageVector.vectorResource(id = R.drawable.home_icon), 0),
-        BottomNavItem("Repas",MainScreenNavigator.RecipeScreen.route , ImageVector.vectorResource(id = R.drawable.plat_icon), 0),
+        BottomNavItem(
+            "Home",
+            MainScreenNavigator.HomeScreen.route,
+            ImageVector.vectorResource(id = R.drawable.home_icon),
+            0
+        ),
+        BottomNavItem(
+            "Repas",
+            MainScreenNavigator.RecipeScreen.route,
+            ImageVector.vectorResource(id = R.drawable.plat_icon),
+            0
+        ),
         BottomNavItem("Organiser", AppScreenNavigator.EventScreen.route, Icons.Rounded.Add, 0),
-        BottomNavItem("Notifications", MainScreenNavigator.NotificationScreen.route, ImageVector.vectorResource(id = R.drawable.notification),5),
-        BottomNavItem("Parametres", MainScreenNavigator.SettingsScreen.route, ImageVector.vectorResource(id = R.drawable.settings_icon), 0),
+        BottomNavItem(
+            "Notifications",
+            MainScreenNavigator.NotificationScreen.route,
+            ImageVector.vectorResource(id = R.drawable.notification),
+            5
+        ),
+        BottomNavItem(
+            "Parametres",
+            MainScreenNavigator.SettingsScreen.route,
+            ImageVector.vectorResource(id = R.drawable.settings_icon),
+            0
+        ),
     )
- Scaffold(
-     modifier = Modifier
-         .navigationBarsPadding()
-         .statusBarsPadding(),
-     topBar = {
-         if (title.value != AppScreenNavigator.EventScreen.route) CustomMainMenuTopBar(title = title.value)
-         else return@Scaffold
-              },
-     bottomBar = {
-         if (title.value != AppScreenNavigator.EventScreen.route)
-         BottomNavigationBar(items = bottomNavigationItems ,
-             route = title.value,
-             onItemClick ={ title.value = it}
-         )
+    Scaffold(
+        modifier = Modifier
+            .navigationBarsPadding()
+            .statusBarsPadding(),
+        topBar = {
+            if (title.value != AppScreenNavigator.EventScreen.route) CustomMainMenuTopBar(title = title.value)
             else return@Scaffold
-     },
-     floatingActionButton = {
-         if (title.value == MainScreenNavigator.RecipeScreen.route)
-             FloatingActionButton(
+        },
+        bottomBar = {
+            if (title.value != AppScreenNavigator.EventScreen.route)
+                BottomNavigationBar(items = bottomNavigationItems,
+                    route = title.value,
+                    onItemClick = { title.value = it }
+                )
+            else return@Scaffold
+        },
+        floatingActionButton = {
+            if (title.value == MainScreenNavigator.RecipeScreen.route)
+                FloatingActionButton(
                     onClick = { navController.navigate(AppScreenNavigator.EventScreen.route) },
                     backgroundColor = LightPrimary
-             ) {
-                Icon(imageVector = Icons.Rounded.Add,
-                    contentDescription = "",
-                    tint = LightSecondary
-                )
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = "",
+                        tint = LightSecondary
+                    )
+                }
+            else return@Scaffold
+        },
+        content = { padding ->
+            Box(
+                modifier = Modifier
+                    .padding(padding)
+                    .background(LightSecondary)
+            ) {
+                when (title.value) {
+                    "Home" -> HomeScreen(navController = navController)
+
+                    "Repas" -> RecipeScreen(navController = navController)
+
+                    "Organiser" -> EventScreen(
+                        onBackPress = { title.value = "Home" },
+                        navController = navController
+                    )
+
+                    "Notifications" -> NotificationScreen()
+
+                    "Parametres" -> SettingsScreen(navController = navController)
+                }
             }
-         else return@Scaffold
-     },
-     content = {padding ->
-         Box(modifier = Modifier
-             .padding(padding)
-             .background(LightSecondary)) {
-             when(title.value)
-             {
-                 "Home" -> HomeScreen(navController = navController)
-
-                 "Repas" -> RecipeScreen (navController = navController)
-
-                 "Organiser" -> EventScreen(onBackPress = {title.value = "Home"}, navController = navController)
-
-                 "Notifications" -> NotificationScreen()
-
-                 "Parametres" -> SettingsScreen(navController = navController)
-             }
-         }
-     }
- )
+        }
+    )
 }
 

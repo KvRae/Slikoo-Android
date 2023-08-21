@@ -1,7 +1,7 @@
-
-
 package slikoo.kvrae.slikoo.ui.pages
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -57,91 +58,48 @@ fun LoginForm(navController: NavController) {
     val logo = R.drawable.slikoo_white
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .navigationBarsPadding()
-        .background(LightPrimary.copy(alpha = 1f))
-    ){
-        Column(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .background(LightPrimary.copy(alpha = 1f))
+    ) {
+        SignInHeader(logo = logo)
+
+        Surface(
+            color = LightSecondary,
+            border = BorderStroke(1.dp, LightSecondary),
+            shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
             modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxSize()
         ) {
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(LightSecondary)
-                    .height(400.dp),
-                contentAlignment = Alignment.Center
+                    .padding(16.dp)
+                    .clip(shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                    .background(LightSecondary),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.login), // Load the drawable resource
-                    contentDescription = stringResource(R.string.background),
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
+                Text(
+                    text = stringResource(id = R.string.connect),
+                    fontWeight = FontWeight.Bold,
+                    style = TextStyle(
+                        color = LightBackground,
+                        fontSize = MaterialTheme.typography.h5.fontSize,
+                    )
                 )
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .background(LightPrimary.copy(alpha = 0.9f))
+                Spacer(modifier = Modifier.height(16.dp))
+                CustomTextField(
+                    onChange = { username = it },
+                    value = username,
+                    label = stringResource(id = R.string.email),
+                    keyboardType = KeyboardType.Email,
+                    leadingIcon = Icons.Rounded.Email
                 )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(32.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(id = logo), // Load the drawable resource
-                        contentDescription = "Logo",
-                        modifier = Modifier.size(150.dp)
-                    )
-                    Text(text = stringResource(id = R.string.welcome_description),
-                        style = TextStyle(
-                            color = LightPrimaryVariant,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                        )
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(text = stringResource(id = R.string.welcome_sub_description),
-                        style = TextStyle(color = LightPrimaryVariant,
-                            fontSize = MaterialTheme.typography.body2.fontSize,
-                            fontWeight = FontWeight.Normal,
-                        )
-                    )
-
-                }
-            }
-            Surface(
-                color = LightSecondary,
-                border = BorderStroke(1.dp, LightSecondary),
-                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxSize()
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .clip(shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                        .background(LightSecondary),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(text = stringResource(id = R.string.connect),
-                        fontWeight = FontWeight.Bold,
-                        style = TextStyle(
-                            color = LightBackground,
-                            fontSize = MaterialTheme.typography.h5.fontSize,
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    CustomTextField(onChange ={ username = it} ,
-                        value = username ,
-                        label = stringResource(id = R.string.email),
-                        keyboardType = KeyboardType.Email,
-                        leadingIcon = Icons.Rounded.Email)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -156,16 +114,15 @@ fun LoginForm(navController: NavController) {
 
                 // Submit button
                 CustomButton(text = stringResource(id = R.string.connect),
-                    onClick = { onSubmit(navController) })
-               /*Divider(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                        .clip(shape = MaterialTheme.shapes.medium),
-                    color = DividerColor,
-                    thickness = 1.dp
-                )*/
-                    Spacer(modifier = Modifier.weight(1f))
+                    onClick = {
+                        onSubmit(navController)
+                        onMakeToast(
+                            context = context,
+                            message = context.getString(R.string.welcome)
+                        )
+                    })
+
+                Spacer(modifier = Modifier.weight(1f))
 
                 Row(
                     modifier = Modifier
@@ -174,27 +131,98 @@ fun LoginForm(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start
                 ) {
-                        TextButton(onClick = { onNavigate(navController,AppScreenNavigator.SignUpAppScreen.route) }) {
-                            Text(
-                                stringResource(id = R.string.signUp),
-                                color = LightSurface,
-                                fontSize = MaterialTheme.typography.body2.fontSize,
-                            )
-                        }
-                        Spacer(modifier = Modifier.weight(1f))
-                        TextButton(onClick = { onNavigate(navController,AppScreenNavigator.ForgotPasswordAppScreen.route) })
-                        { Text(
+                    TextButton(onClick = {
+                        onNavigate(
+                            navController,
+                            AppScreenNavigator.SignUpAppScreen.route
+                        )
+                    }) {
+                        Text(
+                            stringResource(id = R.string.signUp),
+                            color = LightSurface,
+                            fontSize = MaterialTheme.typography.body2.fontSize,
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    TextButton(onClick = {
+                        onNavigate(
+                            navController,
+                            AppScreenNavigator.ForgotPasswordAppScreen.route
+                        )
+                    })
+                    {
+                        Text(
                             stringResource(id = R.string.forgotPassword),
                             color = LightSurface,
-                            fontSize = MaterialTheme.typography.body2.fontSize)
-                        }
-                   }
+                            fontSize = MaterialTheme.typography.body2.fontSize
+                        )
+                    }
+
                 }
             }
         }
     }
 }
 
+
+@Composable
+fun SignInHeader(logo: Int = R.drawable.slikoo_white) {
+    Column(
+        modifier = Modifier
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(LightSecondary)
+                .height(400.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.login), // Load the drawable resource
+                contentDescription = stringResource(R.string.background),
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(LightPrimary.copy(alpha = 0.9f))
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(id = logo), // Load the drawable resource
+                    contentDescription = "Logo",
+                    modifier = Modifier.size(150.dp)
+                )
+                Text(
+                    text = stringResource(id = R.string.welcome_description),
+                    style = TextStyle(
+                        color = LightPrimaryVariant,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = stringResource(id = R.string.welcome_sub_description),
+                    style = TextStyle(
+                        color = LightPrimaryVariant,
+                        fontSize = MaterialTheme.typography.body2.fontSize,
+                        fontWeight = FontWeight.Normal,
+                    )
+                )
+
+            }
+        }
+    }
+}
 
 
 fun onNavigate(navController: NavController, route: String) {
@@ -206,6 +234,15 @@ fun onSubmit(navController: NavController) {
     navController.popBackStack()
     navController.navigate(AppScreenNavigator.MainAppScreen.route)
 
+}
+
+fun onMakeToast(context: Context, message: String) {
+    Toast.makeText(
+        context,
+        message,
+        Toast.LENGTH_LONG
+    )
+        .show()
 }
 
 //fun getGoogleSignInClient(context: Context ): GoogleSignInClient {

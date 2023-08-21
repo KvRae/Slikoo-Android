@@ -3,11 +3,10 @@ package slikoo.kvrae.slikoo.viewmodel
 import androidx.lifecycle.ViewModel
 import slikoo.kvrae.slikoo.data.repository.UserRepository
 
-class UserViewModel(private  val userRepository: UserRepository) : ViewModel() {
+class UserViewModel(private val userRepository: UserRepository) : ViewModel() {
     init {
         println("UserViewModel created!")
     }
-
 
 
     override fun onCleared() {
@@ -15,26 +14,25 @@ class UserViewModel(private  val userRepository: UserRepository) : ViewModel() {
         println("UserViewModel destroyed!")
     }
 
-    fun onSignUp(){
+    fun onSignUp() {
 
     }
 
-    fun onLogin(){
+    fun onLogin() {
 
     }
 
-    fun onForgotPassword(){
+    fun onForgotPassword() {
 
     }
 
-    fun onValidateEmail(){
+    fun onValidateEmail() {
 
     }
 
-    fun onValidatePassword(){
+    fun onValidatePassword() {
 
     }
-
 
 
 }

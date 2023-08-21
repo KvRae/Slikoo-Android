@@ -35,8 +35,6 @@ import slikoo.kvrae.slikoo.viewmodel.CategoryViewModel
 import slikoo.kvrae.slikoo.viewmodel.RatingViewModel
 
 
-
-
 @Composable
 fun HomeScreen(navController: NavController) {
     Box(
@@ -73,7 +71,7 @@ fun OnlineRecipes(navController: NavController) {
             Spacer(modifier = Modifier.padding(8.dp))
             LazyRow(modifier = Modifier.fillMaxWidth()) {
                 items(areas.size) {
-                        RecipeCardContent(areas[it], navController = navController)
+                    RecipeCardContent(areas[it], navController = navController)
                 }
             }
         }
@@ -96,7 +94,11 @@ fun RecipesCategorySection() {
                 userScrollEnabled = false,
                 content = {
                     items(categories.size) {
-                        AreaFilterCard(name = categories[it].name, image = categories[it].image, imageUrl = "") {
+                        AreaFilterCard(
+                            name = categories[it].name,
+                            image = categories[it].image,
+                            imageUrl = ""
+                        ) {
 
                         }
 
@@ -120,7 +122,7 @@ fun RatingListSection() {
             Spacer(modifier = Modifier.padding(8.dp))
             LazyRow(modifier = Modifier.fillMaxWidth()) {
                 items(ratings.size) {
-                        RatingCard(ratings[it])
+                    RatingCard(ratings[it])
                 }
             }
         }
@@ -129,13 +131,17 @@ fun RatingListSection() {
 
 @Composable
 fun SectionHeader(title: String) {
-    Row(modifier = Modifier
-        .padding(start = 10.dp, end = 8.dp)
-        .fillMaxWidth()) {
-        Text(text = title,style = TextStyle(
-            color = LightBackground,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp)
+    Row(
+        modifier = Modifier
+            .padding(start = 10.dp, end = 8.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = title, style = TextStyle(
+                color = LightBackground,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
         )
     }
 }

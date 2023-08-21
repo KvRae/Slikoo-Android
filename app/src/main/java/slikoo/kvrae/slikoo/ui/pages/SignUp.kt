@@ -46,7 +46,7 @@ fun SignUpPreview() {
 @Composable
 fun SignUp(navController: NavController) {
     val route = remember {
-        mutableStateOf(SignUpNavigator.SignUpFormFragment.route )
+        mutableStateOf(SignUpNavigator.SignUpFormFragment.route)
     }
     Box(
         modifier = Modifier
@@ -61,15 +61,21 @@ fun SignUp(navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = LightPrimary.copy(alpha = 0.8f))) {
+                .background(color = LightPrimary.copy(alpha = 0.8f))
+        ) {
         }
-        Row(modifier = Modifier.fillMaxWidth().statusBarsPadding()) {
-            IconButton(onClick = { navController.popBackStack()
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .statusBarsPadding()) {
+            IconButton(onClick = {
+                navController.popBackStack()
 
             }) {
-                Icon(imageVector = Icons.Rounded.ArrowBack,
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = "Back",
-                    tint = LightSecondary)
+                    tint = LightSecondary
+                )
             }
         }
 
@@ -87,14 +93,23 @@ fun SignUp(navController: NavController) {
                     )
 
             ) {
-                when(route.value){
-                    SignUpNavigator.SignUpFormFragment.route -> SignUpForm(onChange = { route.value = it })
+                when (route.value) {
+                    SignUpNavigator.SignUpFormFragment.route -> SignUpForm(onChange = {
+                        route.value = it
+                    })
 
-                    SignUpNavigator.SignUpSecondFormFragment.route -> SignUpSecondForm(onChange = { route.value = it })
+                    SignUpNavigator.SignUpSecondFormFragment.route -> SignUpSecondForm(onChange = {
+                        route.value = it
+                    })
 
-                    SignUpNavigator.SignUpIDCFragment.route -> SignUpCidForm(onChange = { route.value = it })
+                    SignUpNavigator.SignUpIDCFragment.route -> SignUpCidForm(onChange = {
+                        route.value = it
+                    })
 
-                    SignUpNavigator.SignUpProfilePictureFragment.route -> ProfilePictureSection(onChange = { route.value = it }, navController = navController)
+                    SignUpNavigator.SignUpProfilePictureFragment.route -> ProfilePictureSection(
+                        onChange = { route.value = it },
+                        navController = navController
+                    )
 
                 }
             }

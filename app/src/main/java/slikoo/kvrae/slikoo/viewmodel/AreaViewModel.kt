@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import slikoo.kvrae.slikoo.data.models.Area
 import java.util.Date
 
-class AreaViewModel: ViewModel() {
+class AreaViewModel : ViewModel() {
     private var areas: List<Area> = mutableListOf(
         Area(1, "Ariana", 1, "Description 1", "Image 1", 20.00, "Place 1", Date()),
         Area(2, "Tunis", 2, "Description 2", "Image 2", 26.0, "Place 2", Date()),

@@ -44,38 +44,69 @@ import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 @Composable
-fun EditProfileScreen(navController : NavController) {
+fun EditProfileScreen(navController: NavController) {
     Box(
         Modifier
             .fillMaxSize()
             .statusBarsPadding()
             .navigationBarsPadding(),
     ) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .background(LightSecondary)
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(LightSecondary)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             EditProfileTopBar(navController = navController)
-            ProfileImagePicker( onImageSelected = {})
-            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.name), leadingIcon = Icons.Filled.Person )
-            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.familyName), leadingIcon = Icons.Filled.Person )
-            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.phone), leadingIcon = Icons.Filled.Phone )
-            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.address), leadingIcon = Icons.Filled.LocationOn )
-            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.postal_code), leadingIcon = Icons.Filled.AccountCircle )
-            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.description) , leadingIcon = Icons.Filled.Info )
+            ProfileImagePicker(onImageSelected = {})
+            CustomTextField(
+                onChange = {},
+                value = "",
+                label = stringResource(id = R.string.name),
+                leadingIcon = Icons.Filled.Person
+            )
+            CustomTextField(
+                onChange = {},
+                value = "",
+                label = stringResource(id = R.string.familyName),
+                leadingIcon = Icons.Filled.Person
+            )
+            CustomTextField(
+                onChange = {},
+                value = "",
+                label = stringResource(id = R.string.phone),
+                leadingIcon = Icons.Filled.Phone
+            )
+            CustomTextField(
+                onChange = {},
+                value = "",
+                label = stringResource(id = R.string.address),
+                leadingIcon = Icons.Filled.LocationOn
+            )
+            CustomTextField(
+                onChange = {},
+                value = "",
+                label = stringResource(id = R.string.postal_code),
+                leadingIcon = Icons.Filled.AccountCircle
+            )
+            CustomTextField(
+                onChange = {},
+                value = "",
+                label = stringResource(id = R.string.description),
+                leadingIcon = Icons.Filled.Info
+            )
             ImagePickerField()
             CustomButton(text = stringResource(id = R.string.update),
-                onClick = {navController.navigate(AppScreenNavigator.MainAppScreen.route) })
+                onClick = { navController.navigate(AppScreenNavigator.MainAppScreen.route) })
             Row {
-                TextButton( onClick = {}){
+                TextButton(onClick = {}) {
                     Text(text = stringResource(R.string.add_rib), color = LightSurface)
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                TextButton( onClick = {navController.navigate(AppScreenNavigator.AdvancedEditProfilesAppScreen.route)}){
+                TextButton(onClick = { navController.navigate(AppScreenNavigator.AdvancedEditProfilesAppScreen.route) }) {
                     Text(text = stringResource(R.string.advanced_profile), color = LightSurface)
                 }
             }
@@ -85,7 +116,8 @@ fun EditProfileScreen(navController : NavController) {
 
 @Composable
 fun EditProfileTopBar(navController: NavController) {
-    Row(modifier = Modifier.fillMaxWidth(),
+    Row(
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -96,7 +128,8 @@ fun EditProfileTopBar(navController: NavController) {
             )
         }
         Spacer(modifier = Modifier.width(32.dp))
-        Text(text = stringResource(R.string.edit_profile),
+        Text(
+            text = stringResource(R.string.edit_profile),
             fontWeight = FontWeight.Medium,
             fontSize = TextUnit(20f, TextUnitType.Sp)
         )

@@ -29,16 +29,17 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 @Composable
 fun AnimatedSplashScreen(navController: NavController) {
     var startAnimation by remember { mutableStateOf(false) }
-    val alphaAnim = animateFloatAsState(targetValue = if (startAnimation) 1f else 0f,
+    val alphaAnim = animateFloatAsState(
+        targetValue = if (startAnimation) 1f else 0f,
         animationSpec = tween(
             durationMillis = 3000
         )
     )
-    LaunchedEffect(key1 = true ){
+    LaunchedEffect(key1 = true) {
         startAnimation = true
         delay(3000)
-        navController.navigate("sign_in_screen"){
-            popUpTo("splash_screen"){
+        navController.navigate("sign_in_screen") {
+            popUpTo("splash_screen") {
                 inclusive = true
             }
         }
@@ -58,11 +59,13 @@ fun Splash(alpha: Float) {
             )
             .fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         Image(
             painter = painterResource(id = logo), // Load the drawable resource
             contentDescription = "Logo",
-            modifier = Modifier.size(200.dp).alpha(alpha)
+            modifier = Modifier
+                .size(200.dp)
+                .alpha(alpha)
         )
     }
 }

@@ -43,11 +43,13 @@ import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 @Preview(showBackground = true)
 @Composable
 fun ForgetPasswordTopBar() {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .statusBarsPadding()
-        .height(56.dp)
-        .background(LightSecondary)) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .statusBarsPadding()
+            .height(56.dp)
+            .background(LightSecondary)
+    ) {
         Row(
             modifier = Modifier.fillMaxSize(),
             //horizontalArrangement = Arrangement.Start,
@@ -58,7 +60,8 @@ fun ForgetPasswordTopBar() {
                 Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
             }
 
-            Text(text = stringResource(id = R.string.forgotPassword),
+            Text(
+                text = stringResource(id = R.string.forgotPassword),
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(start = 16.dp)
@@ -71,23 +74,35 @@ fun ForgetPasswordTopBar() {
 }
 
 @Composable
-fun EmailInput(navController: NavController){
+fun EmailInput(navController: NavController) {
     var email by rememberSaveable { mutableStateOf("") }
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
             ForgetPasswordTopBar()
-            Text(text = stringResource(R.string.enter_the_email_address_associated_with_your_account),
-                style = typography.titleLarge)
+            Text(
+                text = stringResource(R.string.enter_the_email_address_associated_with_your_account),
+                style = typography.titleLarge
+            )
             Spacer(modifier = Modifier.padding(16.dp))
-            CustomTextField(onChange ={email = it} , value =email , label = stringResource(id = R.string.email), leadingIcon = Icons.Rounded.Email )
+            CustomTextField(onChange = { email = it },
+                value = email,
+                label = stringResource(id = R.string.email),
+                leadingIcon = Icons.Rounded.Email)
             Spacer(modifier = Modifier.padding(16.dp))
-            Button(onClick = { onNavigateTo(navController,AppScreenNavigator.VerifyEmailAppScreen.route) }) {
+            Button(onClick = {
+                onNavigateTo(
+                    navController,
+                    AppScreenNavigator.VerifyEmailAppScreen.route
+                )
+            }) {
                 Text(text = stringResource(R.string.get_code))
             }
         }
@@ -98,21 +113,30 @@ fun EmailInput(navController: NavController){
 @Composable
 fun OtpInput(navController: NavController) {
     var code by rememberSaveable { mutableStateOf("") }
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .statusBarsPadding()
-        .background(LightSecondary)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .background(LightSecondary)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Text(text = stringResource(R.string.enter_the_code_sent_to_your_email_address),
-                style = typography.titleLarge)
+            Text(
+                text = stringResource(R.string.enter_the_code_sent_to_your_email_address),
+                style = typography.titleLarge
+            )
             Spacer(modifier = Modifier.padding(16.dp))
-            PinView(pinText = "", onPinTextChange = {code = it})
+            PinView(pinText = "", onPinTextChange = { code = it })
             Spacer(modifier = Modifier.padding(16.dp))
-            Button(onClick = { onNavigateTo(navController,AppScreenNavigator.ResetPasswordAppScreen.route) }) {
+            Button(onClick = {
+                onNavigateTo(
+                    navController,
+                    AppScreenNavigator.ResetPasswordAppScreen.route
+                )
+            }) {
                 Text(text = stringResource(R.string.postal_code))
             }
         }
@@ -124,18 +148,28 @@ fun OtpInput(navController: NavController) {
 fun PasswordReset(navController: NavController) {
     var password by rememberSaveable { mutableStateOf("") }
     var confirmPassword by rememberSaveable { mutableStateOf("") }
-  Column(modifier = Modifier
-      .fillMaxSize()
-      .statusBarsPadding()) {
-      Text(text = "Reset Password")
-      PasswordTextField(value = password, placeHolder = password, onChange = {password = it} )
-      PasswordTextField(value = confirmPassword, placeHolder = password, onChange = {confirmPassword = it} )
-      Spacer(modifier = Modifier.padding(16.dp))
-      Button(onClick = { onNavigateTo(navController,AppScreenNavigator.SignInAppScreen.route)}) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
+        Text(text = "Reset Password")
+        PasswordTextField(value = password, placeHolder = password, onChange = { password = it })
+        PasswordTextField(
+            value = confirmPassword,
+            placeHolder = password,
+            onChange = { confirmPassword = it })
+        Spacer(modifier = Modifier.padding(16.dp))
+        Button(onClick = {
+            onNavigateTo(
+                navController,
+                AppScreenNavigator.SignInAppScreen.route
+            )
+        }) {
             Text(text = "Reset Password")
-      }
+        }
 
-  }
+    }
 
 }
 

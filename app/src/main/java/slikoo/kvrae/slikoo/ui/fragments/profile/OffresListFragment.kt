@@ -20,20 +20,23 @@ fun UserOffersList(navController: NavController) {
     val areas = AreaViewModel().getAreas()
     val scrollState = rememberLazyGridState()
 
-    Box(modifier = Modifier
-        .fillMaxSize(),
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
-        Column(modifier = Modifier
-            .fillMaxSize().padding(4.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-        ){
+        ) {
             LazyVerticalGrid(columns = GridCells.Fixed(2),
                 userScrollEnabled = true,
                 state = scrollState,
-                content ={
-                    items(areas.size){
-                        UserEventCard( area = areas[it], navController = navController)
+                content = {
+                    items(areas.size) {
+                        UserEventCard(area = areas[it], navController = navController)
                     }
                 })
         }

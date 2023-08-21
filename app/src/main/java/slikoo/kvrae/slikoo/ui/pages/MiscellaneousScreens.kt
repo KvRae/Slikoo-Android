@@ -16,10 +16,11 @@ import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 
 @Composable
 fun LoadingScreen() {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = LightSecondary),
-        contentAlignment = androidx.compose.ui.Alignment.Center
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = LightSecondary),
+        contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
             color = LightPrimary,
@@ -32,9 +33,10 @@ fun LoadingScreen() {
 
 @Composable
 fun EmptyElementsScreen() {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = LightSecondary),
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = LightSecondary),
         contentAlignment = Alignment.Center
     ) {
         Text(text = "No elements to show")
@@ -43,9 +45,10 @@ fun EmptyElementsScreen() {
 
 @Composable
 fun ErrorScreen() {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = LightSecondary),
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = LightSecondary),
         contentAlignment = Alignment.Center
     ) {
         Text(text = "Error")
@@ -54,9 +57,10 @@ fun ErrorScreen() {
 
 @Composable
 fun NoInternetScreen() {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = LightSecondary),
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = LightSecondary),
         contentAlignment = Alignment.Center
     ) {
         Text(text = "No Internet")
@@ -65,9 +69,10 @@ fun NoInternetScreen() {
 
 @Composable
 fun NoSearchResultsScreen() {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = LightSecondary),
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = LightSecondary),
         contentAlignment = Alignment.Center
     ) {
         Text(text = "No results found")
@@ -76,9 +81,10 @@ fun NoSearchResultsScreen() {
 
 @Composable
 fun NoNotificationsScreen() {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = LightSecondary),
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = LightSecondary),
         contentAlignment = Alignment.Center
     ) {
         Text(text = "No notifications")

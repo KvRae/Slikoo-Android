@@ -40,8 +40,8 @@ fun SignUpCidForm(onChange: (String) -> Unit) {
         }
         CustomButton(text = "Suivant",
             onClick = { onChange(SignUpNavigator.SignUpProfilePictureFragment.route) })
-        TextButton(onClick = { onChange(SignUpNavigator.SignUpSecondFormFragment.route)}) {
-            Text(text = "Precedent",color = LightSurface)
+        TextButton(onClick = { onChange(SignUpNavigator.SignUpSecondFormFragment.route) }) {
+            Text(text = "Precedent", color = LightSurface)
         }
 
     }

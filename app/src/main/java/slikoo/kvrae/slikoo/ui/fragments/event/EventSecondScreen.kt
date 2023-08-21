@@ -33,11 +33,11 @@ fun EventSecondFragment(onFragmentChange: (String) -> Unit, navController: NavCo
         horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
     ) {
         CustomSlider(maxSlide = 2, currentSlide = 2)
-        ExpandableCard(items = items , title =item)
+        ExpandableCard(items = items, title = item)
         ExpandableCard(items = themes, title = theme)
-        ExpandableCard(items = types , title = type)
-        ExpandableCard(items = places , title = place)
-        ExpandableCard(items = dates, title = date, )
+        ExpandableCard(items = types, title = type)
+        ExpandableCard(items = places, title = place)
+        ExpandableCard(items = dates, title = date)
         ImagePickerField()
         CustomButton(text = stringResource(id = R.string.finish)) {
             navController.popBackStack()
