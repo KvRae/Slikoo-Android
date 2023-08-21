@@ -32,7 +32,7 @@
     <string name="edit_profile">Modifier le profil</string>
     <string name="add_rib">Ajouter votre RIB</string>
     <string name="advanced_profile">Profile avancé</string>
-    <string name="postal_code">Obtenir code</string>
+    <string name="postal_code">Code postal</string>
     <string name="update">Mettre a jour le profil</string>
     <string name="online_recipes">Recettes en ligne</string>
     <string name="recipes_category">Catégorie Recettes</string>
@@ -44,7 +44,34 @@
     <string name="modifier_le_profil">"Modifier le profil "</string>
     <string name="disconnect">Se deconnecter</string>
     <string name="about">A propos</string>
-    <string name="home">Home</string>
+    <string name="home">Accueil</string>
+    <string name="organize">Organiser</string>
+    <string name="allergies_alimentaires">Allergies Alimentaires</string>
+    <string name="centres_d_interet">Centres d\'intérét</string>
+    <string name="languages">Languages</string>
+    <string name="plus_sur_moi">Plus sur moi</string>
+    <string name="fumeur">Fumeur</string>
+    <string name="alcohol">Alcohol</string>
+    <string name="cherche_plus">Cherche Plus</string>
+    <string name="genre_recherche">Genre recherche</string>
+    <string name="biographie">Biographie</string>
+    <string name="mes_offres">Mes offres</string>
+    <string name="invitations">Invitations</string>
+    <string name="reservations">Reservations</string>
+    <string name="profile_cover_picture">Profile cover picture</string>
+    <string name="delete">Supprimer</string>
+    <string name="edit">Modifier</string>
+    <string name="phone_number">Numero de telephone</string>
+    <string name="profile_description">Description profil</string>
+    <string name="base_url" >" http://www.slikoo.com/ "</string>
+    <string name="meal">Repas</string>
+    <string name="settings">Settings</string>
+    <string name="notifications">Notfications</string>
+    <string name="refresh">refresh</string>
+    <string name="menu_item_icon">Menu Item Icon</string>
+    <string name="avatar">avatar</string>
+    <string name="report">Report</string>
+    <string name="send_feedback">Send Feedback</string>
 
 
 </resources>

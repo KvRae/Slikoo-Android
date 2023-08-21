@@ -2,6 +2,7 @@ package slikoo.kvrae.slikoo.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,18 +24,18 @@ import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
 
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 fun AreaFilterCard(name: String = "null", image: Int, imageUrl: String, onClick: () -> Unit) {
     Card(
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(24.dp),
         elevation = 4.dp,
-        onClick = { onClick() }
     ) {
         Box(
             Modifier
                 .height(200.dp)
+                .clickable(onClick = onClick)
                 .fillMaxSize()) {
 
             Image(
@@ -72,3 +72,8 @@ fun AreaFilterCard(name: String = "null", image: Int, imageUrl: String, onClick:
         }
     }
 }
+
+
+
+
+

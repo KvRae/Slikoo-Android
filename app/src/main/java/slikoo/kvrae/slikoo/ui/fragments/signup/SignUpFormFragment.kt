@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
@@ -37,6 +38,9 @@ import slikoo.kvrae.slikoo.utils.SignUpNavigator
 fun SignUpForm(onChange: (String) -> Unit) {
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -55,23 +59,47 @@ fun SignUpForm(onChange: (String) -> Unit) {
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.size(8.dp))
-            CustomSlider(maxSlide = 4, currentSlide = 1)
 
+            CustomSlider(maxSlide = 4,
+                currentSlide = 1
+            )
 
-            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.name), leadingIcon = Icons.Rounded.Person)
+            CustomTextField(onChange = { firstName = it },
+                value = firstName,
+                label = stringResource(id = R.string.name),
+                keyboardType= KeyboardType.Text,
+                leadingIcon = Icons.Rounded.Person
+            )
 
-            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.familyName), leadingIcon = Icons.Rounded.Person)
+            CustomTextField(onChange = {lastName = it},
+                value = lastName,
+                label = stringResource(id = R.string.familyName),
+                keyboardType= KeyboardType.Text,
+                leadingIcon = Icons.Rounded.Person
+            )
 
-            CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.email), leadingIcon = Icons.Rounded.Email)
+            CustomTextField(onChange = {email = it},
+                value = email,
+                label = stringResource(id = R.string.email),
+                keyboardType= KeyboardType.Email,
+                leadingIcon = Icons.Rounded.Email
+            )
 
-            PasswordTextField(label = "Mot de passe", value = password, onChange = { password = it})
+            PasswordTextField(label = stringResource(id = R.string.password),
+                value = password,
+                onChange = { password = it}
+            )
 
-            PasswordTextField(label = "Repeter mot de passe", value = confirmPassword, onChange = { confirmPassword = it})
-
+            PasswordTextField(label = stringResource(id = R.string.confirmPassword),
+                value = confirmPassword,
+                onChange = { confirmPassword = it}
+            )
 
             Spacer(modifier = Modifier.padding(4.dp))
 
-            CustomButton(text = "Suivant", onClick = { onChange(SignUpNavigator.SignUpSecondFormFragment.route)})
+            CustomButton(text = stringResource(id = R.string.next),
+                onClick = { onChange(SignUpNavigator.SignUpSecondFormFragment.route)}
+            )
 
         }
     }

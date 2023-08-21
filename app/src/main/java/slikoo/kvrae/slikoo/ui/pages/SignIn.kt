@@ -36,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -139,6 +140,7 @@ fun LoginForm(navController: NavController) {
                     CustomTextField(onChange ={ username = it} ,
                         value = username ,
                         label = stringResource(id = R.string.email),
+                        keyboardType = KeyboardType.Email,
                         leadingIcon = Icons.Rounded.Email)
 
                 Spacer(modifier = Modifier.height(16.dp))

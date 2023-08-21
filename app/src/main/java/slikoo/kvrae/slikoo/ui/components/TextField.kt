@@ -70,6 +70,8 @@ fun CustomTextField(onChange : (String) -> Unit,
                     value : String, label : String,
                     modifier: Modifier = Modifier,
                     placeHolder: String = "",
+                    keyboardType: KeyboardType = KeyboardType.Text,
+                    keyboardActions: KeyboardActions = KeyboardActions(),
                     leadingIcon: ImageVector? = null,
                     trailingIcon: ImageVector? = null,
 ) {
@@ -123,8 +125,8 @@ fun CustomTextField(onChange : (String) -> Unit,
             , contentDescription = "",
             tint = if (!isFocused) Color.Gray else LightPrimary
             ) },
-        keyboardOptions = KeyboardOptions( /*TODO*/),
-        keyboardActions = KeyboardActions( /*TODO*/),
+        keyboardOptions = KeyboardOptions( keyboardType = keyboardType),
+        keyboardActions = KeyboardActions( /* TODO */),
 
 
     )
@@ -138,6 +140,7 @@ fun PasswordTextField(
     label: String = "Password",
     value: String,
     placeHolder: String = "",
+    keyboardType: KeyboardType = KeyboardType.Password,
     onChange: (String) -> Unit,
     isError: Boolean = false,
 ) {
@@ -170,7 +173,9 @@ fun PasswordTextField(
                 }
         },
         modifier = Modifier
-            .fillMaxWidth().padding(8.dp).onFocusChanged { focusState ->
+            .fillMaxWidth()
+            .padding(8.dp)
+            .onFocusChanged { focusState ->
                 isFocused = focusState.isFocused },
         singleLine = true,
         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -181,7 +186,7 @@ fun PasswordTextField(
             disabledBorderColor = Color.Transparent,
         ),
         shape = RoundedCornerShape(8.dp),
-        keyboardOptions = KeyboardOptions( keyboardType = KeyboardType.Password),
+        keyboardOptions = KeyboardOptions( keyboardType = keyboardType),
         keyboardActions = KeyboardActions( /*TODO*/),
         visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
 

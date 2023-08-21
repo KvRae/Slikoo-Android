@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
@@ -33,7 +34,6 @@ import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
 @Composable
 fun SignUpSecondForm( onChange: (String) -> Unit) {
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -54,23 +54,23 @@ fun SignUpSecondForm( onChange: (String) -> Unit) {
                 Spacer(modifier = Modifier.size(8.dp))
                 CustomSlider(maxSlide = 4, currentSlide = 2)
 
-                CustomTextField(onChange = {}, value = "", label = "Numero de telephone", leadingIcon = Icons.Rounded.Phone)
+                CustomTextField(onChange = {}, value = "", label = stringResource(R.string.phone_number), keyboardType= KeyboardType.Phone, leadingIcon = Icons.Rounded.Phone)
 
-                CustomTextField(onChange = {}, value = "", label = "Code postal", leadingIcon = Icons.Rounded.LocationOn)
+                CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.postal_code),keyboardType= KeyboardType.Number, leadingIcon = Icons.Rounded.LocationOn)
 
                 CustomTextField(
                     onChange = {},
                     value = "",
-                    label = "Description profil",
+                    label = stringResource(R.string.profile_description),
                     leadingIcon = Icons.Rounded.Info)
-
-
             Spacer(modifier = Modifier.padding(32.dp))
 
-            CustomButton(text = "Suivant", onClick = { onChange(SignUpNavigator.SignUpIDCFragment.route)})
+            CustomButton(text = stringResource(id = R.string.next),
+                onClick = { onChange(SignUpNavigator.SignUpIDCFragment.route)
+                })
 
             TextButton(onClick = { onChange(SignUpNavigator.SignUpFormFragment.route)}) {
-               Text(text = "Precedent", color = LightSurface)
+               Text(text = stringResource(id = R.string.previous), color = LightSurface)
             }
 
         }

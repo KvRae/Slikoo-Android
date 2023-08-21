@@ -25,8 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun DropDownPreview() {
     val dropDownList = listOf("Item 1", "Item 2", "Item 3")
-
-    CustomDropDownMenu(dropDownList = dropDownList, onChange = {})
+    CustomDropDownMenu(dropDownList = dropDownList, onChange = { })
 }
 
 

@@ -78,6 +78,8 @@ dependencies {
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
     // system bars customization
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.30.1"
+    // DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
 
 

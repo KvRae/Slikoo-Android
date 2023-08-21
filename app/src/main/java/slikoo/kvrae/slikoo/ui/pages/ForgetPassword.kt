@@ -140,6 +140,7 @@ fun PasswordReset(navController: NavController) {
 }
 
 fun onNavigateTo(navController: NavController, route: String) {
+    navController.popBackStack()
     navController.navigate(route)
 }
 

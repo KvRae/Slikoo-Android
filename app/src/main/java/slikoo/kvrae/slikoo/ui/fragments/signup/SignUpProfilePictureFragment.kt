@@ -60,11 +60,12 @@ fun ProfilePictureSection(onChange : (String) -> Unit, navController: NavControl
             ProfileImagePicker()
             CustomButton(text = stringResource(R.string.finish),
                 onClick = {
+                    navController.popBackStack()
                     navController.navigate(AppScreenNavigator.SignInAppScreen.route)
                 }
             )
             TextButton(onClick = { onChange(SignUpNavigator.SignUpIDCFragment.route) }) {
-                Text(text = "Precedent", color = LightSurface)
+                Text(text = stringResource(id = R.string.previous), color = LightSurface)
             }
         }
     }

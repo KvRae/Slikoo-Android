@@ -7,16 +7,16 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import slikoo.kvrae.slikoo.ui.pages.EventScreen
-import slikoo.kvrae.slikoo.ui.pages.AdvancedEditProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.AnimatedSplashScreen
 import slikoo.kvrae.slikoo.ui.pages.EditProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.EmailInput
 import slikoo.kvrae.slikoo.ui.pages.EventDetailScreen
+import slikoo.kvrae.slikoo.ui.pages.EventScreen
 import slikoo.kvrae.slikoo.ui.pages.LoginForm
 import slikoo.kvrae.slikoo.ui.pages.MainScreen
 import slikoo.kvrae.slikoo.ui.pages.OtpInput
 import slikoo.kvrae.slikoo.ui.pages.PasswordReset
+import slikoo.kvrae.slikoo.ui.pages.ProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.SignUp
 
 
@@ -67,7 +67,9 @@ fun Navigation() {
         startDestination = AppScreenNavigator.SplashAppScreen.route) {
 
         composable(route = AppScreenNavigator.SignInAppScreen.route) {
-           LoginForm(navController = navController)
+            LoginForm(navController = navController)
+            mainScreenIndex.value = MainScreenNavigator.HomeScreen.route
+
         }
         composable(route = AppScreenNavigator.SignUpAppScreen.route) {
             SignUp(navController = navController)
@@ -92,15 +94,16 @@ fun Navigation() {
             mainScreenIndex.value = MainScreenNavigator.SettingsScreen.route
         }
         composable(route = AppScreenNavigator.AdvancedEditProfilesAppScreen.route) {
-            AdvancedEditProfileScreen(navController = navController)
+            ProfileScreen(navController = navController)
             mainScreenIndex.value = MainScreenNavigator.SettingsScreen.route
         }
         composable(route = AppScreenNavigator.EventScreen.route){
             EventScreen(onBackPress = {mainScreenIndex.value = it}, navController = navController )
-            mainScreenIndex.value = MainScreenNavigator.HomeScreen.route
+            mainScreenIndex.value = MainScreenNavigator.RecipeScreen.route
         }
         composable(route = AppScreenNavigator.EventDetailsAppScreen.route){
             EventDetailScreen(navController = navController)
+            mainScreenIndex.value = MainScreenNavigator.RecipeScreen.route
         }
     }
 }

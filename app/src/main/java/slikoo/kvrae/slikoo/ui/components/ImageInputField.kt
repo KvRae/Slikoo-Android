@@ -38,7 +38,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 
 @Preview
 @Composable
-fun ImageInputField() {
+fun ImagePickerField() {
     var imageUrl by remember {
         mutableStateOf<Uri?>(null)
     }

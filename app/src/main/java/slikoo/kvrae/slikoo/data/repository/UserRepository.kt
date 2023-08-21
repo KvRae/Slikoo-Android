@@ -1,6 +1,6 @@
 package slikoo.kvrae.slikoo.data.repository
 
-class User {
+class UserRepository {
     suspend fun getUser() {
 
     }

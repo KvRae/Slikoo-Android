@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.BottomNavItem
 import slikoo.kvrae.slikoo.ui.components.BottomNavigationBar
-import slikoo.kvrae.slikoo.ui.components.CustomTopBar
+import slikoo.kvrae.slikoo.ui.components.CustomMainMenuTopBar
 import slikoo.kvrae.slikoo.ui.fragments.main_screen.HomeScreen
 import slikoo.kvrae.slikoo.ui.fragments.main_screen.NotificationScreen
 import slikoo.kvrae.slikoo.ui.fragments.main_screen.RecipeScreen
@@ -52,7 +52,7 @@ fun MainScreen(navController: NavController, currentScreen : String = "Home") {
          .navigationBarsPadding()
          .statusBarsPadding(),
      topBar = {
-         if (title.value != AppScreenNavigator.EventScreen.route) CustomTopBar(title = title.value)
+         if (title.value != AppScreenNavigator.EventScreen.route) CustomMainMenuTopBar(title = title.value)
          else return@Scaffold
               },
      bottomBar = {

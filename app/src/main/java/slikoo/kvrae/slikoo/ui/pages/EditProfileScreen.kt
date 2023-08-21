@@ -37,7 +37,7 @@ import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
-import slikoo.kvrae.slikoo.ui.components.ImageInputField
+import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.fragments.signup.ProfileImagePicker
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
@@ -67,7 +67,7 @@ fun EditProfileScreen(navController : NavController) {
             CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.address), leadingIcon = Icons.Filled.LocationOn )
             CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.postal_code), leadingIcon = Icons.Filled.AccountCircle )
             CustomTextField(onChange = {}, value = "", label = stringResource(id = R.string.description) , leadingIcon = Icons.Filled.Info )
-            ImageInputField()
+            ImagePickerField()
             CustomButton(text = stringResource(id = R.string.update),
                 onClick = {navController.navigate(AppScreenNavigator.MainAppScreen.route) })
             Row {
@@ -95,7 +95,7 @@ fun EditProfileTopBar(navController: NavController) {
                 contentDescription = null
             )
         }
-        Spacer(modifier = Modifier.width(78.dp))
+        Spacer(modifier = Modifier.width(32.dp))
         Text(text = stringResource(R.string.edit_profile),
             fontWeight = FontWeight.Medium,
             fontSize = TextUnit(20f, TextUnitType.Sp)

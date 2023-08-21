@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
-import slikoo.kvrae.slikoo.ui.components.ImageInputField
+import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
 
@@ -36,7 +36,7 @@ fun SignUpCidForm(onChange: (String) -> Unit) {
                 .padding(24.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            ImageInputField()
+            ImagePickerField()
         }
         CustomButton(text = "Suivant",
             onClick = { onChange(SignUpNavigator.SignUpProfilePictureFragment.route) })
