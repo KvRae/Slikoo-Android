@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -76,6 +77,7 @@ fun CustomTextField(onChange : (String) -> Unit,
                     trailingIcon: ImageVector? = null,
 ) {
     var searchText by remember { mutableStateOf(value) }
+    val focusManager = LocalFocusManager.current
     var isFocused by remember {
         mutableStateOf(false)
     }
@@ -100,8 +102,7 @@ fun CustomTextField(onChange : (String) -> Unit,
         modifier = modifier
             .padding(8.dp)
             .fillMaxWidth()
-            .onFocusChanged { focusState ->
-                isFocused = focusState.isFocused }
+            .onFocusChanged { focusState -> isFocused = focusState.isFocused }
         ,
         singleLine = true,
         visualTransformation = VisualTransformation.None,
@@ -126,7 +127,7 @@ fun CustomTextField(onChange : (String) -> Unit,
             tint = if (!isFocused) Color.Gray else LightPrimary
             ) },
         keyboardOptions = KeyboardOptions( keyboardType = keyboardType),
-        keyboardActions = KeyboardActions( /* TODO */),
+        keyboardActions = KeyboardActions( onDone = {focusManager.clearFocus()}),
 
 
     )

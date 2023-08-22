@@ -88,6 +88,8 @@
     <string name="step_two_event">2. Localistation, date et prix</string>
     <string name="step_three_event">3. Photo de couverture</string>
     <string name="description_event">Description repas</string>
+    <string name="cancel">Annulez la creation</string>
+    <string name="cancel_message">Voullez vous annulez\nla creation ?</string>
 
 
 </resources>

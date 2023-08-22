@@ -5,5 +5,10 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+    <style name="DialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">#DB003C</item>
+        <item name="android:colorControlNormal">#DB003C</item>
+    </style>
+
 
 </resources>

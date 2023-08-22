@@ -10,9 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,7 +20,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.R
@@ -57,7 +57,7 @@ fun EventFirstFragment(onFragmentChange: (String) -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceAround
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         CustomSlidingBar(sliderPosition = 0f)
 
@@ -77,11 +77,11 @@ fun EventFirstFragment(onFragmentChange: (String) -> Unit) {
         )
 
         ExpandableCard(items = invitationTypes, title = invitationType,
-            onTitleChange = { invitationType = it}, leadingIcon = Icons.Rounded.Place
+            onTitleChange = { invitationType = it}, leadingIcon = ImageVector.vectorResource(id = R.drawable.person_add)
         )
 
         ExpandableCard(items = themes , title = theme ,
-            onTitleChange = { theme = it}, leadingIcon = Icons.Rounded.List
+            onTitleChange = { theme = it}, leadingIcon = ImageVector.vectorResource(id = R.drawable.category)
         )
 
         ExpandableCard(items = preferences , title = preference ,

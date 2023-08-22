@@ -48,10 +48,10 @@ fun EventSecondFragment(onFragmentChange: (String) -> Unit,
         mutableStateOf("")
     }
     var time by remember {
-        mutableStateOf("")
+        mutableStateOf("Time")
     }
     var date by remember {
-        mutableStateOf("")
+        mutableStateOf("Date")
     }
 
 
@@ -83,6 +83,7 @@ fun EventSecondFragment(onFragmentChange: (String) -> Unit,
             leadingIcon = ImageVector.vectorResource(id = R.drawable.round_euro),
             keyboardType = KeyboardType.Number
         )
+
         TimePicker(time = time , onTimeChange ={time = it} )
 
         DatePicker(date = date, onDateChange = {date = it})

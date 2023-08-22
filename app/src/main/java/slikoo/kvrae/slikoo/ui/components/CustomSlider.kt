@@ -8,9 +8,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -47,15 +44,12 @@ fun CustomSlider(
 
 
 @Composable
-fun CustomSlidingBar(sliderPosition : Float = 1f) {
-    val sliderPosition by remember {
-        mutableStateOf(sliderPosition)
-    }
+fun CustomSlidingBar(sliderPosition : Float = 0f) {
     Slider(value = sliderPosition,
-        onValueChange = { /*TODO*/ },
+        onValueChange = {/*Do nothing*/},
         enabled = false,
         valueRange = 0f..2f,
-        steps = 3,
+        steps = 1,
         onValueChangeFinished = { /*TODO*/ },
         colors = SliderDefaults.colors(
             thumbColor = Color.Transparent,

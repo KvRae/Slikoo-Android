@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -27,9 +28,9 @@ import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 fun EventFinalFragment(onFragmentChange: (String) -> Unit, navController: NavController) {
     val context = LocalContext.current
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         CustomSlidingBar(sliderPosition = 2f)
         Row(
@@ -42,6 +43,8 @@ fun EventFinalFragment(onFragmentChange: (String) -> Unit, navController: NavCon
         Spacer(modifier = Modifier.height(32.dp))
 
         ImagePickerField()
+
+        Spacer(modifier = Modifier.height(32.dp))
 
         CustomButton(text = stringResource(id = R.string.finish)) {
             navController.popBackStack()
