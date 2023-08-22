@@ -19,9 +19,10 @@ import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
+import slikoo.kvrae.slikoo.viewmodel.UserViewModel
 
 @Composable
-fun SignUpCidForm(onChange: (String) -> Unit) {
+fun SignUpCidForm(onChange: (String) -> Unit, userViewModel: UserViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()

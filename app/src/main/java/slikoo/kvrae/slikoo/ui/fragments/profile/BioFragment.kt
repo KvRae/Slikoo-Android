@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -175,43 +176,52 @@ fun BioDescriptionSection() {
 
 @Composable
 fun SocialMediaSection() {
+    val uriHandler = LocalUriHandler.current
+
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = { /*TODO*/ })
+            onClick = { uriHandler.openUri("https://www.facebook.com/") })
         {
             Icon(
                 painter = painterResource(id = R.drawable.facebook_icon),
                 contentDescription = "Facebook",
-                tint = LightPrimary
+                tint = LightPrimary,
+                modifier = Modifier.size(32.dp)
+
             )
 
         }
-        IconButton(onClick = { /*TODO*/ })
+        IconButton(onClick = { uriHandler.openUri("https://www.instagram.com/") })
         {
             Icon(
                 painter = painterResource(id = R.drawable.instagram_icon),
                 contentDescription = "Instagram",
+                tint = LightPrimary,
+                modifier = Modifier.size(32.dp)
             )
-            //tint = LightPrimary)
+
         }
-        IconButton(onClick = { /*TODO*/ })
+        IconButton(onClick = { uriHandler.openUri("https://www.linkedin.com/")} )
         {
             Icon(
                 painter = painterResource(id = R.drawable.linkedin_icon),
                 contentDescription = "LinkedIn",
-                tint = LightPrimary
+                tint = LightPrimary,
+                modifier = Modifier.size(32.dp)
             )
         }
-        IconButton(onClick = { /*TODO*/ })
+        IconButton(onClick = { uriHandler.openUri("https://www.twitter.com/") })
         {
             Icon(
                 painter = painterResource(id = R.drawable.twitter_icon),
                 contentDescription = "Twitter",
-                tint = LightPrimary
+                tint = LightPrimary,
+                modifier = Modifier.size(32.dp)
             )
         }
     }

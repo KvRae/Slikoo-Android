@@ -5,13 +5,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
+import androidx.compose.material.Slider
+import androidx.compose.material.SliderDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 
 
@@ -35,4 +41,31 @@ fun CustomSlider(
             }
         }
     }
+}
+
+
+
+
+@Composable
+fun CustomSlidingBar(sliderPosition : Float = 1f) {
+    val sliderPosition by remember {
+        mutableStateOf(sliderPosition)
+    }
+    Slider(value = sliderPosition,
+        onValueChange = { /*TODO*/ },
+        enabled = false,
+        valueRange = 0f..2f,
+        steps = 3,
+        onValueChangeFinished = { /*TODO*/ },
+        colors = SliderDefaults.colors(
+            thumbColor = Color.Transparent,
+            disabledThumbColor = Color.Transparent,
+            disabledActiveTrackColor = LightSurface,
+            disabledActiveTickColor = Color.Transparent,
+            activeTrackColor = LightSurface,
+            inactiveTrackColor = LightPrimary,
+            activeTickColor = Color.Transparent,
+            inactiveTickColor = Color.Transparent
+        )
+    )
 }

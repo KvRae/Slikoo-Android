@@ -71,8 +71,7 @@ fun MainScreen(navController: NavController, currentScreen: String = "Home") {
             .navigationBarsPadding()
             .statusBarsPadding(),
         topBar = {
-            if (title.value != AppScreenNavigator.EventScreen.route) CustomMainMenuTopBar(title = title.value)
-            else return@Scaffold
+            CustomMainMenuTopBar(title = title.value, navController = navController)
         },
         bottomBar = {
             if (title.value != AppScreenNavigator.EventScreen.route)

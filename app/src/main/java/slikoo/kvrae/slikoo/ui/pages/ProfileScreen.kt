@@ -172,7 +172,7 @@ fun ProfileHeader(navController: NavController) {
             contentDescription = stringResource(R.string.profile_cover_picture),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(160.dp),
+                .height(150.dp),
             contentScale = ContentScale.Crop
         )
         UserProfileInfo()
@@ -182,8 +182,8 @@ fun ProfileHeader(navController: NavController) {
             contentDescription = stringResource(R.string.profile_pic),
             onLoading = { },
             modifier = Modifier
-                .padding(start = 26.dp, top = 110.dp)
-                .size(110.dp)
+                .padding(start = 26.dp, top = 100.dp)
+                .size(100.dp)
                 .clip(shape = CircleShape)
         )
         // TopAppBar
@@ -197,13 +197,13 @@ fun UserProfileInfo() {
     Surface(
         Modifier
             .fillMaxWidth()
-            .padding(top = 160.dp),
+            .padding(top = 150.dp),
         shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 24.dp),
         elevation = 8.dp,
     ) {
 
         Column {
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(50.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -217,21 +217,26 @@ fun UserProfileInfo() {
                     Text(
                         text = "Mannai Sara",
                         maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
                         text = "SaraMannai@exemple.tn",
                         maxLines = 1,
-                        fontSize = 10.sp,
+                        overflow = TextOverflow.Ellipsis,
+                        fontSize = 11.sp,
+
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier.padding(top = 4.dp)
 
                     )
                     Text(
                         text = "08 Rue Marseille, Jendouba 8100",
-                        maxLines = 1,
-                        fontSize = 10.sp,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        lineHeight = 15.sp,
+                        fontSize = 11.sp,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier.padding(top = 4.dp)
 
@@ -239,7 +244,8 @@ fun UserProfileInfo() {
                     Text(
                         text = "+21654879654",
                         maxLines = 1,
-                        fontSize = 10.sp,
+                        overflow = TextOverflow.Ellipsis,
+                        fontSize = 11.sp,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier.padding(top = 4.dp)
                     )
@@ -266,7 +272,7 @@ fun UserProfileInfo() {
                     )
                     Text(
                         text = stringResource(id = R.string.welcome_sub_description),
-                        maxLines = 4,
+                        maxLines = 5,
                         letterSpacing = 0.5.sp,
                         lineHeight = 15.sp,
                         overflow = TextOverflow.Ellipsis,

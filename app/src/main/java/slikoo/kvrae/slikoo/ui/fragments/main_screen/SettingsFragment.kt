@@ -76,8 +76,6 @@ fun SettingsScreen(navController: NavController) {
                         icon = Icons.Filled.ExitToApp,
                         onClick = {
                             dialogState = true
-
-
                         }
                     )
                 }

@@ -30,10 +30,11 @@ import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
+import slikoo.kvrae.slikoo.viewmodel.UserViewModel
 
 
 @Composable
-fun SignUpSecondForm(onChange: (String) -> Unit) {
+fun SignUpSecondForm(onChange: (String) -> Unit, userViewModel: UserViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()

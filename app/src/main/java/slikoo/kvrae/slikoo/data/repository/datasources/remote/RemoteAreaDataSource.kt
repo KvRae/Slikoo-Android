@@ -1,4 +1,4 @@
-package slikoo.kvrae.slikoo.data.datasources.remote
+package slikoo.kvrae.slikoo.data.repository.datasources.remote
 
 import slikoo.kvrae.slikoo.data.models.Area
 

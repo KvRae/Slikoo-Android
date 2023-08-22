@@ -77,6 +77,17 @@
     <string name="logout_message">Voullez vous deconnecté(e) ?</string>
     <string name="title">Titre</string>
     <string name="message">Message</string>
+    <string name="expandable_card_arrow">Expandable Card arrow</string>
+    <string name="expandable_card_icon">Expandable Card icon</string>
+    <string name="ppl_nbr">Nombre de personnes</string>
+    <string name="price">Prix</string>
+    <string name="first">first</string>
+    <string name="second">second</string>
+    <string name="third">third</string>
+    <string name="step_one_event">1. Information basique</string>
+    <string name="step_two_event">2. Localistation, date et prix</string>
+    <string name="step_three_event">3. Photo de couverture</string>
+    <string name="description_event">Description repas</string>
 
 
 </resources>

@@ -23,8 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.fragments.signup.ProfilePictureSection
@@ -34,17 +34,12 @@ import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpSecondForm
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
-
-@Preview
-@Composable
-fun SignUpPreview() {
-    val context = androidx.compose.ui.platform.LocalContext.current
-    SignUp(navController = NavController(context))
-}
+import slikoo.kvrae.slikoo.viewmodel.UserViewModel
 
 
 @Composable
 fun SignUp(navController: NavController) {
+    val userViewModel : UserViewModel = viewModel()
     val route = remember {
         mutableStateOf(SignUpNavigator.SignUpFormFragment.route)
     }
@@ -96,19 +91,20 @@ fun SignUp(navController: NavController) {
                 when (route.value) {
                     SignUpNavigator.SignUpFormFragment.route -> SignUpForm(onChange = {
                         route.value = it
-                    })
+                    }, userViewModel = userViewModel)
 
                     SignUpNavigator.SignUpSecondFormFragment.route -> SignUpSecondForm(onChange = {
                         route.value = it
-                    })
+                    }, userViewModel = userViewModel)
 
                     SignUpNavigator.SignUpIDCFragment.route -> SignUpCidForm(onChange = {
                         route.value = it
-                    })
+                    }, userViewModel = userViewModel)
 
                     SignUpNavigator.SignUpProfilePictureFragment.route -> ProfilePictureSection(
                         onChange = { route.value = it },
-                        navController = navController
+                        navController = navController,
+                        userViewModel = userViewModel
                     )
 
                 }

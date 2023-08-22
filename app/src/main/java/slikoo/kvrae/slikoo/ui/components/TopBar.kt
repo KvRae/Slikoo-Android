@@ -13,6 +13,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Settings
@@ -30,11 +31,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
+import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
@@ -44,9 +45,10 @@ import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 
 
 
-@Preview
+
 @Composable
-fun CustomMainMenuTopBar(title: String = stringResource(id = R.string.app_name)) {
+fun CustomMainMenuTopBar(title: String = stringResource(id = R.string.app_name),
+                         navController: NavController) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
@@ -79,7 +81,7 @@ fun CustomMainMenuTopBar(title: String = stringResource(id = R.string.app_name))
                     }
                 },
         actions = {
-            if (title != MainScreenNavigator.SettingsScreen.route) {
+            if (title != MainScreenNavigator.SettingsScreen.route && title != AppScreenNavigator.EventScreen.route) {
                 IconButton(onClick = {
                     isExpanded = !isExpanded
                 }) {
@@ -87,9 +89,19 @@ fun CustomMainMenuTopBar(title: String = stringResource(id = R.string.app_name))
                         painter = painterResource(id = R.drawable.avatar),
                         contentDescription = stringResource(R.string.avatar),
                         modifier = Modifier
-                            .clip(CircleShape)                       // clip to the circle shape
+                            .clip(CircleShape)
                             .border(2.dp, LightPrimary, CircleShape)
                             .size(40.dp)
+                    )
+                }
+            }
+            else if(title == AppScreenNavigator.EventScreen.route) {
+                IconButton(onClick = {
+
+                }) {
+                    Icon(
+                        imageVector = Icons.Rounded.Close,
+                        contentDescription = stringResource(androidx.compose.ui.R.string.close_drawer)
                     )
                 }
             }

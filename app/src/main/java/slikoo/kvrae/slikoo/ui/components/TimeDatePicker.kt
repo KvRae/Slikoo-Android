@@ -3,9 +3,14 @@ package slikoo.kvrae.slikoo.ui.components
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import java.util.Calendar
 
@@ -32,7 +38,7 @@ fun TimePicker(time: String, modifier: Modifier = Modifier, onTimeChange: (Strin
         Calendar.getInstance().get(Calendar.MINUTE),
         false,
     )
-    OutlinedTextField(//label = { Text(text = time) },
+    OutlinedTextField(label = { Text(text = time) },
         value = time,
         placeholder = { Text(text = time) },
         onValueChange = { onTimeChange(timePicked)},
@@ -44,7 +50,7 @@ fun TimePicker(time: String, modifier: Modifier = Modifier, onTimeChange: (Strin
             disabledBorderColor = Color.Gray,
             backgroundColor = LightError
         ),
-        modifier = modifier.clickable { timePickerDialog.show() }
+        modifier = modifier.padding(8.dp).fillMaxWidth().clickable { timePickerDialog.show() }
     )
 
 }
@@ -63,19 +69,21 @@ fun DatePicker( date : String, modifier: Modifier = Modifier, onDateChange: (Str
         Calendar.getInstance().get(Calendar.MONTH),
         Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
     )
-    OutlinedTextField(//label = { Text(text = time) },
+    OutlinedTextField(label = { Text(text = date) },
         value = date,
         placeholder = { Text(text = date) },
-        onValueChange = { onDateChange(datePicked) },
+        onValueChange = { onDateChange(datePicked)  },
         enabled = false,
+        leadingIcon = {Icon(imageVector = Icons.Rounded.DateRange,
+            contentDescription = null, tint = Color.Gray )},
         readOnly = true,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Gray,
             unfocusedBorderColor = Color.Gray,
-            disabledBorderColor = Color.Gray,
+            disabledBorderColor = Color.Transparent,
             backgroundColor = LightError
         ),
-        modifier = modifier.clickable { datePickerDialog.show() }
+        modifier = modifier.padding(8.dp).fillMaxWidth().clickable { datePickerDialog.show() }
     )
 
     
