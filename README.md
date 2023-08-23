@@ -7,18 +7,18 @@
 
 ## Table of Contents
 This README contains the following sections:
-    A. [About Slikoo](#about-slikoo)
-    B. [Features](#features)
-    C. [Installation](#installation)
-    D. [Architecture](#architecture)
-    E. [Project tree](#project-tree)
-    F. [Project structure](#project-structure)
-    G. [Screenshots](#screenshots)
-    H. [Download the app](#download-the-app)
-    I. [Dependencies](#dependencies)
-    J. [Contributing](#contributing)
-    K. [License](#license)
-    L. [Contact](#contact)
+A. [About Slikoo](#about-slikoo)
+B. [Features](#features)
+C. [Installation](#installation)
+D. [Architecture](#architecture)
+E. [Project tree](#project-tree)
+F. [Project structure](#project-structure)
+G. [Screenshots](#screenshots)
+H. [Download the app](#download-the-app)
+I. [Dependencies](#dependencies)
+J. [Contributing](#contributing)
+K. [License](#license)
+L. [Contact](#contact)
 
 
 ## About Slikoo
