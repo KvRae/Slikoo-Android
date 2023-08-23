@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
@@ -30,7 +31,14 @@ fun CustomAlertDialog(
     if (showDialog)
     AlertDialog(
         onDismissRequest = { onDismiss() },
-        title = { Text(text = title) },
+        title = {
+            Text(
+                text = title,
+                color = LightBackground,
+                fontWeight = FontWeight.Bold,
+
+            )
+                },
         text = { Text(text = message) },
         confirmButton = {
             Button(

@@ -77,7 +77,7 @@ fun Navigation() {
             SignUp(navController = navController)
         }
         composable(route = AppScreenNavigator.MainAppScreen.route) {
-            MainScreen(navController = navController, currentScreen = mainScreenIndex.value)
+                MainScreen(navController = navController, currentScreen = mainScreenIndex.value)
         }
         composable(route = AppScreenNavigator.SplashAppScreen.route) {
             AnimatedSplashScreen(navController = navController)

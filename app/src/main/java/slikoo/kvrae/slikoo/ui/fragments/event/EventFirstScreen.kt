@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -85,7 +84,7 @@ fun EventFirstFragment(onFragmentChange: (String) -> Unit) {
         )
 
         ExpandableCard(items = preferences , title = preference ,
-            onTitleChange = { preference = it}, leadingIcon = Icons.Rounded.Star
+            onTitleChange = { preference = it}, leadingIcon = ImageVector.vectorResource(id = R.drawable.fastfood)
         )
 
         ExpandableCard(items = genres , title = genre ,

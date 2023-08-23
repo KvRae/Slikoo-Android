@@ -4,8 +4,27 @@
 
 ![logo](https://github.com/KvRae/Slikoo-Android/assets/58667227/94fee035-631a-498e-93ca-22f6b113e490)
 
+
+## Table of Contents
+This README contains the following sections:
+    A. [About Slikoo](#about-slikoo)
+    B. [Features](#features)
+    C. [Installation](#installation)
+    D. [Architecture](#architecture)
+    E. [Project tree](#project-tree)
+    F. [Project structure](#project-structure)
+    G. [Screenshots](#screenshots)
+    H. [Download the app](#download-the-app)
+    I. [Dependencies](#dependencies)
+    J. [Contributing](#contributing)
+    K. [License](#license)
+    L. [Contact](#contact)
+
+
+## About Slikoo
+
 Slikoo is an Android application that aims to be the ultimate platform for culinary encounters.
-We believe in the power of shared meals to create connections and promote cultural diversity. 
+We believe in the power of shared meals to create connections and promote cultural diversity.
 With Slikoo, you can discover new flavors, meet culinary enthusiasts, and expand your culinary horizons.
 
 ## Features
@@ -36,8 +55,6 @@ from the development of the business logic or back-end logic (the model) so that
 The view model of MVVM is a value converter, meaning the view model is responsible for exposing (converting) the data objects from the model in such a way 
 that objects are easily managed and presented. In this respect, the view model is more model than view and handles most if not all of the view's display logic. 
 The view model may implement a mediator pattern, organizing access to the back-end logic around the set of use cases supported by the view.
-
-
 
 
 ## Project tree

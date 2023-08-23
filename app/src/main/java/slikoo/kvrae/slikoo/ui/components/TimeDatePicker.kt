@@ -54,7 +54,7 @@ fun TimePicker(time: String, modifier: Modifier = Modifier, onTimeChange: (Strin
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Gray,
             unfocusedBorderColor = Color.Gray,
-            disabledBorderColor = if (timePicked!= time)  Color.Gray else LightError,
+            disabledBorderColor = if (timePicked!= time)  Color.Gray.copy(0.4f) else LightError,
             backgroundColor = LightError
         ),
         modifier = modifier
@@ -93,7 +93,7 @@ fun DatePicker( date : String, modifier: Modifier = Modifier, onDateChange: (Str
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Gray,
             unfocusedBorderColor = Color.Gray,
-            disabledBorderColor = if (datePicked!= date)  Color.Gray else LightError,
+            disabledBorderColor = if (datePicked!= date)  Color.Gray.copy(0.4f) else LightError,
             backgroundColor = LightError
         ),
         modifier = modifier

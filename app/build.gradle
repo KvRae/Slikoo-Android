@@ -80,6 +80,9 @@ dependencies {
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.30.1"
     // DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
+    // Compose Paging
+    implementation "androidx.paging:paging-compose:1.0.0-alpha13"
+
 
 
 
