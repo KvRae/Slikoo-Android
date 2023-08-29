@@ -34,7 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.data.models.Area
+import slikoo.kvrae.slikoo.data.entities.Area
+import slikoo.kvrae.slikoo.data.entities.Meal
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
@@ -42,10 +43,10 @@ import java.text.SimpleDateFormat
 
 
 @Composable
-fun RecipeCardContent( area : Area, navController: NavController) {
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm",
+fun RecipeCardContent(meal : Meal, navController: NavController) {
+    /*val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm",
         java.util.Locale.getDefault())
-    val date = dateFormat.format(area.date)
+    val date = dateFormat.format(meal.date)*/
 
     Card(
         modifier = Modifier
@@ -81,7 +82,7 @@ fun RecipeCardContent( area : Area, navController: NavController) {
                             .padding(start = 8.dp),
                         tint = LightPrimaryVariant
                     )
-                    Text(text = area.name, modifier = Modifier.padding(start = 4.dp),
+                    Text(text = meal.description, modifier = Modifier.padding(start = 4.dp),
                         style = TextStyle(fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
                         ),
@@ -90,7 +91,7 @@ fun RecipeCardContent( area : Area, navController: NavController) {
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Text(text = area.nbPerson.toString(), modifier = Modifier.padding(start = 4.dp),
+                    Text(text = meal.nbr, modifier = Modifier.padding(start = 4.dp),
                         style = TextStyle(fontSize = 12.sp,
                             fontWeight = FontWeight.Bold),
                         color = LightPrimaryVariant
@@ -104,7 +105,7 @@ fun RecipeCardContent( area : Area, navController: NavController) {
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Row {
-                    Text(text = date,
+                    Text(text = meal.date.slice(0..9) + " " + meal.heure.slice(11..15),
                         modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 10.sp,
                             fontWeight = FontWeight.Bold),
@@ -112,7 +113,7 @@ fun RecipeCardContent( area : Area, navController: NavController) {
                         )
                 }
                 Row {
-                    Text(text = area.description,
+                    Text(text = meal.description,
                         modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 16.sp,
                             fontWeight = FontWeight.Bold),
@@ -124,13 +125,13 @@ fun RecipeCardContent( area : Area, navController: NavController) {
                 Row(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp)) {
-                    Text(text = area.place, modifier = Modifier.padding(start = 8.dp),
+                    Text(text = meal.localisation, modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 10.sp,
                             fontWeight = FontWeight.Bold),
                         color = LightPrimaryVariant
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Text(text = "${area.price} $", modifier = Modifier.padding(end = 8.dp),
+                    Text(text = "${meal.prix} $", modifier = Modifier.padding(end = 8.dp),
                         style = TextStyle(fontSize = 12.sp,
                             fontWeight = FontWeight.Medium),
                         color = LightPrimaryVariant)

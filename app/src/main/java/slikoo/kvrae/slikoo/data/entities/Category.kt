@@ -1,4 +1,4 @@
-package slikoo.kvrae.slikoo.data.models
+package slikoo.kvrae.slikoo.data.entities
 
 data class Category(
     val id: Int,

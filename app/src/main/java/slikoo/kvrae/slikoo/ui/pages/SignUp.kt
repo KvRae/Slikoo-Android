@@ -91,11 +91,11 @@ fun SignUp(navController: NavController) {
                 when (route.value) {
                     SignUpNavigator.SignUpFormFragment.route -> SignUpForm(onChange = {
                         route.value = it
-                    }, userViewModel = userViewModel)
+                    } )
 
                     SignUpNavigator.SignUpSecondFormFragment.route -> SignUpSecondForm(onChange = {
                         route.value = it
-                    }, userViewModel = userViewModel)
+                    })
 
                     SignUpNavigator.SignUpIDCFragment.route -> SignUpCidForm(onChange = {
                         route.value = it

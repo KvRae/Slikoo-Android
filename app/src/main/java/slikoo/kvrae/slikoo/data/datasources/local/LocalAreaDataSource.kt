@@ -1,6 +1,6 @@
-package slikoo.kvrae.slikoo.data.repository.datasources.local
+package slikoo.kvrae.slikoo.data.datasources.local
 
-import slikoo.kvrae.slikoo.data.models.Area
+import slikoo.kvrae.slikoo.data.entities.Area
 
 class LocalAreaDataSource {
 

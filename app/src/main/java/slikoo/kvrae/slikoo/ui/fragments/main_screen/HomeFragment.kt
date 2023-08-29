@@ -22,6 +22,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.AreaFilterCard
@@ -32,6 +33,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.viewmodel.AreaViewModel
 import slikoo.kvrae.slikoo.viewmodel.CategoryViewModel
+import slikoo.kvrae.slikoo.viewmodel.MealsViewModel
 import slikoo.kvrae.slikoo.viewmodel.RatingViewModel
 
 
@@ -60,7 +62,9 @@ fun HomeScreen(navController: NavController) {
 
 @Composable
 fun OnlineRecipes(navController: NavController) {
-    val areas = AreaViewModel().getAreas()
+    val mealsViewModel : MealsViewModel  = viewModel()
+    val meals = mealsViewModel.meals
+    val  areas = AreaViewModel().getAreas()
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -70,8 +74,8 @@ fun OnlineRecipes(navController: NavController) {
             SectionHeader(title = stringResource(R.string.online_recipes))
             Spacer(modifier = Modifier.padding(8.dp))
             LazyRow(modifier = Modifier.fillMaxWidth()) {
-                items(areas.size) {
-                    RecipeCardContent(areas[it], navController = navController)
+                items(meals.size) {
+                    RecipeCardContent(meals[it], navController = navController)
                 }
             }
         }

@@ -64,7 +64,7 @@
     <string name="edit">Edit</string>
     <string name="phone_number">Numero de telephone</string>
     <string name="profile_description">Description profil</string>
-    <string name="base_url"> http://www.slikoo.com/ </string>
+    <string name="base_url">" http://www.slikoo.com/api/"</string>
     <string name="meal">Meals</string>
     <string name="settings">Settings</string>
     <string name="notifications">Notifications</string>
@@ -91,6 +91,13 @@
     <string name="description_event">Description repas</string>
     <string name="cancel">Annulez la creation</string>
     <string name="cancel_message">Voullez vous annulez\nla creation ?</string>
+    <string name="location">Lieu</string>
+    <string name="cid">Carte D\'identité</string>
+    <string name="picture">picture</string>
+    <string name="add_image">Ajouter une photo</string>
+    <string name="form_error">erreurs</string>
+    <string name="form_error_message">Vous avez des erreurs:</string>
+    <string name="ok">d\'accord</string>
 
 
 </resources>

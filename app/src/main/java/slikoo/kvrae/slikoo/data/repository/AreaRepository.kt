@@ -1,9 +1,9 @@
 package slikoo.kvrae.slikoo.data.repository
 
 import androidx.lifecycle.ViewModel
-import slikoo.kvrae.slikoo.data.repository.datasources.local.LocalAreaDataSource
-import slikoo.kvrae.slikoo.data.repository.datasources.remote.RemoteAreaDataSource
-import slikoo.kvrae.slikoo.data.models.Area
+import slikoo.kvrae.slikoo.data.datasources.local.LocalAreaDataSource
+import slikoo.kvrae.slikoo.data.datasources.remote.RemoteAreaDataSource
+import slikoo.kvrae.slikoo.data.entities.Area
 
 class AreaRepository : ViewModel() {
     private var areas = mutableListOf<Area>()

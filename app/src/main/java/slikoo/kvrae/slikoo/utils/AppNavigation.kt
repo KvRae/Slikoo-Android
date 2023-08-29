@@ -18,7 +18,6 @@ import slikoo.kvrae.slikoo.ui.pages.OtpInput
 import slikoo.kvrae.slikoo.ui.pages.PasswordReset
 import slikoo.kvrae.slikoo.ui.pages.ProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.SignUp
-import slikoo.kvrae.slikoo.viewmodel.UserViewModel
 
 
 @Composable
@@ -69,7 +68,7 @@ fun Navigation() {
     ) {
 
         composable(route = AppScreenNavigator.SignInAppScreen.route) {
-            LoginForm(navController = navController, userVm = UserViewModel())
+            LoginForm(navController = navController)
             mainScreenIndex.value = MainScreenNavigator.HomeScreen.route
 
         }

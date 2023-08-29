@@ -22,7 +22,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightSurface
 fun CustomAlertDialog(
     title: String = stringResource(R.string.title),
     message: String = stringResource(R.string.message),
-    dismissText : String = stringResource(R.string.no),
+    dismissText : String = "",
     confirmText : String = stringResource(R.string.yes),
     showDialog: Boolean = true,
     onDismiss: () -> Unit = {},
@@ -52,12 +52,12 @@ fun CustomAlertDialog(
                 Text(text = confirmText)
             }
         },
+
         dismissButton = {
-            TextButton(onClick = { onDismiss() }) {
+            if (dismissText.isNotEmpty()) TextButton(onClick = { onDismiss() }) {
                 Text(
                     text = dismissText,
                     color = LightSurface,
-
                 )
             }
         },

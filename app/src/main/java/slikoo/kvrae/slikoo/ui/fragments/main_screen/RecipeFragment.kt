@@ -13,20 +13,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBarWithFilter
-import slikoo.kvrae.slikoo.viewmodel.AreaViewModel
+import slikoo.kvrae.slikoo.viewmodel.MealsViewModel
 
 
 @Composable
 fun RecipeScreen(navController: NavController) {
-    val areas = AreaViewModel().getAreas()
+    val mealsViewModel: MealsViewModel = viewModel()
+    val meals = mealsViewModel.meals
     val scrollState = rememberLazyGridState()
 
     Box(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -42,10 +43,12 @@ fun RecipeScreen(navController: NavController) {
                 userScrollEnabled = true,
                 state = scrollState,
                 content = {
-                    items(areas.size) {
-                        RecipeCardContent(area = areas[it], navController = navController)
+                    items(meals.size) {
+                        RecipeCardContent(meal = meals[it],
+                            navController = navController)
                     }
-                })
+                }
+            )
         }
     }
 }

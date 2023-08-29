@@ -18,16 +18,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -38,16 +35,11 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 
 @Preview
 @Composable
-fun ImagePickerField() {
-    var imageUrl by remember {
-        mutableStateOf<Uri?>(null)
-    }
+fun ImagePickerField( imageUrl : Uri? = null , onImageSelected : (Uri?) -> Unit = {}){
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri ->
-            imageUrl = uri
-        }
-    )
+        onResult = { onImageSelected(it) },)
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -71,15 +63,14 @@ fun ImagePickerField() {
             if(imageUrl == null)
             Icon(
                 painter = painterResource(id = R.drawable.camera),
-                contentDescription = "Ajouter une photo",
+                contentDescription = stringResource(R.string.add_image),
                 tint = Color.Gray,
-                modifier = Modifier
-                    .height(50.dp)
+                modifier = Modifier.height(50.dp)
             )
             else
                 BoxWithConstraints {
                     AsyncImage(model = imageUrl,
-                        contentDescription = "picture",
+                        contentDescription = stringResource(R.string.picture),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxSize()
@@ -92,10 +83,9 @@ fun ImagePickerField() {
                             }
                     )
                     Icon(painter = painterResource(id = R.drawable.camera)
-                        , contentDescription = "Ajouter une photo",
+                        , contentDescription = stringResource(R.string.add_image),
                         tint = LightPrimary.copy(alpha = 0.8f),
-                        modifier = Modifier.align(Alignment.BottomEnd)
-                            .padding(8.dp).size(30.dp)
+                        modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp).size(30.dp)
                     )
                 }
 

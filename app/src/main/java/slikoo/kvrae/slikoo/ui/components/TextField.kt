@@ -76,21 +76,18 @@ fun CustomTextField(onChange : (String) -> Unit,
                     leadingIcon: ImageVector? = null,
                     trailingIcon: ImageVector? = null,
 ) {
-    var searchText by remember { mutableStateOf(value) }
     val focusManager = LocalFocusManager.current
-    var isFocused by remember {
-        mutableStateOf(false)
-    }
+    var isFocused by remember { mutableStateOf(false) }
+
+
     OutlinedTextField(
-        value = searchText,
-        onValueChange = { text ->
-            searchText = text
-        },
+        value = value,
+        onValueChange = { onChange(it) },
         shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = LightPrimary,
             cursorColor = LightPrimary,
-            unfocusedBorderColor = if (searchText.isEmpty())Color.Transparent else Color.Gray.copy(alpha = 0.3f),
+            unfocusedBorderColor = if (value.isEmpty())Color.Transparent else Color.Gray.copy(alpha = 0.3f),
             backgroundColor = LightError,
             disabledBorderColor = Color.Transparent,
         ),
@@ -108,9 +105,9 @@ fun CustomTextField(onChange : (String) -> Unit,
         visualTransformation = VisualTransformation.None,
         isError = false,
         trailingIcon = {
-            if (searchText.isNotEmpty()) {
+            if (value.isNotEmpty()) {
                 IconButton(onClick = {
-                    searchText = ""
+                    onChange(".")
 
                 } ) {
                     Icon(
@@ -177,7 +174,8 @@ fun PasswordTextField(
             .fillMaxWidth()
             .padding(8.dp)
             .onFocusChanged { focusState ->
-                isFocused = focusState.isFocused },
+                isFocused = focusState.isFocused
+            },
         singleLine = true,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = LightPrimary,
@@ -263,5 +261,72 @@ private fun DigitView(
             )
         }
     }
+}
+
+
+/************************* Description Text Field *************************************/
+
+@Composable
+fun DescriptionTextField(onChange : (String) -> Unit,
+                         value : String, label : String,
+                         modifier: Modifier = Modifier,
+                         placeHolder: String = "",
+                         keyboardType: KeyboardType = KeyboardType.Text,
+                         keyboardActions: KeyboardActions = KeyboardActions(),
+                         leadingIcon: ImageVector? = null,
+                         trailingIcon: ImageVector? = null,
+) {
+    val focusManager = LocalFocusManager.current
+    var isFocused by remember {
+        mutableStateOf(false)
+    }
+    OutlinedTextField(
+        value = value,
+        onValueChange = { onChange(it)
+        },
+        shape = RoundedCornerShape(8.dp),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = LightPrimary,
+            cursorColor = LightPrimary,
+            unfocusedBorderColor = if (value.isEmpty())Color.Transparent else Color.Gray.copy(alpha = 0.3f),
+            backgroundColor = LightError,
+            disabledBorderColor = Color.Transparent,
+        ),
+        placeholder = { Text(text = placeHolder) },
+        label = { Text(text = label,
+            overflow = TextOverflow.Ellipsis,
+            style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary),
+            maxLines = 4) },
+        modifier = modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .onFocusChanged { focusState -> isFocused = focusState.isFocused }
+        ,
+        singleLine = false,
+        visualTransformation = VisualTransformation.None,
+        isError = false,
+        trailingIcon = {
+            if (value.isNotEmpty()) {
+                IconButton(onClick = {
+                    onChange("")
+                } ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Clear,
+                        contentDescription = "Clear Icon",
+                        tint = if (!isFocused) Color.Gray else LightPrimary
+                    )
+                }
+            }
+        },
+
+        leadingIcon = { if (leadingIcon != null) Icon(imageVector = leadingIcon
+            , contentDescription = "",
+            tint = if (!isFocused) Color.Gray else LightPrimary
+        ) },
+        keyboardOptions = KeyboardOptions( keyboardType = keyboardType),
+        keyboardActions = KeyboardActions( onDone = {focusManager.clearFocus()}),
+
+
+        )
 }
 

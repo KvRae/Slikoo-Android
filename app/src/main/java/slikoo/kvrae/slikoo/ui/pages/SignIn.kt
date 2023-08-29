@@ -24,6 +24,10 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,10 +38,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.PasswordTextField
@@ -51,9 +58,18 @@ import slikoo.kvrae.slikoo.viewmodel.UserViewModel
 
 
 @Composable
-fun LoginForm(navController: NavController,userVm : UserViewModel) {
+fun LoginForm(navController: NavController) {
+
+    val userVm: UserViewModel = viewModel()
     val logo = R.drawable.slikoo_white
     val context = LocalContext.current
+
+    
+    val token = userVm.token
+
+    var isError by remember {
+        mutableStateOf(false)
+    }
 
     Box(
         modifier = Modifier
@@ -61,6 +77,14 @@ fun LoginForm(navController: NavController,userVm : UserViewModel) {
             .navigationBarsPadding()
             .background(LightPrimary.copy(alpha = 1f))
     ) {
+
+        CustomAlertDialog(
+            title = stringResource(id = R.string.form_error_message),
+            message = userVm.onLoginValidation().joinToString (separator = "\n"),
+            confirmText = stringResource(id = R.string.ok),
+            onConfirm = { isError = false },
+            showDialog = isError
+        )
         Column(
             modifier = Modifier
         ) {
@@ -139,9 +163,10 @@ fun LoginForm(navController: NavController,userVm : UserViewModel) {
                             fontSize = MaterialTheme.typography.h5.fontSize,
                         )
                     )
+                    Text(text = token.value, overflow = TextOverflow.Ellipsis, maxLines = 1)
                     Spacer(modifier = Modifier.height(16.dp))
                     CustomTextField(
-                        onChange = { userVm.onEmailChange(it) },
+                        onChange = { userVm.user.value = userVm.user.value.copy(email = it)},
                         value = userVm.user.value.email,
                         label = stringResource(id = R.string.email),
                         keyboardType = KeyboardType.Email,
@@ -154,7 +179,7 @@ fun LoginForm(navController: NavController,userVm : UserViewModel) {
                         value = userVm.user.value.password,
                         label = stringResource(id = R.string.password),
                         placeHolder = stringResource(id = R.string.password_placeholder),
-                        onChange = { userVm.onPasswordChange(it) }
+                        onChange = { userVm.user.value = userVm.user.value.copy(password = it) }
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -162,11 +187,17 @@ fun LoginForm(navController: NavController,userVm : UserViewModel) {
                     // Submit button
                     CustomButton(text = stringResource(id = R.string.connect),
                         onClick = {
-                            onSubmit(navController)
-                            onMakeToast(
-                                context = context,
-                                message = context.getString(R.string.welcome)
-                            )
+                            if(userVm.onLoginValidation().isNotEmpty()){
+                                 isError = true
+                            }
+                            else{
+                                userVm.onLogin()
+                                /*onSubmit(navController)
+                                onMakeToast(
+                                    context = context,
+                                    message = context.getString(R.string.welcome)
+                                )*/
+                            }
                         })
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -179,6 +210,7 @@ fun LoginForm(navController: NavController,userVm : UserViewModel) {
                         horizontalArrangement = Arrangement.Start
                     ) {
                         TextButton(onClick = {
+
                             onNavigate(
                                 navController,
                                 AppScreenNavigator.SignUpAppScreen.route
@@ -231,8 +263,7 @@ fun onMakeToast(context: Context, message: String) {
         context,
         message,
         Toast.LENGTH_LONG
-    )
-        .show()
+    ).show()
 }
 
 //fun getGoogleSignInClient(context: Context ): GoogleSignInClient {

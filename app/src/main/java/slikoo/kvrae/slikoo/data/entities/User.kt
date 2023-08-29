@@ -1,8 +1,10 @@
-package slikoo.kvrae.slikoo.data.models
+package slikoo.kvrae.slikoo.data.entities
 
 data class User (
-    val id : Int = 0,
-    var email: String = "",
+    private val id : Int = 0,
+    var username : String = "",
+    var email: String = "" ,
+    var about: String = "",
     var password: String = "",
     val gender: String = "",
     val speciality: String = "",
@@ -10,9 +12,9 @@ data class User (
     val roles : String = "",
     var firstName : String = "",
     var lastName : String = "",
-    val phone: String = "",
+    var phone: String = "",
     val address: String = "",
-    val postalCode: String = "",
+    var postalCode: String = "",
     val city: String = "",
     val country: String = "",
     val avatar: String = "",
@@ -26,6 +28,6 @@ data class User (
     val bio : String = "",
     )
 {
-    constructor() : this(0,"","","",   "",false,"","",   "","","","","","","","","","","","",false,"","")
+
 }
 

@@ -17,7 +17,7 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
@@ -37,8 +38,10 @@ import slikoo.kvrae.slikoo.viewmodel.UserViewModel
 
 
 @Composable
-fun SignUpForm(onChange: (String) -> Unit, userViewModel: UserViewModel = viewModel()) {
-    var confirmPassword by rememberSaveable { mutableStateOf("") }
+fun SignUpForm(onChange: (String) -> Unit) {
+    val userViewModel: UserViewModel = viewModel()
+    var isErrors by remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -64,7 +67,7 @@ fun SignUpForm(onChange: (String) -> Unit, userViewModel: UserViewModel = viewMo
             )
 
             CustomTextField(
-                onChange = { userViewModel.onFirstNameChange(it) },
+                onChange = { userViewModel.user.value = userViewModel.user.value.copy(firstName = it) },
                 value = userViewModel.user.value.firstName,
                 label = stringResource(id = R.string.name),
                 keyboardType = KeyboardType.Text,
@@ -72,7 +75,7 @@ fun SignUpForm(onChange: (String) -> Unit, userViewModel: UserViewModel = viewMo
             )
 
             CustomTextField(
-                onChange = { userViewModel.onFirstNameChange(it) },
+                onChange = { userViewModel.user.value = userViewModel.user.value.copy(lastName = it) },
                 value = userViewModel.user.value.lastName,
                 label = stringResource(id = R.string.familyName),
                 keyboardType = KeyboardType.Text,
@@ -80,7 +83,7 @@ fun SignUpForm(onChange: (String) -> Unit, userViewModel: UserViewModel = viewMo
             )
 
             CustomTextField(
-                onChange = { userViewModel.user.value.email = it },
+                onChange = { userViewModel.user.value = userViewModel.user.value.copy(email = it) },
                 value = userViewModel.user.value.email,
                 label = stringResource(id = R.string.email),
                 keyboardType = KeyboardType.Email,
@@ -89,19 +92,27 @@ fun SignUpForm(onChange: (String) -> Unit, userViewModel: UserViewModel = viewMo
 
             PasswordTextField(label = stringResource(id = R.string.password),
                 value = userViewModel.user.value.password,
-                onChange = { userViewModel.onPasswordChange(it) }
+                onChange = { userViewModel.user.value = userViewModel.user.value.copy(password = it) }
             )
 
             PasswordTextField(label = stringResource(id = R.string.confirmPassword),
-                value = confirmPassword,
-                onChange = { confirmPassword = it }
+                value = userViewModel.confirmPassword.value,
+                onChange = { userViewModel.confirmPassword.value = it}
             )
 
             Spacer(modifier = Modifier.padding(4.dp))
 
             CustomButton(text = stringResource(id = R.string.next),
-                onClick = { onChange(SignUpNavigator.SignUpSecondFormFragment.route) }
-            )
+                onClick = {
+                    if (!userViewModel.onValidateFirstPart().isEmpty()) { onChange(SignUpNavigator.SignUpSecondFormFragment.route) }
+                    else { isErrors = true }
+                })
+            CustomAlertDialog(
+                title = stringResource(id = R.string.form_error_message),
+                message = userViewModel.onValidateFirstPart().joinToString("\n"),
+                onDismiss = { isErrors = false },
+                onConfirm = { isErrors = false },
+                showDialog = isErrors)
 
         }
     }

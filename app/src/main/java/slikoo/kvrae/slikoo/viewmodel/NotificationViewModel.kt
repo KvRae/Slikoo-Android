@@ -2,7 +2,7 @@ package slikoo.kvrae.slikoo.viewmodel
 
 import androidx.lifecycle.ViewModel
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.data.models.Notification
+import slikoo.kvrae.slikoo.data.entities.Notification
 
 
 class NotificationViewModel : ViewModel() {

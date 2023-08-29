@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.data.models.Notification
+import slikoo.kvrae.slikoo.data.entities.Notification
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 
 

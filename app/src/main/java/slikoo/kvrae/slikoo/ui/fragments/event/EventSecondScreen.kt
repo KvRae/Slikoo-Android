@@ -30,7 +30,6 @@ import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlidingBar
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.DatePicker
-import slikoo.kvrae.slikoo.ui.components.ExpandableCard
 import slikoo.kvrae.slikoo.ui.components.TimePicker
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 
@@ -39,9 +38,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightSurface
 fun EventSecondFragment(onFragmentChange: (String) -> Unit,
                         navController: NavController,
 ) {
-
-    val locations = listOf("Lyon", "Paris", "Marseille", "Toulouse", "Bordeaux", "Dijon", "Lille", "Nantes", "Nice", "Strasbourg")
-    var location by rememberSaveable { mutableStateOf("Lieu") }
+    var location by rememberSaveable { mutableStateOf("") }
 
     val context = LocalContext.current
     var price by remember {
@@ -53,8 +50,6 @@ fun EventSecondFragment(onFragmentChange: (String) -> Unit,
     var date by remember {
         mutableStateOf("Date")
     }
-
-
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -71,10 +66,11 @@ fun EventSecondFragment(onFragmentChange: (String) -> Unit,
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        ExpandableCard(items = locations  ,
-            title = location,
-            onTitleChange = { location = it},
-            leadingIcon = Icons.Rounded.LocationOn )
+        CustomTextField(
+            value = location,
+            onChange = { location = it},
+            label = stringResource(id = R.string.location),
+            leadingIcon = Icons.Rounded.LocationOn)
 
         CustomTextField(
             onChange = {price = "$it.00" } ,
@@ -87,9 +83,6 @@ fun EventSecondFragment(onFragmentChange: (String) -> Unit,
         TimePicker(time = time , onTimeChange ={time = it} )
 
         DatePicker(date = date, onDateChange = {date = it})
-
-
-
 
         CustomButton(text = stringResource(id = R.string.next)) {
             onFragmentChange(context.getString(R.string.third))

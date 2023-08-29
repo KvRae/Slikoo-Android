@@ -2,7 +2,7 @@ package slikoo.kvrae.slikoo.viewmodel
 
 import androidx.lifecycle.ViewModel
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.data.models.Category
+import slikoo.kvrae.slikoo.data.entities.Category
 
 class CategoryViewModel : ViewModel() {
     fun getCategories(): List<Category> {
