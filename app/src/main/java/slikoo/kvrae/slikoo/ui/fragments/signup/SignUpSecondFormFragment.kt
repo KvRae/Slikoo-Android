@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
@@ -91,18 +90,18 @@ fun SignUpSecondForm(onChange: (String) -> Unit) {
 
             CustomButton(text = stringResource(id = R.string.next),
                 onClick = {
-                    if (userViewModel.onValidateSecondPart().isEmpty())
+                    /*if (userViewModel.onValidateSecondPart().isEmpty())
                         onChange(SignUpNavigator.SignUpIDCFragment.route)
                     else
-                        isError = true
+                        isError = true*/
                 })
-            CustomAlertDialog(
+            /*CustomAlertDialog(
                 title = stringResource(id = R.string.form_error_message),
                 message = userViewModel.onValidateSecondPart().joinToString(separator = "\n"),
                 confirmText = stringResource(id = R.string.ok),
                 showDialog = isError,
                 onConfirm = { isError = false }
-            )
+            )*/
             TextButton(onClick = { onChange(SignUpNavigator.SignUpFormFragment.route) }) {
                 Text(text = stringResource(id = R.string.previous), color = LightSurface)
             }

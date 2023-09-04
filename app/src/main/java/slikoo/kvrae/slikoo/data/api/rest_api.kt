@@ -19,25 +19,50 @@ import slikoo.kvrae.slikoo.data.entities.User
 
 interface ApiServices {
 
+    /************************** Meal **************************/
     @Headers("Content-Type: application/json")
     @GET("getAllRepas")
     suspend fun getAllMeals(): Response<MealResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("addrepas")
+    suspend fun addRepas( @Body user: User): Response<String>
+
+    /************************** User **************************/
+
+    @Headers("Content-Type: application/json")
+    @POST("addRib")
+    suspend fun addRib( @Body user: User): Response<String>
+
+
+    /************************** Notifications **************************/
+    @Headers("Content-Type: application/json")
+    @GET("GetAllNotifications")
+    suspend fun getNotificationsByEmail(email: String): Response<NotificationsResponse>
+
+    /************************** SignIn/Up **************************/
 
     @Headers("Content-Type: application/json")
     @POST("mobile-login")
     suspend fun login(@Body user: LoginRequest): Response<LoginResponse>
 
     @Headers("Content-Type: application/json")
+    @POST("register")
+    suspend fun register(@Body user: User): Response<User>
+
+    @Headers("Content-Type: application/json")
+    @POST("resetpwd")
+    suspend fun resetPassword(@Body user: User): Response<User>
+
+    @Headers("Content-Type: application/json")
     @POST("get-user-by-email")
     suspend fun getUserByEmail(@Header("Authorization") token: String, @Body user: User): Response<User>
 
-    @Headers("Content-Type: application/json")
-    @GET("GetAllNotifications")
-    suspend fun getNotificationsByEmail(email: String): Response<NotificationsResponse>
 
-    @Headers("Content-Type: application/json")
-    @POST("addRib")
-    suspend fun addRib( @Body user: User): Response<String>
+
+
+
+
 
 }
 

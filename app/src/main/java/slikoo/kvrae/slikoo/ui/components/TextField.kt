@@ -50,6 +50,7 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
+import slikoo.kvrae.slikoo.ui.theme.LightSurface
 
 /*data class TextField(
     val label: String,
@@ -67,67 +68,91 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 
 //******************************* Custom Text Field *******************************************************//
 @Composable
-fun CustomTextField(onChange : (String) -> Unit,
-                    value : String, label : String,
-                    modifier: Modifier = Modifier,
-                    placeHolder: String = "",
-                    keyboardType: KeyboardType = KeyboardType.Text,
-                    keyboardActions: KeyboardActions = KeyboardActions(),
-                    leadingIcon: ImageVector? = null,
-                    trailingIcon: ImageVector? = null,
-) {
+fun CustomTextField(
+    onChange: (String) -> Unit,
+    value: String, label: String,
+    modifier: Modifier = Modifier,
+    placeHolder: String = "",
+    keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    leadingIcon: ImageVector? = null,
+    isError: Boolean = false,
+    trailingIcon: ImageVector? = null,
+    errorMessage: String = "",
+
+    ) {
     val focusManager = LocalFocusManager.current
     var isFocused by remember { mutableStateOf(false) }
 
 
-    OutlinedTextField(
-        value = value,
-        onValueChange = { onChange(it) },
-        shape = RoundedCornerShape(8.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = LightPrimary,
-            cursorColor = LightPrimary,
-            unfocusedBorderColor = if (value.isEmpty())Color.Transparent else Color.Gray.copy(alpha = 0.3f),
-            backgroundColor = LightError,
-            disabledBorderColor = Color.Transparent,
-        ),
-        placeholder = { Text(text = placeHolder) },
-        label = { Text(text = label,
-            overflow = TextOverflow.Ellipsis,
-            style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary),
-            maxLines = 1) },
-        modifier = modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-            .onFocusChanged { focusState -> isFocused = focusState.isFocused }
-        ,
-        singleLine = true,
-        visualTransformation = VisualTransformation.None,
-        isError = false,
-        trailingIcon = {
-            if (value.isNotEmpty()) {
-                IconButton(onClick = {
-                    onChange(".")
+    Column {
+        OutlinedTextField(
+            value = value,
+            onValueChange = { onChange(it) },
+            shape = RoundedCornerShape(8.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = LightPrimary,
+                errorBorderColor = LightPrimary,
+                errorCursorColor = LightPrimary,
+                cursorColor = LightPrimary,
+                unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(
+                    alpha = 0.3f
+                ),
+                backgroundColor = LightError,
+                disabledBorderColor = Color.Transparent,
+            ),
+            placeholder = { Text(text = placeHolder) },
+            label = {
+                Text(
+                    text = label,
+                    overflow = TextOverflow.Ellipsis,
+                    style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary),
+                    maxLines = 1
+                )
+            },
+            modifier = modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+                .onFocusChanged { focusState -> isFocused = focusState.isFocused },
+            singleLine = true,
+            visualTransformation = VisualTransformation.None,
+            isError = if (errorMessage.isNotEmpty() && isError) true else isError,
+            trailingIcon = {
+                if (value.isNotEmpty()) {
+                    IconButton(onClick = {
+                        onChange(".")
 
-                } ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Clear,
-                        contentDescription = "Clear Icon",
-                        tint = if (!isFocused) Color.Gray else LightPrimary
-                    )
+                    }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Clear,
+                            contentDescription = "Clear Icon",
+                            tint = if (!isFocused) Color.Gray else LightPrimary
+                        )
+                    }
                 }
-            }
-        },
+            },
 
-        leadingIcon = { if (leadingIcon != null) Icon(imageVector = leadingIcon
-            , contentDescription = "",
-            tint = if (!isFocused) Color.Gray else LightPrimary
-            ) },
-        keyboardOptions = KeyboardOptions( keyboardType = keyboardType),
-        keyboardActions = KeyboardActions( onDone = {focusManager.clearFocus()}),
+            leadingIcon = {
+                if (leadingIcon != null) Icon(
+                    imageVector = leadingIcon,
+                    contentDescription = "",
+                    tint = if (!isFocused) Color.Gray else LightPrimary
+                )
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
 
 
-    )
+            )
+        if (errorMessage.isNotEmpty() && isError) {
+            Text(
+                text = errorMessage,
+                color = LightSurface,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
 }
 
 
@@ -151,24 +176,34 @@ fun PasswordTextField(
     OutlinedTextField(
         value = value,
         onValueChange = { onChange(it) },
-        label = { Text(text = label, style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary)) },
+        label = {
+            Text(
+                text = label,
+                style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary)
+            )
+        },
         isError = isError,
         //placeholder = { Text(text = placeHolder) },
-        leadingIcon = { Icon(imageVector = Icons.Rounded.Lock,
-            contentDescription = "lock icon" ,
-            tint = if (!isFocused) Color.Gray else LightPrimary
-        ) },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Rounded.Lock,
+                contentDescription = "lock icon",
+                tint = if (!isFocused) Color.Gray else LightPrimary
+            )
+        },
         trailingIcon = {
-                IconButton(onClick = {
-                        passwordVisibility = !passwordVisibility
-                }) {
-                    Icon(
-                        painter = if (passwordVisibility)painterResource(id = R.drawable.visibility_icon) else painterResource(id = R.drawable.visibility_off_icon),
-                        contentDescription = "Clear Icon",
-                        tint = if (!isFocused) Color.Gray else LightPrimary
-                    )
+            IconButton(onClick = {
+                passwordVisibility = !passwordVisibility
+            }) {
+                Icon(
+                    painter = if (passwordVisibility) painterResource(id = R.drawable.visibility_icon) else painterResource(
+                        id = R.drawable.visibility_off_icon
+                    ),
+                    contentDescription = "Clear Icon",
+                    tint = if (!isFocused) Color.Gray else LightPrimary
+                )
 
-                }
+            }
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -181,15 +216,15 @@ fun PasswordTextField(
             focusedBorderColor = LightPrimary,
             backgroundColor = LightError,
             cursorColor = LightPrimary,
-            unfocusedBorderColor = if (value.isEmpty())Color.Transparent else Color.Gray.copy(alpha = 0.3f),
+            unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(alpha = 0.3f),
             disabledBorderColor = Color.Transparent,
         ),
         shape = RoundedCornerShape(8.dp),
-        keyboardOptions = KeyboardOptions( keyboardType = keyboardType),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         keyboardActions = KeyboardActions( /*TODO*/),
         visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
 
-    )
+        )
 }
 
 // ********************************* OtpView ********************************* //
@@ -235,22 +270,22 @@ private fun DigitView(
         Modifier
             .width(containerSize)
             .border(
-                width = 1.dp,
-                color = digitColor,
-                shape = MaterialTheme.shapes.medium
+                width = 1.dp, color = digitColor, shape = MaterialTheme.shapes.medium
             )
             .padding(bottom = 3.dp)
     } else Modifier.width(containerSize)
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+    ) {
         Text(
             text = if (index >= pinText.length) "" else pinText[index].toString(),
             color = digitColor,
             modifier = modifier,
             style = MaterialTheme.typography.body1,
             fontSize = digitSize,
-            textAlign = TextAlign.Center)
+            textAlign = TextAlign.Center
+        )
         if (type == PIN_VIEW_TYPE_UNDERLINE) {
             Spacer(modifier = Modifier.height(2.dp))
             Box(
@@ -267,66 +302,85 @@ private fun DigitView(
 /************************* Description Text Field *************************************/
 
 @Composable
-fun DescriptionTextField(onChange : (String) -> Unit,
-                         value : String, label : String,
-                         modifier: Modifier = Modifier,
-                         placeHolder: String = "",
-                         keyboardType: KeyboardType = KeyboardType.Text,
-                         keyboardActions: KeyboardActions = KeyboardActions(),
-                         leadingIcon: ImageVector? = null,
-                         trailingIcon: ImageVector? = null,
+fun DescriptionTextField(
+    onChange: (String) -> Unit,
+    value: String, label: String,
+    modifier: Modifier = Modifier,
+    placeHolder: String = "",
+    keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    leadingIcon: ImageVector? = null,
+    trailingIcon: ImageVector? = null,
+    errorMessage: String = "",
 ) {
     val focusManager = LocalFocusManager.current
     var isFocused by remember {
         mutableStateOf(false)
     }
-    OutlinedTextField(
-        value = value,
-        onValueChange = { onChange(it)
-        },
-        shape = RoundedCornerShape(8.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = LightPrimary,
-            cursorColor = LightPrimary,
-            unfocusedBorderColor = if (value.isEmpty())Color.Transparent else Color.Gray.copy(alpha = 0.3f),
-            backgroundColor = LightError,
-            disabledBorderColor = Color.Transparent,
-        ),
-        placeholder = { Text(text = placeHolder) },
-        label = { Text(text = label,
-            overflow = TextOverflow.Ellipsis,
-            style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary),
-            maxLines = 4) },
-        modifier = modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-            .onFocusChanged { focusState -> isFocused = focusState.isFocused }
-        ,
-        singleLine = false,
-        visualTransformation = VisualTransformation.None,
-        isError = false,
-        trailingIcon = {
-            if (value.isNotEmpty()) {
-                IconButton(onClick = {
-                    onChange("")
-                } ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Clear,
-                        contentDescription = "Clear Icon",
-                        tint = if (!isFocused) Color.Gray else LightPrimary
-                    )
+    Column(modifier = Modifier.fillMaxWidth()) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = {
+                onChange(it)
+            },
+            shape = RoundedCornerShape(8.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = LightPrimary,
+                cursorColor = LightPrimary,
+                unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(
+                    alpha = 0.3f
+                ),
+                backgroundColor = LightError,
+                disabledBorderColor = Color.Transparent,
+            ),
+            placeholder = { Text(text = placeHolder) },
+            label = {
+                Text(
+                    text = label,
+                    overflow = TextOverflow.Ellipsis,
+                    style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary),
+                    maxLines = 4
+                )
+            },
+            modifier = modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+                .onFocusChanged { focusState -> isFocused = focusState.isFocused },
+            singleLine = false,
+            visualTransformation = VisualTransformation.None,
+            isError = errorMessage.isNotEmpty(),
+            trailingIcon = {
+                if (value.isNotEmpty()) {
+                    IconButton(onClick = {
+                        onChange("")
+                    }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Clear,
+                            contentDescription = "Clear Icon",
+                            tint = if (!isFocused) Color.Gray else LightPrimary
+                        )
+                    }
                 }
-            }
-        },
+            },
 
-        leadingIcon = { if (leadingIcon != null) Icon(imageVector = leadingIcon
-            , contentDescription = "",
-            tint = if (!isFocused) Color.Gray else LightPrimary
-        ) },
-        keyboardOptions = KeyboardOptions( keyboardType = keyboardType),
-        keyboardActions = KeyboardActions( onDone = {focusManager.clearFocus()}),
-
-
+            leadingIcon = {
+                if (leadingIcon != null) Icon(
+                    imageVector = leadingIcon,
+                    contentDescription = "",
+                    tint = if (!isFocused) Color.Gray else LightPrimary
+                )
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
         )
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+                color = LightSurface,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
 }
 

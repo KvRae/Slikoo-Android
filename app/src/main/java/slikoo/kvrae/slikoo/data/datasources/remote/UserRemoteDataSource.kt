@@ -12,19 +12,18 @@ class UserRemoteDataSource {
         val retIn = RetrofitInstance
             .getRetrofitInstance()
             .create(ApiServices::class.java)
-        val request = LoginRequest(username = user.email, password = user.password)
-
+        val request = LoginRequest(
+            username = user.email,
+            password = user.password)
         return try {
-            val response = retIn.login(user = request)
-            if (response.code() == 200) {
-                response.body()?.token.toString() + "200" + response.code().toString()
-            } else if (response.code() == 401) {
-                response.body()!!.toString() + "401 " + response.code().toString()
-            }else {
-                response.body()?.message!! + " else " + response.code().toString()
+            val response = retIn.login(request)
+            if (response.isSuccessful) {
+                response.body()?.token.toString()
+            } else {
+                response.code().toString()
             }
         } catch (e: Exception) {
-             e.message.toString() + " e " + e.cause.toString()
+            e.message.toString()
         }
     }
 

@@ -28,18 +28,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.PasswordTextField
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
-import slikoo.kvrae.slikoo.viewmodel.UserViewModel
+import slikoo.kvrae.slikoo.viewmodel.SignUpViewModel
 
 
 @Composable
 fun SignUpForm(onChange: (String) -> Unit) {
-    val userViewModel: UserViewModel = viewModel()
+    val userViewModel: SignUpViewModel = viewModel()
     var isErrors by remember { mutableStateOf(false) }
 
     Box(
@@ -71,7 +70,9 @@ fun SignUpForm(onChange: (String) -> Unit) {
                 value = userViewModel.user.value.firstName,
                 label = stringResource(id = R.string.name),
                 keyboardType = KeyboardType.Text,
-                leadingIcon = Icons.Rounded.Person
+                leadingIcon = Icons.Rounded.Person,
+                errorMessage = userViewModel.onValidateFirstName(),
+                isError = isErrors
             )
 
             CustomTextField(
@@ -79,7 +80,9 @@ fun SignUpForm(onChange: (String) -> Unit) {
                 value = userViewModel.user.value.lastName,
                 label = stringResource(id = R.string.familyName),
                 keyboardType = KeyboardType.Text,
-                leadingIcon = Icons.Rounded.Person
+                leadingIcon = Icons.Rounded.Person,
+                errorMessage = userViewModel.onValidateLastName(),
+                isError = isErrors
             )
 
             CustomTextField(
@@ -87,7 +90,9 @@ fun SignUpForm(onChange: (String) -> Unit) {
                 value = userViewModel.user.value.email,
                 label = stringResource(id = R.string.email),
                 keyboardType = KeyboardType.Email,
-                leadingIcon = Icons.Rounded.Email
+                leadingIcon = Icons.Rounded.Email,
+                errorMessage = userViewModel.onValidateEmail(),
+                isError = isErrors
             )
 
             PasswordTextField(label = stringResource(id = R.string.password),
@@ -104,16 +109,18 @@ fun SignUpForm(onChange: (String) -> Unit) {
 
             CustomButton(text = stringResource(id = R.string.next),
                 onClick = {
-                    if (!userViewModel.onValidateFirstPart().isEmpty()) { onChange(SignUpNavigator.SignUpSecondFormFragment.route) }
-                    else { isErrors = true }
-                })
-            CustomAlertDialog(
-                title = stringResource(id = R.string.form_error_message),
-                message = userViewModel.onValidateFirstPart().joinToString("\n"),
-                onDismiss = { isErrors = false },
-                onConfirm = { isErrors = false },
-                showDialog = isErrors)
-
+                    isErrors = if (
+                        userViewModel.onValidateFirstName().isEmpty()
+                        && userViewModel.onValidateLastName().isEmpty()
+                        && userViewModel.onValidateEmail().isEmpty()
+                        && userViewModel.onValidatePassword().isEmpty()
+                        && userViewModel.onConfirmPassword()) { onChange(SignUpNavigator.SignUpSecondFormFragment.route)
+                        false
+                    } else {
+                        true
+                    }
+                }
+            )
         }
     }
 }
