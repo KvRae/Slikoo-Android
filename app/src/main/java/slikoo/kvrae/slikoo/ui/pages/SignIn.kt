@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.utils.TokenDataStore
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
@@ -54,18 +55,17 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
-import slikoo.kvrae.slikoo.viewmodel.UserViewModel
+import slikoo.kvrae.slikoo.viewmodel.SignInViewModel
 
 
 @Composable
 fun LoginForm(navController: NavController) {
 
-    val userVm: UserViewModel = viewModel()
+    val signInViewModel: SignInViewModel = viewModel()
     val logo = R.drawable.slikoo_white
     val context = LocalContext.current
-
-    
-    val token = userVm.token
+    val token = signInViewModel.token
+    val tokenDataStore = TokenDataStore(context)
 
     var isError by remember {
         mutableStateOf(false)
@@ -80,7 +80,7 @@ fun LoginForm(navController: NavController) {
 
         CustomAlertDialog(
             title = stringResource(id = R.string.form_error_message),
-            message = userVm.onLoginValidation().joinToString (separator = "\n"),
+            message = signInViewModel.onLoginValidation().joinToString (separator = "\n"),
             confirmText = stringResource(id = R.string.ok),
             onConfirm = { isError = false },
             showDialog = isError
@@ -166,8 +166,8 @@ fun LoginForm(navController: NavController) {
                     Text(text = token.value, overflow = TextOverflow.Ellipsis, maxLines = 1)
                     Spacer(modifier = Modifier.height(16.dp))
                     CustomTextField(
-                        onChange = { userVm.user.value = userVm.user.value.copy(email = it)},
-                        value = userVm.user.value.email,
+                        onChange = { signInViewModel.user.value = signInViewModel.user.value.copy(email = it)},
+                        value = signInViewModel.user.value.email,
                         label = stringResource(id = R.string.email),
                         keyboardType = KeyboardType.Email,
                         leadingIcon = Icons.Rounded.Email
@@ -176,10 +176,10 @@ fun LoginForm(navController: NavController) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     PasswordTextField(
-                        value = userVm.user.value.password,
+                        value = signInViewModel.user.value.password,
                         label = stringResource(id = R.string.password),
                         placeHolder = stringResource(id = R.string.password_placeholder),
-                        onChange = { userVm.user.value = userVm.user.value.copy(password = it) }
+                        onChange = { signInViewModel.user.value = signInViewModel.user.value.copy(password = it) }
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -187,16 +187,16 @@ fun LoginForm(navController: NavController) {
                     // Submit button
                     CustomButton(text = stringResource(id = R.string.connect),
                         onClick = {
-                            if(userVm.onLoginValidation().isNotEmpty()){
+                            if(signInViewModel.onLoginValidation().isNotEmpty()){
                                  isError = true
                             }
                             else{
-                                userVm.onLogin()
-                                /*onSubmit(navController)
+                                //signInViewModel.onLogin()
+                                onSubmit(navController)
                                 onMakeToast(
                                     context = context,
                                     message = context.getString(R.string.welcome)
-                                )*/
+                                )
                             }
                         })
 

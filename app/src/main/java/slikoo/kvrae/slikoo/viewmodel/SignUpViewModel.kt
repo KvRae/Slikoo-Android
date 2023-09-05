@@ -3,7 +3,7 @@ package slikoo.kvrae.slikoo.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import slikoo.kvrae.slikoo.data.entities.User
+import slikoo.kvrae.slikoo.data.datasources.entities.User
 
 class SignUpViewModel: ViewModel() {
 

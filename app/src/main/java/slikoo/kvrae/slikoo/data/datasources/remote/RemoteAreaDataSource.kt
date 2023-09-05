@@ -1,6 +1,6 @@
 package slikoo.kvrae.slikoo.data.datasources.remote
 
-import slikoo.kvrae.slikoo.data.entities.Area
+import slikoo.kvrae.slikoo.data.datasources.entities.Area
 
 class RemoteAreaDataSource {
     private var remoteAreaDataSource: RemoteAreaDataSource? = null

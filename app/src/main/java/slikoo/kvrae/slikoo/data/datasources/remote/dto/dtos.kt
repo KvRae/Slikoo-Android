@@ -1,8 +1,8 @@
-package slikoo.kvrae.slikoo.data.dto
+package slikoo.kvrae.slikoo.data.datasources.remote.dto
 
 import com.google.gson.annotations.SerializedName
-import slikoo.kvrae.slikoo.data.entities.Meal
-import slikoo.kvrae.slikoo.data.entities.Notification
+import slikoo.kvrae.slikoo.data.datasources.entities.Meal
+import slikoo.kvrae.slikoo.data.datasources.entities.Notification
 
 data class MealResponse(
     @SerializedName("repasList")

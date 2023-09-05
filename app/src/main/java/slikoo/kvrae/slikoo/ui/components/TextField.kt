@@ -166,6 +166,7 @@ fun PasswordTextField(
     keyboardType: KeyboardType = KeyboardType.Password,
     onChange: (String) -> Unit,
     isError: Boolean = false,
+    errorMessage: String = "",
 ) {
     var passwordVisibility by remember {
         mutableStateOf(true)
@@ -173,214 +174,226 @@ fun PasswordTextField(
     var isFocused by remember {
         mutableStateOf(false)
     }
-    OutlinedTextField(
-        value = value,
-        onValueChange = { onChange(it) },
-        label = {
-            Text(
-                text = label,
-                style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary)
-            )
-        },
-        isError = isError,
-        //placeholder = { Text(text = placeHolder) },
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Rounded.Lock,
-                contentDescription = "lock icon",
-                tint = if (!isFocused) Color.Gray else LightPrimary
-            )
-        },
-        trailingIcon = {
-            IconButton(onClick = {
-                passwordVisibility = !passwordVisibility
-            }) {
-                Icon(
-                    painter = if (passwordVisibility) painterResource(id = R.drawable.visibility_icon) else painterResource(
-                        id = R.drawable.visibility_off_icon
-                    ),
-                    contentDescription = "Clear Icon",
-                    tint = if (!isFocused) Color.Gray else LightPrimary
-                )
-
-            }
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .onFocusChanged { focusState ->
-                isFocused = focusState.isFocused
-            },
-        singleLine = true,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = LightPrimary,
-            backgroundColor = LightError,
-            cursorColor = LightPrimary,
-            unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(alpha = 0.3f),
-            disabledBorderColor = Color.Transparent,
-        ),
-        shape = RoundedCornerShape(8.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        keyboardActions = KeyboardActions( /*TODO*/),
-        visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
-
-        )
-}
-
-// ********************************* OtpView ********************************* //
-
-
-const val PIN_VIEW_TYPE_UNDERLINE = 0
-const val PIN_VIEW_TYPE_BORDER = 1
-
-@Composable
-fun PinView(
-    pinText: String,
-    onPinTextChange: (String) -> Unit,
-    digitColor: Color = LightBackground,
-    digitSize: TextUnit = 16.sp,
-    containerSize: Dp = digitSize.value.dp * 2,
-    digitCount: Int = 4,
-    type: Int = PIN_VIEW_TYPE_UNDERLINE,
-) {
-    BasicTextField(value = pinText,
-        onValueChange = onPinTextChange,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        decorationBox = {
-            Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                repeat(digitCount) { index ->
-                    DigitView(index, pinText, digitColor, digitSize, containerSize, type = type)
-                    Spacer(modifier = Modifier.width(5.dp))
-                }
-            }
-        })
-}
-
-
-@Composable
-private fun DigitView(
-    index: Int,
-    pinText: String,
-    digitColor: Color = LightBackground,
-    digitSize: TextUnit,
-    containerSize: Dp,
-    type: Int = PIN_VIEW_TYPE_UNDERLINE,
-) {
-    val modifier = if (type == PIN_VIEW_TYPE_BORDER) {
-        Modifier
-            .width(containerSize)
-            .border(
-                width = 1.dp, color = digitColor, shape = MaterialTheme.shapes.medium
-            )
-            .padding(bottom = 3.dp)
-    } else Modifier.width(containerSize)
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = if (index >= pinText.length) "" else pinText[index].toString(),
-            color = digitColor,
-            modifier = modifier,
-            style = MaterialTheme.typography.body1,
-            fontSize = digitSize,
-            textAlign = TextAlign.Center
-        )
-        if (type == PIN_VIEW_TYPE_UNDERLINE) {
-            Spacer(modifier = Modifier.height(2.dp))
-            Box(
-                modifier = Modifier
-                    .background(digitColor)
-                    .height(1.dp)
-                    .width(containerSize)
-            )
-        }
-    }
-}
-
-
-/************************* Description Text Field *************************************/
-
-@Composable
-fun DescriptionTextField(
-    onChange: (String) -> Unit,
-    value: String, label: String,
-    modifier: Modifier = Modifier,
-    placeHolder: String = "",
-    keyboardType: KeyboardType = KeyboardType.Text,
-    keyboardActions: KeyboardActions = KeyboardActions(),
-    leadingIcon: ImageVector? = null,
-    trailingIcon: ImageVector? = null,
-    errorMessage: String = "",
-) {
-    val focusManager = LocalFocusManager.current
-    var isFocused by remember {
-        mutableStateOf(false)
-    }
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column {
         OutlinedTextField(
             value = value,
-            onValueChange = {
-                onChange(it)
+            onValueChange = { onChange(it) },
+            label = {
+                Text(
+                    text = label,
+                    style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary)
+                )
             },
-            shape = RoundedCornerShape(8.dp),
+            isError = isError,
+            //placeholder = { Text(text = placeHolder) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.Lock,
+                    contentDescription = "lock icon",
+                    tint = if (!isFocused) Color.Gray else LightPrimary
+                )
+            },
+            trailingIcon = {
+                IconButton(onClick = {
+                    passwordVisibility = !passwordVisibility
+                }) {
+                    Icon(
+                        painter = if (passwordVisibility) painterResource(id = R.drawable.visibility_icon) else painterResource(
+                            id = R.drawable.visibility_off_icon
+                        ),
+                        contentDescription = "Clear Icon",
+                        tint = if (!isFocused) Color.Gray else LightPrimary
+                    )
+
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .onFocusChanged { focusState ->
+                    isFocused = focusState.isFocused
+                },
+            singleLine = true,
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = LightPrimary,
+                backgroundColor = LightError,
                 cursorColor = LightPrimary,
                 unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(
                     alpha = 0.3f
                 ),
-                backgroundColor = LightError,
                 disabledBorderColor = Color.Transparent,
             ),
-            placeholder = { Text(text = placeHolder) },
-            label = {
-                Text(
-                    text = label,
-                    overflow = TextOverflow.Ellipsis,
-                    style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary),
-                    maxLines = 4
-                )
-            },
-            modifier = modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-                .onFocusChanged { focusState -> isFocused = focusState.isFocused },
-            singleLine = false,
-            visualTransformation = VisualTransformation.None,
-            isError = errorMessage.isNotEmpty(),
-            trailingIcon = {
-                if (value.isNotEmpty()) {
-                    IconButton(onClick = {
-                        onChange("")
-                    }) {
-                        Icon(
-                            imageVector = Icons.Rounded.Clear,
-                            contentDescription = "Clear Icon",
-                            tint = if (!isFocused) Color.Gray else LightPrimary
-                        )
-                    }
-                }
-            },
-
-            leadingIcon = {
-                if (leadingIcon != null) Icon(
-                    imageVector = leadingIcon,
-                    contentDescription = "",
-                    tint = if (!isFocused) Color.Gray else LightPrimary
-                )
-            },
+            shape = RoundedCornerShape(8.dp),
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-        )
-        if (errorMessage.isNotEmpty()) {
-            Text(
-                text = errorMessage,
-                color = LightSurface,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 8.dp)
+            keyboardActions = KeyboardActions( /*TODO*/),
+            visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
             )
+            if (errorMessage.isNotEmpty() && isError) {
+                Text(
+                    text = errorMessage,
+                    color = LightSurface,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
         }
     }
-}
+
+// ********************************* OtpView ********************************* //
+
+
+    const val PIN_VIEW_TYPE_UNDERLINE = 0
+    const val PIN_VIEW_TYPE_BORDER = 1
+
+    @Composable
+    fun PinView(
+        pinText: String,
+        onPinTextChange: (String) -> Unit,
+        digitColor: Color = LightBackground,
+        digitSize: TextUnit = 16.sp,
+        containerSize: Dp = digitSize.value.dp * 2,
+        digitCount: Int = 4,
+        type: Int = PIN_VIEW_TYPE_UNDERLINE,
+    ) {
+        BasicTextField(value = pinText,
+            onValueChange = onPinTextChange,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            decorationBox = {
+                Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                    repeat(digitCount) { index ->
+                        DigitView(index, pinText, digitColor, digitSize, containerSize, type = type)
+                        Spacer(modifier = Modifier.width(5.dp))
+                    }
+                }
+            })
+    }
+
+
+    @Composable
+    private fun DigitView(
+        index: Int,
+        pinText: String,
+        digitColor: Color = LightBackground,
+        digitSize: TextUnit,
+        containerSize: Dp,
+        type: Int = PIN_VIEW_TYPE_UNDERLINE,
+    ) {
+        val modifier = if (type == PIN_VIEW_TYPE_BORDER) {
+            Modifier
+                .width(containerSize)
+                .border(
+                    width = 1.dp, color = digitColor, shape = MaterialTheme.shapes.medium
+                )
+                .padding(bottom = 3.dp)
+        } else Modifier.width(containerSize)
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = if (index >= pinText.length) "" else pinText[index].toString(),
+                color = digitColor,
+                modifier = modifier,
+                style = MaterialTheme.typography.body1,
+                fontSize = digitSize,
+                textAlign = TextAlign.Center
+            )
+            if (type == PIN_VIEW_TYPE_UNDERLINE) {
+                Spacer(modifier = Modifier.height(2.dp))
+                Box(
+                    modifier = Modifier
+                        .background(digitColor)
+                        .height(1.dp)
+                        .width(containerSize)
+                )
+            }
+        }
+    }
+
+
+    /************************* Description Text Field *************************************/
+
+    @Composable
+    fun DescriptionTextField(
+        onChange: (String) -> Unit,
+        value: String, label: String,
+        modifier: Modifier = Modifier,
+        placeHolder: String = "",
+        keyboardType: KeyboardType = KeyboardType.Text,
+        keyboardActions: KeyboardActions = KeyboardActions(),
+        leadingIcon: ImageVector? = null,
+        trailingIcon: ImageVector? = null,
+        errorMessage: String = "",
+    ) {
+        val focusManager = LocalFocusManager.current
+        var isFocused by remember {
+            mutableStateOf(false)
+        }
+        Column(modifier = Modifier.fillMaxWidth()) {
+            OutlinedTextField(
+                value = value,
+                onValueChange = {
+                    onChange(it)
+                },
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = LightPrimary,
+                    cursorColor = LightPrimary,
+                    unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(
+                        alpha = 0.3f
+                    ),
+                    backgroundColor = LightError,
+                    disabledBorderColor = Color.Transparent,
+                ),
+                placeholder = { Text(text = placeHolder) },
+                label = {
+                    Text(
+                        text = label,
+                        overflow = TextOverflow.Ellipsis,
+                        style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary),
+                        maxLines = 4
+                    )
+                },
+                modifier = modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .onFocusChanged { focusState -> isFocused = focusState.isFocused },
+                singleLine = false,
+                visualTransformation = VisualTransformation.None,
+                isError = errorMessage.isNotEmpty(),
+                trailingIcon = {
+                    if (value.isNotEmpty()) {
+                        IconButton(onClick = {
+                            onChange("")
+                        }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Clear,
+                                contentDescription = "Clear Icon",
+                                tint = if (!isFocused) Color.Gray else LightPrimary
+                            )
+                        }
+                    }
+                },
+
+                leadingIcon = {
+                    if (leadingIcon != null) Icon(
+                        imageVector = leadingIcon,
+                        contentDescription = "",
+                        tint = if (!isFocused) Color.Gray else LightPrimary
+                    )
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            )
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = LightSurface,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+        }
+    }
 

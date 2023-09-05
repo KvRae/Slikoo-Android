@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.data.datasources.remote.MealRemoteDataSource
-import slikoo.kvrae.slikoo.data.entities.Meal
+import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 
 class MealsViewModel(): ViewModel() {
     private val mealRemoteDataSource = MealRemoteDataSource()

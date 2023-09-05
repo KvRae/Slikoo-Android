@@ -21,6 +21,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,9 +36,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.data.entities.Area
-import slikoo.kvrae.slikoo.data.entities.Meal
+import slikoo.kvrae.slikoo.data.datasources.entities.Area
+import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
@@ -47,6 +51,8 @@ fun RecipeCardContent(meal : Meal, navController: NavController) {
     /*val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm",
         java.util.Locale.getDefault())
     val date = dateFormat.format(meal.date)*/
+    val isLoading by remember{ mutableStateOf(false) }
+    val avatar = "https://slikoo.com/repasImgs/${meal.avatar}"
 
     Card(
         modifier = Modifier
@@ -61,7 +67,7 @@ fun RecipeCardContent(meal : Meal, navController: NavController) {
             .clickable(
                 onClick = { navController.navigate(AppScreenNavigator.EventDetailsAppScreen.route) })
         ) {
-            Image(painter = painterResource(id = R.drawable.login),
+            AsyncImage(model = avatar,
                 contentDescription = "",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
@@ -74,6 +80,9 @@ fun RecipeCardContent(meal : Meal, navController: NavController) {
 
             Column(modifier = Modifier.padding(8.dp)) {
                 Row(horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(30.dp),
                     verticalAlignment = Alignment.CenterVertically) {
                     Icon(imageVector = Icons.Rounded.LocationOn,
                         contentDescription = "",
@@ -82,10 +91,14 @@ fun RecipeCardContent(meal : Meal, navController: NavController) {
                             .padding(start = 8.dp),
                         tint = LightPrimaryVariant
                     )
-                    Text(text = meal.description, modifier = Modifier.padding(start = 4.dp),
-                        style = TextStyle(fontSize = 14.sp,
+                    Text(text = if (meal.description.length > 12) meal.description.slice(0..11) + "..." else meal.description,
+                        modifier = Modifier.padding(start = 4.dp),
+                        style = TextStyle(
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
                         ),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
                         color = LightPrimaryVariant
                     )
 
@@ -175,7 +188,9 @@ fun UserEventCard(area : Area, navController: NavController) {
                         .size(170.dp)
                         .background(Color.Black.copy(0.4f))
                 ) {}
-                Column(modifier = Modifier.padding(8.dp).size(150.dp)) {
+                Column(modifier = Modifier
+                    .padding(8.dp)
+                    .size(150.dp)) {
                     Row(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically

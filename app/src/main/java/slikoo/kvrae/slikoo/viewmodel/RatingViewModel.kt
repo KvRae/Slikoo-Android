@@ -2,7 +2,7 @@ package slikoo.kvrae.slikoo.viewmodel
 
 
 import androidx.lifecycle.ViewModel
-import slikoo.kvrae.slikoo.data.entities.Rating
+import slikoo.kvrae.slikoo.data.datasources.entities.Rating
 import java.util.Date
 
 class RatingViewModel : ViewModel() {

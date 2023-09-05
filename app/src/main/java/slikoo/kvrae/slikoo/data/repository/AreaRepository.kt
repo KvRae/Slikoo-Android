@@ -1,20 +1,15 @@
 package slikoo.kvrae.slikoo.data.repository
 
-import androidx.lifecycle.ViewModel
-import slikoo.kvrae.slikoo.data.datasources.local.LocalAreaDataSource
-import slikoo.kvrae.slikoo.data.datasources.remote.RemoteAreaDataSource
-import slikoo.kvrae.slikoo.data.entities.Area
-
-class AreaRepository : ViewModel() {
-    private var areas = mutableListOf<Area>()
+class AreaRepository {
+    /*private var areas = mutableListOf<Area>()
 
     private var remoteAreaDataSource = RemoteAreaDataSource()
-    private var localAreaDataSource = LocalAreaDataSource()
+    private var areaDao = AreaDao()
 
     suspend fun getAreas() : List<Area> {
         try {
             areas = remoteAreaDataSource.getAreas() as MutableList<Area>
-            localAreaDataSource.updateAreas(areas)
+            areaDao.updateAreas(areas)
         }
         catch (e: Exception) {
             // handle exception
@@ -22,6 +17,6 @@ class AreaRepository : ViewModel() {
         return areas
     }
 
-
+*/
 
 }

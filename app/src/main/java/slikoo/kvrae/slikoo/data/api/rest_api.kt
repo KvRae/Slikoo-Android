@@ -2,6 +2,7 @@ package slikoo.kvrae.slikoo.data.api
 
 
 import android.util.Log
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -11,11 +12,16 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.Multipart
 import retrofit2.http.POST
-import slikoo.kvrae.slikoo.data.dto.LoginResponse
-import slikoo.kvrae.slikoo.data.dto.MealResponse
-import slikoo.kvrae.slikoo.data.dto.NotificationsResponse
-import slikoo.kvrae.slikoo.data.entities.User
+import retrofit2.http.Part
+import retrofit2.http.Path
+import slikoo.kvrae.slikoo.data.datasources.entities.User
+import slikoo.kvrae.slikoo.data.datasources.remote.dto.LoginResponse
+import slikoo.kvrae.slikoo.data.datasources.remote.dto.MealResponse
+import slikoo.kvrae.slikoo.data.datasources.remote.dto.NotificationsResponse
+
+
 
 interface ApiServices {
 
@@ -28,6 +34,10 @@ interface ApiServices {
     @POST("addrepas")
     suspend fun addRepas( @Body user: User): Response<String>
 
+    @Headers("Content-Type: application/json")
+    @GET("getRepasByDate/{id}")
+    suspend fun getMealById(@Path("id") id: Int): Response<MealResponse>
+
     /************************** User **************************/
 
     @Headers("Content-Type: application/json")
@@ -37,8 +47,8 @@ interface ApiServices {
 
     /************************** Notifications **************************/
     @Headers("Content-Type: application/json")
-    @GET("GetAllNotifications")
-    suspend fun getNotificationsByEmail(email: String): Response<NotificationsResponse>
+    @GET("GetAllNotifications/{email}")
+    suspend fun getNotificationsByEmail(@Header("Authorization") token: String, @Path("email") email: String): Response<NotificationsResponse>
 
     /************************** SignIn/Up **************************/
 
@@ -46,17 +56,18 @@ interface ApiServices {
     @POST("mobile-login")
     suspend fun login(@Body user: LoginRequest): Response<LoginResponse>
 
+    @Multipart
     @Headers("Content-Type: application/json")
     @POST("register")
-    suspend fun register(@Body user: User): Response<User>
+    suspend fun register(@Body user: User, @Part avatar: MultipartBody.Part, @Part cinavatar: MultipartBody.Part ): Response<String>
 
     @Headers("Content-Type: application/json")
     @POST("resetpwd")
-    suspend fun resetPassword(@Body user: User): Response<User>
+    suspend fun resetPassword(@Body user: User): Response<String>
 
-    @Headers("Content-Type: application/json")
-    @POST("get-user-by-email")
-    suspend fun getUserByEmail(@Header("Authorization") token: String, @Body user: User): Response<User>
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @GET("get-user-by-email/{email}")
+    suspend fun getUserByEmail(@Header("Authorization") token: String, @Path("email") email: String): Response<UserResponse>
 
 
 
@@ -71,18 +82,17 @@ data class LoginRequest(
     val password: String
 )
 
+data class UserResponse(
+    val user: User,
+)
+
 
 
 
 class RetrofitInstance {
     companion object {
         private const val BASE_URL: String = "https://slikoo.com/api/"
-        private val loggingInterceptor = HttpLoggingInterceptor { message ->
-            Log.d(
-                "Retrofit",
-                message
-            )
-        }.apply {
+        private val loggingInterceptor = HttpLoggingInterceptor { message -> Log.d("Retrofit", message) }.apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
@@ -91,13 +101,17 @@ class RetrofitInstance {
             .build()
 
 
-        // retrofit instance
+        private var retrofit: Retrofit? = null
+        // retrofit singleton instance
         fun getRetrofitInstance(): Retrofit {
-            return Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+            if (retrofit == null) {
+                retrofit = Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+            }
+            return retrofit!!
         }
     }
 }

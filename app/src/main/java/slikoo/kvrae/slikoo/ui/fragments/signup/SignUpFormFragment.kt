@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.valentinilk.shimmer.shimmer
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlider
@@ -42,10 +43,12 @@ fun SignUpForm(onChange: (String) -> Unit) {
     var isErrors by remember { mutableStateOf(false) }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)
-            .verticalScroll(rememberScrollState())
+        modifier = Modifier.run {
+            fillMaxSize()
+                .padding(8.dp)
+                .shimmer()
+                .verticalScroll(rememberScrollState())
+        }
     ) {
         Column(
             modifier = Modifier
@@ -97,7 +100,9 @@ fun SignUpForm(onChange: (String) -> Unit) {
 
             PasswordTextField(label = stringResource(id = R.string.password),
                 value = userViewModel.user.value.password,
-                onChange = { userViewModel.user.value = userViewModel.user.value.copy(password = it) }
+                onChange = { userViewModel.user.value = userViewModel.user.value.copy(password = it) },
+                isError = isErrors,
+                errorMessage = userViewModel.onValidatePassword()
             )
 
             PasswordTextField(label = stringResource(id = R.string.confirmPassword),

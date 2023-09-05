@@ -1,55 +1,33 @@
 package slikoo.kvrae.slikoo.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.data.entities.Notification
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import slikoo.kvrae.slikoo.data.datasources.entities.Notification
+import slikoo.kvrae.slikoo.data.datasources.remote.NotificationRemoteDataSource
 
 
 class NotificationViewModel : ViewModel() {
-    private val notifications = mutableListOf<Notification>(
-        Notification(
-            id = 1,
-            profileImage = R.drawable.avatar,
-            "karam Mannai",
-            "hello world",
-            "Time"
-        ),
-        Notification(
-            id = 2,
-            profileImage = R.drawable.avatar,
-            "Ahmed Mannai",
-            "hello world",
-            "Time"
-        ),
-        Notification(
-            id = 3,
-            profileImage = R.drawable.avatar,
-            "Morad Mannai",
-            "hello world",
-            "Time"
-        ),
-        Notification(
-            id = 4,
-            profileImage = R.drawable.avatar,
-            "Asma Mannai",
-            "hello world",
-            "Time"
-        ),
-        Notification(
-            id = 5,
-            profileImage = R.drawable.avatar,
-            "Sirine Mannai",
-            "hello world",
-            "Time"
-        )
-    )
+    private val notifcationRepository = NotificationRemoteDataSource()
+    private var notifications = mutableListOf<Notification>()
 
-    fun getNotifications(): List<Notification> {
+    fun getNotifications(email: String, token: String): List<Notification> {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val list  = notifcationRepository.getNotifications(token, email)
+            Log.d("NotificationViewModel res", "getNotifications: $list")
+            if (list != null) {
+                notifications.addAll(list)
+                Log.d("NotificationViewModel notfications", "getNotifications: $notifications")
+            }
+        }
         return notifications
     }
 
     fun removeNotification(notification: Notification) {
-        notifications.remove(notification)
+        //notifications.remove(notification)
     }
 
 

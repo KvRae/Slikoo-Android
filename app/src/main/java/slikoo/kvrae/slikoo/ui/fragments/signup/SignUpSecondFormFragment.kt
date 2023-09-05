@@ -36,12 +36,12 @@ import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.DescriptionTextField
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
-import slikoo.kvrae.slikoo.viewmodel.UserViewModel
+import slikoo.kvrae.slikoo.viewmodel.SignInViewModel
 
 
 @Composable
 fun SignUpSecondForm(onChange: (String) -> Unit) {
-    val userViewModel: UserViewModel = viewModel()
+    val userViewModel: SignInViewModel = viewModel()
     var isError by remember{ mutableStateOf(false)}
     Box(
         modifier = Modifier
@@ -81,8 +81,8 @@ fun SignUpSecondForm(onChange: (String) -> Unit) {
             )
 
             DescriptionTextField(
-                onChange = { userViewModel.user.value = userViewModel.user.value.copy(about = it)},
-                value = userViewModel.user.value.about,
+                onChange = { userViewModel.user.value = userViewModel.user.value.copy(bio = it)},
+                value = userViewModel.user.value.bio,
                 label = stringResource(R.string.profile_description),
                 leadingIcon = Icons.Rounded.Info
             )

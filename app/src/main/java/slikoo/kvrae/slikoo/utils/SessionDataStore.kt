@@ -1,4 +1,4 @@
-package slikoo.kvrae.slikoo.data.datasources.local
+package slikoo.kvrae.slikoo.utils
 
 import android.content.Context
 import androidx.datastore.core.DataStore

@@ -3,7 +3,7 @@ package slikoo.kvrae.slikoo.data.datasources.remote
 import android.util.Log
 import slikoo.kvrae.slikoo.data.api.ApiServices
 import slikoo.kvrae.slikoo.data.api.RetrofitInstance
-import slikoo.kvrae.slikoo.data.entities.Meal
+import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 
 class MealRemoteDataSource() {
 

@@ -1,7 +1,7 @@
 package slikoo.kvrae.slikoo.viewmodel
 
 import androidx.lifecycle.ViewModel
-import slikoo.kvrae.slikoo.data.entities.Area
+import slikoo.kvrae.slikoo.data.datasources.entities.Area
 import java.util.Date
 
 class AreaViewModel : ViewModel() {

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
@@ -26,19 +25,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.data.entities.Notification
+import slikoo.kvrae.slikoo.data.datasources.entities.Notification
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 fun NotificationItem(content : @Composable () -> Unit) {
     Card(
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 6.dp,
-        enabled = false,
-        onClick = { /*TODO*/ }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             content()
@@ -49,7 +46,7 @@ fun NotificationItem(content : @Composable () -> Unit) {
 
 
 @Composable
-fun NotificationItemContent(notification: Notification ) {
+fun NotificationItemContent(notification: Notification) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
@@ -62,7 +59,7 @@ fun NotificationItemContent(notification: Notification ) {
                 modifier = Modifier.size(40.dp),
                 painter = painterResource(id = R.drawable.avatar),
                 contentDescription = "" )
-            Text(text = notification.title,
+            Text(text = notification.sender[0].firstName,
                 style = TextStyle(color = LightBackground, fontSize = 14.sp, fontWeight = FontWeight.Medium),
                 modifier = Modifier.padding(start = 8.dp))
             Spacer(modifier = Modifier.weight(1f))

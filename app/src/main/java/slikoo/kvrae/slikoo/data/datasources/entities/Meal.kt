@@ -1,6 +1,7 @@
-package slikoo.kvrae.slikoo.data.entities
+package slikoo.kvrae.slikoo.data.datasources.entities
 
 data class Meal(
+    //val avatarUrl: String =,
     val avatar: String,
     val `data`: Any,
     val date: String,
