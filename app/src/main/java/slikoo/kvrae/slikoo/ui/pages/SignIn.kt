@@ -41,13 +41,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.utils.TokenDataStore
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
+import slikoo.kvrae.slikoo.ui.components.LoadingDialog
 import slikoo.kvrae.slikoo.ui.components.PasswordTextField
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
@@ -55,18 +54,17 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
+import slikoo.kvrae.slikoo.utils.SessionDataStore
+import slikoo.kvrae.slikoo.utils.SlikooDatabase
 import slikoo.kvrae.slikoo.viewmodel.SignInViewModel
 
 
 @Composable
 fun LoginForm(navController: NavController) {
-
-    val signInViewModel: SignInViewModel = viewModel()
-    val logo = R.drawable.slikoo_white
     val context = LocalContext.current
-    val token = signInViewModel.token
-    val tokenDataStore = TokenDataStore(context)
+    val signInViewModel = SignInViewModel(SessionDataStore(context))
 
+    val logo = R.drawable.slikoo_white
     var isError by remember {
         mutableStateOf(false)
     }
@@ -78,13 +76,6 @@ fun LoginForm(navController: NavController) {
             .background(LightPrimary.copy(alpha = 1f))
     ) {
 
-        CustomAlertDialog(
-            title = stringResource(id = R.string.form_error_message),
-            message = signInViewModel.onLoginValidation().joinToString (separator = "\n"),
-            confirmText = stringResource(id = R.string.ok),
-            onConfirm = { isError = false },
-            showDialog = isError
-        )
         Column(
             modifier = Modifier
         ) {
@@ -163,7 +154,7 @@ fun LoginForm(navController: NavController) {
                             fontSize = MaterialTheme.typography.h5.fontSize,
                         )
                     )
-                    Text(text = token.value, overflow = TextOverflow.Ellipsis, maxLines = 1)
+                    Text(text = signInViewModel.token.value, overflow = TextOverflow.Ellipsis, maxLines = 1)
                     Spacer(modifier = Modifier.height(16.dp))
                     CustomTextField(
                         onChange = { signInViewModel.user.value = signInViewModel.user.value.copy(email = it)},
@@ -187,16 +178,8 @@ fun LoginForm(navController: NavController) {
                     // Submit button
                     CustomButton(text = stringResource(id = R.string.connect),
                         onClick = {
-                            if(signInViewModel.onLoginValidation().isNotEmpty()){
-                                 isError = true
-                            }
-                            else{
-                                //signInViewModel.onLogin()
-                                onSubmit(navController)
-                                onMakeToast(
-                                    context = context,
-                                    message = context.getString(R.string.welcome)
-                                )
+                            if(signInViewModel.onLoginValidation().isNotEmpty()){ isError = true }
+                            else{ signInViewModel.onLogin()
                             }
                         })
 
@@ -238,6 +221,19 @@ fun LoginForm(navController: NavController) {
                         }
 
                     }
+
+                    if (signInViewModel.isLoading.value) LoadingDialog()
+                    if (signInViewModel.navigate.value) {CustomAlertDialog(
+                        title = "",
+                        message = stringResource(id = R.string.welcome),
+                        onConfirm = {
+                            navController.popBackStack()
+                            onNavigate(navController, AppScreenNavigator.MainAppScreen.route) },
+                        confirmText = stringResource(id = R.string.thanks)
+
+                    )
+
+                    }
                 }
             }
         }
@@ -248,6 +244,7 @@ fun LoginForm(navController: NavController) {
 
 
 fun onNavigate(navController: NavController, route: String) {
+
     navController.navigate(route)
 
 }

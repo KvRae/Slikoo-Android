@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.pages
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Email
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,27 +22,29 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
+import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
-import slikoo.kvrae.slikoo.ui.components.PasswordTextField
-import slikoo.kvrae.slikoo.ui.components.PinView
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
+import slikoo.kvrae.slikoo.viewmodel.ForgetPasswordViewModel
 
 
-@Preview(showBackground = true)
+
 @Composable
-fun ForgetPasswordTopBar() {
+fun ForgetPasswordTopBar( navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,11 +54,13 @@ fun ForgetPasswordTopBar() {
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
-            //horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
 
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                navController.popBackStack()
+                navController.navigate(AppScreenNavigator.SignInAppScreen.route)
+            }) {
                 Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
             }
 
@@ -73,9 +77,14 @@ fun ForgetPasswordTopBar() {
     }
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun EmailInput(navController: NavController) {
-    var email by rememberSaveable { mutableStateOf("") }
+    val emailViewModel: ForgetPasswordViewModel = viewModel()
+    var isValid by remember {
+        mutableStateOf(false)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -86,92 +95,123 @@ fun EmailInput(navController: NavController) {
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            ForgetPasswordTopBar()
+            ForgetPasswordTopBar(navController = navController)
             Text(
                 text = stringResource(R.string.enter_the_email_address_associated_with_your_account),
                 style = typography.titleLarge
             )
             Spacer(modifier = Modifier.padding(16.dp))
-            CustomTextField(onChange = { email = it },
-                value = email,
+            CustomTextField(onChange = { emailViewModel.email.value = it },
+                value = emailViewModel.email.value,
                 label = stringResource(id = R.string.email),
+                keyboardType = KeyboardType.Email,
+                isError = !emailViewModel.isEmailValid.value,
                 leadingIcon = Icons.Rounded.Email)
             Spacer(modifier = Modifier.padding(16.dp))
-            Button(onClick = {
-                onNavigateTo(
-                    navController,
-                    AppScreenNavigator.VerifyEmailAppScreen.route
-                )
-            }) {
-                Text(text = stringResource(R.string.get_code))
+            CustomButton(onClick = {
+                isValid = true
+                emailViewModel.isEmailValid.value = emailViewModel.onValidateEmail() && emailViewModel.onValidateEmailNotEmpty()
+                if (emailViewModel.isEmailValid.value) emailViewModel.onSendEmail()
+
+            }, text = stringResource(id = R.string.send_email))
+        }
+
+        if (isValid) CustomAlertDialog(
+            title = stringResource(id = emailViewModel.dialogTitle()),
+            message = stringResource(id = emailViewModel.dialogMessage()),
+            confirmText = stringResource(id = R.string.ok),
+            onConfirm = {
+                isValid = false
+                if (emailViewModel.resCode.value == 200) {
+                    navController.popBackStack()
+                    navController.navigate(AppScreenNavigator.SignInAppScreen.route)
+                }
             }
-        }
+        )
+
+
     }
 }
 
 
-@Composable
-fun OtpInput(navController: NavController) {
-    var code by rememberSaveable { mutableStateOf("") }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-            .background(LightSecondary)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.enter_the_code_sent_to_your_email_address),
-                style = typography.titleLarge
-            )
-            Spacer(modifier = Modifier.padding(16.dp))
-            PinView(pinText = "", onPinTextChange = { code = it })
-            Spacer(modifier = Modifier.padding(16.dp))
-            Button(onClick = {
-                onNavigateTo(
-                    navController,
-                    AppScreenNavigator.ResetPasswordAppScreen.route
-                )
-            }) {
-                Text(text = stringResource(R.string.postal_code))
-            }
-        }
-    }
-}
 
 
-@Composable
-fun PasswordReset(navController: NavController) {
-    var password by rememberSaveable { mutableStateOf("") }
-    var confirmPassword by rememberSaveable { mutableStateOf("") }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-    ) {
-        Text(text = "Reset Password")
-        PasswordTextField(value = password, placeHolder = password, onChange = { password = it })
-        PasswordTextField(
-            value = confirmPassword,
-            placeHolder = password,
-            onChange = { confirmPassword = it })
-        Spacer(modifier = Modifier.padding(16.dp))
-        Button(onClick = {
-            onNavigateTo(
-                navController,
-                AppScreenNavigator.SignInAppScreen.route
-            )
-        }) {
-            Text(text = "Reset Password")
-        }
 
-    }
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+//@Composable
+//fun OtpInput(navController: NavController) {
+//    var code by rememberSaveable { mutableStateOf("") }
+//    Box(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .statusBarsPadding()
+//            .background(LightSecondary)
+//    ) {
+//        Column(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(16.dp)
+//        ) {
+//            Text(
+//                text = stringResource(R.string.enter_the_code_sent_to_your_email_address),
+//                style = typography.titleLarge
+//            )
+//            Spacer(modifier = Modifier.padding(16.dp))
+//            PinView(pinText = "", onPinTextChange = { code = it })
+//            Spacer(modifier = Modifier.padding(16.dp))
+//            Button(onClick = {
+//                onNavigateTo(
+//                    navController,
+//                    AppScreenNavigator.ResetPasswordAppScreen.route
+//                )
+//            }) {
+//                Text(text = stringResource(R.string.postal_code))
+//            }
+//        }
+//    }
+//}
+
+
+//@Composable
+//fun PasswordReset(navController: NavController) {
+//    var password by rememberSaveable { mutableStateOf("") }
+//    var confirmPassword by rememberSaveable { mutableStateOf("") }
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .statusBarsPadding()
+//    ) {
+//        Text(text = "Reset Password")
+//        PasswordTextField(value = password, placeHolder = password, onChange = { password = it })
+//        PasswordTextField(
+//            value = confirmPassword,
+//            placeHolder = password,
+//            onChange = { confirmPassword = it })
+//        Spacer(modifier = Modifier.padding(16.dp))
+//        Button(onClick = {
+//            onNavigateTo(
+//                navController,
+//                AppScreenNavigator.SignInAppScreen.route
+//            )
+//        }) {
+//            Text(text = "Reset Password")
+//        }
+//
+//    }
+//
+//}
 
 fun onNavigateTo(navController: NavController, route: String) {
     navController.popBackStack()

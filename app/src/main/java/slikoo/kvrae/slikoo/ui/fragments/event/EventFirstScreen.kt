@@ -28,12 +28,14 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlidingBar
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
+import slikoo.kvrae.slikoo.ui.components.DescriptionTextField
 import slikoo.kvrae.slikoo.ui.components.ExpandableCard
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
+import slikoo.kvrae.slikoo.viewmodel.MealsViewModel
 
 
 @Composable
-fun EventFirstFragment(onFragmentChange: (String) -> Unit) {
+fun EventFirstFragment(mealsViewModel: MealsViewModel, onFragmentChange: (String) -> Unit) {
 
     var description by remember { mutableStateOf("") }
 
@@ -41,7 +43,6 @@ fun EventFirstFragment(onFragmentChange: (String) -> Unit) {
     var peopleNbr by rememberSaveable { mutableStateOf("") }
 
     val invitationTypes = listOf("Anniversaire", "Mariage", "Soirée", "Fête", "Réunion", "Autre")
-    var invitationType by rememberSaveable { mutableStateOf("Type d'invitation") }
 
     val themes = listOf("Theme 1", "THeme 2", "Theme 3")
     var theme by rememberSaveable { mutableStateOf("Thème ou sujet ") }
@@ -70,30 +71,32 @@ fun EventFirstFragment(onFragmentChange: (String) -> Unit) {
         Spacer(modifier = Modifier.height(32.dp))
 
 
-        CustomTextField(onChange = {peopleNbr = it}, value= peopleNbr,
+        CustomTextField(onChange = {mealsViewModel.meal.value = mealsViewModel.meal.value.copy(nbr = it)}, value= mealsViewModel.meal.value.nbr,
             label = pplLabel, leadingIcon = Icons.Rounded.Person,
             keyboardType = KeyboardType.Number
         )
 
-        ExpandableCard(items = invitationTypes, title = invitationType,
-            onTitleChange = { invitationType = it}, leadingIcon = ImageVector.vectorResource(id = R.drawable.person_add)
+        ExpandableCard(items = invitationTypes, title = mealsViewModel.meal.value.lettre.toString(),
+            onTitleChange = { mealsViewModel.meal.value.lettre = it},
+            leadingIcon = ImageVector.vectorResource(id = R.drawable.person_add)
         )
 
-        ExpandableCard(items = themes , title = theme ,
-            onTitleChange = { theme = it}, leadingIcon = ImageVector.vectorResource(id = R.drawable.category)
+        ExpandableCard(items = themes , title = mealsViewModel.meal.value.theme ,
+            onTitleChange = { mealsViewModel.meal.value = mealsViewModel.meal.value.copy(theme = it)}, leadingIcon = ImageVector.vectorResource(id = R.drawable.category)
         )
 
-        ExpandableCard(items = preferences , title = preference ,
-            onTitleChange = { preference = it}, leadingIcon = ImageVector.vectorResource(id = R.drawable.fastfood)
+        ExpandableCard(items = preferences , title = mealsViewModel.meal.value.genrenourriture ,
+            onTitleChange = { mealsViewModel.meal.value= mealsViewModel.meal.value.copy(genrenourriture = it)}, leadingIcon = ImageVector.vectorResource(id = R.drawable.fastfood)
         )
 
-        ExpandableCard(items = genres , title = genre ,
-            onTitleChange = { genre = it}, leadingIcon = Icons.Rounded.Face
+        ExpandableCard(items = genres , title = mealsViewModel.meal.value.genre ,
+            onTitleChange = { mealsViewModel.meal.value = mealsViewModel.meal.value.copy(genre = it)},
+            leadingIcon = Icons.Rounded.Face
         )
 
-        CustomTextField(
-            onChange = {description = it} ,
-            value = description ,
+        DescriptionTextField(
+            onChange = {mealsViewModel.meal.value = mealsViewModel.meal.value.copy(description = it)},
+            value = mealsViewModel.meal.value.description ,
             label = stringResource(id = R.string.description_event),
             leadingIcon = Icons.Rounded.Info,
             keyboardType = KeyboardType.Text

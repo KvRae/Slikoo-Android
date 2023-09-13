@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
-import slikoo.kvrae.slikoo.ui.components.CustomSlider
+import slikoo.kvrae.slikoo.ui.components.CustomSliderPointers
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.DescriptionTextField
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
@@ -62,27 +62,27 @@ fun SignUpSecondForm(onChange: (String) -> Unit) {
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.size(8.dp))
-            CustomSlider(maxSlide = 4, currentSlide = 2)
+            CustomSliderPointers(maxSlide = 4, currentSlide = 2)
 
             CustomTextField(
-                onChange = { userViewModel.user.value = userViewModel.user.value.copy(phone = it) },
-                value = userViewModel.user.value.phone,
+                onChange = { userViewModel.user.value = userViewModel.user.value.copy(numtel = it) },
+                value = userViewModel.user.value.numtel,
                 label = stringResource(R.string.phone_number),
                 keyboardType = KeyboardType.Phone,
                 leadingIcon = Icons.Rounded.Phone
             )
 
             CustomTextField(
-                onChange = { userViewModel.user.value= userViewModel.user.value.copy(postalCode = it) },
-                value = userViewModel.user.value.postalCode,
+                onChange = { userViewModel.user.value= userViewModel.user.value.copy(codepostal = it) },
+                value = userViewModel.user.value.codepostal,
                 label = stringResource(id = R.string.postal_code),
                 keyboardType = KeyboardType.Number,
                 leadingIcon = Icons.Rounded.LocationOn
             )
 
             DescriptionTextField(
-                onChange = { userViewModel.user.value = userViewModel.user.value.copy(bio = it)},
-                value = userViewModel.user.value.bio,
+                onChange = { userViewModel.user.value = userViewModel.user.value.copy(description = it)},
+                value = userViewModel.user.value.description,
                 label = stringResource(R.string.profile_description),
                 leadingIcon = Icons.Rounded.Info
             )

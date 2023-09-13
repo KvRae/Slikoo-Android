@@ -2,6 +2,7 @@ package slikoo.kvrae.slikoo.ui.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,23 +27,27 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.ui.components.RatingBar
+import slikoo.kvrae.slikoo.ui.components.CustomSlidingBar
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 
 @Composable
-fun EventDetailScreen(navController: NavController) {
+fun MealsDetailScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -57,16 +63,16 @@ fun EventDetailScreen(navController: NavController) {
                 .fillMaxWidth()
                 .height(400.dp)
         )
-        AsyncImage(
-            model = "",
-            contentDescription = ""
-        )
+//        AsyncImage(
+//            model = "",
+//            contentDescription = ""
+//        )
 
         //Content
         Column(modifier = Modifier.fillMaxWidth()) {
             // TopAppBar
             TopAppBar(
-                title = { /*TODO*/ },
+                title = {},
                 navigationIcon = {
                     IconButton(
                         onClick = { navController.navigate(AppScreenNavigator.MainAppScreen.route) },
@@ -118,26 +124,47 @@ fun EventDetailScreen(navController: NavController) {
                 Column(
                     Modifier
                         .fillMaxSize()
-                        .padding(16.dp)) {
+                        .fillMaxHeight(1f)
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+
+                ) {
                     // Event Name
-                    Text(text = "Baladé au Champ d'elysee")
+                    Text(
+                        text = "Baladé au Champ d'elysee",
+                        style = androidx.compose.ui.text.TextStyle(
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp
+                        )
+                    )
                     Row {
-                        RatingBar(onRatingChanged = {}, maxRating = 5, currentRating = 4)
+                        Icon(
+                            imageVector = Icons.Outlined.FavoriteBorder,
+                            contentDescription = "Share",
+                            tint = LightPrimary
+                        )
                         Text(text = "${4.0} ")
                         Text(text = "(${100})")
                         Text(text = "Reviews")
                     }
-                    Row {
-
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LazyRow(
+                        modifier= Modifier.fillMaxWidth().padding(end = 8.dp, start=8.dp),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ){
+                        items(3){
+                            Text(text = "Info")
+                        }
                     }
-                    // Event Date
-                    Text(text = "")
-                    // Event Time
-                    Text(text = "")
-                    // Event Location
-                    Text(text = "")
-                    // Event Description
-                    Text(text = "")
+
+                    CustomSlidingBar(
+                        sliderPosition = 0.7f,
+                        maxSlide = 2f,
+                        mintSlide = 0f,
+                    )
+
                 }
 
             }
@@ -145,4 +172,10 @@ fun EventDetailScreen(navController: NavController) {
         }
 
     }
+}
+
+@Preview
+@Composable
+fun MealsDetailScreenPreview() {
+    MealsDetailScreen(navController = NavController(LocalContext.current))
 }

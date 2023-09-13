@@ -19,6 +19,6 @@ data class LoginResponse(
 )
 
 data class NotificationsResponse(
-    @SerializedName("notifications")
-    val notification: List<Notification>
+    @SerializedName("Notification")
+    val notifications: List<Notification>
 )

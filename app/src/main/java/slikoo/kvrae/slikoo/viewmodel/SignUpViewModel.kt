@@ -12,15 +12,16 @@ class SignUpViewModel: ViewModel() {
 
 
 
+
     fun onValidateFirstName(): String {
-        if (user.value.firstName.isEmpty()) return "remplir ce champs"
-        if (user.value.firstName.length < 2) return "nom est court"
+        if (user.value.nom.isEmpty()) return "remplir ce champs"
+        if (user.value.nom.length < 2) return "nom est court"
         return ""
     }
 
     fun onValidateLastName(): String{
-        if (user.value.lastName.isEmpty()) return "Ce champ est obligatoire"
-        if (user.value.lastName.length < 2) return "votre prenom est tout court"
+        if (user.value.prenom.isEmpty()) return "Ce champ est obligatoire"
+        if (user.value.prenom.length < 2) return "votre prenom est tout court"
         return ""
     }
 
@@ -45,10 +46,10 @@ class SignUpViewModel: ViewModel() {
 
     fun onValidatePhone(): String {
         val phoneRegex = Regex(pattern = "[0-9]+")
-        if (user.value.phone.isEmpty())  return "Phone is empty"
-        if (user.value.phone.length < 8)  return "phone is too short"
-        if (user.value.phone.length > 20)  return "phone is too long"
-        if (!phoneRegex.matches(user.value.phone)) return "phone is incorrect "
+        if (user.value.numtel.isEmpty())  return "Phone is empty"
+        if (user.value.numtel.length < 8)  return "phone is too short"
+        if (user.value.numtel.length > 20)  return "phone is too long"
+        if (!phoneRegex.matches(user.value.numtel)) return "phone is incorrect "
         return ""
     }
 
@@ -61,7 +62,7 @@ class SignUpViewModel: ViewModel() {
     }
 
     fun onValidateCid(): String {
-        if (user.value.cid.isEmpty()) return ""
+        if (user.value.cinavatar.isEmpty()) return ""
         return ""
     }
 

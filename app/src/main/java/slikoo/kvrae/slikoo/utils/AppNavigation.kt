@@ -10,12 +10,12 @@ import androidx.navigation.compose.rememberNavController
 import slikoo.kvrae.slikoo.ui.pages.AnimatedSplashScreen
 import slikoo.kvrae.slikoo.ui.pages.EditProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.EmailInput
-import slikoo.kvrae.slikoo.ui.pages.EventDetailScreen
 import slikoo.kvrae.slikoo.ui.pages.EventScreen
 import slikoo.kvrae.slikoo.ui.pages.LoginForm
 import slikoo.kvrae.slikoo.ui.pages.MainScreen
-import slikoo.kvrae.slikoo.ui.pages.OtpInput
-import slikoo.kvrae.slikoo.ui.pages.PasswordReset
+import slikoo.kvrae.slikoo.ui.pages.MealsDetailScreen
+//import slikoo.kvrae.slikoo.ui.pages.OtpInput
+//import slikoo.kvrae.slikoo.ui.pages.PasswordReset
 import slikoo.kvrae.slikoo.ui.pages.ProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.SignUp
 
@@ -84,12 +84,12 @@ fun Navigation() {
         composable(route = AppScreenNavigator.ForgotPasswordAppScreen.route) {
             EmailInput(navController = navController)
         }
-        composable(route = AppScreenNavigator.VerifyEmailAppScreen.route) {
-            OtpInput(navController = navController)
-        }
-        composable(route = AppScreenNavigator.ResetPasswordAppScreen.route) {
-            PasswordReset(navController = navController)
-        }
+//        composable(route = AppScreenNavigator.VerifyEmailAppScreen.route) {
+//            OtpInput(navController = navController)
+//        }
+//        composable(route = AppScreenNavigator.ResetPasswordAppScreen.route) {
+//            PasswordReset(navController = navController)
+//        }
         composable(route = AppScreenNavigator.EditProfileAppScreen.route) {
             EditProfileScreen(navController = navController)
             mainScreenIndex.value = MainScreenNavigator.SettingsScreen.route
@@ -103,7 +103,7 @@ fun Navigation() {
             mainScreenIndex.value = MainScreenNavigator.RecipeScreen.route
         }
         composable(route = AppScreenNavigator.EventDetailsAppScreen.route) {
-            EventDetailScreen(navController = navController)
+            MealsDetailScreen(navController = navController)
             mainScreenIndex.value = MainScreenNavigator.RecipeScreen.route
         }
     }

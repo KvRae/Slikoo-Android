@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
-import slikoo.kvrae.slikoo.ui.components.CustomSlider
+import slikoo.kvrae.slikoo.ui.components.CustomSliderPointers
 import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
@@ -34,7 +34,7 @@ fun SignUpCidForm(onChange: (String) -> Unit, userViewModel: UserViewModel) {
         Text(text = stringResource(R.string.cid),
             style = MaterialTheme.typography.h4)
         Spacer(modifier = Modifier.size(8.dp))
-        CustomSlider(maxSlide = 4, currentSlide = 3)
+        CustomSliderPointers(maxSlide = 4, currentSlide = 3)
         Row(
             modifier = Modifier
                 .padding(24.dp),

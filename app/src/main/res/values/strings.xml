@@ -98,6 +98,18 @@
     <string name="form_error">erreurs</string>
     <string name="form_error_message">Vous avez des erreurs:</string>
     <string name="ok">d\'accord</string>
+    <string name="send_email">Verifier</string>
+    <string name="email_sent">un email envoyé</string>
+    <string name="email_sent_message">email envoye avec succes</string>
+    <string name="email_not_sent">Erreur</string>
+    <string name="email_not_sent_message">Erreur servunu</string>
+    <string name="email_not_found">Non trouvé</string>
+    <string name="email_not_found_message">votre email n\'existe pas</string>
+    <string name="emailInvalid">andresse incorrect</string>
+    <string name="error_message_email">Verifier l\'adresse email</string>
+    <string name="add">Ajouter</string>
+    <string name="dismiss">Annuler</string>
+    <string name="thanks">Merci</string>
 
 
 </resources>

@@ -16,6 +16,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.LoginResponse
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.MealResponse
@@ -32,7 +33,7 @@ interface ApiServices {
 
     @Headers("Content-Type: application/json")
     @POST("addrepas")
-    suspend fun addRepas( @Body user: User): Response<String>
+    suspend fun createMeal(@Header("Authorization") token: String, @Body meal: Meal, avatar: MultipartBody.Part): Response<String>
 
     @Headers("Content-Type: application/json")
     @GET("getRepasByDate/{id}")
@@ -61,9 +62,9 @@ interface ApiServices {
     @POST("register")
     suspend fun register(@Body user: User, @Part avatar: MultipartBody.Part, @Part cinavatar: MultipartBody.Part ): Response<String>
 
-    @Headers("Content-Type: application/json")
+    @Headers("Content-Type: application/json", "Accept: application/html")
     @POST("resetpwd")
-    suspend fun resetPassword(@Body user: User): Response<String>
+    suspend fun forgetPassword(@Body forgetPasswordRequest: ForgetPasswordRequest): Response<Int>
 
     @Headers("Content-Type: application/json", "Accept: application/json")
     @GET("get-user-by-email/{email}")
@@ -80,6 +81,10 @@ interface ApiServices {
 data class LoginRequest(
     val username: String,
     val password: String
+)
+
+data class ForgetPasswordRequest(
+    val email: String
 )
 
 data class UserResponse(

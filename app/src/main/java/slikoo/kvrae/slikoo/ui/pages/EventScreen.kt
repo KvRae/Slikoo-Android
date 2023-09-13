@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
@@ -35,6 +36,7 @@ import slikoo.kvrae.slikoo.ui.fragments.event.EventSecondFragment
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
+import slikoo.kvrae.slikoo.viewmodel.MealsViewModel
 
 
 @Composable
@@ -47,46 +49,7 @@ fun EventScreen(
         mutableStateOf("first")
     }
 
-    var date by remember {
-        mutableStateOf("")
-    }
-
-    val themes = listOf("Theme 1", "THeme 2", "Theme 3")
-
-    var time by remember {
-        mutableStateOf("Heure")
-    }
-
-
-    val localistaion by remember {
-        mutableStateOf("localisation")
-    }
-    var typeInvitation by remember {
-        mutableStateOf("type invitation")
-    }
-    var theme by remember {
-        mutableStateOf("theme")
-    }
-    var preferenceCulinaire by remember {
-        mutableStateOf("preference culinaire")
-    }
-    val norriture by remember {
-        mutableStateOf(" nourriture")
-    }
-    var nombrePersonnes by remember {
-        mutableStateOf("nombre personnes")
-    }
-    var prix by remember {
-        mutableStateOf("prix")
-    }
-
-
-    var description by remember {
-        mutableStateOf("description")
-    }
-    var image by remember {
-        mutableStateOf("")
-    }
+    val mealVM: MealsViewModel = viewModel()
 
 
     Box(
@@ -137,7 +100,7 @@ fun EventScreen(
                         //                        Icon(
             )
             when (fragment) {
-                stringResource(R.string.first) -> EventFirstFragment { fragment = it }
+                stringResource(R.string.first) -> EventFirstFragment(mealVM) { fragment = it }
                 stringResource(R.string.second) -> {
                     EventSecondFragment({ fragment = it }, navController = navController)
 
@@ -146,7 +109,7 @@ fun EventScreen(
                     EventFinalFragment({ fragment = it }, navController = navController)
 
                 }
-                else -> EventFirstFragment { fragment = it }
+                else -> EventFirstFragment(mealVM) { fragment = it }
             }
 
         }

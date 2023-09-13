@@ -4,10 +4,10 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import slikoo.kvrae.slikoo.data.api.ApiServices
+import slikoo.kvrae.slikoo.data.api.ForgetPasswordRequest
 import slikoo.kvrae.slikoo.data.api.LoginRequest
 import slikoo.kvrae.slikoo.data.api.RetrofitInstance
 import slikoo.kvrae.slikoo.data.datasources.entities.User
-import slikoo.kvrae.slikoo.data.datasources.entities.Notification
 import java.io.File
 
 class UserRemoteDataSource {
@@ -58,51 +58,30 @@ class UserRemoteDataSource {
     }
 
     suspend fun getUserByEmail(token: String, email: String) : User {
-        try {
-            val retIn = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
-            val response = retIn.getUserByEmail(token= "Bearer $token", email = email)
+        val retIn = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
+        val response = retIn.getUserByEmail(token= "Bearer $token", email = email)
+         return try {
             if (response.code() == 200) {
-                return response.body()!!.user
-            }
-        } catch (e: Exception) {
-            return User()
-        }
-        return User()
-    }
-
-    suspend fun getNotificationsByEmail(token: String, email: String): MutableList<Notification> {
-        // Declare a retrofit instance
-        val retIn= RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
-
-        try {
-            val response = retIn.getNotificationsByEmail("Bearer $token", email)
-            if (response.code() == 200) {
-                return response.body()?.notification as MutableList<Notification>
-            }
-
-        }
-        catch (e: Exception) {
-            return mutableListOf<Notification>()
-        }
-        return mutableListOf<Notification>()
-    }
-
-    suspend fun resetPassword(user : User): String {
-        val retIn = RetrofitInstance
-            .getRetrofitInstance()
-            .create(ApiServices::class.java)
-
-        return try {
-            val response = retIn.resetPassword(user)
-            if (response.code() == 200) {
-                "Email sent"
-            } else if (response.code() == 400) {
-                "No email found"
+                response.body()?.user!!
             } else {
-                response.body().toString() + " " + response.code().toString()
+                User()
             }
         } catch (e: Exception) {
-            e.message.toString()
+            User()
+         }
+
+    }
+
+    suspend fun forgotPassword(email : String): Int {
+        return try {
+            val forgetPasswordRequest = ForgetPasswordRequest(email = email)
+            val response =  RetrofitInstance
+                .getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .forgetPassword(forgetPasswordRequest)
+            return response.code()
+            } catch (e: Exception) {
+            500
         }
 
     }
@@ -126,5 +105,6 @@ class UserRemoteDataSource {
         }
 
     }
+
 
 }

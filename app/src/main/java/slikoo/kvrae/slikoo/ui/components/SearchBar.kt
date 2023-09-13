@@ -105,10 +105,12 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
 
 
 @Composable
-fun SearchBarWithFilter(onSearch: (String) -> Unit,
-                        modifier: Modifier = Modifier,
-                        onFilter: (Boolean) -> Unit) {
-    var searchText by remember { mutableStateOf("") }
+fun SearchBarWithFilter(
+    searchText: String,
+    onValueChange: (String) -> Unit,
+    onSearch: (String) -> Unit,
+    onFilter: (Boolean) -> Unit
+) {
     var isToggled by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
 
@@ -122,8 +124,8 @@ fun SearchBarWithFilter(onSearch: (String) -> Unit,
             // Search Bar
             OutlinedTextField(
                 value = searchText,
-                onValueChange = { text ->
-                    searchText = text
+                onValueChange = {
+                    onValueChange(it)
                 },
                 modifier = Modifier
                     .weight(1f)
@@ -158,7 +160,7 @@ fun SearchBarWithFilter(onSearch: (String) -> Unit,
                 trailingIcon = {
                     if (searchText.isNotEmpty()) {
                         IconButton(onClick = {
-                            searchText = ""
+                            onValueChange("")
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Clear,

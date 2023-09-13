@@ -31,50 +31,50 @@ import slikoo.kvrae.slikoo.ui.theme.LightBackground
 
 
 @Composable
-fun NotificationItem(content : @Composable () -> Unit) {
+fun NotificationItem(notification: Notification) {
     Card(
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 6.dp,
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            content()
-        }
-    }
-}
-
-
-
-@Composable
-fun NotificationItemContent(notification: Notification) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-        ) {
-            Image(
-                modifier = Modifier.size(40.dp),
-                painter = painterResource(id = R.drawable.avatar),
-                contentDescription = "" )
-            Text(text = notification.sender[0].firstName,
-                style = TextStyle(color = LightBackground, fontSize = 14.sp, fontWeight = FontWeight.Medium),
-                modifier = Modifier.padding(start = 8.dp))
-            Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = { /*TODO*/})
-            {
-                Icon(imageVector = Icons.Default.Close,
-                    contentDescription = "",
-                    tint = Color.Gray,
-                    modifier = Modifier.size(15.dp))
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                ) {
+                    Image(
+                        modifier = Modifier.size(40.dp),
+                        painter = painterResource(id = R.drawable.avatar),
+                        contentDescription = "" )
+                    Text(text = "notification.fromuser[0].nom",
+                        style = TextStyle(color = LightBackground, fontSize = 14.sp, fontWeight = FontWeight.Medium),
+                        modifier = Modifier.padding(start = 8.dp))
+                    Spacer(modifier = Modifier.weight(1f))
+                    IconButton(onClick = { /*TODO*/})
+                    {
+                        Icon(imageVector = Icons.Default.Close,
+                            contentDescription = "",
+                            tint = Color.Gray,
+                            modifier = Modifier.size(15.dp))
+                    }
+                }
+                Spacer(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp))
+                Text(text = "notification.motif",
+                    style = TextStyle(color = LightBackground, fontSize = 12.sp),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis)
             }
         }
-        Spacer(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp))
-        Text(text = notification.description,
-        style = TextStyle(color = LightBackground, fontSize = 12.sp),
-        maxLines = 2,
-        overflow = TextOverflow.Ellipsis)
     }
 }
+
+
+
+//@Composable
+//fun NotificationItemContent(notification: Notification) {
+//
+//}

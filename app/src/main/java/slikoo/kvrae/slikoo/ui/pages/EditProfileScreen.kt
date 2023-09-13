@@ -1,5 +1,7 @@
 package slikoo.kvrae.slikoo.ui.pages
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +28,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,6 +41,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.components.CustomAlertDialogWithContent
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.ImagePickerField
@@ -45,6 +52,7 @@ import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 @Composable
 fun EditProfileScreen(navController: NavController) {
+    var showDialog by remember { mutableStateOf(false) }
     Box(
         Modifier
             .fillMaxSize()
@@ -102,7 +110,7 @@ fun EditProfileScreen(navController: NavController) {
             CustomButton(text = stringResource(id = R.string.update),
                 onClick = { navController.navigate(AppScreenNavigator.MainAppScreen.route) })
             Row {
-                TextButton(onClick = {}) {
+                TextButton(onClick = { showDialog = true}) {
                     Text(text = stringResource(R.string.add_rib), color = LightSurface)
                 }
                 Spacer(modifier = Modifier.weight(1f))
@@ -110,8 +118,28 @@ fun EditProfileScreen(navController: NavController) {
                     Text(text = stringResource(R.string.advanced_profile), color = LightSurface)
                 }
             }
+            if (showDialog)
+                CustomAlertDialogWithContent(
+                    title = stringResource(id = R.string.add_rib),
+                    content = {
+                        CustomTextField(
+                            onChange = {},
+                            value = "",
+                            label = stringResource(id = R.string.add_rib),
+                            leadingIcon = Icons.Filled.AccountCircle
+                        )
+                    },
+                    confirmText = stringResource(id = R.string.add),
+                    dismissText = stringResource(id = R.string.dismiss),
+                    onDismiss = { showDialog = false },
+                    onConfirm = { showDialog = false })
+
         }
     }
+}
+
+fun makeToast(message: String, context: Context) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
 @Composable

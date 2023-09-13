@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
@@ -30,13 +31,18 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.MainScreenNavigator
+import slikoo.kvrae.slikoo.utils.SessionDataStore
+import slikoo.kvrae.slikoo.viewmodel.MainScreenViewModel
 
 
 @Composable
 fun MainScreen(navController: NavController, currentScreen: String = "Home") {
+    val context  = LocalContext.current
+    val mainViewModel = MainScreenViewModel(session = SessionDataStore(context = context))
     val title = remember {
         mutableStateOf(currentScreen)
     }
+
 
 
     val bottomNavigationItems = listOf(

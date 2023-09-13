@@ -23,7 +23,6 @@ import slikoo.kvrae.slikoo.viewmodel.MealsViewModel
 @Composable
 fun RecipeScreen(navController: NavController) {
     val mealsViewModel: MealsViewModel = viewModel()
-    val meals = mealsViewModel.meals
     val scrollState = rememberLazyGridState()
 
     Box(
@@ -37,14 +36,14 @@ fun RecipeScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (remember { derivedStateOf { scrollState.firstVisibleItemIndex } }.value == 0) {
-                SearchBarWithFilter(onSearch = {}, onFilter = {})
+                SearchBarWithFilter(onSearch = { }, onFilter = { }, onValueChange = {}, searchText = "")
             }
             LazyVerticalGrid(columns = GridCells.Fixed(2),
                 userScrollEnabled = true,
                 state = scrollState,
                 content = {
-                    items(meals.size) {
-                        RecipeCardContent(meal = meals[it],
+                    items(mealsViewModel.meals.size) {
+                        RecipeCardContent(meal = mealsViewModel.meals[it],
                             navController = navController)
                     }
                 }

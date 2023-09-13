@@ -39,7 +39,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
-import slikoo.kvrae.slikoo.ui.components.CustomSlider
+import slikoo.kvrae.slikoo.ui.components.CustomSliderPointers
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
@@ -61,7 +61,7 @@ fun ProfilePictureSection(
     ) {
         Text(text = stringResource(R.string.profile_pic), style = MaterialTheme.typography.h4)
         Spacer(modifier = Modifier.size(8.dp))
-        CustomSlider(maxSlide = 4, currentSlide = 4)
+        CustomSliderPointers(maxSlide = 4, currentSlide = 4)
         ProfileImagePicker()
         CustomButton(text = stringResource(R.string.finish),
             onClick = {

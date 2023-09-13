@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import slikoo.kvrae.slikoo.data.datasources.entities.UserDb
 import slikoo.kvrae.slikoo.data.datasources.local.UserDao
-import slikoo.kvrae.slikoo.data.datasources.entities.User
 
 
-@Database(entities = [User::class], version = 1)
+@Database(entities = [UserDb::class], version = 1, exportSchema = false)
 abstract class SlikooDatabase : RoomDatabase() {
     // DAOs
     abstract fun userDao(): UserDao
@@ -23,7 +23,7 @@ abstract class SlikooDatabase : RoomDatabase() {
                           context.applicationContext,
                           SlikooDatabase::class.java,
                           "slikoo.db"
-                      ).allowMainThreadQueries().build()
+                      ).build()
                   }
               }
            return instance

@@ -31,7 +31,6 @@ import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBar
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
-import slikoo.kvrae.slikoo.viewmodel.AreaViewModel
 import slikoo.kvrae.slikoo.viewmodel.CategoryViewModel
 import slikoo.kvrae.slikoo.viewmodel.MealsViewModel
 import slikoo.kvrae.slikoo.viewmodel.RatingViewModel
@@ -64,7 +63,6 @@ fun HomeScreen(navController: NavController) {
 fun OnlineRecipes(navController: NavController) {
     val mealsViewModel : MealsViewModel  = viewModel()
     val meals = mealsViewModel.meals
-    val  areas = AreaViewModel().getAreas()
     Box(
         modifier = Modifier
             .fillMaxWidth()

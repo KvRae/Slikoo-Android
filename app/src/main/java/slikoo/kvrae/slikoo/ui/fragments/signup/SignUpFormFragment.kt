@@ -27,10 +27,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.valentinilk.shimmer.shimmer
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
-import slikoo.kvrae.slikoo.ui.components.CustomSlider
+import slikoo.kvrae.slikoo.ui.components.CustomSliderPointers
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.PasswordTextField
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
@@ -46,7 +45,6 @@ fun SignUpForm(onChange: (String) -> Unit) {
         modifier = Modifier.run {
             fillMaxSize()
                 .padding(8.dp)
-                .shimmer()
                 .verticalScroll(rememberScrollState())
         }
     ) {
@@ -63,14 +61,14 @@ fun SignUpForm(onChange: (String) -> Unit) {
             )
             Spacer(modifier = Modifier.size(8.dp))
 
-            CustomSlider(
+            CustomSliderPointers(
                 maxSlide = 4,
                 currentSlide = 1
             )
 
             CustomTextField(
-                onChange = { userViewModel.user.value = userViewModel.user.value.copy(firstName = it) },
-                value = userViewModel.user.value.firstName,
+                onChange = { userViewModel.user.value = userViewModel.user.value.copy(nom = it) },
+                value = userViewModel.user.value.nom,
                 label = stringResource(id = R.string.name),
                 keyboardType = KeyboardType.Text,
                 leadingIcon = Icons.Rounded.Person,
@@ -79,8 +77,8 @@ fun SignUpForm(onChange: (String) -> Unit) {
             )
 
             CustomTextField(
-                onChange = { userViewModel.user.value = userViewModel.user.value.copy(lastName = it) },
-                value = userViewModel.user.value.lastName,
+                onChange = { userViewModel.user.value = userViewModel.user.value.copy(prenom = it) },
+                value = userViewModel.user.value.prenom,
                 label = stringResource(id = R.string.familyName),
                 keyboardType = KeyboardType.Text,
                 leadingIcon = Icons.Rounded.Person,

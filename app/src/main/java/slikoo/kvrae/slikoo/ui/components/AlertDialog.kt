@@ -1,15 +1,24 @@
 package slikoo.kvrae.slikoo.ui.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
@@ -52,7 +61,6 @@ fun CustomAlertDialog(
                 Text(text = confirmText)
             }
         },
-
         dismissButton = {
             if (dismissText.isNotEmpty()) TextButton(onClick = { onDismiss() }) {
                 Text(
@@ -69,4 +77,79 @@ fun CustomAlertDialog(
         return
 
 }
+
+@Composable
+fun CustomAlertDialogWithContent(
+    title: String = stringResource(R.string.title),
+    content : @Composable () -> Unit,
+    confirmText: String = stringResource(R.string.yes),
+    dismissText: String = "",
+    onDismiss: () -> Unit = {},
+    onConfirm: () -> Unit = {}
+
+){
+    AlertDialog(
+        properties = DialogProperties(
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false,
+
+        ),
+
+        backgroundColor = LightSecondary,
+        onDismissRequest = {},
+
+        text = {
+            content()
+        },
+        title = {},
+        shape = RoundedCornerShape(16.dp),
+        confirmButton = {
+            Button(
+                onClick = { onConfirm() },
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = LightPrimary,
+                    contentColor = LightError
+                )
+            ) {
+                Text(text = confirmText)
+            }
+        },
+        dismissButton = {
+            if (dismissText.isNotEmpty())
+                TextButton(onClick = { onDismiss() }) {
+                Text(
+                    text = dismissText,
+                    color = LightSurface,
+                )
+            }
+        },
+    )
+}
+
+
+@Composable
+fun LoadingDialog() {
+    Dialog(
+        onDismissRequest = { },
+        DialogProperties(
+            dismissOnBackPress = false,
+            dismissOnClickOutside = true
+        )
+    ) {
+        Box(
+            contentAlignment= Alignment.Center,
+            modifier = Modifier
+                .size(100.dp)
+                .background(Color.Transparent, shape = RoundedCornerShape(8.dp))
+        ) {
+            CircularProgressIndicator(
+                color = LightPrimary,
+                backgroundColor = LightSecondary,
+            )
+        }
+    }
+}
+
+
 

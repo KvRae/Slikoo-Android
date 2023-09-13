@@ -5,21 +5,21 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import slikoo.kvrae.slikoo.data.datasources.entities.User
+import slikoo.kvrae.slikoo.data.datasources.entities.UserDb
 
 @Dao
 interface UserDao {
     @Insert
-    fun insertUser(user : User)
+    fun insertUser(user : UserDb)
 
     @Query("SELECT * FROM user WHERE email = :email")
-    fun getUser(email : String) : User
+    fun getUser(email : String) : UserDb
 
     @Update
-    fun updateUser(user : User)
+    fun updateUser(user : UserDb)
 
     @Delete
-    fun deleteUser(user : User)
+    fun deleteUser(user : UserDb)
 
 
 
