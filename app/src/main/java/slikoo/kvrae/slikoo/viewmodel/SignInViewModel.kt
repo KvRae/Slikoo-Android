@@ -8,11 +8,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.UserRemoteDataSource
-import slikoo.kvrae.slikoo.utils.SessionDataStore
 import slikoo.kvrae.slikoo.utils.TempSession
 import java.io.File
 
-class SignInViewModel( private val session: SessionDataStore): ViewModel() {
+class SignInViewModel(): ViewModel() {
     private val userRDS = UserRemoteDataSource()
     var user = mutableStateOf(User(email = "hamzabenmahmoud9898@gmail.com", password = "12345678"))
     var token = mutableStateOf("")
@@ -39,9 +38,10 @@ class SignInViewModel( private val session: SessionDataStore): ViewModel() {
             TempSession.token = async { token.value}.await()
             TempSession.email = async { user.value.email}.await()
             user.value = async { userRDS.getUserByEmail(token.value, user.value.email) }.await()
+            user.value.password = async { "****************" }.await()
             async { isLoading.value = false }
-            async { session.setUserToken(token.value) }.await()
-            async { session.setUserEmail(user.value.email) }.await()
+//            async { session.setUserToken(token.value) }.await()
+//            async { session.setUserEmail(user.value.email) }.await()
 //            async { db.userDao().insertUser(user = user.value) }
 
 

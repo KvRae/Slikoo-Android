@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -43,13 +44,12 @@ fun SignUpForm(onChange: (String) -> Unit) {
 
     Box(
         modifier = Modifier.run {
-            fillMaxSize()
-                .padding(8.dp)
-                .verticalScroll(rememberScrollState())
+            fillMaxSize().padding(8.dp).navigationBarsPadding()
         }
     ) {
         Column(
             modifier = Modifier
+                .verticalScroll(rememberScrollState())
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -73,7 +73,7 @@ fun SignUpForm(onChange: (String) -> Unit) {
                 keyboardType = KeyboardType.Text,
                 leadingIcon = Icons.Rounded.Person,
                 errorMessage = userViewModel.onValidateFirstName(),
-                isError = isErrors
+                isError = userViewModel.onValidateFirstName().isNotEmpty() && isErrors
             )
 
             CustomTextField(
@@ -83,7 +83,7 @@ fun SignUpForm(onChange: (String) -> Unit) {
                 keyboardType = KeyboardType.Text,
                 leadingIcon = Icons.Rounded.Person,
                 errorMessage = userViewModel.onValidateLastName(),
-                isError = isErrors
+                isError = userViewModel.onValidateLastName().isNotEmpty() && isErrors
             )
 
             CustomTextField(
@@ -93,35 +93,30 @@ fun SignUpForm(onChange: (String) -> Unit) {
                 keyboardType = KeyboardType.Email,
                 leadingIcon = Icons.Rounded.Email,
                 errorMessage = userViewModel.onValidateEmail(),
-                isError = isErrors
+                isError = userViewModel.onValidateEmail().isNotEmpty() && isErrors
             )
 
             PasswordTextField(label = stringResource(id = R.string.password),
                 value = userViewModel.user.value.password,
                 onChange = { userViewModel.user.value = userViewModel.user.value.copy(password = it) },
-                isError = isErrors,
+                isError = userViewModel.onValidatePassword().isNotEmpty() && isErrors,
                 errorMessage = userViewModel.onValidatePassword()
             )
 
             PasswordTextField(label = stringResource(id = R.string.confirmPassword),
                 value = userViewModel.confirmPassword.value,
-                onChange = { userViewModel.confirmPassword.value = it}
+                onChange = { userViewModel.confirmPassword.value = it},
+                isError = userViewModel.onConfirmPassword().isNotEmpty() && isErrors,
+                errorMessage = userViewModel.onConfirmPassword()
             )
 
-            Spacer(modifier = Modifier.padding(4.dp))
+            Spacer(modifier = Modifier.padding(8.dp))
 
             CustomButton(text = stringResource(id = R.string.next),
                 onClick = {
-                    isErrors = if (
-                        userViewModel.onValidateFirstName().isEmpty()
-                        && userViewModel.onValidateLastName().isEmpty()
-                        && userViewModel.onValidateEmail().isEmpty()
-                        && userViewModel.onValidatePassword().isEmpty()
-                        && userViewModel.onConfirmPassword()) { onChange(SignUpNavigator.SignUpSecondFormFragment.route)
-                        false
-                    } else {
-                        true
-                    }
+                    isErrors = if (userViewModel.onValidateFirstForm()) {
+                        onChange(SignUpNavigator.SignUpSecondFormFragment.route)
+                        false } else true
                 }
             )
         }

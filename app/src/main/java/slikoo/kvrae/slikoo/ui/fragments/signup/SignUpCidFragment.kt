@@ -13,18 +13,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import androidx.lifecycle.viewmodel.compose.viewModel
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSliderPointers
 import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
-import slikoo.kvrae.slikoo.viewmodel.UserViewModel
+import slikoo.kvrae.slikoo.viewmodel.SignUpViewModel
 
 @Composable
-fun SignUpCidForm(onChange: (String) -> Unit, userViewModel: UserViewModel) {
+fun SignUpCidForm(onChange: (String) -> Unit) {
+    val context = LocalContext.current
+    val  userViewModel: SignUpViewModel = viewModel(initializer = { SignUpViewModel(context) })
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -40,7 +45,10 @@ fun SignUpCidForm(onChange: (String) -> Unit, userViewModel: UserViewModel) {
                 .padding(24.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            ImagePickerField()
+            ImagePickerField(
+                onImageSelected = { userViewModel.onImageSelected(it) },
+                imageUrl = userViewModel.user.value.cinavatar.toUri()
+            )
         }
         CustomButton(text = stringResource(R.string.next),
             onClick = { onChange(SignUpNavigator.SignUpProfilePictureFragment.route) })

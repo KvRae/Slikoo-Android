@@ -9,6 +9,13 @@ data class MealResponse(
     val meals: List<Meal>
 )
 
+data class MealDetailsResponse(
+    @SerializedName("message")
+    val message: String,
+    @SerializedName("repas")
+    val meal: Meal
+)
+
 data class LoginResponse(
     @SerializedName("token")
     val token: String? = null,

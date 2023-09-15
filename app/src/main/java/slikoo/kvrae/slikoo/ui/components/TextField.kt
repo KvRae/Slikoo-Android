@@ -1,23 +1,13 @@
 package slikoo.kvrae.slikoo.ui.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
@@ -29,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
@@ -40,17 +29,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
-import slikoo.kvrae.slikoo.ui.theme.LightSurface
 
 /*data class TextField(
     val label: String,
@@ -120,7 +104,7 @@ fun CustomTextField(
             trailingIcon = {
                 if (value.isNotEmpty()) {
                     IconButton(onClick = {
-                        onChange(".")
+                        onChange("")
 
                     }) {
                         Icon(
@@ -147,7 +131,7 @@ fun CustomTextField(
         if (errorMessage.isNotEmpty() && isError) {
             Text(
                 text = errorMessage,
-                color = LightSurface,
+                color = LightPrimary,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(start = 8.dp)
             )
@@ -218,9 +202,7 @@ fun PasswordTextField(
                 focusedBorderColor = LightPrimary,
                 backgroundColor = LightError,
                 cursorColor = LightPrimary,
-                unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(
-                    alpha = 0.3f
-                ),
+                unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(alpha = 0.3f),
                 disabledBorderColor = Color.Transparent,
             ),
             shape = RoundedCornerShape(8.dp),
@@ -231,7 +213,7 @@ fun PasswordTextField(
             if (errorMessage.isNotEmpty() && isError) {
                 Text(
                     text = errorMessage,
-                    color = LightSurface,
+                    color = LightPrimary,
                     fontSize = 12.sp,
                     modifier = Modifier.padding(start = 8.dp)
                 )
@@ -242,7 +224,7 @@ fun PasswordTextField(
 // ********************************* OtpView ********************************* //
 
 
-    const val PIN_VIEW_TYPE_UNDERLINE = 0
+    /*const val PIN_VIEW_TYPE_UNDERLINE = 0
     const val PIN_VIEW_TYPE_BORDER = 1
 
     @Composable
@@ -309,7 +291,7 @@ fun PasswordTextField(
                 )
             }
         }
-    }
+    }*/
 
 
     /************************* Description Text Field *************************************/
@@ -389,7 +371,7 @@ fun PasswordTextField(
             if (errorMessage.isNotEmpty()) {
                 Text(
                     text = errorMessage,
-                    color = LightSurface,
+                    color = LightPrimary,
                     fontSize = 12.sp,
                     modifier = Modifier.padding(start = 8.dp)
                 )

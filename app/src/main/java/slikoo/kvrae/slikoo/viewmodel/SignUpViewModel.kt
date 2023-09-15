@@ -1,17 +1,23 @@
 package slikoo.kvrae.slikoo.viewmodel
 
+import android.content.Context
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 
-class SignUpViewModel: ViewModel() {
+class SignUpViewModel( context : Context): ViewModel() {
 
-    var user = mutableStateOf(User())
-    var confirmPassword = mutableStateOf("")
-
-
-
+    var user = mutableStateOf(User(
+        nom = "Karam",
+        prenom = "MANNAI",
+        email = "karam.mannaii@esprit.tn",
+        password = "123456",
+        numtel = "12345678",
+        codepostal = "1234",
+    ))
+    var confirmPassword = mutableStateOf("123456")
 
     fun onValidateFirstName(): String {
         if (user.value.nom.isEmpty()) return "remplir ce champs"
@@ -39,8 +45,17 @@ class SignUpViewModel: ViewModel() {
         return ""
     }
 
-    fun onConfirmPassword(): Boolean{
-        if (user.value.password == confirmPassword.value) return true
+    fun onConfirmPassword(): String{
+        if (user.value.password == confirmPassword.value && user.value.password.isNotEmpty()) return ""
+        return "mot de passe incorrect"
+    }
+
+    fun onValidateFirstForm(): Boolean{
+        if (onValidateFirstName().isEmpty()
+            && onValidateLastName().isEmpty()
+            && onValidateEmail().isEmpty()
+            && onValidatePassword().isEmpty()
+            && onConfirmPassword().isEmpty()) return true
         return false
     }
 
@@ -54,11 +69,19 @@ class SignUpViewModel: ViewModel() {
     }
 
     fun onValidatePostalCode(): String{
+        if (user.value.codepostal.isEmpty()) return "postal code is empty"
+        if (user.value.codepostal.length < 4) return "postal code is too short"
+        if (user.value.codepostal.length > 10) return "postal code is too long"
         return ""
     }
 
-    fun onValidateDescription(): String {
-        return ""
+//    fun onValidateDescription(): String {
+//        return ""
+//    }
+
+    fun onValidateSecondPart(): Boolean{
+        if (onValidatePhone().isEmpty() && onValidatePostalCode().isEmpty()) return true
+        return false
     }
 
     fun onValidateCid(): String {
@@ -79,8 +102,9 @@ class SignUpViewModel: ViewModel() {
 
     }
 
-
-
+    fun onImageSelected(cid: Uri?) {
+        TODO("Not yet implemented")
+    }
 
 
 }

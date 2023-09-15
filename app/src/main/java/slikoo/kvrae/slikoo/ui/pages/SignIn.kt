@@ -54,15 +54,13 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
-import slikoo.kvrae.slikoo.utils.SessionDataStore
-import slikoo.kvrae.slikoo.utils.SlikooDatabase
 import slikoo.kvrae.slikoo.viewmodel.SignInViewModel
 
 
 @Composable
 fun LoginForm(navController: NavController) {
     val context = LocalContext.current
-    val signInViewModel = SignInViewModel(SessionDataStore(context))
+    val signInViewModel = SignInViewModel()
 
     val logo = R.drawable.slikoo_white
     var isError by remember {

@@ -17,6 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBarWithFilter
+import slikoo.kvrae.slikoo.ui.components.ShimmerRecipeCard
 import slikoo.kvrae.slikoo.viewmodel.MealsViewModel
 
 
@@ -35,19 +36,20 @@ fun RecipeScreen(navController: NavController) {
                 .padding(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (remember { derivedStateOf { scrollState.firstVisibleItemIndex } }.value == 0) {
-                SearchBarWithFilter(onSearch = { }, onFilter = { }, onValueChange = {}, searchText = "")
-            }
+            if (remember { derivedStateOf { scrollState.firstVisibleItemIndex } }.value == 0) SearchBarWithFilter(onSearch = { }, onFilter = { }, onValueChange = {}, searchText = "")
+
             LazyVerticalGrid(columns = GridCells.Fixed(2),
                 userScrollEnabled = true,
                 state = scrollState,
                 content = {
+                    if (mealsViewModel.meals.isEmpty()) items(6){ ShimmerRecipeCard() }
                     items(mealsViewModel.meals.size) {
                         RecipeCardContent(meal = mealsViewModel.meals[it],
                             navController = navController)
                     }
                 }
             )
+
         }
     }
 }

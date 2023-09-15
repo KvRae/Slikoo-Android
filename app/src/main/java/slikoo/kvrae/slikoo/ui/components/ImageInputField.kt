@@ -35,7 +35,8 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 
 @Preview
 @Composable
-fun ImagePickerField( imageUrl : Uri? = null , onImageSelected : (Uri?) -> Unit = {}){
+fun ImagePickerField( imageUrl : Uri? = null ,
+                      onImageSelected : (Uri?) -> Unit = {}){
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),

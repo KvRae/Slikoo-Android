@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.valentinilk.shimmer.shimmer
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.datasources.entities.Area
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
@@ -65,7 +67,11 @@ fun RecipeCardContent(meal : Meal, navController: NavController) {
         Box(modifier = Modifier
             .fillMaxSize()
             .clickable(
-                onClick = { navController.navigate(AppScreenNavigator.EventDetailsAppScreen.route) })
+                onClick = {
+                    navController.navigate("event_details_screen/" + "${meal.id}")
+                    Log.d("RecipeCardContent", "id : ${meal.id}")
+                })
+
         ) {
             AsyncImage(model = avatar,
                 contentDescription = "",
@@ -150,6 +156,26 @@ fun RecipeCardContent(meal : Meal, navController: NavController) {
                         color = LightPrimaryVariant)
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ShimmerRecipeCard() {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .shimmer()
+            .size(170.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = 4.dp,
+        ) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Gray.copy(0.4f))
+            .shimmer()
+        ) {
+
         }
     }
 }
@@ -281,8 +307,9 @@ fun UserEventCard(area : Area, navController: NavController) {
                         )
                     }
                 }
+                //EventManagementBar(onDelete = { /*TODO*/ }, onEdit = { /*TODO*/ })
             }
-            EventManagementBar(onDelete = { /*TODO*/ }, onEdit = { /*TODO*/ })
+
         }
 
     }

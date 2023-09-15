@@ -29,6 +29,7 @@ import slikoo.kvrae.slikoo.ui.components.AreaFilterCard
 import slikoo.kvrae.slikoo.ui.components.RatingCard
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBar
+import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.viewmodel.CategoryViewModel
@@ -38,6 +39,8 @@ import slikoo.kvrae.slikoo.viewmodel.RatingViewModel
 
 @Composable
 fun HomeScreen(navController: NavController) {
+    val mealsViewModel : MealsViewModel  = viewModel()
+    if (mealsViewModel.meals.isEmpty()) LoadingScreen()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -51,7 +54,7 @@ fun HomeScreen(navController: NavController) {
         ) {
             Spacer(modifier = Modifier.padding(8.dp))
             SearchBar(onSearch = {})
-            OnlineRecipes(navController)
+            OnlineRecipes(navController,mealsViewModel)
             RecipesCategorySection()
             RatingListSection()
         }
@@ -60,8 +63,7 @@ fun HomeScreen(navController: NavController) {
 
 
 @Composable
-fun OnlineRecipes(navController: NavController) {
-    val mealsViewModel : MealsViewModel  = viewModel()
+fun OnlineRecipes(navController: NavController,mealsViewModel : MealsViewModel ) {
     val meals = mealsViewModel.meals
     Box(
         modifier = Modifier

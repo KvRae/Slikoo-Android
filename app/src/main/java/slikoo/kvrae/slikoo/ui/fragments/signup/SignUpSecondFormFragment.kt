@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -36,21 +38,22 @@ import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.DescriptionTextField
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
-import slikoo.kvrae.slikoo.viewmodel.SignInViewModel
+import slikoo.kvrae.slikoo.viewmodel.SignUpViewModel
 
 
 @Composable
 fun SignUpSecondForm(onChange: (String) -> Unit) {
-    val userViewModel: SignInViewModel = viewModel()
-    var isError by remember{ mutableStateOf(false)}
+    val context = LocalContext.current
+    val userViewModel: SignUpViewModel = viewModel( initializer = { SignUpViewModel(context) })
+    var isErrors by remember{ mutableStateOf(false)}
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
-            .verticalScroll(rememberScrollState())
     ) {
         Column(
             modifier = Modifier
+                .verticalScroll(rememberScrollState())
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -62,6 +65,7 @@ fun SignUpSecondForm(onChange: (String) -> Unit) {
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.size(8.dp))
+
             CustomSliderPointers(maxSlide = 4, currentSlide = 2)
 
             CustomTextField(
@@ -69,7 +73,9 @@ fun SignUpSecondForm(onChange: (String) -> Unit) {
                 value = userViewModel.user.value.numtel,
                 label = stringResource(R.string.phone_number),
                 keyboardType = KeyboardType.Phone,
-                leadingIcon = Icons.Rounded.Phone
+                leadingIcon = Icons.Rounded.Phone,
+                errorMessage = userViewModel.onValidatePhone(),
+                isError = userViewModel.onValidatePhone().isNotEmpty() && isErrors
             )
 
             CustomTextField(
@@ -77,7 +83,9 @@ fun SignUpSecondForm(onChange: (String) -> Unit) {
                 value = userViewModel.user.value.codepostal,
                 label = stringResource(id = R.string.postal_code),
                 keyboardType = KeyboardType.Number,
-                leadingIcon = Icons.Rounded.LocationOn
+                leadingIcon = Icons.Rounded.LocationOn,
+                errorMessage = userViewModel.onValidatePostalCode(),
+                isError = userViewModel.onValidatePostalCode().isNotEmpty() && isErrors
             )
 
             DescriptionTextField(
@@ -86,14 +94,13 @@ fun SignUpSecondForm(onChange: (String) -> Unit) {
                 label = stringResource(R.string.profile_description),
                 leadingIcon = Icons.Rounded.Info
             )
-            Spacer(modifier = Modifier.padding(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             CustomButton(text = stringResource(id = R.string.next),
                 onClick = {
-                    /*if (userViewModel.onValidateSecondPart().isEmpty())
+                    isErrors = if (userViewModel.onValidateSecondPart()){
                         onChange(SignUpNavigator.SignUpIDCFragment.route)
-                    else
-                        isError = true*/
+                        false } else true
                 })
             /*CustomAlertDialog(
                 title = stringResource(id = R.string.form_error_message),

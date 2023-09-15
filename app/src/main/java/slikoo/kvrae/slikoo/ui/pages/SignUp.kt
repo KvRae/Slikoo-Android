@@ -99,12 +99,11 @@ fun SignUp(navController: NavController) {
 
                     SignUpNavigator.SignUpIDCFragment.route -> SignUpCidForm(onChange = {
                         route.value = it
-                    }, userViewModel = userViewModel)
+                    })
 
                     SignUpNavigator.SignUpProfilePictureFragment.route -> ProfilePictureSection(
                         onChange = { route.value = it },
                         navController = navController,
-                        userViewModel = userViewModel
                     )
 
                 }

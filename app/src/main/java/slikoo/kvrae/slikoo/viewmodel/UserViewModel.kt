@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import javax.inject.Singleton
 
@@ -12,6 +13,10 @@ class UserViewModel() : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         println("UserViewModel destroyed!")
+    }
+
+    fun onImageSelected(it: Uri?) {
+        TODO("Not yet implemented")
     }
 
 

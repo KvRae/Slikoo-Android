@@ -35,4 +35,19 @@ class MealRemoteDataSource() {
             e.message.toString()
         }
     }
+
+    suspend fun getMealById(id : Int): Meal {
+        val response = RetrofitInstance.getRetrofitInstance()
+            .create(ApiServices::class.java).getMealById(id)
+        return try {
+            if (response.code() == 200) response.body()?.meal!!
+            else Meal()
+        } catch (e: Exception) {
+            Log.e("Meals Error", e.message.toString())
+            Meal()
+        }
+    }
+
+
+
 }

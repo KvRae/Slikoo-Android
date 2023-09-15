@@ -19,6 +19,7 @@ import retrofit2.http.Path
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.LoginResponse
+import slikoo.kvrae.slikoo.data.datasources.remote.dto.MealDetailsResponse
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.MealResponse
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.NotificationsResponse
 
@@ -36,8 +37,8 @@ interface ApiServices {
     suspend fun createMeal(@Header("Authorization") token: String, @Body meal: Meal, avatar: MultipartBody.Part): Response<String>
 
     @Headers("Content-Type: application/json")
-    @GET("getRepasByDate/{id}")
-    suspend fun getMealById(@Path("id") id: Int): Response<MealResponse>
+    @GET("getrepasdetailsbyId/{id}")
+    suspend fun getMealById(@Path("id") id: Int): Response<MealDetailsResponse>
 
     /************************** User **************************/
 

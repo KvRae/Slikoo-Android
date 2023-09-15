@@ -6,6 +6,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 
@@ -19,6 +21,10 @@ fun CustomButton(text : String, onClick: () -> Unit) {
             containerColor = LightPrimary,
             contentColor = LightPrimaryVariant)
     ) {
-        Text(text = text)
+        Text(text = text,
+            color = LightPrimaryVariant,
+            fontWeight = Bold,
+            fontSize = 16.sp,
+        )
     }
 }

@@ -51,7 +51,6 @@ import slikoo.kvrae.slikoo.viewmodel.UserViewModel
 fun ProfilePictureSection(
     onChange: (String) -> Unit,
     navController: NavController,
-    userViewModel: UserViewModel
 ) {
     Column(
         modifier = Modifier

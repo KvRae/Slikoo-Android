@@ -2,8 +2,10 @@ package slikoo.kvrae.slikoo.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -11,11 +13,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
+import androidx.compose.material.Checkbox
+import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
@@ -196,28 +201,60 @@ fun SearchBarWithFilter(
         DropdownMenu(expanded = isToggled,
             onDismissRequest = { isToggled = false },
             modifier = Modifier
+                .padding(8.dp)
                 .fillMaxWidth()
-                .padding(16.dp)
+
         ) {
-            Text(text = "Filtre")
-            Text(text = "Filtre")
-            Text(text = "Filtre")
-            Text(text = "Filtre")
-            Text(text = "Filtre")
+            FilterRow(header = "Filter 1", onFilterChange = { /*TODO*/ }, filterList = listOf("Item1", "Item2", "Item3"))
+            Divider(modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp))
+            FilterRow(header = "Date", onFilterChange = { /*TODO*/ }, filterList = listOf("Item1", "Item2", "Item3"))
+            Divider()
+            Row(modifier = Modifier.fillMaxWidth()) {
+                TextButton(onClick = { /*TODO*/ }) {
+                    Text(text = "Clear Filters")
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                TextButton(onClick = { /*TODO*/ }) {
+                    Text(text = "Cancel")
+                }
+                Spacer(modifier = Modifier.padding(8.dp))
+                TextButton(onClick = { /*TODO*/ }) {
+                    Text(text = "Apply")
+                }
+            }
 
 
         }
     }
 }
 
-
 @Composable
-fun CustomDropDownMenu(isExpended : Boolean,
-                       onDismissRequest: () -> Unit,
-                       modifier: Modifier = Modifier,
-                       content: @Composable () -> Unit) {
-    DropdownMenu(expanded = isExpended, onDismissRequest = onDismissRequest, modifier = modifier) {
-        content()
-    }
+fun FilterRow(
+    header: String,
+    onFilterChange: (String) -> Unit,
+    filterList : List<String>
+) {
+    var selectedFilter by remember { mutableStateOf("") }
+    Row(modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically) {
+        Text(text = header)
+        filterList.forEach {
+            filter ->
+            Row(modifier = Modifier.padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Checkbox(checked = selectedFilter == filter, onCheckedChange = {
+                    selectedFilter = filter
+                    onFilterChange(filter)
+                })
+                Text(text = filter)
+            }
+        }
 
+
+
+    }
 }
