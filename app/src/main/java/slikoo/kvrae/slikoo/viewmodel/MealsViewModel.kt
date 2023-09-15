@@ -14,28 +14,50 @@ class MealsViewModel(): ViewModel() {
     private val mealRemoteDataSource = MealRemoteDataSource()
     var meal = mutableStateOf(Meal())
     var meals = mutableListOf<Meal>()
-
-
-    private val _searchText = mutableStateOf("")
-    private val _isSearching = mutableStateOf(false)
+    var isLoading = mutableStateOf(true)
+    var searchText = mutableStateOf("")
+    var filteredMeals = mutableListOf<Meal>()
 
     init {
         getAllMeals(meals)
-
     }
 
+    fun filterMealsList(filter : String){
+        filteredMeals.clear()
+        if (filter.isEmpty()){
+            filteredMeals.clear()
+            filteredMeals.addAll(meals)
+        }
+        if (filter.isNotEmpty())
+            for (meal in meals){
+                if (meal.localisation.contains(filter,ignoreCase = true)
+                    || meal.theme.contains(filter,ignoreCase = true)
+                    || meal.genrenourriture.contains(filter,ignoreCase = true)
+                    || meal.prix.contains(filter,ignoreCase = true)
+                    || meal.nbr.contains(filter,ignoreCase = true)
+                    || meal.description.contains(filter,ignoreCase = true)
+                    || meal.date.contains(filter,ignoreCase = true)
+                    || meal.heure.contains(filter,ignoreCase = true)
+                )
+                    filteredMeals.add(meal)
+            }
+    }
 
-     private fun getAllMeals(meals : MutableList<Meal>)  {
+    private fun getAllMeals(meals : MutableList<Meal>)  {
         viewModelScope.launch {
             try {
-                mealRemoteDataSource.getAllMeals(meals)
+                async { isLoading.value = true }.await()
+                async {mealRemoteDataSource.getAllMeals(meals)  }.await()
+                async { filteredMeals.addAll(meals) }.await()
+                async { isLoading.value = false }.await()
+
             } catch (e: Exception) {
                 Log.e("Meals Error", e.message.toString())
             }
         }
     }
 
-     fun getMealById(id : Int)  {
+    fun getMealById(id : Int)  {
         viewModelScope.launch(Dispatchers.IO) {
             if (id != 0) {
                 try {

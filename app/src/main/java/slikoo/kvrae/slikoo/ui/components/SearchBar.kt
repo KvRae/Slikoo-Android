@@ -91,7 +91,7 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
                 trailingIcon = {
                     if (searchText.isNotEmpty()) {
                         IconButton(onClick = {
-                            searchText = ""
+                            onSearch("")
                         }) {
                             Icon(
                                 imageVector = Icons.Rounded.Clear,
@@ -111,7 +111,7 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
 
 @Composable
 fun SearchBarWithFilter(
-    searchText: String,
+    searchText: String = "",
     onValueChange: (String) -> Unit,
     onSearch: (String) -> Unit,
     onFilter: (Boolean) -> Unit

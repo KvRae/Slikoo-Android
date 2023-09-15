@@ -28,18 +28,17 @@ fun LoadingScreen() {
             modifier = Modifier.size(40.dp)
         )
     }
-
 }
 
 @Composable
-fun EmptyElementsScreen() {
+fun EmptyElementsScreen(text : String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = LightSecondary),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "No elements to show")
+        Text(text = text)
     }
 }
 
@@ -67,28 +66,7 @@ fun NoInternetScreen() {
     }
 }
 
-@Composable
-fun NoSearchResultsScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = LightSecondary),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "No results found")
-    }
-}
 
-@Composable
-fun NoNotificationsScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = LightSecondary),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "No notifications")
-    }
-}
+
 
 

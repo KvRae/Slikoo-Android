@@ -109,6 +109,8 @@
     <string name="dismiss">Annuler</string>
     <string name="thanks">Merci</string>
     <string name="book">Reserver maintenant</string>
+    <string name="detail">Detail</string>
+    <string name="no_element_found">aucun élément à afficher</string>
 
 
 </resources>

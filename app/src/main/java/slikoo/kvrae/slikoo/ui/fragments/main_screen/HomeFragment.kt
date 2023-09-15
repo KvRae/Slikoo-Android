@@ -40,7 +40,7 @@ import slikoo.kvrae.slikoo.viewmodel.RatingViewModel
 @Composable
 fun HomeScreen(navController: NavController) {
     val mealsViewModel : MealsViewModel  = viewModel()
-    if (mealsViewModel.meals.isEmpty()) LoadingScreen()
+    if (mealsViewModel.meals.isEmpty() && mealsViewModel.isLoading.value) LoadingScreen()
     Box(
         modifier = Modifier
             .fillMaxSize()

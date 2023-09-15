@@ -13,16 +13,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.runtime.Composable
@@ -65,7 +64,6 @@ fun MealsDetailScreen(navController: NavController,id : Int) {
             modifier = Modifier
                 .fillMaxSize()
                 .background(LightSecondary)
-                .verticalScroll(rememberScrollState())
         ) {
             // Heading Image
             AsyncImage(
@@ -86,8 +84,7 @@ fun MealsDetailScreen(navController: NavController,id : Int) {
                 MealDetailHeader(navController = navController)
                 // Event Details
                 Spacer(modifier = Modifier.height(100.dp))
-                MealDetailHeading(eventName = mealsViewModel.meal.value.theme,
-                    eventDate = mealsViewModel.meal.value.genrenourriture)
+                MealDetailHeading(eventName = mealsViewModel.meal.value.theme, eventDate = mealsViewModel.meal.value.genrenourriture)
                 MealDetailContent(mealsViewModel = mealsViewModel)
             }
 
@@ -195,9 +192,15 @@ fun MealDetailContent(mealsViewModel: MealsViewModel) {
                 detail = mealsViewModel . meal . value . prix,
             )
 
+            MealDetailContentItem(
+                icon = Icons.Rounded.AccountBox,
+                title = stringResource(id = R.string.detail),
+                detail = mealsViewModel.meal. value . description,
+            )
+
             Spacer(modifier = Modifier.height(16.dp))
             CustomButton(text = stringResource(id = R.string.book), onClick = {  })
-
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -210,7 +213,7 @@ fun MealDetailContentItem(
 ) {
     Row(modifier = Modifier
         .fillMaxWidth()
-        .padding(32.dp),
+        .padding(16.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically) {
         Icon(

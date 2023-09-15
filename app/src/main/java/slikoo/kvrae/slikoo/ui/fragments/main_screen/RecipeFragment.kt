@@ -12,12 +12,15 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBarWithFilter
 import slikoo.kvrae.slikoo.ui.components.ShimmerRecipeCard
+import slikoo.kvrae.slikoo.ui.pages.EmptyElementsScreen
 import slikoo.kvrae.slikoo.viewmodel.MealsViewModel
 
 
@@ -36,15 +39,27 @@ fun RecipeScreen(navController: NavController) {
                 .padding(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (remember { derivedStateOf { scrollState.firstVisibleItemIndex } }.value == 0) SearchBarWithFilter(onSearch = { }, onFilter = { }, onValueChange = {}, searchText = "")
-
+            if (remember { derivedStateOf { scrollState.firstVisibleItemIndex } }.value == 0)
+                SearchBarWithFilter(
+                    searchText = mealsViewModel.searchText.value,
+                    onSearch = {
+                        mealsViewModel.searchText.value = it
+                        mealsViewModel.filterMealsList(it) },
+                    onValueChange = {
+                        mealsViewModel.searchText.value = it
+                        mealsViewModel.filterMealsList(it)
+                                    },
+                    onFilter = { }
+                    )
+            if (mealsViewModel.filteredMeals.isEmpty() && mealsViewModel.searchText.value.isNotEmpty())
+                EmptyElementsScreen(text = stringResource(id = R.string.no_element_found))
             LazyVerticalGrid(columns = GridCells.Fixed(2),
                 userScrollEnabled = true,
                 state = scrollState,
                 content = {
-                    if (mealsViewModel.meals.isEmpty()) items(6){ ShimmerRecipeCard() }
-                    items(mealsViewModel.meals.size) {
-                        RecipeCardContent(meal = mealsViewModel.meals[it],
+                    if (mealsViewModel.filteredMeals.isEmpty()&& mealsViewModel.isLoading.value) items(6){ ShimmerRecipeCard() }
+                    items(mealsViewModel.filteredMeals.size) {
+                        RecipeCardContent(meal = mealsViewModel.filteredMeals[it],
                             navController = navController)
                     }
                 }

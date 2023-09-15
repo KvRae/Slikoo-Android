@@ -22,9 +22,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,7 +50,6 @@ fun RecipeCardContent(meal : Meal, navController: NavController) {
     /*val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm",
         java.util.Locale.getDefault())
     val date = dateFormat.format(meal.date)*/
-    val isLoading by remember{ mutableStateOf(false) }
     val avatar = "https://slikoo.com/repasImgs/${meal.avatar}"
 
     Card(
@@ -97,7 +93,7 @@ fun RecipeCardContent(meal : Meal, navController: NavController) {
                             .padding(start = 8.dp),
                         tint = LightPrimaryVariant
                     )
-                    Text(text = if (meal.description.length > 12) meal.description.slice(0..11) + "..." else meal.description,
+                    Text(text = if (meal.localisation.length > 12) meal.description.slice(0..11) + "..." else meal.localisation,
                         modifier = Modifier.padding(start = 4.dp),
                         style = TextStyle(
                             fontSize = 14.sp,
@@ -144,7 +140,7 @@ fun RecipeCardContent(meal : Meal, navController: NavController) {
                 Row(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp)) {
-                    Text(text = meal.localisation, modifier = Modifier.padding(start = 8.dp),
+                    Text(text = meal.theme, modifier = Modifier.padding(start = 8.dp),
                         style = TextStyle(fontSize = 10.sp,
                             fontWeight = FontWeight.Bold),
                         color = LightPrimaryVariant
