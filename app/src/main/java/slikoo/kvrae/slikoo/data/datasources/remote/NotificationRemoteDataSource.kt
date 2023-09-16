@@ -8,18 +8,20 @@ import slikoo.kvrae.slikoo.data.datasources.entities.Notification
 class NotificationRemoteDataSource {
 
     suspend fun getNotifications(token: String, email: String, notifications: MutableList<Notification>) {
-        val retIn = RetrofitInstance.getRetrofitInstance()
-            .create(ApiServices::class.java)
-        val response = retIn.getNotificationsByEmail("Bearer $token", email)
-        val gson = com.google.gson.Gson()
+        notifications.clear()
+        val response = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
+            .getNotificationsByEmail("Bearer $token", email)
 
-        Log.wtf("Notifications List DS gSon", gson.toJson(response.body()?.notifications))
         try {
             if (response.isSuccessful) {
                 response.body()?.notifications?.let { notifications.addAll(it) }
+                Log.d("Notifications List size DS", notifications.size.toString())
+            } else {
+                notifications.add(Notification())
+                Log.e("Notifications Error", response.errorBody().toString())
             }
         } catch (e: Exception) {
-            Log.e("Notifications Error", e.message.toString())
+            Log.e("Notifications Exception", e.message.toString())
         }
 
     }

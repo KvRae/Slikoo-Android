@@ -36,7 +36,7 @@ import slikoo.kvrae.slikoo.ui.fragments.event.EventSecondFragment
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
-import slikoo.kvrae.slikoo.viewmodel.MealsViewModel
+import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
 @Composable

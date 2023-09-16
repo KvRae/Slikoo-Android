@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.pages
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
@@ -31,7 +33,7 @@ fun LoadingScreen() {
 }
 
 @Composable
-fun EmptyElementsScreen(text : String) {
+fun TextElementScreen(text : String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -43,28 +45,24 @@ fun EmptyElementsScreen(text : String) {
 }
 
 @Composable
-fun ErrorScreen() {
+fun TextWithImageScreen(
+    imageVector: ImageVector,
+    text: String
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = LightSecondary),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Error")
+        Image(imageVector = imageVector,
+            contentDescription = ""
+        )
+        Text(text = "TextWithImageScreen")
     }
+
 }
 
-@Composable
-fun NoInternetScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = LightSecondary),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "No Internet")
-    }
-}
 
 
 

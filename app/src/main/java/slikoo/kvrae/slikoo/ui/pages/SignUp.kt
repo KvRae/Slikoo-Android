@@ -34,7 +34,7 @@ import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpSecondForm
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
-import slikoo.kvrae.slikoo.viewmodel.UserViewModel
+import slikoo.kvrae.slikoo.viewmodels.UserViewModel
 
 
 @Composable

@@ -20,8 +20,8 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBarWithFilter
 import slikoo.kvrae.slikoo.ui.components.ShimmerRecipeCard
-import slikoo.kvrae.slikoo.ui.pages.EmptyElementsScreen
-import slikoo.kvrae.slikoo.viewmodel.MealsViewModel
+import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
+import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
 @Composable
@@ -52,7 +52,7 @@ fun RecipeScreen(navController: NavController) {
                     onFilter = { }
                     )
             if (mealsViewModel.filteredMeals.isEmpty() && mealsViewModel.searchText.value.isNotEmpty())
-                EmptyElementsScreen(text = stringResource(id = R.string.no_element_found))
+                TextElementScreen(text = stringResource(id = R.string.no_element_found))
             LazyVerticalGrid(columns = GridCells.Fixed(2),
                 userScrollEnabled = true,
                 state = scrollState,

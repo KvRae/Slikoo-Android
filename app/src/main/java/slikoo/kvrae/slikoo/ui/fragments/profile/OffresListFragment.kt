@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.UserEventCard
-import slikoo.kvrae.slikoo.viewmodel.AreaViewModel
+import slikoo.kvrae.slikoo.viewmodels.AreaViewModel
 
 @Composable
 fun UserOffersList(navController: NavController) {

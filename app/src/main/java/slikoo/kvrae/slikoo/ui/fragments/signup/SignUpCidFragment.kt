@@ -24,7 +24,7 @@ import slikoo.kvrae.slikoo.ui.components.CustomSliderPointers
 import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
-import slikoo.kvrae.slikoo.viewmodel.SignUpViewModel
+import slikoo.kvrae.slikoo.viewmodels.SignUpViewModel
 
 @Composable
 fun SignUpCidForm(onChange: (String) -> Unit) {

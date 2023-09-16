@@ -1,4 +1,4 @@
-package slikoo.kvrae.slikoo.viewmodel
+package slikoo.kvrae.slikoo.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -13,18 +13,19 @@ import slikoo.kvrae.slikoo.utils.TempSession
 
 class NotificationViewModel : ViewModel() {
     private val notificationRepository = NotificationRemoteDataSource()
-    val notifications = mutableListOf<Notification>()
+    var notifications = mutableListOf<Notification>()
+    var isLoading = false
 
     init {
-        getNotifications(TempSession.email, TempSession.token, notifications)
+        getNotifications(email = TempSession.email,token = TempSession.token, notifications =  notifications)
+        Log.d("Notifications List size VM", notifications.size.toString())
     }
 
     private fun getNotifications(email: String, token: String, notifications: MutableList<Notification>) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                async {notificationRepository.getNotifications(token, email, notifications)}.await()
-                async { Log.d("Notifications List size VM", notifications.size.toString()) }.await()
-
+                async {notificationRepository.getNotifications(token =token, email =  email, notifications= notifications)}.await()
+                Log.d("Notifications List size VM", notifications.size.toString())
             } catch (e: Exception) {
                Log.e("Notifications Error Vm", e.message.toString())
             }

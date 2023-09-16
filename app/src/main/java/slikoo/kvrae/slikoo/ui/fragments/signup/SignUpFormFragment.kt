@@ -34,7 +34,7 @@ import slikoo.kvrae.slikoo.ui.components.CustomSliderPointers
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.PasswordTextField
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
-import slikoo.kvrae.slikoo.viewmodel.SignUpViewModel
+import slikoo.kvrae.slikoo.viewmodels.SignUpViewModel
 
 
 @Composable

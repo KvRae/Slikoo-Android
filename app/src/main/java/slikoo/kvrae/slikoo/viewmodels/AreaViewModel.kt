@@ -1,4 +1,4 @@
-package slikoo.kvrae.slikoo.viewmodel
+package slikoo.kvrae.slikoo.viewmodels
 
 import androidx.lifecycle.ViewModel
 import slikoo.kvrae.slikoo.data.datasources.entities.Area

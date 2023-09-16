@@ -32,9 +32,9 @@ import slikoo.kvrae.slikoo.ui.components.SearchBar
 import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
-import slikoo.kvrae.slikoo.viewmodel.CategoryViewModel
-import slikoo.kvrae.slikoo.viewmodel.MealsViewModel
-import slikoo.kvrae.slikoo.viewmodel.RatingViewModel
+import slikoo.kvrae.slikoo.viewmodels.CategoryViewModel
+import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
+import slikoo.kvrae.slikoo.viewmodels.RatingViewModel
 
 
 @Composable
@@ -101,7 +101,7 @@ fun RecipesCategorySection() {
                         AreaFilterCard(
                             name = categories[it].name,
                             image = categories[it].image,
-                            imageUrl = ""
+
                         ) {
 
                         }

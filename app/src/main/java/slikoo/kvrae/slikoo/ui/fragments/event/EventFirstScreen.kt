@@ -31,7 +31,7 @@ import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.DescriptionTextField
 import slikoo.kvrae.slikoo.ui.components.ExpandableCard
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
-import slikoo.kvrae.slikoo.viewmodel.MealsViewModel
+import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
 @Composable

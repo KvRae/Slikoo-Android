@@ -1,4 +1,4 @@
-package slikoo.kvrae.slikoo.viewmodel
+package slikoo.kvrae.slikoo.viewmodels
 
 import android.content.Context
 import android.net.Uri

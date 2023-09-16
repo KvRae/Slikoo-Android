@@ -54,7 +54,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
-import slikoo.kvrae.slikoo.viewmodel.SignInViewModel
+import slikoo.kvrae.slikoo.viewmodels.SignInViewModel
 
 
 @Composable

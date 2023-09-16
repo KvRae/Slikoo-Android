@@ -39,7 +39,7 @@ import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
-import slikoo.kvrae.slikoo.viewmodel.ForgetPasswordViewModel
+import slikoo.kvrae.slikoo.viewmodels.ForgetPasswordViewModel
 
 
 

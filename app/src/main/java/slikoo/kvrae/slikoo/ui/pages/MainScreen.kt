@@ -32,7 +32,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 import slikoo.kvrae.slikoo.utils.SessionDataStore
-import slikoo.kvrae.slikoo.viewmodel.MainScreenViewModel
+import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 
 
 @Composable

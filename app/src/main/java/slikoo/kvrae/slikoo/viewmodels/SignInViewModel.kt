@@ -1,4 +1,4 @@
-package slikoo.kvrae.slikoo.viewmodel
+package slikoo.kvrae.slikoo.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

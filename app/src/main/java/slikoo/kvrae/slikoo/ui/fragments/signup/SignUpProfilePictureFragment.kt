@@ -44,7 +44,6 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
-import slikoo.kvrae.slikoo.viewmodel.UserViewModel
 
 
 @Composable
