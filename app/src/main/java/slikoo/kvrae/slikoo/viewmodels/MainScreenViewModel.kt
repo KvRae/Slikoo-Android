@@ -8,10 +8,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.UserRemoteDataSource
-import slikoo.kvrae.slikoo.utils.SessionDataStore
 import slikoo.kvrae.slikoo.utils.TempSession
 
-class MainScreenViewModel( private val session: SessionDataStore): ViewModel() {
+class MainScreenViewModel( ): ViewModel() {
 
     val user = mutableStateOf(User())
     private val userRemoteDataSource = UserRemoteDataSource()
@@ -25,7 +24,7 @@ class MainScreenViewModel( private val session: SessionDataStore): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             user.value = userRemoteDataSource.getUserByEmail(
                 token = TempSession.token,
-                email = session.getUserEmail()
+                email = TempSession.email
             )
         }
         Log.wtf("MainScreenViewModel", "getUser: ${user.value}")

@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.fragments.main_screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,6 +22,7 @@ import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.SettingCard
+import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 @Composable
@@ -29,7 +31,7 @@ fun SettingsScreen(navController: NavController) {
         mutableStateOf(false)
     }
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(LightSecondary),
         contentAlignment = Alignment.Center
     ) {
         CustomAlertDialog(showDialog = dialogState,

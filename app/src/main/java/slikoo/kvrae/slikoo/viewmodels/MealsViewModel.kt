@@ -1,6 +1,7 @@
 package slikoo.kvrae.slikoo.viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,10 +14,10 @@ import slikoo.kvrae.slikoo.data.datasources.remote.MealRemoteDataSource
 class MealsViewModel(): ViewModel() {
     private val mealRemoteDataSource = MealRemoteDataSource()
     var meal = mutableStateOf(Meal())
-    var meals = mutableListOf<Meal>()
+    var meals = mutableStateListOf<Meal>()
     var isLoading = mutableStateOf(true)
     var searchText = mutableStateOf("")
-    var filteredMeals = mutableListOf<Meal>()
+    var filteredMeals = mutableStateListOf<Meal>()
 
     init {
         getAllMeals(meals)

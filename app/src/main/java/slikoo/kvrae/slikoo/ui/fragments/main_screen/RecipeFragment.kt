@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.fragments.main_screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +22,7 @@ import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBarWithFilter
 import slikoo.kvrae.slikoo.ui.components.ShimmerRecipeCard
 import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
+import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
@@ -30,7 +32,7 @@ fun RecipeScreen(navController: NavController) {
     val scrollState = rememberLazyGridState()
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(LightSecondary),
         contentAlignment = Alignment.Center
     ) {
         Column(

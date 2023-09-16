@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -16,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
@@ -28,17 +28,12 @@ import slikoo.kvrae.slikoo.ui.fragments.main_screen.NotificationScreen
 import slikoo.kvrae.slikoo.ui.fragments.main_screen.RecipeScreen
 import slikoo.kvrae.slikoo.ui.fragments.main_screen.SettingsScreen
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
-import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.MainScreenNavigator
-import slikoo.kvrae.slikoo.utils.SessionDataStore
-import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 
 
 @Composable
 fun MainScreen(navController: NavController, currentScreen: String = "Home") {
-    val context  = LocalContext.current
-    val mainViewModel = MainScreenViewModel(session = SessionDataStore(context = context))
     val title = remember {
         mutableStateOf(currentScreen)
     }
@@ -98,7 +93,7 @@ fun MainScreen(navController: NavController, currentScreen: String = "Home") {
                     Icon(
                         imageVector = Icons.Rounded.Add,
                         contentDescription = "",
-                        tint = LightSecondary
+                        tint = MaterialTheme.colors.secondary
                     )
                 }
             else return@Scaffold
@@ -107,7 +102,7 @@ fun MainScreen(navController: NavController, currentScreen: String = "Home") {
             Box(
                 modifier = Modifier
                     .padding(padding)
-                    .background(LightSecondary)
+                    .background(MaterialTheme.colors.secondary)
             ) {
                 when (title.value) {
                     "Home" -> HomeScreen(navController = navController)
@@ -115,11 +110,11 @@ fun MainScreen(navController: NavController, currentScreen: String = "Home") {
                     "Repas" -> RecipeScreen(navController = navController)
 
                     "Organiser" -> EventScreen(
-                        onBackPress = { title.value = "Home" },
+                        onBackPress = { title.value = "Repas" },
                         navController = navController
                     )
 
-                    "Notifications" -> NotificationScreen()
+                    "Notifications" -> NotificationScreen(navController = navController)
 
                     "Parametres" -> SettingsScreen(navController = navController)
                 }
