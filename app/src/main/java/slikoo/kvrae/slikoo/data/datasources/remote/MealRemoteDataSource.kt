@@ -10,9 +10,9 @@ import slikoo.kvrae.slikoo.utils.TempSession.Companion.token
 class MealRemoteDataSource() {
 
     suspend fun getAllMeals(meals: MutableList<Meal>) {
-        meals.clear()
-        val response = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java).getAllMeals()
         try {
+            meals.clear()
+            val response = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java).getAllMeals()
             if (response.isSuccessful)
                 response.body()?.meals?.let { meals.addAll(it) }
         }
@@ -22,11 +22,11 @@ class MealRemoteDataSource() {
     }
 
     suspend fun createMeal(meal: Meal): String {
-        val response = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
-            .createMeal(token = token,
-                meal= meal,
-                avatar = MultipartBody.Part.createFormData("avatar", meal.avatar))
         return try {
+            val response = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
+                .createMeal(token = token,
+                    meal= meal,
+                    avatar = MultipartBody.Part.createFormData("avatar", meal.avatar))
             if (response.isSuccessful) response.body().toString()
             else response.errorBody().toString()
         }
@@ -37,9 +37,9 @@ class MealRemoteDataSource() {
     }
 
     suspend fun getMealById(id : Int): Meal {
-        val response = RetrofitInstance.getRetrofitInstance()
-            .create(ApiServices::class.java).getMealById(id)
         return try {
+            val response = RetrofitInstance.getRetrofitInstance()
+                .create(ApiServices::class.java).getMealById(id)
             if (response.code() == 200) response.body()?.meal!!
             else Meal()
         } catch (e: Exception) {

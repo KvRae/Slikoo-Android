@@ -32,13 +32,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -59,13 +57,9 @@ import slikoo.kvrae.slikoo.viewmodels.SignInViewModel
 
 @Composable
 fun LoginForm(navController: NavController) {
-    val context = LocalContext.current
     val signInViewModel = SignInViewModel()
-
+    var isError by remember { mutableStateOf(false) }
     val logo = R.drawable.slikoo_white
-    var isError by remember {
-        mutableStateOf(false)
-    }
 
     Box(
         modifier = Modifier
@@ -114,9 +108,7 @@ fun LoginForm(navController: NavController) {
                             fontSize = 18.sp,
                         )
                     )
-
                     Spacer(modifier = Modifier.height(16.dp))
-
                     Text(
                         text = stringResource(id = R.string.welcome_sub_description),
                         style = TextStyle(
@@ -152,14 +144,17 @@ fun LoginForm(navController: NavController) {
                             fontSize = MaterialTheme.typography.h5.fontSize,
                         )
                     )
-                    Text(text = signInViewModel.token.value, overflow = TextOverflow.Ellipsis, maxLines = 1)
                     Spacer(modifier = Modifier.height(16.dp))
                     CustomTextField(
-                        onChange = { signInViewModel.user.value = signInViewModel.user.value.copy(email = it)},
+                        onChange = {
+                            signInViewModel.user.value = signInViewModel.user.value.copy(email = it)
+                        },
                         value = signInViewModel.user.value.email,
                         label = stringResource(id = R.string.email),
                         keyboardType = KeyboardType.Email,
-                        leadingIcon = Icons.Rounded.Email
+                        leadingIcon = Icons.Rounded.Email,
+                        isError = isError,
+                        errorMessage = stringResource(id = R.string.email_error),
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -168,7 +163,12 @@ fun LoginForm(navController: NavController) {
                         value = signInViewModel.user.value.password,
                         label = stringResource(id = R.string.password),
                         placeHolder = stringResource(id = R.string.password_placeholder),
-                        onChange = { signInViewModel.user.value = signInViewModel.user.value.copy(password = it) }
+                        isError = isError && signInViewModel.user.value.password.isEmpty(),
+                        errorMessage = stringResource(id = R.string.password_error),
+                        onChange = {
+                            signInViewModel.user.value =
+                                signInViewModel.user.value.copy(password = it)
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -176,8 +176,10 @@ fun LoginForm(navController: NavController) {
                     // Submit button
                     CustomButton(text = stringResource(id = R.string.connect),
                         onClick = {
-                            if(signInViewModel.onLoginValidation().isNotEmpty()){ isError = true }
-                            else{ signInViewModel.onLogin()
+                            if (signInViewModel.onLoginValidation().isNotEmpty()) {
+                                isError = true
+                            } else {
+                                signInViewModel.onLogin()
                             }
                         })
 
@@ -191,7 +193,6 @@ fun LoginForm(navController: NavController) {
                         horizontalArrangement = Arrangement.Start
                     ) {
                         TextButton(onClick = {
-
                             onNavigate(
                                 navController,
                                 AppScreenNavigator.SignUpAppScreen.route
@@ -221,15 +222,23 @@ fun LoginForm(navController: NavController) {
                     }
 
                     if (signInViewModel.isLoading.value) LoadingDialog()
-                    if (signInViewModel.navigate.value) {CustomAlertDialog(
-                        title = "",
-                        message = stringResource(id = R.string.welcome),
-                        onConfirm = {
-                            navController.popBackStack()
-                            onNavigate(navController, AppScreenNavigator.MainAppScreen.route) },
-                        confirmText = stringResource(id = R.string.thanks)
-
+                    if (signInViewModel.isError.value) CustomAlertDialog(
+                        title = stringResource(id = R.string.form_error),
+                        message = signInViewModel.errorMessage.value,
+                        onConfirm = { signInViewModel.isError.value = false },
+                        confirmText = stringResource(id = R.string.ok)
                     )
+                    if (signInViewModel.navigate.value) {
+                        CustomAlertDialog(
+                            title = "",
+                            message = stringResource(id = R.string.welcome),
+                            onConfirm = {
+                                navController.popBackStack()
+                                onNavigate(navController, AppScreenNavigator.MainAppScreen.route)
+                            },
+                            confirmText = stringResource(id = R.string.thanks)
+
+                        )
 
                     }
                 }
@@ -239,18 +248,13 @@ fun LoginForm(navController: NavController) {
 }
 
 
-
-
 fun onNavigate(navController: NavController, route: String) {
-
     navController.navigate(route)
-
 }
 
 fun onSubmit(navController: NavController) {
     navController.popBackStack()
     navController.navigate(AppScreenNavigator.MainAppScreen.route)
-
 }
 
 fun onMakeToast(context: Context, message: String) {

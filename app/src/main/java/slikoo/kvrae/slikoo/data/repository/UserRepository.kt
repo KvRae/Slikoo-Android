@@ -1,28 +1,25 @@
 package slikoo.kvrae.slikoo.data.repository
 
-import android.content.Context
 import slikoo.kvrae.slikoo.data.datasources.entities.UserDb
-import slikoo.kvrae.slikoo.utils.SessionDataStore
-import slikoo.kvrae.slikoo.utils.SlikooDatabase
+import slikoo.kvrae.slikoo.data.datasources.local.UserDao
 
-class UserRepository(context : Context) {
+class UserRepository(private val userDao: UserDao) {
 
 
-    private val userLDS = SlikooDatabase.getInstance(context)?.userDao()
 //    private val userRDS = UserRemoteDataSource()
-    private val session = SessionDataStore(context)
+//    private val session = SessionDataStore(context)
 
-    suspend fun setUserTokenAndEmail(token: String, email: String) {
-        session.setUserToken(token)
-        session.setUserEmail(email)
-    }
+//    suspend fun setUserTokenAndEmail(token: String, email: String) {
+//        session.setUserToken(token)
+//        session.setUserEmail(email)
+//    }
+//
+//    suspend fun getUserToken() : String {
+//        return session.getUserToken()
+//    }
 
-    suspend fun getUserToken() : String {
-        return session.getUserToken()
-    }
-
-    suspend fun getUser() : UserDb {
-        return userLDS?.getUser(session.getUserEmail())!!
+    suspend fun getUser(email :String) : UserDb {
+        return userDao.getUser(email)
     }
 
 

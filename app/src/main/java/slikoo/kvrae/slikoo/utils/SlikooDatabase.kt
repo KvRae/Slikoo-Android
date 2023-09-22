@@ -12,24 +12,23 @@ import slikoo.kvrae.slikoo.data.datasources.local.UserDao
 abstract class SlikooDatabase : RoomDatabase() {
     // DAOs
     abstract fun userDao(): UserDao
-
     // Database singleton instance
     companion object {
-       private var instance: SlikooDatabase? = null
-       fun getInstance(context: Context) : SlikooDatabase? {
-              if(instance == null) {
-                  synchronized(SlikooDatabase::class) {
-                      instance = Room.databaseBuilder(
-                          context.applicationContext,
-                          SlikooDatabase::class.java,
-                          "slikoo.db"
-                      ).build()
-                  }
-              }
-           return instance
-       }
-
-        // destroy instance
-        fun destroyInstance(){ instance = null}
+        @Volatile
+        private var _INSTANCE: SlikooDatabase? = null
+        // get instance
+        fun getInstance(context: Context): SlikooDatabase {
+            val tempInstance = _INSTANCE
+            if (tempInstance != null) {
+                return tempInstance
+            }
+            synchronized(this) {
+                return Room.databaseBuilder(
+                    context.applicationContext,
+                    SlikooDatabase::class.java,
+                    "slikoo.db"
+                ).build()
+            }
+        }
     }
 }

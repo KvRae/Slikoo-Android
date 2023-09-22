@@ -20,18 +20,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.SettingCard
+import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(navController: NavController,user: User) {
     var dialogState by remember {
         mutableStateOf(false)
     }
     Box(
-        modifier = Modifier.fillMaxSize().background(LightSecondary),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(LightSecondary),
         contentAlignment = Alignment.Center
     ) {
         CustomAlertDialog(showDialog = dialogState,
@@ -44,15 +48,19 @@ fun SettingsScreen(navController: NavController) {
                 navController.navigate(AppScreenNavigator.SignInAppScreen.route)
             }
         )
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
             content = {
                 item {
-                    SettingCard(title = "Karam Mannai",
-                        subtitle = "Manage your account",
-                        // modifier = Modifier.height(100.dp),
-                        actionIcon = Icons.Filled.Person, icon = Icons.Filled.Person,
+                    SettingCard(title = user.nom + " " + user.prenom,
+                        subtitle = if (user.verified) stringResource(R.string.verified) else stringResource(
+                            R.string.not_verified
+                        ),
+                        actionIcon = Icons.Filled.Person,
+                        avatar = if (user.avatar != "") user.avatarUrl + user.avatar else "",
+                        icon = Icons.Filled.Person,
                         onClick = {
                             navController.navigate(AppScreenNavigator.AdvancedEditProfilesAppScreen.route)
                         })
@@ -84,5 +92,7 @@ fun SettingsScreen(navController: NavController) {
 
             }
         )
+
+        if (user.nom.isEmpty()) LoadingScreen()
     }
 }

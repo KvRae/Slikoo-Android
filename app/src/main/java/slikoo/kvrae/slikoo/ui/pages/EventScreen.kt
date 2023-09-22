@@ -55,14 +55,13 @@ fun EventScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
             .statusBarsPadding()
-            .background(color = LightSecondary),
+            .background(LightSecondary),
         contentAlignment = Alignment.TopCenter
     ) {
 
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(8.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         )

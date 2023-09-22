@@ -163,7 +163,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-If you have any questions, suggestions, or feedback, please don't hesitate to contact us at [slikoo@example.com](mailto:slikoo@example.com). We would love to hear from you!
+If you have any questions, suggestions, or feedback, please don't hesitate to contact us at [slikoo@example.com](mailto:contact@slikoo.com). We would love to hear from you!
 
 Visit our website at [www.slikoo.com](https://www.slikoo.com) to learn more about Slikoo and join our community.
 

@@ -111,6 +111,12 @@
     <string name="book">Reserver maintenant</string>
     <string name="detail">Detail</string>
     <string name="no_element_found">aucun élément à afficher</string>
+    <string name="verified">Verifié(e)</string>
+    <string name="not_verified">Non verifié(e)</string>
+    <string name="session_expired">Votre session a expirée</string>
+    <string name="reconnect">Reconnecter</string>
+    <string name="email_error">Erreur dans ce champs \"Mail\"</string>
+    <string name="password_error">Erreur de mot de pass</string>
 
 
 </resources>

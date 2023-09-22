@@ -1,13 +1,12 @@
 package slikoo.kvrae.slikoo.viewmodels
 
-import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 
-class SignUpViewModel( context : Context): ViewModel() {
+class SignUpViewModel(): ViewModel() {
 
     var user = mutableStateOf(User(
         nom = "Karam",

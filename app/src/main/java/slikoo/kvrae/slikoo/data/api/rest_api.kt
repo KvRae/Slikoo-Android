@@ -22,7 +22,7 @@ import slikoo.kvrae.slikoo.data.datasources.remote.dto.LoginResponse
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.MealDetailsResponse
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.MealResponse
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.NotificationsResponse
-
+import java.util.concurrent.TimeUnit
 
 
 interface ApiServices {
@@ -44,8 +44,7 @@ interface ApiServices {
 
     @Headers("Content-Type: application/json")
     @POST("addRib")
-    suspend fun addRib( @Body user: User): Response<String>
-
+    suspend fun addRib(@Header("Authorization") token: String, @Body email : String, rib : String): Response<Int>
 
     /************************** Notifications **************************/
     @Headers("Content-Type: application/json")
@@ -103,6 +102,10 @@ class RetrofitInstance {
         }
 
         private val client = OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS) // Connection timeout
+            .readTimeout(10, TimeUnit.SECONDS)    // Read timeout
+            .writeTimeout(10, TimeUnit.SECONDS)   // Write timeout
+            .retryOnConnectionFailure(false)
             .addInterceptor(loggingInterceptor)
             .build()
 

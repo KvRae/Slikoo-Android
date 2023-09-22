@@ -1,6 +1,5 @@
 package slikoo.kvrae.slikoo.viewmodels
 
-import android.util.Log
 import android.util.Patterns.EMAIL_ADDRESS
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -26,8 +25,7 @@ class ForgetPasswordViewModel: ViewModel() {
     fun onSendEmail() {
         viewModelScope.launch(Dispatchers.IO) {
             resCode.value = async { userRp.forgotPassword(email.value) }.await()
-            Log.d("forget email", email.value)
-            Log.d("forget resCode", resCode.value.toString())
+
         }
     }
     fun dialogTitle(): Int {

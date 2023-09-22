@@ -8,10 +8,9 @@ import slikoo.kvrae.slikoo.data.datasources.entities.Notification
 class NotificationRemoteDataSource {
 
     suspend fun getNotifications(token: String, email: String, notifications: MutableList<Notification>) {
-        val response = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
-            .getNotificationsByEmail("Bearer $token", email)
-
         try {
+            val response = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
+                .getNotificationsByEmail("Bearer $token", email)
             if (response.isSuccessful) {
                 response.body()?.notifications?.let { notifications.addAll(it) }
                 Log.d("Notifications List size DS", notifications.size.toString())

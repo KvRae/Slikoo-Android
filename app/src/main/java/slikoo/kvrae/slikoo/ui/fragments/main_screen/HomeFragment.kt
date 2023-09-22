@@ -40,7 +40,6 @@ import slikoo.kvrae.slikoo.viewmodels.RatingViewModel
 @Composable
 fun HomeScreen(navController: NavController) {
     val mealsViewModel : MealsViewModel  = viewModel()
-    if (mealsViewModel.meals.isEmpty() && mealsViewModel.isLoading.value) LoadingScreen()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -54,11 +53,13 @@ fun HomeScreen(navController: NavController) {
         ) {
             Spacer(modifier = Modifier.padding(8.dp))
             SearchBar(onSearch = {})
-            OnlineRecipes(navController,mealsViewModel)
+            if (mealsViewModel.meals.isNotEmpty())OnlineRecipes(navController,mealsViewModel)
             RecipesCategorySection()
             RatingListSection()
         }
     }
+
+    if (mealsViewModel.meals.isEmpty() && mealsViewModel.isLoading.value) LoadingScreen()
 }
 
 
@@ -99,12 +100,10 @@ fun RecipesCategorySection() {
                 content = {
                     items(categories.size) {
                         AreaFilterCard(
+                            onClick =  {},
                             name = categories[it].name,
-                            image = categories[it].image,
-
-                        ) {
-
-                        }
+                            image = categories[it].image
+                        )
 
                     }
                 }

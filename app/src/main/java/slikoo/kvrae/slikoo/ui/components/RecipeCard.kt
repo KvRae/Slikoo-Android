@@ -76,9 +76,8 @@ fun RecipeCardContent(meal : Meal, navController: NavController) {
             )
             Column(modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(0.4f))) {
-
-            }
+                .background(Color.Black.copy(0.4f)),
+                content = { })
 
             Column(modifier = Modifier.padding(8.dp)) {
                 Row(horizontalArrangement = Arrangement.Start,

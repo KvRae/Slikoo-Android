@@ -44,7 +44,7 @@ import slikoo.kvrae.slikoo.viewmodels.SignUpViewModel
 @Composable
 fun SignUpSecondForm(onChange: (String) -> Unit) {
     val context = LocalContext.current
-    val userViewModel: SignUpViewModel = viewModel( initializer = { SignUpViewModel(context) })
+    val userViewModel: SignUpViewModel = viewModel()
     var isErrors by remember{ mutableStateOf(false)}
     Box(
         modifier = Modifier

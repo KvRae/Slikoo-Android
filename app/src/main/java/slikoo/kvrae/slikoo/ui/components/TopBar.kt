@@ -3,21 +3,12 @@ package slikoo.kvrae.slikoo.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Lock
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,17 +16,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.PopupProperties
-import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
@@ -47,7 +36,11 @@ import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 
 @Composable
 fun CustomMainMenuTopBar(title: String = stringResource(id = R.string.app_name),
-                         navController: NavController) {
+                         user: User = User(),
+                         onTitleChange: (String) -> Unit = {}) {
+
+    val avatar = if (user.avatar.isNotEmpty()) user.avatarUrl + user.avatar  else stringResource(id = R.string.avatar)
+
     var isExpanded by remember {
         mutableStateOf(false)
     }
@@ -82,10 +75,10 @@ fun CustomMainMenuTopBar(title: String = stringResource(id = R.string.app_name),
         actions = {
             if (title != MainScreenNavigator.SettingsScreen.route) {
                 IconButton(onClick = {
-                    isExpanded = !isExpanded
+                        onTitleChange("Parametres")
                 }) {
-                    Image(
-                        painter = painterResource(id = R.drawable.avatar),
+                    AsyncImage(
+                        model = avatar,
                         contentDescription = stringResource(R.string.avatar),
                         modifier = Modifier
                             .clip(CircleShape)
@@ -94,29 +87,9 @@ fun CustomMainMenuTopBar(title: String = stringResource(id = R.string.app_name),
                     )
                 }
             }
-            DropdownMenu(
-                expanded = isExpanded,
-                offset = DpOffset(4.dp, 0.dp),
-                properties = PopupProperties(focusable = true),
-                onDismissRequest = { isExpanded = false },
-                modifier = Modifier.background(LightSecondary)
-            ) {
-                DropdownMenuItem(onClick = { /*TODO*/ }) { DropDownItemContent(stringResource(id = R.string.see_profile), Icons.Rounded.Person) }
-                DropdownMenuItem(onClick = { /*TODO*/ }) { DropDownItemContent(stringResource(id = R.string.settings), Icons.Rounded.Settings) }
-                DropdownMenuItem(onClick = { /*TODO*/ }) { DropDownItemContent(stringResource(id =R.string.disconnect), Icons.Rounded.Lock) }
-            }
         }
     )
 
-}
-
-@Composable
-fun DropDownItemContent(label : String, icon : ImageVector) {
-    Row {
-        Icon(imageVector = icon, contentDescription = stringResource(R.string.menu_item_icon))
-        Spacer(modifier = Modifier.size(4.dp))
-        Text(label)
-    }
 }
 
 

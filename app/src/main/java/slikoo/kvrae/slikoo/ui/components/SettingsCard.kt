@@ -38,6 +38,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 fun SettingCard(icon: ImageVector,
                 modifier: Modifier = Modifier,
                 title: String, subtitle: String = "Null",
+                avatar: String = "",
                 actionIcon: ImageVector,
                 onClick : () -> Unit) {
     Card(
@@ -94,7 +95,7 @@ fun SettingCard(icon: ImageVector,
                 },
             navigationIcon = {
                 if (subtitle != "Null")
-                AsyncImage(model = "https://raw.githubusercontent.com/KvRae/Slikoo-JsonCollection/main/Assets/portrait-6054910_1280.jpg",
+                AsyncImage(model = avatar.ifEmpty { R.drawable.avatar },
                     contentDescription = stringResource(R.string.profile_pic),
                     onLoading = { },
                     modifier = Modifier

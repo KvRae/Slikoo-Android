@@ -77,6 +77,7 @@ fun ProfilePictureSection(
 @Composable
 fun ProfileImagePicker(
     imageUri: Uri? = null,
+    image : String = "",
     onImageSelected: (Uri) -> Unit = {}
 ) {
     var imageUrl by remember {
@@ -124,7 +125,7 @@ fun ProfileImagePicker(
             else
                 BoxWithConstraints {
                     AsyncImage(
-                        model = imageUrl,
+                        model = image,
                         contentDescription = "picture",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

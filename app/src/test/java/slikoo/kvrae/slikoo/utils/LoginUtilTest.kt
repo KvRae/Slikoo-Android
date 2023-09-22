@@ -14,14 +14,14 @@ class LoginUtilTest {
         )
         assertThat(result).isFalse()
     }
-}
 
     @Test
     fun `empty password returns false`(){
         val result = LoginUtil.validateLogin(
             username = "Ahmed",
             password = "",
-            confirmPassword = ""
-        )
+            confirmPassword = "")
         assertThat(result).isFalse()
     }
+}
+

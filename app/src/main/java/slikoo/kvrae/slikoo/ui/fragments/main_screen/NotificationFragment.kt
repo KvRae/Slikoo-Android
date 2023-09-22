@@ -16,9 +16,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.NotificationItem
-import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
+import slikoo.kvrae.slikoo.ui.components.NotificationItemShimmer
 import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
+import slikoo.kvrae.slikoo.ui.pages.TextWithButtonScreen
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
+import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.viewmodels.NotificationViewModel
 
 
@@ -49,8 +51,20 @@ fun NotificationScreen(navController: NavController) {
         if (notificationViewModel.notifications.isEmpty() && !notificationViewModel.isLoading)
             TextElementScreen(text = stringResource(id = R.string.no_element_found))
 
-        if (notificationViewModel.isLoading)
-            LoadingScreen()
+        if (notificationViewModel.isLoading && !notificationViewModel.isError)
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(6) {
+                    NotificationItemShimmer()
+                }
+            }
+        if (notificationViewModel.isError && !notificationViewModel.isLoading)
+            TextWithButtonScreen(text = stringResource(id = R.string.form_error),
+                buttonText = stringResource(id = R.string.error_message_email),
+                onClick = {navController.navigate(AppScreenNavigator.SignInAppScreen.route)}
+            )
     }
 }
 

@@ -39,6 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialogWithContent
@@ -49,9 +51,12 @@ import slikoo.kvrae.slikoo.ui.fragments.signup.ProfileImagePicker
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
+import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 
 @Composable
 fun EditProfileScreen(navController: NavController) {
+    val viewModel: MainScreenViewModel = viewModel()
+    val image = viewModel.user.value.avatarUrl+viewModel.user.value.avatar
     var showDialog by remember { mutableStateOf(false) }
     Box(
         Modifier
@@ -69,40 +74,43 @@ fun EditProfileScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             EditProfileTopBar(navController = navController)
-            ProfileImagePicker(onImageSelected = {})
+            ProfileImagePicker(
+                imageUri = image.toUri(),
+                image = image,
+                onImageSelected = {})
             CustomTextField(
-                onChange = {},
-                value = "",
+                onChange = {viewModel.user.value.nom = it},
+                value = viewModel.user.value.nom,
                 label = stringResource(id = R.string.name),
                 leadingIcon = Icons.Filled.Person
             )
             CustomTextField(
-                onChange = {},
-                value = "",
+                onChange = { viewModel.user.value.prenom = it },
+                value = viewModel.user.value.prenom,
                 label = stringResource(id = R.string.familyName),
                 leadingIcon = Icons.Filled.Person
             )
             CustomTextField(
-                onChange = {},
-                value = "",
+                onChange = { viewModel.user.value.numtel = it },
+                value = viewModel.user.value.numtel,
                 label = stringResource(id = R.string.phone),
                 leadingIcon = Icons.Filled.Phone
             )
             CustomTextField(
-                onChange = {},
-                value = "",
+                onChange = { viewModel.user.value.adressepostal = it },
+                value =  viewModel.user.value.adressepostal,
                 label = stringResource(id = R.string.address),
                 leadingIcon = Icons.Filled.LocationOn
             )
             CustomTextField(
-                onChange = {},
-                value = "",
+                onChange = { viewModel.user.value.codepostal = it },
+                value = viewModel.user.value.codepostal,
                 label = stringResource(id = R.string.postal_code),
                 leadingIcon = Icons.Filled.AccountCircle
             )
             CustomTextField(
-                onChange = {},
-                value = "",
+                onChange = { viewModel.user.value.description = it},
+                value = viewModel.user.value.description,
                 label = stringResource(id = R.string.description),
                 leadingIcon = Icons.Filled.Info
             )
@@ -123,8 +131,8 @@ fun EditProfileScreen(navController: NavController) {
                     title = stringResource(id = R.string.add_rib),
                     content = {
                         CustomTextField(
-                            onChange = {},
-                            value = "",
+                            onChange = { viewModel.user.value.RIB = it},
+                            value = viewModel.user.value.RIB,
                             label = stringResource(id = R.string.add_rib),
                             leadingIcon = Icons.Filled.AccountCircle
                         )
@@ -132,10 +140,21 @@ fun EditProfileScreen(navController: NavController) {
                     confirmText = stringResource(id = R.string.add),
                     dismissText = stringResource(id = R.string.dismiss),
                     onDismiss = { showDialog = false },
-                    onConfirm = { showDialog = false })
+                    onConfirm = {
+                        viewModel.addRib()
+                        showDialog = false
+                        makeToast(viewModel.ribMessage.value, navController.context)
+                    })
 
         }
     }
+    if (viewModel.isLoading && !viewModel.isError) LoadingScreen()
+
+    if (viewModel.isError && !viewModel.isLoading)
+        TextWithButtonScreen(text = stringResource(id = R.string.session_expired),
+            buttonText = stringResource(id = R.string.reconnect),
+            onClick = { navController.navigate(AppScreenNavigator.SignInAppScreen.route) }
+        )
 }
 
 fun makeToast(message: String, context: Context) {

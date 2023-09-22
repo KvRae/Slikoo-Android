@@ -1,6 +1,5 @@
 package slikoo.kvrae.slikoo.ui.pages
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -77,7 +76,7 @@ fun ForgetPasswordTopBar( navController: NavController) {
     }
 }
 
-@SuppressLint("SuspiciousIndentation")
+
 @Composable
 fun EmailInput(navController: NavController) {
     val emailViewModel: ForgetPasswordViewModel = viewModel()

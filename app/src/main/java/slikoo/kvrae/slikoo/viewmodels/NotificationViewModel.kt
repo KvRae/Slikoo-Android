@@ -12,13 +12,16 @@ import slikoo.kvrae.slikoo.utils.TempSession
 
 
 class NotificationViewModel : ViewModel() {
+    var isLoading = true
+    var isError = false
     private val notificationRepository = NotificationRemoteDataSource()
     var notifications = mutableStateListOf<Notification>()
-    var isLoading = true
+
 
     init {
         getNotifications(email = TempSession.email, token = TempSession.token, notifications = notifications)
     }
+
 
      private fun getNotifications(email: String, token: String, notifications: MutableList<Notification>) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -28,6 +31,8 @@ class NotificationViewModel : ViewModel() {
                 async { isLoading = false }.await()
             } catch (e: Exception) {
                 e.printStackTrace()
+                async { isLoading = false }.await()
+                async { isError = true }.await()
             }
         }
     }

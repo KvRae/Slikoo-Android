@@ -29,7 +29,7 @@ import slikoo.kvrae.slikoo.viewmodels.SignUpViewModel
 @Composable
 fun SignUpCidForm(onChange: (String) -> Unit) {
     val context = LocalContext.current
-    val  userViewModel: SignUpViewModel = viewModel(initializer = { SignUpViewModel(context) })
+    val  userViewModel: SignUpViewModel = viewModel()
     Column(
         modifier = Modifier
             .fillMaxSize()

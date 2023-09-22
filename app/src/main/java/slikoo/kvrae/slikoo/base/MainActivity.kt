@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window,
-            false) // This is important to make the status bar transparent on Android 12
+            false)
         setContent {
             SlikooTheme {
                 App()

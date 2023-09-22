@@ -59,13 +59,15 @@ fun RecipeScreen(navController: NavController) {
                 userScrollEnabled = true,
                 state = scrollState,
                 content = {
-                    if (mealsViewModel.filteredMeals.isEmpty()&& mealsViewModel.isLoading.value) items(6){ ShimmerRecipeCard() }
+                    if (mealsViewModel.filteredMeals.isEmpty() && mealsViewModel.isLoading.value) items(6){ ShimmerRecipeCard() }
                     items(mealsViewModel.filteredMeals.size) {
                         RecipeCardContent(meal = mealsViewModel.filteredMeals[it],
                             navController = navController)
                     }
                 }
             )
+            if (mealsViewModel.filteredMeals.isEmpty() && !mealsViewModel.isLoading.value)
+                TextElementScreen(text = stringResource(id = R.string.no_element_found))
 
         }
     }
