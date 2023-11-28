@@ -39,8 +39,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondaryVariant
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
@@ -205,23 +207,23 @@ fun SearchBarWithFilter(
                 .fillMaxWidth()
 
         ) {
-            FilterRow(header = "Filter 1", onFilterChange = { /*TODO*/ }, filterList = listOf("Item1", "Item2", "Item3"))
+            FilterRow(header = stringResource(R.string.localtion), onFilterChange = {  }, filterList = listOf("Paris", "Lyon"))
             Divider(modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp))
-            FilterRow(header = "Date", onFilterChange = { /*TODO*/ }, filterList = listOf("Item1", "Item2", "Item3"))
+            FilterRow(header = "Date", onFilterChange = { /*TODO*/ }, filterList = listOf("Cette Semaine"))
             Divider()
             Row(modifier = Modifier.fillMaxWidth()) {
-                TextButton(onClick = { /*TODO*/ }) {
-                    Text(text = "Clear Filters")
+                TextButton(onClick = { isToggled = false }) {
+                    Text(text = stringResource(R.string.clear_filters))
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                TextButton(onClick = { /*TODO*/ }) {
-                    Text(text = "Cancel")
+                TextButton(onClick = { isToggled = false }) {
+                    Text(text = stringResource(R.string.cancel))
                 }
                 Spacer(modifier = Modifier.padding(8.dp))
-                TextButton(onClick = { /*TODO*/ }) {
-                    Text(text = "Apply")
+                TextButton(onClick = { isToggled = false }) {
+                    Text(text = stringResource(R.string.apply))
                 }
             }
 
@@ -246,7 +248,8 @@ fun FilterRow(
             Row(modifier = Modifier.padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Checkbox(checked = selectedFilter == filter, onCheckedChange = {
+                Checkbox(checked = selectedFilter == filter,
+                    onCheckedChange = {
                     selectedFilter = filter
                     onFilterChange(filter)
                 })

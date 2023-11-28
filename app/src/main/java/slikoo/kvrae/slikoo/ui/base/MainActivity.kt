@@ -1,4 +1,4 @@
-package slikoo.kvrae.slikoo.base
+package slikoo.kvrae.slikoo.ui.base
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

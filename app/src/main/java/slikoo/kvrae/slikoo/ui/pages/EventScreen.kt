@@ -101,7 +101,7 @@ fun EventScreen(
             when (fragment) {
                 stringResource(R.string.first) -> EventFirstFragment(mealVM) { fragment = it }
                 stringResource(R.string.second) -> {
-                    EventSecondFragment({ fragment = it }, navController = navController)
+                    EventSecondFragment({ fragment = it }, navController = navController, mealVM)
 
                 }
                 stringResource(R.string.third) -> {

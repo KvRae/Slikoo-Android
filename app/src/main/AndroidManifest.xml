@@ -27,7 +27,7 @@
         android:theme="@style/Theme.Slikoo"
         tools:targetApi="31">
         <activity
-            android:name=".base.MainActivity"
+            android:name=".ui.base.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Slikoo">
             <intent-filter>

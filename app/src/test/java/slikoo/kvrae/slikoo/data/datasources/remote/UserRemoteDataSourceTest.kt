@@ -9,20 +9,6 @@ class UserRemoteDataSourceTest {
 
 
     @Test
-    fun login(){
-    }
-
-    @Test
-    fun getUserByEmail() {
-
-
-    }
-
-    @Test
-    fun getNotificationsByEmail() {
-    }
-
-    @Test
-    fun addRib() {
+     fun login(){
     }
 }

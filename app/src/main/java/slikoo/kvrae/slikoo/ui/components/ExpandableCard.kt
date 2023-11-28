@@ -108,8 +108,7 @@ fun ExpandableCard(
                     DropdownMenuItem(onClick = {
                         onTitleChange(label)
                         expanded = false
-                    }
-                    )
+                    })
                     {
                         Text(
                             text = label,

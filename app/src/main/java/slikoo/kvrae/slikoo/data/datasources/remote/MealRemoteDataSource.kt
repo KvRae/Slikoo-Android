@@ -5,6 +5,7 @@ import okhttp3.MultipartBody
 import slikoo.kvrae.slikoo.data.api.ApiServices
 import slikoo.kvrae.slikoo.data.api.RetrofitInstance
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
+import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.utils.TempSession.Companion.token
 
 class MealRemoteDataSource() {
@@ -48,6 +49,14 @@ class MealRemoteDataSource() {
         }
     }
 
+    fun getUserById(id: String): User {
+        return User(
+            id = 91,
+            nom = "Kvrae",
+            prenom = "Slikoo",
+            email = ""
+        )
+    }
 
 
 }

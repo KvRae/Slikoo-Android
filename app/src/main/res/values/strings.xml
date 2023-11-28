@@ -119,6 +119,15 @@
     <string name="reconnect">Reconnecter</string>
     <string name="email_error">Erreur dans ce champs \"Mail\"</string>
     <string name="password_error">Erreur de mot de pass</string>
+    <string name="organisateur">"L'organisateur: "</string>
+    <string name="pay">Payer</string>
+    <string name="cancel_pay">Annuler</string>
+    <string name="localtion">Localisation</string>
+    <string name="apply">Appliquer</string>
+    <string name="cancel1">Annuler</string>
+    <string name="clear_filters">Reset</string>
+    <string name="accept">Accepter</string>
+    <string name="updateRecipe">Modifier</string>
 
 
 </resources>

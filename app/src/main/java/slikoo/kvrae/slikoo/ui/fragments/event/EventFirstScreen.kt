@@ -12,11 +12,6 @@ import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -35,23 +30,17 @@ import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
 @Composable
-fun EventFirstFragment(mealsViewModel: MealsViewModel, onFragmentChange: (String) -> Unit) {
+fun EventFirstFragment(mealsViewModel: MealsViewModel,
+                       onFragmentChange: (String) -> Unit,
+) {
 
-    var description by remember { mutableStateOf("") }
+
 
     val pplLabel = stringResource(R.string.ppl_nbr)
-    var peopleNbr by rememberSaveable { mutableStateOf("") }
-
     val invitationTypes = listOf("Anniversaire", "Mariage", "Soirée", "Fête", "Réunion", "Autre")
-
     val themes = listOf("Theme 1", "THeme 2", "Theme 3")
-    var theme by rememberSaveable { mutableStateOf("Thème ou sujet ") }
-
     val preferences = listOf("Halal", "Casher", "Végétarien", "Végétalien", "Autre")
-    var preference by rememberSaveable { mutableStateOf("Préférence Culinaire") }
-
     val genres = listOf("Famille", "Amis", "Collègues", "Entre fille", "Entre mecs", "Autre")
-    var genre by rememberSaveable { mutableStateOf("Genre") }
 
 
     Column(
@@ -78,6 +67,7 @@ fun EventFirstFragment(mealsViewModel: MealsViewModel, onFragmentChange: (String
 
         ExpandableCard(items = invitationTypes, title = mealsViewModel.meal.value.lettre.toString(),
             onTitleChange = { mealsViewModel.meal.value.lettre = it},
+
             leadingIcon = ImageVector.vectorResource(id = R.drawable.person_add)
         )
 

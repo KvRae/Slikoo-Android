@@ -32,11 +32,13 @@ import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.DatePicker
 import slikoo.kvrae.slikoo.ui.components.TimePicker
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
+import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
 @Composable
 fun EventSecondFragment(onFragmentChange: (String) -> Unit,
                         navController: NavController,
+                        mealsViewModel: MealsViewModel
 ) {
     var location by rememberSaveable { mutableStateOf("") }
 
@@ -67,22 +69,22 @@ fun EventSecondFragment(onFragmentChange: (String) -> Unit,
         Spacer(modifier = Modifier.height(32.dp))
 
         CustomTextField(
-            value = location,
-            onChange = { location = it},
+            value = mealsViewModel.meal.value.localisation,
+            onChange = { mealsViewModel.meal.value.copy(localisation = it)},
             label = stringResource(id = R.string.location),
             leadingIcon = Icons.Rounded.LocationOn)
 
         CustomTextField(
-            onChange = {price = "$it.00" } ,
-            value = price,
+            onChange = {mealsViewModel.meal.value.copy(prix = it) } ,
+            value = mealsViewModel.meal.value.prix,
             label = stringResource(id = R.string.price),
             leadingIcon = ImageVector.vectorResource(id = R.drawable.round_euro),
             keyboardType = KeyboardType.Number
         )
 
-        TimePicker(time = time , onTimeChange ={time = it} )
+        TimePicker(time = mealsViewModel.meal.value.heure , onTimeChange ={mealsViewModel.meal.value.copy(heure = it)} )
 
-        DatePicker(date = date, onDateChange = {date = it})
+        DatePicker(date = mealsViewModel.meal.value.date, onDateChange = {mealsViewModel.meal.value.copy(date = it)})
 
         CustomButton(text = stringResource(id = R.string.next)) {
             onFragmentChange(context.getString(R.string.third))

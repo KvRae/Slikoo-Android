@@ -1,42 +1,42 @@
 package slikoo.kvrae.slikoo.viewmodels
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import slikoo.kvrae.slikoo.data.datasources.entities.Notification
 import slikoo.kvrae.slikoo.data.datasources.remote.NotificationRemoteDataSource
 import slikoo.kvrae.slikoo.utils.TempSession
 
-
 class NotificationViewModel : ViewModel() {
-    var isLoading = true
-    var isError = false
-    private val notificationRepository = NotificationRemoteDataSource()
+    var isLoading = mutableStateOf(true)
+    var isError = mutableStateOf(false)
     var notifications = mutableStateListOf<Notification>()
-
+    private val notificationRepository = NotificationRemoteDataSource()
 
     init {
-        getNotifications(email = TempSession.email, token = TempSession.token, notifications = notifications)
+        getNotifications()
     }
 
-
-     private fun getNotifications(email: String, token: String, notifications: MutableList<Notification>) {
-        viewModelScope.launch(Dispatchers.IO) {
+    private fun getNotifications() {
+        viewModelScope.launch {
             try {
-                async { isLoading = true }.await()
-                async {notificationRepository.getNotifications(token =token, email =  email, notifications= notifications)}.await()
-                async { isLoading = false }.await()
+                withContext(Dispatchers.IO) {
+                    notifications.clear()
+                    notifications.addAll(notificationRepository.getNotifications(
+                        token = TempSession.token,
+                        email = TempSession.email
+                    ))
+                }
+                isLoading.value = false
             } catch (e: Exception) {
                 e.printStackTrace()
-                async { isLoading = false }.await()
-                async { isError = true }.await()
+                isLoading.value = false
+                isError.value = true
             }
         }
     }
-
-
-
 }

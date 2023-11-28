@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -100,7 +101,8 @@ fun SettingCard(icon: ImageVector,
                     onLoading = { },
                     modifier = Modifier
                         .size(50.dp)
-                        .clip(shape = CircleShape)
+                        .clip(shape = CircleShape),
+                    contentScale = ContentScale.Crop
                 )
                 else
                     Icon(imageVector = icon, contentDescription = "" ,

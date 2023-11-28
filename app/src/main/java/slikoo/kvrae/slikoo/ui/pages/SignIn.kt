@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.pages
 
+import SignInViewModel
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -24,6 +25,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,13 +54,11 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
-import slikoo.kvrae.slikoo.viewmodels.SignInViewModel
 
 
 @Composable
 fun LoginForm(navController: NavController) {
     val signInViewModel = SignInViewModel()
-    var isError by remember { mutableStateOf(false) }
     val logo = R.drawable.slikoo_white
 
     Box(
@@ -120,129 +120,132 @@ fun LoginForm(navController: NavController) {
 
                 }
             }
-            Surface(
-                color = LightSecondary,
-                border = BorderStroke(1.dp, LightSecondary),
-                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxSize()
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .clip(shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                        .background(LightSecondary),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.connect),
-                        fontWeight = FontWeight.Bold,
-                        style = TextStyle(
-                            color = LightBackground,
-                            fontSize = MaterialTheme.typography.h5.fontSize,
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    CustomTextField(
-                        onChange = {
-                            signInViewModel.user.value = signInViewModel.user.value.copy(email = it)
-                        },
-                        value = signInViewModel.user.value.email,
-                        label = stringResource(id = R.string.email),
-                        keyboardType = KeyboardType.Email,
-                        leadingIcon = Icons.Rounded.Email,
-                        isError = isError,
-                        errorMessage = stringResource(id = R.string.email_error),
-                    )
+            LoginContent(signInViewModel, navController)
+        }
+    }
+}
 
-                    Spacer(modifier = Modifier.height(16.dp))
+@Composable
+fun LoginContent(
+    signInViewModel: SignInViewModel,
+    navController: NavController
+)  {
+    var isError by remember { mutableStateOf(signInViewModel.isError) }
+    Surface(
+        color = LightSecondary,
+        border = BorderStroke(1.dp, LightSecondary),
+        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .clip(shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                .background(LightSecondary),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = stringResource(id = R.string.connect),
+                fontWeight = FontWeight.Bold,
+                style = TextStyle(
+                    color = LightBackground,
+                    fontSize = MaterialTheme.typography.h5.fontSize,
+                )
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            CustomTextField(
+                onChange = {
+                    signInViewModel.user = signInViewModel.user.copy(email = it)
+                },
+                value = signInViewModel.user.email,
+                label = stringResource(id = R.string.email),
+                keyboardType = KeyboardType.Email,
+                leadingIcon = Icons.Rounded.Email,
+                isError = isError,
+                errorMessage = stringResource(id = R.string.email_error),
+            )
 
-                    PasswordTextField(
-                        value = signInViewModel.user.value.password,
-                        label = stringResource(id = R.string.password),
-                        placeHolder = stringResource(id = R.string.password_placeholder),
-                        isError = isError && signInViewModel.user.value.password.isEmpty(),
-                        errorMessage = stringResource(id = R.string.password_error),
-                        onChange = {
-                            signInViewModel.user.value =
-                                signInViewModel.user.value.copy(password = it)
-                        }
-                    )
+            Spacer(modifier = Modifier.height(16.dp))
 
-                    Spacer(modifier = Modifier.height(16.dp))
+            PasswordTextField(
+                value = signInViewModel.user.password,
+                label = stringResource(id = R.string.password),
+                placeHolder = stringResource(id = R.string.password_placeholder),
+                isError = isError && signInViewModel.user.password.isEmpty(),
+                errorMessage = stringResource(id = R.string.password_error),
+                onChange = {
+                    signInViewModel.user =
+                        signInViewModel.user.copy(password = it)
+                }
+            )
 
-                    // Submit button
-                    CustomButton(text = stringResource(id = R.string.connect),
-                        onClick = {
-                            if (signInViewModel.onLoginValidation().isNotEmpty()) {
-                                isError = true
-                            } else {
-                                signInViewModel.onLogin()
-                            }
-                        })
+            Spacer(modifier = Modifier.height(16.dp))
 
-                    Spacer(modifier = Modifier.weight(1f))
+            // Submit button
+            CustomButton(text = stringResource(id = R.string.connect),
+                onClick = {
+                    signInViewModel.onLogin()
+                    isError = signInViewModel.onLoginValidation().isNotEmpty()
+                })
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        TextButton(onClick = {
-                            onNavigate(
-                                navController,
-                                AppScreenNavigator.SignUpAppScreen.route
-                            )
-                        }) {
-                            Text(
-                                stringResource(id = R.string.signUp),
-                                color = LightSurface,
-                                fontSize = MaterialTheme.typography.body2.fontSize,
-                            )
-                        }
-                        Spacer(modifier = Modifier.weight(1f))
-                        TextButton(onClick = {
-                            onNavigate(
-                                navController,
-                                AppScreenNavigator.ForgotPasswordAppScreen.route
-                            )
-                        })
-                        {
-                            Text(
-                                stringResource(id = R.string.forgotPassword),
-                                color = LightSurface,
-                                fontSize = MaterialTheme.typography.body2.fontSize
-                            )
-                        }
-
-                    }
-
-                    if (signInViewModel.isLoading.value) LoadingDialog()
-                    if (signInViewModel.isError.value) CustomAlertDialog(
-                        title = stringResource(id = R.string.form_error),
-                        message = signInViewModel.errorMessage.value,
-                        onConfirm = { signInViewModel.isError.value = false },
-                        confirmText = stringResource(id = R.string.ok)
-                    )
-                    if (signInViewModel.navigate.value) {
-                        CustomAlertDialog(
-                            title = "",
-                            message = stringResource(id = R.string.welcome),
-                            onConfirm = {
-                                navController.popBackStack()
-                                onNavigate(navController, AppScreenNavigator.MainAppScreen.route)
-                            },
-                            confirmText = stringResource(id = R.string.thanks)
-
-                        )
-
-                    }
+            if (signInViewModel.navigate) {
+                onMakeToast(
+                    context = navController.context,
+                    message = stringResource(id = R.string.welcome))
+                DisposableEffect(Unit) {
+                    navController.popBackStack()
+                    navController.navigate(AppScreenNavigator.MainAppScreen.route)
+                    onDispose { signInViewModel.navigate = false }
                 }
             }
+            Spacer(modifier = Modifier.weight(1f))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                TextButton(onClick = {
+                    onNavigate(
+                        navController,
+                        AppScreenNavigator.SignUpAppScreen.route
+                    )
+                }) {
+                    Text(
+                        stringResource(id = R.string.signUp),
+                        color = LightSurface,
+                        fontSize = MaterialTheme.typography.body2.fontSize,
+                    )
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                TextButton(onClick = {
+                    onNavigate(
+                        navController,
+                        AppScreenNavigator.ForgotPasswordAppScreen.route
+                    )
+                })
+                {
+                    Text(
+                        stringResource(id = R.string.forgotPassword),
+                        color = LightSurface,
+                        fontSize = MaterialTheme.typography.body2.fontSize
+                    )
+                }
+
+            }
+
+            if (signInViewModel.isLoading) LoadingDialog()
+            if (signInViewModel.isError) CustomAlertDialog(
+                title = stringResource(id = R.string.form_error),
+                message = signInViewModel.errorMessage,
+                onConfirm = { signInViewModel.isError = false },
+                confirmText = stringResource(id = R.string.ok)
+            )
         }
     }
 }
@@ -252,10 +255,7 @@ fun onNavigate(navController: NavController, route: String) {
     navController.navigate(route)
 }
 
-fun onSubmit(navController: NavController) {
-    navController.popBackStack()
-    navController.navigate(AppScreenNavigator.MainAppScreen.route)
-}
+
 
 fun onMakeToast(context: Context, message: String) {
     Toast.makeText(

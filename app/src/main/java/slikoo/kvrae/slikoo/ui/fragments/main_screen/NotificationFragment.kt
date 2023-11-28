@@ -23,10 +23,9 @@ import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.viewmodels.NotificationViewModel
 
-
 @Composable
 fun NotificationScreen(navController: NavController) {
-    val notificationViewModel : NotificationViewModel = viewModel()
+    val notificationViewModel: NotificationViewModel = viewModel()
     val scrollState = rememberScrollState()
 
     Box(
@@ -35,36 +34,39 @@ fun NotificationScreen(navController: NavController) {
             .background(LightSecondary),
         contentAlignment = Alignment.Center
     ) {
-        if (notificationViewModel.notifications.isNotEmpty()) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .scrollable(scrollState, Orientation.Vertical),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                items(notificationViewModel.notifications.size) {
-                    NotificationItem(notification = notificationViewModel.notifications[it])
+        when {
+            notificationViewModel.isLoading.value && notificationViewModel.notifications.isEmpty() -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    items(6) {
+                        NotificationItemShimmer()
+                    }
                 }
+            }
+            notificationViewModel.notifications.isNotEmpty() -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .scrollable(scrollState, Orientation.Vertical),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    items(notificationViewModel.notifications.size) {
+                        NotificationItem(notification = notificationViewModel.notifications[it])
+                    }
+                }
+            }
+            notificationViewModel.notifications.isEmpty() && !notificationViewModel.isLoading.value -> {
+                TextElementScreen(text = stringResource(id = R.string.no_element_found))
+            }
+            notificationViewModel.isError.value && !notificationViewModel.isLoading.value -> {
+                TextWithButtonScreen(
+                    text = stringResource(id = R.string.form_error),
+                    buttonText = stringResource(id = R.string.error_message_email),
+                    onClick = { navController.navigate(AppScreenNavigator.SignInAppScreen.route) }
+                )
             }
         }
-
-        if (notificationViewModel.notifications.isEmpty() && !notificationViewModel.isLoading)
-            TextElementScreen(text = stringResource(id = R.string.no_element_found))
-
-        if (notificationViewModel.isLoading && !notificationViewModel.isError)
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                items(6) {
-                    NotificationItemShimmer()
-                }
-            }
-        if (notificationViewModel.isError && !notificationViewModel.isLoading)
-            TextWithButtonScreen(text = stringResource(id = R.string.form_error),
-                buttonText = stringResource(id = R.string.error_message_email),
-                onClick = {navController.navigate(AppScreenNavigator.SignInAppScreen.route)}
-            )
     }
 }
-

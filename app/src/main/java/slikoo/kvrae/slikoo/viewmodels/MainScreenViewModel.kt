@@ -10,7 +10,7 @@ import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.UserRemoteDataSource
 import slikoo.kvrae.slikoo.utils.TempSession
 
-class MainScreenViewModel(): ViewModel() {
+class MainScreenViewModel: ViewModel() {
 
     val user = mutableStateOf(User())
     private val userRDS = UserRemoteDataSource()
@@ -20,7 +20,6 @@ class MainScreenViewModel(): ViewModel() {
 
 
     init {
-        isLoading = true
         isError = false
         getUser()
     }
@@ -29,14 +28,18 @@ class MainScreenViewModel(): ViewModel() {
     private fun getUser() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                isLoading = async { true }.await()
+                isLoading = true
                 TempSession.user = async { userRDS.getUserByEmail(token = TempSession.token ,email = TempSession.email) }.await()
                 user.value = async { TempSession.user }.await()
+                async { if (user.value.RIB == null) user.value.RIB = "" }.await()
                 isLoading = async { false }.await()
             } catch (e: Exception) {
                 e.printStackTrace()
-                isLoading = async { false }.await()
-                isError = async { true }.await()
+                isLoading =  false
+                isError = true
+            }
+            finally {
+                isLoading =  false
             }
         }
     }
@@ -49,9 +52,12 @@ class MainScreenViewModel(): ViewModel() {
                 user.value = async { TempSession.user }.await()
                 isLoading = async { false }.await()
             } catch (e: Exception) {
-                ribMessage.value = async { "Something went wrong" }.await()
-                isLoading = async { false }.await()
-                isError = async { true }.await()
+                ribMessage.value ="Something went wrong"
+                isLoading =  false
+                isError =  true
+            }
+            finally {
+                isLoading =  false
             }
         }
     }

@@ -1,6 +1,5 @@
 package slikoo.kvrae.slikoo.ui.pages
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -42,31 +41,35 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.fragments.profile.BioFragment
+import slikoo.kvrae.slikoo.ui.fragments.profile.InvitationsFragment
+import slikoo.kvrae.slikoo.ui.fragments.profile.ReservationFragment
 import slikoo.kvrae.slikoo.ui.fragments.profile.UserOffersList
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
+import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 
 
 @Composable
 fun ProfileScreen(navController: NavController) {
+    val viewModel: MainScreenViewModel = viewModel()
+    val image = viewModel.user.value.avatarUrl+viewModel.user.value.avatar
     val bio = stringResource(id = R.string.biographie)
-    var selectedMenuIndex by remember {
-        mutableStateOf(bio)
-    }
+    var selectedMenuIndex by remember { mutableStateOf(bio) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,7 +77,7 @@ fun ProfileScreen(navController: NavController) {
             .background(LightSecondary)
     ) {
         // Profile Header
-        ProfileHeader(navController = navController)
+        ProfileHeader(navController = navController, user = viewModel.user.value)
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -161,30 +164,31 @@ fun ProfileAppBar(navController: NavController) {
 }
 
 @Composable
-fun ProfileHeader(navController: NavController) {
+fun ProfileHeader(navController: NavController ,user: User) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(LightSecondary)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.banner),
+        AsyncImage(
+            model = user.avatarbannerUrl+user.avatarbanner,
             contentDescription = stringResource(R.string.profile_cover_picture),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(150.dp),
             contentScale = ContentScale.Crop
         )
-        UserProfileInfo()
+        UserProfileInfo( user = user)
         // Profile Picture
         AsyncImage(
-            model = "https://raw.githubusercontent.com/KvRae/Slikoo-JsonCollection/main/Assets/portrait-6054910_1280.jpg",
+            model = user.avatarUrl+user.avatar,
             contentDescription = stringResource(R.string.profile_pic),
             onLoading = { },
             modifier = Modifier
                 .padding(start = 26.dp, top = 100.dp)
                 .size(100.dp)
-                .clip(shape = CircleShape)
+                .clip(shape = CircleShape),
+            contentScale = ContentScale.Crop
         )
         // TopAppBar
         ProfileAppBar(navController = navController)
@@ -193,7 +197,7 @@ fun ProfileHeader(navController: NavController) {
 }
 
 @Composable
-fun UserProfileInfo() {
+fun UserProfileInfo(user : User = User()) {
     Surface(
         Modifier
             .fillMaxWidth()
@@ -215,14 +219,14 @@ fun UserProfileInfo() {
 
                 ) {
                     Text(
-                        text = "Mannai Sara",
+                        text = user.nom + " " + user.prenom,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        text = "SaraMannai@exemple.tn",
+                        text = user.email,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 11.sp,
@@ -232,7 +236,7 @@ fun UserProfileInfo() {
 
                     )
                     Text(
-                        text = "08 Rue Marseille, Jendouba 8100",
+                        text = user.adressepostal,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         lineHeight = 15.sp,
@@ -242,7 +246,7 @@ fun UserProfileInfo() {
 
                     )
                     Text(
-                        text = "+21654879654",
+                        text = user.numtel,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 11.sp,
@@ -271,7 +275,7 @@ fun UserProfileInfo() {
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        text = stringResource(id = R.string.welcome_sub_description),
+                        text = user.description,
                         maxLines = 5,
                         letterSpacing = 0.5.sp,
                         lineHeight = 15.sp,
@@ -335,29 +339,11 @@ fun ProfileContent(selectedMenuIndex: String, navController: NavController) {
         }
 
         stringResource(id = R.string.invitations) -> {
-            Text(
-                text = stringResource(R.string.welcome_sub_description),
-                maxLines = 4,
-                letterSpacing = 0.5.sp,
-                lineHeight = 15.sp,
-                overflow = TextOverflow.Ellipsis,
-                fontSize = 11.sp,
-                modifier = Modifier.padding(top = 4.dp)
-
-            )
+            InvitationsFragment()
         }
 
         stringResource(id = R.string.reservations) -> {
-            Text(
-                text = stringResource(R.string.welcome_description),
-                maxLines = 4,
-                letterSpacing = 0.5.sp,
-                lineHeight = 15.sp,
-                overflow = TextOverflow.Ellipsis,
-                fontSize = 11.sp,
-                modifier = Modifier.padding(top = 4.dp)
-
-            )
+            ReservationFragment()
         }
     }
 }

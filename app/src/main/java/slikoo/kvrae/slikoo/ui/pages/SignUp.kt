@@ -105,7 +105,6 @@ fun SignUp(navController: NavController) {
                         onChange = { route.value = it },
                         navController = navController,
                     )
-
                 }
             }
         }

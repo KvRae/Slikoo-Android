@@ -92,7 +92,7 @@ fun RecipeCardContent(meal : Meal, navController: NavController) {
                             .padding(start = 8.dp),
                         tint = LightPrimaryVariant
                     )
-                    Text(text = if (meal.localisation.length > 12) meal.description.slice(0..11) + "..." else meal.localisation,
+                    Text(text = if (meal.localisation.length > 10) meal.localisation.slice(0..10) + "..." else meal.localisation,
                         modifier = Modifier.padding(start = 4.dp),
                         style = TextStyle(
                             fontSize = 14.sp,
@@ -185,7 +185,7 @@ fun UserEventCard(area : Area, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .size(200.dp),
+            .height(210.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 4.dp,
 
@@ -194,19 +194,19 @@ fun UserEventCard(area : Area, navController: NavController) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .size(160.dp)
+                    .size(180.dp)
                     .clickable(
                         onClick = { navController.navigate(AppScreenNavigator.EventDetailsAppScreen.route) })
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.login),
                     contentDescription = "",
-                    modifier = Modifier.size(170.dp),
+                    modifier = Modifier.size(180.dp),
                     contentScale = ContentScale.Crop
                 )
-                Column(
+                Box(
                     modifier = Modifier
-                        .size(170.dp)
+                        .size(180.dp)
                         .background(Color.Black.copy(0.4f))
                 ) {}
                 Column(modifier = Modifier
@@ -302,9 +302,9 @@ fun UserEventCard(area : Area, navController: NavController) {
                         )
                     }
                 }
-                //EventManagementBar(onDelete = { /*TODO*/ }, onEdit = { /*TODO*/ })
-            }
 
+            }
+            EventManagementBar(onDelete = { /*TODO*/ }, onEdit = { /*TODO*/ })
         }
 
     }
@@ -330,12 +330,12 @@ fun EventManagementBar( onDelete: () -> Unit, onEdit: () -> Unit) {
             Icon(painterResource(id = R.drawable.delete),
                 contentDescription = "Delete icon" ,
                 tint= Color.Gray,
-                modifier = Modifier.size(14.dp)
+                modifier = Modifier.size(12.dp).padding(end = 2.dp)
             )
 
             Text(text = stringResource(R.string.delete),
                 style = TextStyle(
-                    fontSize = 12.sp,
+                    fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray
                 )
@@ -350,12 +350,11 @@ fun EventManagementBar( onDelete: () -> Unit, onEdit: () -> Unit) {
             Icon(painterResource(id = R.drawable.edit),
                 contentDescription = "Delete icon" ,
                 tint= Color.Gray,
-                modifier = Modifier.size(14.dp)
+                modifier = Modifier.size(12.dp).padding(end = 2.dp)
             )
-
             Text(text = stringResource(R.string.edit),
                 style = TextStyle(
-                fontSize = 12.sp,
+                fontSize = 11.sp,
                 fontWeight = FontWeight.Bold),
                 color = Color.Gray
             )

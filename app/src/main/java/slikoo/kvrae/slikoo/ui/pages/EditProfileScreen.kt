@@ -2,6 +2,7 @@ package slikoo.kvrae.slikoo.ui.pages
 
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,7 +48,8 @@ import slikoo.kvrae.slikoo.ui.components.CustomAlertDialogWithContent
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.ImagePickerField
-import slikoo.kvrae.slikoo.ui.fragments.signup.ProfileImagePicker
+import slikoo.kvrae.slikoo.ui.components.ProfileImagePicker
+
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
@@ -56,6 +58,7 @@ import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 @Composable
 fun EditProfileScreen(navController: NavController) {
     val viewModel: MainScreenViewModel = viewModel()
+    var rib by remember { mutableStateOf("") }
     val image = viewModel.user.value.avatarUrl+viewModel.user.value.avatar
     var showDialog by remember { mutableStateOf(false) }
     Box(
@@ -79,42 +82,46 @@ fun EditProfileScreen(navController: NavController) {
                 image = image,
                 onImageSelected = {})
             CustomTextField(
-                onChange = {viewModel.user.value.nom = it},
+                onChange = {viewModel.user.value.copy( nom = it)},
                 value = viewModel.user.value.nom,
                 label = stringResource(id = R.string.name),
                 leadingIcon = Icons.Filled.Person
             )
             CustomTextField(
-                onChange = { viewModel.user.value.prenom = it },
-                value = viewModel.user.value.prenom,
+                onChange = { viewModel.user.value.copy(prenom = it?: "",) },
+                value = viewModel.user.value.prenom?: "",
                 label = stringResource(id = R.string.familyName),
                 leadingIcon = Icons.Filled.Person
             )
             CustomTextField(
-                onChange = { viewModel.user.value.numtel = it },
+                onChange = { viewModel.user.value.copy(numtel = it)},
                 value = viewModel.user.value.numtel,
                 label = stringResource(id = R.string.phone),
                 leadingIcon = Icons.Filled.Phone
             )
             CustomTextField(
-                onChange = { viewModel.user.value.adressepostal = it },
+                onChange = { viewModel.user.value.copy(adressepostal = it) },
                 value =  viewModel.user.value.adressepostal,
                 label = stringResource(id = R.string.address),
                 leadingIcon = Icons.Filled.LocationOn
             )
             CustomTextField(
-                onChange = { viewModel.user.value.codepostal = it },
+                onChange = { viewModel.user.value.copy(codepostal = it) },
                 value = viewModel.user.value.codepostal,
                 label = stringResource(id = R.string.postal_code),
                 leadingIcon = Icons.Filled.AccountCircle
             )
             CustomTextField(
-                onChange = { viewModel.user.value.description = it},
+                onChange = { viewModel.user.value.copy(description = it)},
                 value = viewModel.user.value.description,
                 label = stringResource(id = R.string.description),
                 leadingIcon = Icons.Filled.Info
             )
-            ImagePickerField()
+            ImagePickerField(
+                imageUrl = viewModel.user.value.avatarbannerUrl.plus(viewModel.user.value.avatarbanner).toUri(),
+                image = viewModel.user.value.avatarbannerUrl+viewModel.user.value.avatarbanner,
+                onImageSelected = { viewModel.user.value.avatarbanner = it.toString() }
+            )
             CustomButton(text = stringResource(id = R.string.update),
                 onClick = { navController.navigate(AppScreenNavigator.MainAppScreen.route) })
             Row {
@@ -131,8 +138,8 @@ fun EditProfileScreen(navController: NavController) {
                     title = stringResource(id = R.string.add_rib),
                     content = {
                         CustomTextField(
-                            onChange = { viewModel.user.value.RIB = it},
-                            value = viewModel.user.value.RIB,
+                            onChange = {  rib = it},
+                            value = rib,
                             label = stringResource(id = R.string.add_rib),
                             leadingIcon = Icons.Filled.AccountCircle
                         )
@@ -141,6 +148,7 @@ fun EditProfileScreen(navController: NavController) {
                     dismissText = stringResource(id = R.string.dismiss),
                     onDismiss = { showDialog = false },
                     onConfirm = {
+                        viewModel.user.value.RIB = rib
                         viewModel.addRib()
                         showDialog = false
                         makeToast(viewModel.ribMessage.value, navController.context)
@@ -155,6 +163,10 @@ fun EditProfileScreen(navController: NavController) {
             buttonText = stringResource(id = R.string.reconnect),
             onClick = { navController.navigate(AppScreenNavigator.SignInAppScreen.route) }
         )
+    // on back pressed button on android devices
+    BackHandler {
+        navController.popBackStack()
+    }
 }
 
 fun makeToast(message: String, context: Context) {
@@ -184,9 +196,5 @@ fun EditProfileTopBar(navController: NavController) {
 }
 
 
-//    // on back pressed button on android devices
-//    BackHandler {
-//        navController.popBackStack()
-//
-//    }
+
 

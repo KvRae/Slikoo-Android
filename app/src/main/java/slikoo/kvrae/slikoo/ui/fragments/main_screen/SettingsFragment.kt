@@ -41,6 +41,7 @@ fun SettingsScreen(navController: NavController,user: User) {
         CustomAlertDialog(showDialog = dialogState,
             title = stringResource(R.string.disconnect),
             message = stringResource(R.string.logout_message),
+            dismissText = stringResource(id = R.string.no),
             onDismiss = { dialogState = false },
             onConfirm = {
                 dialogState = false

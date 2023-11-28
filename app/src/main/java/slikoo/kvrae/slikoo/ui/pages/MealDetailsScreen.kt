@@ -10,30 +10,32 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.LocationOn
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,12 +46,15 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
+import slikoo.kvrae.slikoo.ui.components.DescriptionTextField
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
+import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
+import slikoo.kvrae.slikoo.utils.TempSession
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
@@ -78,13 +83,19 @@ fun MealsDetailScreen(navController: NavController,id : Int) {
                 .fillMaxWidth()
                 .height(400.dp)
                 .background(Color.Black.copy(alpha = 0.3f)))
+
             //Content
             Column(modifier = Modifier.fillMaxWidth()) {
                 // TopAppBar
                 MealDetailHeader(navController = navController)
                 // Event Details
                 Spacer(modifier = Modifier.height(100.dp))
-                MealDetailHeading(eventName = mealsViewModel.meal.value.theme, eventDate = mealsViewModel.meal.value.genrenourriture)
+                MealDetailHeading(
+                    eventName = mealsViewModel.meal.value.type,
+                    eventPlace = mealsViewModel.meal.value.localisation,
+                    eventParticipants = mealsViewModel.meal.value.nbr
+                )
+
                 MealDetailContent(mealsViewModel = mealsViewModel)
             }
 
@@ -132,7 +143,9 @@ fun MealDetailHeader(navController : NavController) {
 @Composable
 fun MealDetailHeading(
     eventName : String = "Event Name",
-    eventDate : String = "Event Date"
+    eventPlace : String = "Event place",
+    eventParticipants : String = "0"
+
 ) {
     Column(
         modifier = Modifier
@@ -148,13 +161,40 @@ fun MealDetailHeading(
                 fontSize = 32.sp,
             )
         )
-        Text(text = eventDate,
-            style = TextStyle(
-                color = LightPrimaryVariant,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.LocationOn,
+                contentDescription = "" ,
+                modifier = Modifier.padding(end = 8.dp),
+                tint = LightPrimaryVariant
             )
-        )
+            Text(text = eventPlace,
+                style = TextStyle(
+                    color = LightPrimaryVariant,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                )
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(text = eventParticipants,
+                style = TextStyle(
+                    color = LightPrimaryVariant,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                )
+            )
+            Icon(
+                imageVector = Icons.Rounded.Person,
+                contentDescription = "",
+                tint = LightPrimaryVariant
+            )
+        }
     }
 }
 
@@ -173,66 +213,226 @@ fun MealDetailContent(mealsViewModel: MealsViewModel) {
                 .padding(16.dp),
 
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
 
         ) {
-            MealDetailContentItem(
-                icon = ImageVector.vectorResource(id = R.drawable.time_filled)
-                , title = mealsViewModel.dateConverter(mealsViewModel.meal.value.date.slice(0..9)) ,
-                detail = mealsViewModel.meal.value.heure.slice(11..15)
-            )
-            MealDetailContentItem(
-                icon = Icons.Rounded.LocationOn,
-                detail = mealsViewModel.meal.value.localisation,
-                title = stringResource(id = R.string.location)
-            )
-            MealDetailContentItem(
-                icon = ImageVector.vectorResource(id = R.drawable.round_euro),
-                title = stringResource(id = R.string.price),
-                detail = mealsViewModel . meal . value . prix,
-            )
-
-            MealDetailContentItem(
-                icon = Icons.Rounded.AccountBox,
-                title = stringResource(id = R.string.detail),
-                detail = mealsViewModel.meal. value . description,
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            CustomButton(text = stringResource(id = R.string.book), onClick = {  })
-            Spacer(modifier = Modifier.height(16.dp))
+            //Content Header
+            ContentHeader(mealsViewModel = mealsViewModel)
+            Divider(color = LightBackground, thickness = 0.5.dp)
+            // Content Sub Header
+            ContentSubHeader(mealsViewModel = mealsViewModel)
+            ContentBody(mealsViewModel = mealsViewModel)
         }
     }
 }
 
 @Composable
-fun MealDetailContentItem(
-    icon: ImageVector,
-    title: String = "",
-    detail: String = ""
+fun ContentHeader(
+    mealsViewModel: MealsViewModel
 ) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(16.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            imageVector = icon,
-            tint = Color.Gray,
-            contentDescription ="")
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        AsyncImage(model = R.drawable.avatar,
+            contentDescription = "",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .width(50.dp)
+                .height(50.dp)
+                .clip(CircleShape)
+        )
         Spacer(modifier = Modifier.width(8.dp))
-        Column(Modifier.fillMaxWidth()) {
-            Text(text = title,
+        Column(
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(text = mealsViewModel.meal.value.iduser,
                 style = TextStyle(
                     color = LightBackground,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
+                    fontSize = 18.sp,
                 )
             )
-            Text(text = detail,
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = mealsViewModel.dateConverter(mealsViewModel.meal.value.date,mealsViewModel.meal.value.heure),
                 style = TextStyle(
-                    color = Color.Gray,
-                    fontWeight = FontWeight.Medium,
+                    color = LightBackground,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                )
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Text(text = mealsViewModel.meal.value.prix + " £",
+            style = TextStyle(
+                color = LightBackground,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+            )
+        )
+
+    }
+
+}
+
+@Composable
+fun ContentSubHeader(
+    mealsViewModel: MealsViewModel
+) {
+   Row(
+         modifier = Modifier
+             .fillMaxWidth()
+             .padding(bottom = 16.dp, top = 16.dp),
+         horizontalArrangement = Arrangement.SpaceAround,
+         verticalAlignment = Alignment.CenterVertically
+   ) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp, top = 16.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        SubHeaderItemCard(
+            title = "Genre Recherché",
+            description = mealsViewModel.meal.value.genre
+        )
+        SubHeaderItemCard(
+            title = "Type de nourriture",
+            description = mealsViewModel.meal.value.genrenourriture
+        )
+        SubHeaderItemCard(
+            title = "Type d'evenement",
+            description = mealsViewModel.meal.value.theme
+        )
+    }
+
+   }
+}
+
+@Composable
+fun ContentBody( mealsViewModel: MealsViewModel) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp, bottom = 16.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Text(text = mealsViewModel.meal.value.description,
+            style = TextStyle(
+                color = LightBackground,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+            )
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        if(mealsViewModel.meal.value.iduser != TempSession.user.id.toString())DetailsContentBodyWithTextField() else DetailsContentBodyWithButtons()
+    }
+}
+
+@Composable
+fun DetailsContentBodyWithTextField() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp, bottom = 16.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Text(text = "Message a l'organisateur",
+            style = TextStyle(
+                color = LightBackground,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+            )
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        DescriptionTextField(onChange = {}, value = "", label = "Message")
+        Spacer(modifier = Modifier.weight(1f))
+        CustomButton(text = stringResource(id = R.string.book), onClick = {  })
+        Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+}
+
+@Preview
+@Composable
+fun DetailsContentBodyWithButtons() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp, top = 16.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = LightSurface,
+                contentColor = LightPrimaryVariant
+            ),
+            onClick = { /*TODO*/ }
+        ) {
+            Text(text = stringResource(id = R.string.updateRecipe),
+                style = TextStyle(
+                    color = LightPrimaryVariant,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                ),
+                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)
+            )
+        }
+
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = LightPrimary,
+                contentColor = LightPrimaryVariant
+            ),
+            onClick = { /*TODO*/ }
+        ) {
+            Text(text = stringResource(id = R.string.delete),
+                style = TextStyle(
+                    color = LightPrimaryVariant,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                ),
+                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)
+            )
+        }
+    }
+
+}
+
+@Composable
+fun SubHeaderItemCard(
+    title : String = "",
+    description : String = ""
+) {
+    Card(
+        modifier = Modifier,
+        shape = RoundedCornerShape(16.dp),
+        backgroundColor = LightSecondary,
+        elevation = 4.dp
+    ) {
+        Column(
+            modifier = Modifier.padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(text = title,
+                style = TextStyle(
+                    color = LightPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 11.sp,
+                )
+            )
+            Text(text = description,
+                style = TextStyle(
+                    color = LightBackground,
+                    fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
                 )
             )
@@ -240,8 +440,4 @@ fun MealDetailContentItem(
     }
 }
 
-@Preview
-@Composable
-fun MealsDetailScreenPreview() {
-    MealsDetailScreen(navController = NavController(LocalContext.current),id = 1)
-}
+

@@ -27,31 +27,62 @@ import java.util.concurrent.TimeUnit
 
 interface ApiServices {
 
-    /************************** Meal **************************/
+    /************************** Get Requests **************************/
+
+
     @Headers("Content-Type: application/json")
     @GET("getAllRepas")
     suspend fun getAllMeals(): Response<MealResponse>
 
     @Headers("Content-Type: application/json")
-    @POST("addrepas")
-    suspend fun createMeal(@Header("Authorization") token: String, @Body meal: Meal, avatar: MultipartBody.Part): Response<String>
-
-    @Headers("Content-Type: application/json")
     @GET("getrepasdetailsbyId/{id}")
     suspend fun getMealById(@Path("id") id: Int): Response<MealDetailsResponse>
 
-    /************************** User **************************/
-
-    @Headers("Content-Type: application/json")
-    @POST("addRib")
-    suspend fun addRib(@Header("Authorization") token: String, @Body email : String, rib : String): Response<Int>
-
-    /************************** Notifications **************************/
     @Headers("Content-Type: application/json")
     @GET("GetAllNotifications/{email}")
     suspend fun getNotificationsByEmail(@Header("Authorization") token: String, @Path("email") email: String): Response<NotificationsResponse>
 
-    /************************** SignIn/Up **************************/
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @POST("get-user-by-email/{email}")
+    suspend fun getUserByEmail(@Header("Authorization") token: String, @Path("email") email: String): Response<UserResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("getUsetdetailsbyId/{id}")
+    suspend fun getUserById(@Header("Authorization") token: String, @Path("id") id: Int): Response<UserResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("diplsayfeedbackbyid/{id}")
+    suspend fun getFeedbackById(@Header("Authorization") token: String, @Path("id") id: Int): Response<UserResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("displaymysubmitedfeedBacks/{id}")
+    suspend fun getMySubmittedFeedbacks(@Header("Authorization") token: String, @Path("id") id: Int): Response<UserResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("displaymyfeedback/{id}")
+    suspend fun getMyFeedback(@Header("Authorization") token: String, @Path("id") id: Int): Response<UserResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("displayfeedbackbyrepas/{id}")
+    suspend fun getFeedbackByMealId(@Header("Authorization") token: String, @Path("id") id: Int): Response<UserResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("getlistParticipantConfirmer/{id}")
+    suspend fun getConfirmedParticipants(@Header("Authorization") token: String, @Path("id") id: Int): Response<UserResponse>
+
+
+
+
+
+    /************************** Post Requests **************************/
+
+    @Headers("Content-Type: application/json")
+    @POST("addRib")
+    suspend fun addRib(@Header("Authorization") token: String, @Body ribRequest: RibRequest): Response<Int>
+
+    @Headers("Content-Type: application/json")
+    @POST("addrepas")
+    suspend fun createMeal(@Header("Authorization") token: String, @Body meal: Meal, avatar: MultipartBody.Part): Response<String>
 
     @Headers("Content-Type: application/json")
     @POST("mobile-login")
@@ -66,9 +97,20 @@ interface ApiServices {
     @POST("resetpwd")
     suspend fun forgetPassword(@Body forgetPasswordRequest: ForgetPasswordRequest): Response<Int>
 
-    @Headers("Content-Type: application/json", "Accept: application/json")
-    @GET("get-user-by-email/{email}")
-    suspend fun getUserByEmail(@Header("Authorization") token: String, @Path("email") email: String): Response<UserResponse>
+
+
+
+
+
+
+
+
+    /************************** Put & Patch Requests **************************/
+
+    /************************** Delete Requests **************************/
+
+
+
 
 
 
@@ -77,6 +119,11 @@ interface ApiServices {
 
 
 }
+
+data class RibRequest(
+    val email: String,
+    val rib: String
+)
 
 data class LoginRequest(
     val username: String,

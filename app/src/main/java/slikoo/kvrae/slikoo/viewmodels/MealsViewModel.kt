@@ -9,11 +9,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
+import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.MealRemoteDataSource
 
 class MealsViewModel(): ViewModel() {
     private val mealRemoteDataSource = MealRemoteDataSource()
-    var meal = mutableStateOf(Meal())
+    val user = mutableStateOf(User())
+    val meal = mutableStateOf(Meal())
     var meals = mutableStateListOf<Meal>()
     var isLoading = mutableStateOf(true)
     var searchText = mutableStateOf("")
@@ -55,6 +57,9 @@ class MealsViewModel(): ViewModel() {
             } catch (e: Exception) {
                 Log.e("Meals Error", e.message.toString())
             }
+            finally {
+                isLoading.value = false
+            }
         }
     }
 
@@ -63,15 +68,24 @@ class MealsViewModel(): ViewModel() {
             if (id != 0) {
                 try {
                     meal.value = async { mealRemoteDataSource.getMealById(id = id) }.await()
+                    user.value = async { mealRemoteDataSource.getUserById(id = meal.value.iduser) }.await()
+
                 } catch (e: Exception) {
                     Log.e("Meals Error", e.message.toString())
+                    isLoading.value = false
                 }
             }
         }
     }
 
-    fun dateConverter(date: String): String {
-        val dateList = date.split("-")
+    fun dateConverter(date: String,time : String): String {
+        val timeList = date.split("T")
+        val dateList = timeList[0].split("-")
+
+        val hour = time.split("T")[1].subSequence(0,2)
+        val minute = time.split("T")[1].subSequence(3,5)
+
+
         val day = dateList[2]
         var month = dateList[1]
         val year = dateList[0]
@@ -89,7 +103,8 @@ class MealsViewModel(): ViewModel() {
             "11" -> month = "Novembre"
             "12" -> month = "Decembre"
         }
-        return "$day $month $year"
+        return "$day $month $year à $hour:$minute"
     }
+
 }
 

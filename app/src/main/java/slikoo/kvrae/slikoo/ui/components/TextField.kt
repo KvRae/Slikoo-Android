@@ -71,7 +71,7 @@ fun CustomTextField(
 
     Column {
         OutlinedTextField(
-            value = value,
+            value = value+"",
             onValueChange = { onChange(it) },
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(

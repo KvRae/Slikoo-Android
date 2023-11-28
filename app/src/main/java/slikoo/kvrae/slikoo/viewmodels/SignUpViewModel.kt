@@ -1,12 +1,22 @@
 package slikoo.kvrae.slikoo.viewmodels
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.data.datasources.entities.User
+import slikoo.kvrae.slikoo.data.datasources.remote.UserRemoteDataSource
+import java.io.File
 
-class SignUpViewModel(): ViewModel() {
+class SignUpViewModel: ViewModel() {
+
+    private val userRepository = UserRemoteDataSource()
+    public val cid = mutableStateOf<File?>(File("drawable/banner.png"))
+    public val profilePicture = mutableStateOf<File?>(File("drawable/banner.png"))
+
 
     var user = mutableStateOf(User(
         nom = "Karam",
@@ -16,6 +26,7 @@ class SignUpViewModel(): ViewModel() {
         numtel = "12345678",
         codepostal = "1234",
     ))
+
     var confirmPassword = mutableStateOf("123456")
 
     fun onValidateFirstName(): String {
@@ -94,15 +105,26 @@ class SignUpViewModel(): ViewModel() {
     }
 
     fun onRegister() {
-        if (onValidateFirstName().isEmpty() && onValidateLastName().isEmpty()){
-            viewModelScope
-        }
-        return
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                userRepository.register(
+                    user.value,
+                    profilePicture.value!!,
+                    cid.value!!
+                )
+                Log.d("Retro", "ok")
+            } catch (e: Exception) {
+                e.message.toString()
+                Log.d("Retro", e.message.toString())
+            }
 
+        }
     }
 
     fun onImageSelected(cid: Uri?) {
-        TODO("Not yet implemented")
+        if (cid != null) {
+            user.value = user.value.copy(cinavatar = cid.toString())
+        }
     }
 
 

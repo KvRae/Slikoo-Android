@@ -12,7 +12,7 @@ data class Meal(
     val heure: String="",
     val id: Int=0,
     val iduser: String="",
-    var lettre: Any = Any(),
+    var lettre: String? = "",
     val localisation: String = "",
     var nbr: String = "",
     val prix: String    = "",

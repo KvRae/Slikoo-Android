@@ -17,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -36,9 +35,11 @@ import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 
 
+
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun MainScreen(navController: NavController, currentScreen: String = "Home") {
+
     val title = remember {
         mutableStateOf(currentScreen)
     }
@@ -73,11 +74,17 @@ fun MainScreen(navController: NavController, currentScreen: String = "Home") {
             0
         ),
     )
-    if (viewModel.user.value.nom.isNotEmpty())
+
+
+
+    //if (viewModel.user.value.nom.isNotEmpty())
     Scaffold(
         modifier = Modifier
             .navigationBarsPadding()
             .statusBarsPadding(),
+        snackbarHost = {
+
+        },
         topBar = {
             if (title.value != AppScreenNavigator.EventScreen.route)
                 CustomMainMenuTopBar(
@@ -132,13 +139,13 @@ fun MainScreen(navController: NavController, currentScreen: String = "Home") {
             }
         }
     )
-    if(viewModel.isLoading && !viewModel.isError) LoadingScreen()
-    if (viewModel.user.value.email.isEmpty() && !viewModel.isLoading)
+    if(viewModel.isLoading) LoadingScreen()
+    /*if (viewModel.user.value.email.isEmpty() && !viewModel.isLoading)
         TextWithButtonScreen(text = stringResource(id = R.string.session_expired),
             buttonText = stringResource(id = R.string.reconnect),
             onClick = {
                 navController.navigate(AppScreenNavigator.SignInAppScreen.route)
             }
-        )
+        )*/
 
 }
