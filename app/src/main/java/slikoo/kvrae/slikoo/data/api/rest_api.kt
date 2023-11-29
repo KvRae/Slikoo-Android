@@ -17,12 +17,14 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
-import slikoo.kvrae.slikoo.data.datasources.entities.User
+import slikoo.kvrae.slikoo.data.datasources.remote.dto.ForgetPasswordRequest
+import slikoo.kvrae.slikoo.data.datasources.remote.dto.LoginRequest
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.LoginResponse
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.MealDetailsResponse
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.MealResponse
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.NotificationsResponse
-import java.util.concurrent.TimeUnit
+import slikoo.kvrae.slikoo.data.datasources.remote.dto.RibRequest
+import slikoo.kvrae.slikoo.data.datasources.remote.dto.UserResponse
 
 
 interface ApiServices {
@@ -31,8 +33,12 @@ interface ApiServices {
 
 
     @Headers("Content-Type: application/json")
-    @GET("getAllRepas")
+    @GET("get-all-repas")
     suspend fun getAllMeals(): Response<MealResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("getallrepasbyuserId/{id}")
+    suspend fun getMyMeals(@Header("Authorization") token: String, @Path("id") id: Int): Response<MealResponse>
 
     @Headers("Content-Type: application/json")
     @GET("getrepasdetailsbyId/{id}")
@@ -47,8 +53,16 @@ interface ApiServices {
     suspend fun getUserByEmail(@Header("Authorization") token: String, @Path("email") email: String): Response<UserResponse>
 
     @Headers("Content-Type: application/json")
-    @GET("getUsetdetailsbyId/{id}")
+    @GET("getuserbyID/{id}")
     suspend fun getUserById(@Header("Authorization") token: String, @Path("id") id: Int): Response<UserResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("getInvitation/{id}")
+    suspend fun getInvitations(@Header("Authorization") token: String, @Path("id") id: Int): Response<UserResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("getUsetdetailsbyId/{id}")
+    suspend fun getUserDetailsById(@Header("Authorization") token: String, @Path("id") id: Int): Response<UserResponse>
 
     @Headers("Content-Type: application/json")
     @GET("diplsayfeedbackbyid/{id}")
@@ -89,54 +103,29 @@ interface ApiServices {
     suspend fun login(@Body user: LoginRequest): Response<LoginResponse>
 
     @Multipart
-    @Headers("Content-Type: application/json")
     @POST("register")
-    suspend fun register(@Body user: User, @Part avatar: MultipartBody.Part, @Part cinavatar: MultipartBody.Part ): Response<String>
+    suspend fun register(@Part email: MultipartBody.Part,
+                         @Part nom: MultipartBody.Part,
+                         @Part prenom: MultipartBody.Part,
+                         @Part numtel: MultipartBody.Part,
+                         @Part password: MultipartBody.Part,
+                         @Part adressepostal: MultipartBody.Part,
+                         @Part ville: MultipartBody.Part,
+                         @Part codepostal: MultipartBody.Part,
+                         @Part description: MultipartBody.Part,
+                         @Part avatar: MultipartBody.Part,
+                         @Part cinavatar: MultipartBody.Part,
+                         @Part sexe: MultipartBody.Part,
+
+    ): Response<String>
 
     @Headers("Content-Type: application/json", "Accept: application/html")
     @POST("resetpwd")
     suspend fun forgetPassword(@Body forgetPasswordRequest: ForgetPasswordRequest): Response<Int>
 
-
-
-
-
-
-
-
-
-    /************************** Put & Patch Requests **************************/
-
-    /************************** Delete Requests **************************/
-
-
-
-
-
-
-
-
-
-
 }
 
-data class RibRequest(
-    val email: String,
-    val rib: String
-)
 
-data class LoginRequest(
-    val username: String,
-    val password: String
-)
-
-data class ForgetPasswordRequest(
-    val email: String
-)
-
-data class UserResponse(
-    val user: User,
-)
 
 
 
@@ -149,13 +138,15 @@ class RetrofitInstance {
         }
 
         private val client = OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS) // Connection timeout
-            .readTimeout(10, TimeUnit.SECONDS)    // Read timeout
-            .writeTimeout(10, TimeUnit.SECONDS)   // Write timeout
-            .retryOnConnectionFailure(false)
+            .retryOnConnectionFailure(true)
             .addInterceptor(loggingInterceptor)
+            .callTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
+            .connectTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
+            .pingInterval(5, java.util.concurrent.TimeUnit.SECONDS)
+            .retryOnConnectionFailure(false)
             .build()
-
 
         private var retrofit: Retrofit? = null
         // retrofit singleton instance
@@ -171,3 +162,4 @@ class RetrofitInstance {
         }
     }
 }
+

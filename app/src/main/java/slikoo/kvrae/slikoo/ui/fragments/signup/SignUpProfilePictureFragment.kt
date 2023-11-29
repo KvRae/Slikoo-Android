@@ -1,6 +1,5 @@
 package slikoo.kvrae.slikoo.ui.fragments.signup
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -25,6 +23,7 @@ import slikoo.kvrae.slikoo.ui.components.ProfileImagePicker
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
 import slikoo.kvrae.slikoo.viewmodels.SignUpViewModel
+import java.io.File
 
 
 @Composable
@@ -32,6 +31,8 @@ fun ProfilePictureSection(
     onChange: (String) -> Unit,
     navController: NavController,
 ) {
+
+
     val viewModel: SignUpViewModel = viewModel()
     Column(
         modifier = Modifier
@@ -43,13 +44,15 @@ fun ProfilePictureSection(
         Spacer(modifier = Modifier.size(8.dp))
         CustomSliderPointers(maxSlide = 4, currentSlide = 4)
         ProfileImagePicker(
-            imageUri = "${viewModel.profilePicture}".toUri(),
-            onImageSelected = { viewModel.profilePicture.value = it.toFile() }
+            imageUri = viewModel.profilePicture.toUri(),
+            onImageSelected = { viewModel.profilePicture = File(it.toString()) }
         )
         CustomButton(text = stringResource(R.string.finish),
             onClick = {
-                viewModel.onRegister()
-                Log.d("Terminer", "clicked")
+                viewModel.onRegister(
+                    cid = viewModel.cid,
+                    profilePicture = viewModel.profilePicture,
+                )
                 /*navController.popBackStack()
                 navController.navigate(AppScreenNavigator.SignInAppScreen.route)*/
             }

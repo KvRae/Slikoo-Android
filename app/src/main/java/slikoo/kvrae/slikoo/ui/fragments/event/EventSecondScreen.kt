@@ -11,11 +11,6 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -40,18 +35,8 @@ fun EventSecondFragment(onFragmentChange: (String) -> Unit,
                         navController: NavController,
                         mealsViewModel: MealsViewModel
 ) {
-    var location by rememberSaveable { mutableStateOf("") }
 
     val context = LocalContext.current
-    var price by remember {
-        mutableStateOf("")
-    }
-    var time by remember {
-        mutableStateOf("Time")
-    }
-    var date by remember {
-        mutableStateOf("Date")
-    }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -69,22 +54,27 @@ fun EventSecondFragment(onFragmentChange: (String) -> Unit,
         Spacer(modifier = Modifier.height(32.dp))
 
         CustomTextField(
-            value = mealsViewModel.meal.value.localisation,
-            onChange = { mealsViewModel.meal.value.copy(localisation = it)},
+            value =     mealsViewModel.meal.value.localisation,
+            onChange = { mealsViewModel.meal.value = mealsViewModel.meal.value.copy(localisation = it)},
             label = stringResource(id = R.string.location),
             leadingIcon = Icons.Rounded.LocationOn)
 
         CustomTextField(
-            onChange = {mealsViewModel.meal.value.copy(prix = it) } ,
+            onChange = {mealsViewModel.meal.value = mealsViewModel.meal.value.copy(prix = it) } ,
             value = mealsViewModel.meal.value.prix,
             label = stringResource(id = R.string.price),
             leadingIcon = ImageVector.vectorResource(id = R.drawable.round_euro),
             keyboardType = KeyboardType.Number
         )
 
-        TimePicker(time = mealsViewModel.meal.value.heure , onTimeChange ={mealsViewModel.meal.value.copy(heure = it)} )
+        TimePicker(
+            time = mealsViewModel.meal.value.heure ,
+            onTimeChange ={mealsViewModel.meal.value = mealsViewModel.meal.value.copy(heure = it)}
+        )
 
-        DatePicker(date = mealsViewModel.meal.value.date, onDateChange = {mealsViewModel.meal.value.copy(date = it)})
+        DatePicker(date = mealsViewModel.meal.value.date,
+            onDateChange = {mealsViewModel.meal.value = mealsViewModel.meal.value.copy(date = it)}
+        )
 
         CustomButton(text = stringResource(id = R.string.next)) {
             onFragmentChange(context.getString(R.string.third))

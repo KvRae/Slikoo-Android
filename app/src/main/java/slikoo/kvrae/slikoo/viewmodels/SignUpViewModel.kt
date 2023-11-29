@@ -2,7 +2,9 @@ package slikoo.kvrae.slikoo.viewmodels
 
 import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -14,17 +16,23 @@ import java.io.File
 class SignUpViewModel: ViewModel() {
 
     private val userRepository = UserRemoteDataSource()
-    public val cid = mutableStateOf<File?>(File("drawable/banner.png"))
-    public val profilePicture = mutableStateOf<File?>(File("drawable/banner.png"))
+    var cid by  mutableStateOf(
+        File("")
+    )
+    var profilePicture by mutableStateOf(
+        File("")
+    )
 
 
     var user = mutableStateOf(User(
         nom = "Karam",
         prenom = "MANNAI",
-        email = "karam.mannaii@esprit.tn",
+        email = "karam.mannaiii@esprit.tn",
         password = "123456",
         numtel = "12345678",
         codepostal = "1234",
+        avatar = profilePicture.name,
+        cinavatar = cid.name
     ))
 
     var confirmPassword = mutableStateOf("123456")
@@ -104,18 +112,14 @@ class SignUpViewModel: ViewModel() {
         return ""
     }
 
-    fun onRegister() {
+    fun onRegister(user : User = this.user.value, profilePicture: File = this.profilePicture, cid: File = this.cid) {
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                userRepository.register(
-                    user.value,
-                    profilePicture.value!!,
-                    cid.value!!
-                )
-                Log.d("Retro", "ok")
+                userRepository.register(user, profilePicture, cid)
+                Log.d("Retro register", "REGISTER ok")
             } catch (e: Exception) {
-                e.message.toString()
-                Log.d("Retro", e.message.toString())
+                Log.d("Retro register", e.message.toString())
             }
 
         }

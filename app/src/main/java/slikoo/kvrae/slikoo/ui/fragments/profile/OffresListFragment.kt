@@ -11,13 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.components.UserEventCard
-import slikoo.kvrae.slikoo.viewmodels.AreaViewModel
+import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
+import slikoo.kvrae.slikoo.ui.theme.LightError
+import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 @Composable
 fun UserOffersList(navController: NavController) {
-    val areas = AreaViewModel().getAreas()
+    val viewModel : MealsViewModel = viewModel()
     val scrollState = rememberLazyGridState()
 
     Box(
@@ -31,14 +34,15 @@ fun UserOffersList(navController: NavController) {
                 .padding(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            LazyVerticalGrid(columns = GridCells.Fixed(2),
+            if (viewModel.myMeals.isNotEmpty())LazyVerticalGrid(columns = GridCells.Fixed(2),
                 userScrollEnabled = true,
                 state = scrollState,
                 content = {
-                    items(areas.size) {
-                        UserEventCard(area = areas[it], navController = navController)
+                    items(viewModel.myMeals.size) {
+                        UserEventCard(meal = viewModel.myMeals[it], navController = navController)
                     }
                 })
+            if (viewModel.myMeals.isEmpty()) TextElementScreen(backgound = LightError, text = "Aucune offre disponible")
         }
     }
 }

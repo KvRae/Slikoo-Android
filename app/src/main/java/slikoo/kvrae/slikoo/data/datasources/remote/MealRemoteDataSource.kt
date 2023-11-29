@@ -22,6 +22,20 @@ class MealRemoteDataSource() {
         }
     }
 
+    suspend fun getMyMeals(meals: MutableList<Meal>, token: String, id: Int) {
+        try {
+            meals.clear()
+            val response = RetrofitInstance.getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .getMyMeals(token = "Bearer $token", id = id)
+            if (response.isSuccessful)
+                response.body()?.meals?.let { meals.addAll(it) }
+        }
+        catch (e: Exception) {
+            Log.e("Meals Error", e.message.toString())
+        }
+    }
+
     suspend fun createMeal(meal: Meal): String {
         return try {
             val response = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
@@ -49,13 +63,19 @@ class MealRemoteDataSource() {
         }
     }
 
-    fun getUserById(id: String): User {
-        return User(
-            id = 91,
-            nom = "Kvrae",
-            prenom = "Slikoo",
-            email = ""
-        )
+    suspend fun getUserById(id: Int, token: String): User {
+        return try {
+            val response = RetrofitInstance.getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .getUserById(token = "Bearer $token", id = id)
+            if (response.code() == 200) response.body()?.user1!!
+            else User()
+        } catch (e: Exception) {
+            Log.e("Meals Error", e.message.toString())
+            User()
+        }
+
+
     }
 
 

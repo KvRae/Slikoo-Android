@@ -1,7 +1,6 @@
 package slikoo.kvrae.slikoo.ui.pages
 
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -17,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -36,13 +36,11 @@ import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 
 
 
-@SuppressLint("SuspiciousIndentation")
+
 @Composable
 fun MainScreen(navController: NavController, currentScreen: String = "Home") {
 
-    val title = remember {
-        mutableStateOf(currentScreen)
-    }
+    val title = remember { mutableStateOf(currentScreen) }
 
     val viewModel: MainScreenViewModel = viewModel()
 
@@ -140,12 +138,11 @@ fun MainScreen(navController: NavController, currentScreen: String = "Home") {
         }
     )
     if(viewModel.isLoading) LoadingScreen()
-    /*if (viewModel.user.value.email.isEmpty() && !viewModel.isLoading)
+    if (viewModel.isError)
         TextWithButtonScreen(text = stringResource(id = R.string.session_expired),
             buttonText = stringResource(id = R.string.reconnect),
             onClick = {
                 navController.navigate(AppScreenNavigator.SignInAppScreen.route)
             }
-        )*/
-
+        )
 }

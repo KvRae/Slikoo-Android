@@ -5,42 +5,53 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import slikoo.kvrae.slikoo.data.api.ApiServices
-import slikoo.kvrae.slikoo.data.api.ForgetPasswordRequest
-import slikoo.kvrae.slikoo.data.api.LoginRequest
 import slikoo.kvrae.slikoo.data.api.RetrofitInstance
-import slikoo.kvrae.slikoo.data.api.RibRequest
 import slikoo.kvrae.slikoo.data.datasources.entities.User
+import slikoo.kvrae.slikoo.data.datasources.remote.dto.ForgetPasswordRequest
+import slikoo.kvrae.slikoo.data.datasources.remote.dto.LoginRequest
+import slikoo.kvrae.slikoo.data.datasources.remote.dto.RibRequest
 import java.io.File
 
 class UserRemoteDataSource {
 
     suspend fun register(user: User, avatar: File, cin: File ): Int {
-        return try {
+        val avatarRequestBody = avatar.asRequestBody("image/*".toMediaTypeOrNull())
+        val cinRequestBody = cin.asRequestBody("image/*".toMediaTypeOrNull())
+       return try {
+
             val response = RetrofitInstance
                 .getRetrofitInstance()
                 .create(ApiServices::class.java)
-                .register(user, MultipartBody.Part.createFormData("avatar", avatar.name, avatar.asRequestBody("image/*".toMediaTypeOrNull())),
-                    MultipartBody.Part.createFormData("cin", cin.name, cin.asRequestBody("image/*".toMediaTypeOrNull())))
-
-            return when (response.code()) {
-                200 -> {
-                    Log.d("Response from server", response.body().toString())
-                    200
-                }
-                401 -> {
-                    Log.d("Response from server", response.body().toString())
-                    401
-                }
-                else -> {
-                    Log.d("Response from server", response.body().toString())
-                    500
-                }
+                .register(
+                    nom = MultipartBody.Part.createFormData("nom", user.nom),
+                    prenom = MultipartBody.Part.createFormData("prenom", user.prenom),
+                    email = MultipartBody.Part.createFormData("email", user.email),
+                    password = MultipartBody.Part.createFormData("password", user.password),
+                    numtel = MultipartBody.Part.createFormData("numtel", user.numtel),
+                    adressepostal = MultipartBody.Part.createFormData("adressepostal", user.codepostal),
+                    ville = MultipartBody.Part.createFormData("ville", user.ville),
+                    codepostal = MultipartBody.Part.createFormData("codepostal", user.codepostal),
+                    description = MultipartBody.Part.createFormData("description", user.description),
+                    avatar = MultipartBody.Part.createFormData("avatar", avatar.name, avatarRequestBody),
+                    cinavatar = MultipartBody.Part.createFormData("cinavatar", cin.name, cinRequestBody),
+                    sexe = MultipartBody.Part.createFormData("sex", user.sexe),
+                )
+            if (response.code() == 201) {
+                Log.d("Response from server 200", response.body().toString())
+                201
+            } else if (response.code() == 401) {
+                Log.d("Response from server 401", response.body().toString())
+                401
+            } else {
+                Log.d("Response from server 500", response.body().toString())
+                500
             }
-
-        } catch (e: Exception) {
-            500
-            Log.d("response in data source 500 catch", e.message.toString())
         }
+        catch (e: Exception) {
+            Log.d("response in data source 500 catch", e.message.toString())
+            500
+        }
+
     }
 
     suspend fun authUser(user : User): String {
@@ -85,7 +96,7 @@ class UserRemoteDataSource {
     suspend fun getUserById(token: String, id: Int) : User {
        return try {
            val retIn = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
-           val response = retIn.getUserById(token= "Bearer $token", id = id)
+           val response = retIn.getUserDetailsById(token= "Bearer $token", id = id)
            if (response.code() == 200) {
                 response.body()?.user!!
             } else {

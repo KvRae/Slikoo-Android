@@ -53,7 +53,7 @@ fun HomeScreen(navController: NavController) {
         ) {
             Spacer(modifier = Modifier.padding(8.dp))
             SearchBar(onSearch = {})
-            if (mealsViewModel.meals.isNotEmpty())OnlineRecipes(navController,mealsViewModel)
+            if (mealsViewModel.meals.isNotEmpty()) OnlineRecipes(navController,mealsViewModel)
             RecipesCategorySection()
             RatingListSection()
         }

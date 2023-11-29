@@ -32,6 +32,7 @@ fun DropDownPreview() {
 @Composable
 fun CustomDropDownMenu(dropDownList : List<String> ,
                        value : String = "" ,
+                       placeHolder: String = "",
                        onChange : (String) -> Unit) {
     var isExpanded by remember { mutableStateOf(false) }
     Box() {

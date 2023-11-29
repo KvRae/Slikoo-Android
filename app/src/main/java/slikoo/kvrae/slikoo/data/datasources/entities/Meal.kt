@@ -2,20 +2,20 @@ package slikoo.kvrae.slikoo.data.datasources.entities
 
 data class Meal(
     //val avatarUrl: String =,
-    val avatar: String = "",
-    val `data`: Any = Any(),
-    val date: String = "",
-    val datecreation: String = "",
+    var avatar: String = "",
+    var `data`: Any = Any(),
+    var date: String = "",
+    var datecreation: String = "",
     var description: String = "",
     var genre: String= "",
     var genrenourriture: String="",
-    val heure: String="",
-    val id: Int=0,
-    val iduser: String="",
+    var heure: String="",
+    var id: Int=0,
+    var iduser: String="",
     var lettre: String? = "",
-    val localisation: String = "",
+    var localisation: String = "",
     var nbr: String = "",
-    val prix: String    = "",
+    var prix: String    = "",
     var theme: String = "",
-    val type: String = ""
+    var type: String = ""
 )

@@ -67,7 +67,6 @@ import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 @Composable
 fun ProfileScreen(navController: NavController) {
     val viewModel: MainScreenViewModel = viewModel()
-    val image = viewModel.user.value.avatarUrl+viewModel.user.value.avatar
     val bio = stringResource(id = R.string.biographie)
     var selectedMenuIndex by remember { mutableStateOf(bio) }
     Column(
@@ -159,8 +158,6 @@ fun ProfileAppBar(navController: NavController) {
             }
         },
     )
-
-
 }
 
 @Composable

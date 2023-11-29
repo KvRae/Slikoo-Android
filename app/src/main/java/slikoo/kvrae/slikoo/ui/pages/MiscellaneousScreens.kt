@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.ui.components.CustomButton
@@ -37,11 +38,14 @@ fun LoadingScreen() {
 }
 
 @Composable
-fun TextElementScreen(text : String) {
+fun TextElementScreen(
+    text : String,
+    backgound : Color = LightSecondary
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = LightSecondary),
+            .background(color = backgound),
         contentAlignment = Alignment.Center
     ) {
         Text(text = text)

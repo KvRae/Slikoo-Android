@@ -36,25 +36,32 @@ fun TimePicker(time: String, modifier: Modifier = Modifier, onTimeChange: (Strin
     val timePickerDialog = TimePickerDialog(
         LocalContext.current,
         R.style.DialogTheme,
-        {_, mHour : Int , mMinute: Int ->
+        { _, mHour: Int, mMinute: Int ->
             timePicked = "$mHour:$mMinute"
-        }, Calendar.getInstance().get(Calendar.HOUR),
+            onTimeChange(timePicked) // Update the time using the callback
+        },
+        Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
         Calendar.getInstance().get(Calendar.MINUTE),
-        true,
-
+        true
     )
-    OutlinedTextField(//label = { Text(text = time) },
+    OutlinedTextField(
         value = timePicked,
         shape = RoundedCornerShape(8.dp),
         placeholder = { Text(text = time) },
-        onValueChange = { onTimeChange(timePicked)},
-        leadingIcon = {Icon(imageVector = ImageVector.vectorResource(id = R.drawable.time_filled), contentDescription = null, tint = Color.Gray )},
+        onValueChange = { updatedTime -> onTimeChange(updatedTime) },
+        leadingIcon = {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.time_filled),
+                contentDescription = null,
+                tint = Color.Gray
+            )
+        },
         enabled = false,
         readOnly = true,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Gray,
             unfocusedBorderColor = Color.Gray,
-            disabledBorderColor = if (timePicked!= time)  Color.Gray.copy(0.4f) else LightError,
+            disabledBorderColor = if (timePicked != time) Color.Gray.copy(0.4f) else LightError,
             backgroundColor = LightError
         ),
         modifier = modifier
@@ -62,38 +69,42 @@ fun TimePicker(time: String, modifier: Modifier = Modifier, onTimeChange: (Strin
             .fillMaxWidth()
             .clickable { timePickerDialog.show() }
     )
-
 }
 
 @Composable
-fun DatePicker( date : String, modifier: Modifier = Modifier, onDateChange: (String) -> Unit) {
-    var datePicked by remember {
-        mutableStateOf(date)
-    }
+fun DatePicker(date: String, modifier: Modifier = Modifier, onDateChange: (String) -> Unit) {
     val datePickerDialog = DatePickerDialog(
         LocalContext.current,
         R.style.DialogTheme,
         { _, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            datePicked = "$mDayOfMonth/${mMonth + 1}/$mYear"
+            val selectedDate = date.ifEmpty {
+                "$mDayOfMonth/${mMonth + 1}/$mYear"
+            }
+            onDateChange(selectedDate)
         },
         Calendar.getInstance().get(Calendar.YEAR),
         Calendar.getInstance().get(Calendar.MONTH),
         Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
     )
-    OutlinedTextField(//label = { Text(text = date, color = LightBackground) },
-        value = datePicked,
-        shape = RoundedCornerShape(8.dp),
 
+    OutlinedTextField(
+        value = date,
+        shape = RoundedCornerShape(8.dp),
         placeholder = { Text(text = date) },
-        onValueChange = { onDateChange(datePicked)  },
+        onValueChange = { updatedDate -> onDateChange(updatedDate) },
         enabled = false,
-        leadingIcon = {Icon(imageVector = Icons.Rounded.DateRange,
-            contentDescription = null, tint = Color.Gray )},
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Rounded.DateRange,
+                contentDescription = null,
+                tint = Color.Gray
+            )
+        },
         readOnly = true,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Gray,
             unfocusedBorderColor = Color.Gray,
-            disabledBorderColor = if (datePicked!= date)  Color.Gray.copy(0.4f) else LightError,
+            disabledBorderColor = if (date.isNotEmpty()) Color.Gray.copy(0.4f) else LightError,
             backgroundColor = LightError
         ),
         modifier = modifier
@@ -101,6 +112,4 @@ fun DatePicker( date : String, modifier: Modifier = Modifier, onDateChange: (Str
             .fillMaxWidth()
             .clickable { datePickerDialog.show() }
     )
-
-    
 }

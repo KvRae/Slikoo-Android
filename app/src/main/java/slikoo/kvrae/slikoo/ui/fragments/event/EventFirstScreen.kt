@@ -33,11 +33,12 @@ import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 fun EventFirstFragment(mealsViewModel: MealsViewModel,
                        onFragmentChange: (String) -> Unit,
 ) {
-
-
-
     val pplLabel = stringResource(R.string.ppl_nbr)
-    val invitationTypes = listOf("Anniversaire", "Mariage", "Soirée", "Fête", "Réunion", "Autre")
+    val invitationTypes = listOf("Anniversaire",
+        "Mariage",
+        "Soirée", "Fête",
+        "Réunion",
+        "Autre")
     val themes = listOf("Theme 1", "THeme 2", "Theme 3")
     val preferences = listOf("Halal", "Casher", "Végétarien", "Végétalien", "Autre")
     val genres = listOf("Famille", "Amis", "Collègues", "Entre fille", "Entre mecs", "Autre")

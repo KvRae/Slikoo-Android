@@ -3,6 +3,7 @@ package slikoo.kvrae.slikoo.ui.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -120,6 +121,10 @@ fun CustomTextField(
                 if (leadingIcon != null) Icon(
                     imageVector = leadingIcon,
                     contentDescription = "",
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .size(24.dp)
+                    ,
                     tint = if (!isFocused) Color.Gray else LightPrimary
                 )
             },

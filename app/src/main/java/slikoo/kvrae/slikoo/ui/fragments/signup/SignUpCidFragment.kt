@@ -24,6 +24,7 @@ import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
 import slikoo.kvrae.slikoo.viewmodels.SignUpViewModel
+import java.io.File
 
 @Composable
 fun SignUpCidForm(onChange: (String) -> Unit) {
@@ -44,8 +45,8 @@ fun SignUpCidForm(onChange: (String) -> Unit) {
             horizontalArrangement = Arrangement.Center
         ) {
             ImagePickerField(
-                onImageSelected = { userViewModel.onImageSelected(it) },
-                imageUrl = userViewModel.user.value.cinavatar.toUri()
+                onImageSelected = { userViewModel.cid = File(it.toString()) },
+                imageUrl = userViewModel.cid.toUri(),
             )
         }
         CustomButton(text = stringResource(R.string.next),

@@ -223,6 +223,7 @@ fun MealDetailContent(mealsViewModel: MealsViewModel) {
             ContentSubHeader(mealsViewModel = mealsViewModel)
             ContentBody(mealsViewModel = mealsViewModel)
         }
+        if (mealsViewModel.isLoading.value) LoadingScreen()
     }
 }
 
@@ -237,7 +238,7 @@ fun ContentHeader(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(model = R.drawable.avatar,
+        AsyncImage(model = mealsViewModel.user.value.avatarUrl+mealsViewModel.user.value.avatar,
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -250,7 +251,7 @@ fun ContentHeader(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = mealsViewModel.meal.value.iduser,
+            Text(text = mealsViewModel.user.value.nom + " " + mealsViewModel.user.value.prenom,
                 style = TextStyle(
                     color = LightBackground,
                     fontWeight = FontWeight.Bold,

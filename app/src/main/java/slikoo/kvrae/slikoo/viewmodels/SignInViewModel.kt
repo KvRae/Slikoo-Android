@@ -1,4 +1,4 @@
-import android.util.Log
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,7 +14,10 @@ import slikoo.kvrae.slikoo.utils.TempSession
 class SignInViewModel : ViewModel() {
     private val userRDS = UserRemoteDataSource()
 
-    var user by mutableStateOf(User(email = "hamzabenmahmoud9898@gmail.com", password = "12345678"))
+    var user by mutableStateOf(User(
+        email = "karam.mannai@esprit.tn",
+        password = "12345678")
+    )
     var token by mutableStateOf("")
     var isLoading by mutableStateOf(false)
     var isError by mutableStateOf(false)
@@ -33,26 +36,20 @@ class SignInViewModel : ViewModel() {
 
     fun onLogin () {
         viewModelScope.launch(Dispatchers.IO) {
-            async { isLoading = true }
+            isLoading = true
             try {
                 token = async { userRDS.authUser(user) }.await()
-                Log .d("Login token", token)
                 isError = async { token.length <= 1 }.await()
-                Log.d ("Login isError", isError.toString())
-                async { if (token.length == 1) { errorMessage = "Bad credentials"  }}.await()
-                async { if (token.isEmpty()) { errorMessage =  "Something went wrong" } }.await()
-                Log.d ("Login errorMessage", errorMessage)
-                async {  if (!isError) { TempSession.token = token; TempSession.email =  user.email }}.await()
-                async { if (TempSession.token.isNotEmpty() && token.length>1) navigate = true }.await()
-                async { isLoading = false }.await()
+                if (token.length == 1) errorMessage = async {   "Bad credentials"  }.await()
+                if (token.isEmpty()) errorMessage =  async { "Something went wrong" }.await()
+                if (!isError) async { TempSession.token = token; TempSession.email =  user.email;navigate = true }.await()
+                isLoading = async {  false }.await()
             } catch (e: Exception) {
                 e.printStackTrace()
-                async { isLoading = false }.await()
-                async { isError = true }.await()
-            }
-            finally {
-                async { isLoading = false }.await()
-                async { navigate = true }.await()
+                isLoading = false
+                isError = true
+            } finally {
+                isLoading = false
             }
         }
     }

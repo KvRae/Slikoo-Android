@@ -22,7 +22,6 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -196,14 +195,10 @@ fun ProfileImagePicker(
     image: String = "",
     onImageSelected: (Uri) -> Unit = {}
 ) {
-    var imageUrl by remember {
-        mutableStateOf(imageUri)
-    }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
-            imageUrl = uri
-            onImageSelected(uri?: Uri.EMPTY)
+            onImageSelected(uri ?: Uri.EMPTY)
         })
 
     Box(
@@ -224,22 +219,20 @@ fun ProfileImagePicker(
                 .padding(8.dp)
                 .fillMaxSize()
                 .clip(shape = RoundedCornerShape(50))
-
                 .background(Color.White),
             colors = IconButtonDefaults.filledIconButtonColors(
                 containerColor = Color.Transparent,
-                contentColor = LightPrimary,
-
-                )
+                contentColor = LightPrimary
+            )
         ) {
-            if (imageUrl == null)
+            if (imageUri == null) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.camera),
-                    contentDescription = "",
+                    contentDescription = null,
                     tint = Color.Gray,
                     modifier = Modifier.size(50.dp)
                 )
-            else
+            } else {
                 BoxWithConstraints {
                     AsyncImage(
                         model = image,
@@ -247,14 +240,7 @@ fun ProfileImagePicker(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxSize()
-                            .clip(shape = RoundedCornerShape(50))
-                            .clickable {
-                                launcher.launch(
-                                    PickVisualMediaRequest(
-                                        ActivityResultContracts.PickVisualMedia.ImageOnly
-                                    )
-                                )
-                            },
+                            .clip(shape = RoundedCornerShape(50)),
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.camera),
@@ -266,7 +252,7 @@ fun ProfileImagePicker(
                             .size(25.dp)
                     )
                 }
-
+            }
         }
     }
 }

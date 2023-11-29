@@ -11,10 +11,12 @@ import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.MealRemoteDataSource
+import slikoo.kvrae.slikoo.utils.TempSession
 
 class MealsViewModel(): ViewModel() {
     private val mealRemoteDataSource = MealRemoteDataSource()
     val user = mutableStateOf(User())
+    val myMeals = mutableStateListOf<Meal>()
     val meal = mutableStateOf(Meal())
     var meals = mutableStateListOf<Meal>()
     var isLoading = mutableStateOf(true)
@@ -49,13 +51,11 @@ class MealsViewModel(): ViewModel() {
     private fun getAllMeals(meals : MutableList<Meal>)  {
         viewModelScope.launch {
             try {
-                async { isLoading.value = true }.await()
-                async {mealRemoteDataSource.getAllMeals(meals)  }.await()
+                async {mealRemoteDataSource.getAllMeals(meals)}.await()
                 async { filteredMeals.addAll(meals) }.await()
-                async { isLoading.value = false }.await()
 
             } catch (e: Exception) {
-                Log.e("Meals Error", e.message.toString())
+                meals.clear()
             }
             finally {
                 isLoading.value = false
@@ -68,15 +68,30 @@ class MealsViewModel(): ViewModel() {
             if (id != 0) {
                 try {
                     meal.value = async { mealRemoteDataSource.getMealById(id = id) }.await()
-                    user.value = async { mealRemoteDataSource.getUserById(id = meal.value.iduser) }.await()
-
+                    user.value = async { mealRemoteDataSource.getUserById(id = meal.value.iduser.toInt() , token = TempSession.token) }.await()
                 } catch (e: Exception) {
                     Log.e("Meals Error", e.message.toString())
+                }
+                finally {
                     isLoading.value = false
                 }
             }
         }
     }
+
+
+    /*fun getMyMeals()  {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                async { mealRemoteDataSource.getMyMeals(meals = myMeals, token = TempSession.token, id = TempSession.user.id) }.await()
+            } catch (e: Exception) {
+                myMeals.clear()
+            }
+            finally {
+                isLoading.value = false
+            }
+        }
+    }*/
 
     fun dateConverter(date: String,time : String): String {
         val timeList = date.split("T")
