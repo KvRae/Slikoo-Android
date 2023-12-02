@@ -11,6 +11,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -80,9 +81,7 @@ fun MainScreen(navController: NavController, currentScreen: String = "Home") {
         modifier = Modifier
             .navigationBarsPadding()
             .statusBarsPadding(),
-        snackbarHost = {
-
-        },
+        scaffoldState = rememberScaffoldState(),
         topBar = {
             if (title.value != AppScreenNavigator.EventScreen.route)
                 CustomMainMenuTopBar(
@@ -146,3 +145,4 @@ fun MainScreen(navController: NavController, currentScreen: String = "Home") {
             }
         )
 }
+

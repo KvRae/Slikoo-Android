@@ -4,6 +4,7 @@ import android.util.Log
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import slikoo.kvrae.slikoo.data.api.ApiServices
 import slikoo.kvrae.slikoo.data.api.RetrofitInstance
 import slikoo.kvrae.slikoo.data.datasources.entities.User
@@ -11,57 +12,62 @@ import slikoo.kvrae.slikoo.data.datasources.remote.dto.ForgetPasswordRequest
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.LoginRequest
 import slikoo.kvrae.slikoo.data.datasources.remote.dto.RibRequest
 import java.io.File
+import java.io.IOException
 
 class UserRemoteDataSource {
 
-    suspend fun register(user: User, avatar: File, cin: File ): Int {
+    suspend fun register(user: User, avatar: File, cin: File): String {
         val avatarRequestBody = avatar.asRequestBody("image/*".toMediaTypeOrNull())
         val cinRequestBody = cin.asRequestBody("image/*".toMediaTypeOrNull())
-       return try {
 
+        return try {
             val response = RetrofitInstance
                 .getRetrofitInstance()
                 .create(ApiServices::class.java)
                 .register(
-                    nom = MultipartBody.Part.createFormData("nom", user.nom),
-                    prenom = MultipartBody.Part.createFormData("prenom", user.prenom),
-                    email = MultipartBody.Part.createFormData("email", user.email),
-                    password = MultipartBody.Part.createFormData("password", user.password),
-                    numtel = MultipartBody.Part.createFormData("numtel", user.numtel),
-                    adressepostal = MultipartBody.Part.createFormData("adressepostal", user.codepostal),
-                    ville = MultipartBody.Part.createFormData("ville", user.ville),
-                    codepostal = MultipartBody.Part.createFormData("codepostal", user.codepostal),
-                    description = MultipartBody.Part.createFormData("description", user.description),
+                    nom = user.nom.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    prenom = user.prenom.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    email = user.email.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    password = user.password.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    numtel = user.numtel.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    adressepostal = user.adressepostal.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    ville = user.ville.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    codepostal = user.codepostal.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    description = user.description.toRequestBody("text/plain".toMediaTypeOrNull()),
                     avatar = MultipartBody.Part.createFormData("avatar", avatar.name, avatarRequestBody),
                     cinavatar = MultipartBody.Part.createFormData("cinavatar", cin.name, cinRequestBody),
-                    sexe = MultipartBody.Part.createFormData("sex", user.sexe),
+                    sexe = user.sexe.toRequestBody("text/plain".toMediaTypeOrNull())
                 )
-            if (response.code() == 201) {
-                Log.d("Response from server 200", response.body().toString())
-                201
-            } else if (response.code() == 401) {
-                Log.d("Response from server 401", response.body().toString())
-                401
-            } else {
-                Log.d("Response from server 500", response.body().toString())
-                500
-            }
-        }
-        catch (e: Exception) {
-            Log.d("response in data source 500 catch", e.message.toString())
-            500
-        }
 
+            when (response.code()) {
+                in 200..299 -> {
+                    Log.d("Response from server ${response.code()}", response.body().toString())
+                    response.body().toString()
+                }
+                401 -> {
+                    Log.d("Response from server 401", response.body().toString())
+                    response.body().toString()
+                }
+                else -> {
+                    Log.d("Response from server ${response.code()}", response.body().toString())
+                    response.body().toString()
+                }
+            }
+        } catch (e: IOException) {
+            Log.d("Network error", e.message.toString())
+            e.message.toString()
+        } catch (e: Exception) {
+            Log.e("Exception in data source", e.toString())
+            e.message.toString()
+        }
     }
+
 
     suspend fun authUser(user : User): String {
         return try {
-            val request = LoginRequest(username = user.email,
-                password = user.password)
-
-            val retIn = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
-
-            val response = retIn.login(request)
+            val request = LoginRequest(username = user.email, password = user.password)
+            val response = RetrofitInstance.getRetrofitInstance().
+            create(ApiServices::class.java).login(request)
 
             if (response.isSuccessful) {
                 response.body()?.token.toString()

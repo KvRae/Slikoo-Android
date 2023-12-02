@@ -1,5 +1,7 @@
 package slikoo.kvrae.slikoo.ui.pages
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +32,7 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,13 +41,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.DescriptionTextField
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
@@ -62,7 +65,10 @@ import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 fun MealsDetailScreen(navController: NavController,id : Int) {
     val mealsViewModel : MealsViewModel = viewModel()
 
-    mealsViewModel.getMealById(id = id)
+    DisposableEffect(Unit ){
+        mealsViewModel.getMealById(id)
+        onDispose {}
+    }
 
     if (mealsViewModel.meal.value.id != 0){
         Box(
@@ -100,15 +106,36 @@ fun MealsDetailScreen(navController: NavController,id : Int) {
             }
 
         }
-    } else {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-        ) {
-           LoadingScreen()
-        }
     }
+    if (mealsViewModel.isLoading.value) LoadingScreen()
+    if (mealsViewModel.isDialogOpen && mealsViewModel.dialogContext == "delete") CustomAlertDialog(
+        title = stringResource(id = R.string.delete),
+        message = stringResource(id = R.string.delete_meal_description),
+        confirmText = stringResource(id = R.string.yes),
+        dismissText = stringResource(id = R.string.no),
+        onDismiss = { mealsViewModel.isDialogOpen = false },
+        onConfirm = {
+            mealsViewModel.deleteMeal(mealsViewModel.meal.value.id)
+            makeToast(navController.context, mealsViewModel.mealMessage.value)
+            mealsViewModel.isDialogOpen = false
+        }
+    )
+    if (mealsViewModel.isDialogOpen && mealsViewModel.dialogContext == "book") CustomAlertDialog(
+        title = stringResource(id = R.string.participate),
+        message = stringResource(id = R.string.book_meal_description),
+        confirmText = stringResource(id = R.string.yes),
+        dismissText = stringResource(id = R.string.no),
+        onDismiss = { mealsViewModel.isDialogOpen = false },
+        onConfirm = {
+            mealsViewModel.participateMeal(
+                mealsViewModel.meal.value.id,
+                mealsViewModel.meal.value.iduser.toInt()
+            )
+            makeToast(navController.context, mealsViewModel.mealMessage.value)
+            mealsViewModel.isDialogOpen = false
+        }
+    )
+
 
 }
 
@@ -223,14 +250,11 @@ fun MealDetailContent(mealsViewModel: MealsViewModel) {
             ContentSubHeader(mealsViewModel = mealsViewModel)
             ContentBody(mealsViewModel = mealsViewModel)
         }
-        if (mealsViewModel.isLoading.value) LoadingScreen()
     }
 }
 
 @Composable
-fun ContentHeader(
-    mealsViewModel: MealsViewModel
-) {
+fun ContentHeader(mealsViewModel: MealsViewModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -281,9 +305,7 @@ fun ContentHeader(
 }
 
 @Composable
-fun ContentSubHeader(
-    mealsViewModel: MealsViewModel
-) {
+fun ContentSubHeader(mealsViewModel: MealsViewModel) {
    Row(
          modifier = Modifier
              .fillMaxWidth()
@@ -332,12 +354,17 @@ fun ContentBody( mealsViewModel: MealsViewModel) {
             )
         )
         Spacer(modifier = Modifier.height(8.dp))
-        if(mealsViewModel.meal.value.iduser != TempSession.user.id.toString())DetailsContentBodyWithTextField() else DetailsContentBodyWithButtons()
+        if(mealsViewModel.meal.value.iduser != TempSession.user.id.toString())
+            DetailsContentBodyWithTextField(viewModel = mealsViewModel)
+        else
+            DetailsContentBodyWithButtons(viewModel = mealsViewModel)
     }
 }
 
 @Composable
-fun DetailsContentBodyWithTextField() {
+fun DetailsContentBodyWithTextField(
+    viewModel: MealsViewModel
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -355,14 +382,20 @@ fun DetailsContentBodyWithTextField() {
         Spacer(modifier = Modifier.height(8.dp))
         DescriptionTextField(onChange = {}, value = "", label = "Message")
         Spacer(modifier = Modifier.weight(1f))
-        CustomButton(text = stringResource(id = R.string.book), onClick = {  })
+        CustomButton(text = stringResource(id = R.string.book),
+            onClick = {
+                viewModel.dialogContext = "book"
+                viewModel.isDialogOpen = true
+            })
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 
-@Preview
+
 @Composable
-fun DetailsContentBodyWithButtons() {
+fun DetailsContentBodyWithButtons(
+    viewModel: MealsViewModel
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -392,7 +425,10 @@ fun DetailsContentBodyWithButtons() {
                 backgroundColor = LightPrimary,
                 contentColor = LightPrimaryVariant
             ),
-            onClick = { /*TODO*/ }
+            onClick = {
+                viewModel.dialogContext = "delete"
+                viewModel.isDialogOpen = true
+            }
         ) {
             Text(text = stringResource(id = R.string.delete),
                 style = TextStyle(
@@ -439,6 +475,10 @@ fun SubHeaderItemCard(
             )
         }
     }
+}
+
+fun makeToast(context : Context, message : String) {
+    val toast = Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
 

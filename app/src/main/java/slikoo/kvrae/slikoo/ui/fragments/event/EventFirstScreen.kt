@@ -61,14 +61,16 @@ fun EventFirstFragment(mealsViewModel: MealsViewModel,
         Spacer(modifier = Modifier.height(32.dp))
 
 
-        CustomTextField(onChange = {mealsViewModel.meal.value = mealsViewModel.meal.value.copy(nbr = it)}, value= mealsViewModel.meal.value.nbr,
+        CustomTextField(
+            onChange = {mealsViewModel.meal.value = mealsViewModel.meal.value.copy(nbr = it)},
+            value= mealsViewModel.meal.value.nbr,
+            placeHolder = stringResource(id = R.string.ppl_nbr),
             label = pplLabel, leadingIcon = Icons.Rounded.Person,
             keyboardType = KeyboardType.Number
         )
 
         ExpandableCard(items = invitationTypes, title = mealsViewModel.meal.value.lettre.toString(),
             onTitleChange = { mealsViewModel.meal.value.lettre = it},
-
             leadingIcon = ImageVector.vectorResource(id = R.drawable.person_add)
         )
 

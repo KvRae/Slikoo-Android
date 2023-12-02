@@ -95,18 +95,23 @@ fun EventScreen(
                         message = stringResource(id = R.string.cancel_message),
                     )
                 }
-
-                        //                        Icon(
             )
             when (fragment) {
                 stringResource(R.string.first) -> EventFirstFragment(mealVM) { fragment = it }
                 stringResource(R.string.second) -> {
-                    EventSecondFragment({ fragment = it }, navController = navController, mealVM)
+                    EventSecondFragment(
+                        { fragment = it },
+                        navController = navController,
+                        mealVM
+                    )
 
                 }
                 stringResource(R.string.third) -> {
-                    EventFinalFragment({ fragment = it }, navController = navController)
-
+                    EventFinalFragment(
+                        { fragment = it },
+                        navController = navController,
+                        mealsVm = mealVM
+                    )
                 }
                 else -> EventFirstFragment(mealVM) { fragment = it }
             }

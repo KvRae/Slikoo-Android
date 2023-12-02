@@ -36,17 +36,15 @@ class SignInViewModel : ViewModel() {
 
     fun onLogin () {
         viewModelScope.launch(Dispatchers.IO) {
-            isLoading = true
             try {
+                isLoading = true
                 token = async { userRDS.authUser(user) }.await()
                 isError = async { token.length <= 1 }.await()
                 if (token.length == 1) errorMessage = async {   "Bad credentials"  }.await()
                 if (token.isEmpty()) errorMessage =  async { "Something went wrong" }.await()
                 if (!isError) async { TempSession.token = token; TempSession.email =  user.email;navigate = true }.await()
-                isLoading = async {  false }.await()
             } catch (e: Exception) {
                 e.printStackTrace()
-                isLoading = false
                 isError = true
             } finally {
                 isLoading = false

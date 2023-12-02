@@ -41,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
@@ -58,7 +59,7 @@ import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 
 @Composable
 fun LoginForm(navController: NavController) {
-    val signInViewModel = SignInViewModel()
+    val signInViewModel : SignInViewModel = viewModel()
     val logo = R.drawable.slikoo_white
 
     Box(
@@ -117,7 +118,6 @@ fun LoginForm(navController: NavController) {
                             fontWeight = FontWeight.Normal,
                         )
                     )
-
                 }
             }
             LoginContent(signInViewModel, navController)
@@ -261,7 +261,7 @@ fun onMakeToast(context: Context, message: String) {
     Toast.makeText(
         context,
         message,
-        Toast.LENGTH_LONG
+        Toast.LENGTH_SHORT
     ).show()
 }
 

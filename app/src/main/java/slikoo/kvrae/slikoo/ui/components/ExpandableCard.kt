@@ -45,6 +45,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightError
 fun ExpandableCard(
     modifier: Modifier = Modifier,
     items: List<String>,
+    placeholder: String = stringResource(R.string.select),
     title: String,
     leadingIcon: ImageVector = Icons.Rounded.Email,
     onTitleChange: (String) -> Unit = {},
@@ -85,7 +86,7 @@ fun ExpandableCard(
                     modifier = Modifier.padding(end = 8.dp)
                 )
                 Text(
-                    text = title,
+                    text = title.ifBlank { placeholder },
                     modifier = Modifier.weight(1f),
                     style = TextStyle(fontSize = 14.sp),
                     maxLines = 1,

@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
@@ -24,11 +23,10 @@ import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
 import slikoo.kvrae.slikoo.viewmodels.SignUpViewModel
-import java.io.File
 
 @Composable
-fun SignUpCidForm(onChange: (String) -> Unit) {
-    val  userViewModel: SignUpViewModel = viewModel()
+fun SignUpCidFragment(onChange: (String) -> Unit) {
+    val  viewModel: SignUpViewModel = viewModel()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,8 +43,8 @@ fun SignUpCidForm(onChange: (String) -> Unit) {
             horizontalArrangement = Arrangement.Center
         ) {
             ImagePickerField(
-                onImageSelected = { userViewModel.cid = File(it.toString()) },
-                imageUrl = userViewModel.cid.toUri(),
+                onImageSelected = { viewModel.cid = it!! },
+                imageUrl = viewModel.cid,
             )
         }
         CustomButton(text = stringResource(R.string.next),

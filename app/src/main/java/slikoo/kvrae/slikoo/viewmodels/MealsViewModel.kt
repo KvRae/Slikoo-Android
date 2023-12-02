@@ -1,8 +1,11 @@
 package slikoo.kvrae.slikoo.viewmodels
 
+import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -12,16 +15,37 @@ import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.MealRemoteDataSource
 import slikoo.kvrae.slikoo.utils.TempSession
+import java.io.File
 
 class MealsViewModel(): ViewModel() {
     private val mealRemoteDataSource = MealRemoteDataSource()
+    // Objects
     val user = mutableStateOf(User())
+    val meal = mutableStateOf(Meal(
+        localisation = "PSG",
+        type = " la pute",
+        genre = " la poeme",
+        genrenourriture = " la poeme",
+        description = "Gourmandise et convivialité sont les maîtres mots de ce repas. Venez découvrir les saveurs de la cuisine marocaine et partager un moment de partage et de convivialité.",
+        prix = "20",
+        nbr = "4",
+        date = "01/01/2021",
+        heure = "14:00",
+        iduser = "91",
+    ))
+    // Lists
     val myMeals = mutableStateListOf<Meal>()
-    val meal = mutableStateOf(Meal())
     var meals = mutableStateListOf<Meal>()
-    var isLoading = mutableStateOf(true)
-    var searchText = mutableStateOf("")
     var filteredMeals = mutableStateListOf<Meal>()
+    // Boolean mutable variables
+    var isDialogOpen by mutableStateOf(false)
+    var isLoading = mutableStateOf(true)
+    // String mutable variables
+    var searchText = mutableStateOf("")
+    var dialogContext by mutableStateOf("")
+    val mealMessage = mutableStateOf("")
+    // Uri mutable variables
+    var mealUri by mutableStateOf(Uri.EMPTY)
 
     init {
         getAllMeals(meals)
@@ -65,6 +89,7 @@ class MealsViewModel(): ViewModel() {
 
     fun getMealById(id : Int)  {
         viewModelScope.launch(Dispatchers.IO) {
+            meal.value = Meal()
             if (id != 0) {
                 try {
                     meal.value = async { mealRemoteDataSource.getMealById(id = id) }.await()
@@ -80,18 +105,16 @@ class MealsViewModel(): ViewModel() {
     }
 
 
-    /*fun getMyMeals()  {
+    fun getMyMeals()  {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 async { mealRemoteDataSource.getMyMeals(meals = myMeals, token = TempSession.token, id = TempSession.user.id) }.await()
             } catch (e: Exception) {
                 myMeals.clear()
             }
-            finally {
-                isLoading.value = false
-            }
+
         }
-    }*/
+    }
 
     fun dateConverter(date: String,time : String): String {
         val timeList = date.split("T")
@@ -121,5 +144,55 @@ class MealsViewModel(): ViewModel() {
         return "$day $month $year à $hour:$minute"
     }
 
+    fun deleteMeal(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                mealMessage.value = async { mealRemoteDataSource.deleteMeal(token = TempSession.token, id = id) }.await()
+            } catch (e: Exception) {
+                Log.e("Meals Error", e.message.toString())
+            }
+            finally {
+                Log.e("Meals Delete Message", mealMessage.value)
+                getMyMeals()
+            }
+        }
+
+    }
+
+    fun onAddMeal(mealBanner: File) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                isLoading.value = true
+                mealMessage.value = async { mealRemoteDataSource
+                    .createMeal(
+                        token = TempSession.token,
+                        meal = meal.value,
+                        mealBanner = mealBanner,
+                    ) }.await().toString()
+            } catch (e: Exception) {
+                mealMessage.value = e.message.toString()
+            }
+            finally {
+                isLoading.value = false
+            }
+        }
+    }
+
+    fun participateMeal(idrepas: Int, iduserOwner: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                mealMessage.value = async { mealRemoteDataSource.participate(
+                    token = TempSession.token,
+                    mealId = idrepas,
+                    userId = TempSession.user.id,
+                    ownerId = iduserOwner,
+                    motif= "Je veux participer ma man"
+                    )
+                }.await()
+            } catch (e: Exception) {
+                mealMessage.value = e.message.toString()
+            }
+        }
+    }
 }
 

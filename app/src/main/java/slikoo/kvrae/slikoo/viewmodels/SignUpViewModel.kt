@@ -1,13 +1,13 @@
 package slikoo.kvrae.slikoo.viewmodels
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.UserRemoteDataSource
@@ -16,23 +16,25 @@ import java.io.File
 class SignUpViewModel: ViewModel() {
 
     private val userRepository = UserRemoteDataSource()
-    var cid by  mutableStateOf(
-        File("")
-    )
-    var profilePicture by mutableStateOf(
-        File("")
-    )
+    var profilePictureUri by mutableStateOf(Uri.EMPTY)
+    var cid by mutableStateOf(Uri.EMPTY)
+    var isLoading by mutableStateOf(false)
+
+    var registerResult by mutableStateOf("")
 
 
     var user = mutableStateOf(User(
         nom = "Karam",
         prenom = "MANNAI",
-        email = "karam.mannaiii@esprit.tn",
+        email = "karam.mannaii@esprit.tn",
         password = "123456",
+        ville = "Tunis",
         numtel = "12345678",
         codepostal = "1234",
-        avatar = profilePicture.name,
-        cinavatar = cid.name
+        description = "description",
+        sexe = "homme",
+        adressepostal = "adressepostal",
+
     ))
 
     var confirmPassword = mutableStateOf("123456")
@@ -112,24 +114,20 @@ class SignUpViewModel: ViewModel() {
         return ""
     }
 
-    fun onRegister(user : User = this.user.value, profilePicture: File = this.profilePicture, cid: File = this.cid) {
-
+    fun onRegister(
+        user : User = this.user.value,
+        avatar: File ,
+        cidAvatar: File) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                userRepository.register(user, profilePicture, cid)
-                Log.d("Retro register", "REGISTER ok")
+                isLoading = true
+                registerResult= async { userRepository.register(user, avatar, cidAvatar) }.await()
             } catch (e: Exception) {
-                Log.d("Retro register", e.message.toString())
+                e.printStackTrace()
             }
-
+            finally {
+                isLoading = false
+            }
         }
     }
-
-    fun onImageSelected(cid: Uri?) {
-        if (cid != null) {
-            user.value = user.value.copy(cinavatar = cid.toString())
-        }
-    }
-
-
 }

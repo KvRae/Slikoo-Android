@@ -79,7 +79,6 @@ fun EditProfileScreen(navController: NavController) {
             EditProfileTopBar(navController = navController)
             ProfileImagePicker(
                 imageUri = image.toUri(),
-                image = image,
                 onImageSelected = {})
             CustomTextField(
                 onChange = {viewModel.user.value.copy( nom = it)},
@@ -119,7 +118,6 @@ fun EditProfileScreen(navController: NavController) {
             )
             ImagePickerField(
                 imageUrl = viewModel.user.value.avatarbannerUrl.plus(viewModel.user.value.avatarbanner).toUri(),
-                image = viewModel.user.value.avatarbannerUrl+viewModel.user.value.avatarbanner,
                 onImageSelected = { viewModel.user.value.avatarbanner = it.toString() }
             )
             CustomButton(text = stringResource(id = R.string.update),

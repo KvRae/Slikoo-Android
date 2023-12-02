@@ -51,3 +51,12 @@ data class UserResponse(
     val user1 : User,
     val message: String
 )
+
+data class MealRequest(
+    val meal: Meal,
+    val avatar: String
+)
+
+data class ParticiapteRequest(
+    val motif: String
+)

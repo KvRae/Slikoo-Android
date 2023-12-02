@@ -127,6 +127,10 @@
     <string name="clear_filters">Reset</string>
     <string name="accept">Accepter</string>
     <string name="updateRecipe">Modifier</string>
+    <string name="delete_meal_description">Voulez-vous vraiment supprimer cette offre ?</string>
+    <string name="participate">Participer ?</string>
+    <string name="book_meal_description">Voullez vous participer a cettte repas ?</string>
+    <string name="select">Choisir une option</string>
 
 
 </resources>

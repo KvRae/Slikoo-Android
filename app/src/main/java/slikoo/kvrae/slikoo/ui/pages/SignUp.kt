@@ -24,22 +24,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.fragments.signup.ProfilePictureSection
-import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpCidForm
+import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpCidFragment
 import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpForm
 import slikoo.kvrae.slikoo.ui.fragments.signup.SignUpSecondForm
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.SignUpNavigator
-import slikoo.kvrae.slikoo.viewmodels.UserViewModel
 
 
 @Composable
 fun SignUp(navController: NavController) {
-    val userViewModel : UserViewModel = viewModel()
     val route = remember {
         mutableStateOf(SignUpNavigator.SignUpFormFragment.route)
     }
@@ -86,7 +83,6 @@ fun SignUp(navController: NavController) {
                         color = LightSecondary,
                         shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
                     )
-
             ) {
                 when (route.value) {
                     SignUpNavigator.SignUpFormFragment.route -> SignUpForm(onChange = {
@@ -97,7 +93,7 @@ fun SignUp(navController: NavController) {
                         route.value = it
                     })
 
-                    SignUpNavigator.SignUpIDCFragment.route -> SignUpCidForm(onChange = {
+                    SignUpNavigator.SignUpIDCFragment.route -> SignUpCidFragment(onChange = {
                         route.value = it
                     })
 

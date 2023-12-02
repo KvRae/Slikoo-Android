@@ -169,20 +169,26 @@ fun ShimmerRecipeCard() {
 
 
 @Composable
-fun UserEventCard(meal : Meal, navController: NavController) {
+fun UserEventCard(meal : Meal,
+                  navController: NavController,
+                  onDelete: () -> Unit = {},
+) {
 
 
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .height(210.dp),
+            .height(220.dp),
+
         shape = RoundedCornerShape(16.dp),
         elevation = 4.dp,
 
         ) {
         Column(modifier= Modifier.fillMaxSize()) {
             RecipeCardContent(meal = meal , navController = navController )
-            EventManagementBar(onDelete = { /*TODO*/ }, onEdit = { /*TODO*/ })
+            EventManagementBar(onDelete = {
+                onDelete()
+            }, onEdit = { /*TODO*/ })
         }
 
     }
