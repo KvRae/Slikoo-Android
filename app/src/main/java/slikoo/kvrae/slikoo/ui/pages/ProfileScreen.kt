@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.pages
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -32,6 +33,7 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,11 +66,18 @@ import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun ProfileScreen(navController: NavController) {
     val viewModel: MainScreenViewModel = viewModel()
     val bio = stringResource(id = R.string.biographie)
     var selectedMenuIndex by remember { mutableStateOf(bio) }
+
+    DisposableEffect(Unit) {
+        viewModel.getUser()
+        onDispose { }
+    }
+    if (viewModel.user.value.id != -1)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -97,6 +106,13 @@ fun ProfileScreen(navController: NavController) {
         ) {
             ProfileContent(selectedMenuIndex = selectedMenuIndex, navController = navController)
         }
+    }
+    if (viewModel.isLoading) LoadingScreen()
+    if (viewModel.isError) TextWithButtonScreen(
+        text = stringResource(id = R.string.session_expired),
+        buttonText = stringResource(id = R.string.reconnect),
+    ) {
+
     }
 }
 

@@ -1,40 +1,40 @@
 package slikoo.kvrae.slikoo.viewmodels
 
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import slikoo.kvrae.slikoo.data.datasources.entities.Rating
-import java.util.Date
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import slikoo.kvrae.slikoo.data.datasources.entities.FeedBack
+import slikoo.kvrae.slikoo.data.datasources.remote.FeedbackRemoteDataSource
+import slikoo.kvrae.slikoo.utils.TempSession
 
 class RatingViewModel : ViewModel() {
-    private var ratings = mutableListOf<Rating>(
-        Rating(
-            id = 1,
-            comment = "great i like you slikko",
-            rate = 5,
-            date = Date(),
-            user = "Karam"
-        ),
-        Rating(id = 2, comment = "Lorem i", rate = 3, date = Date(), user = "Ahmed Mohsen"),
-        Rating(
-            id = 3,
-            comment = "helooo guys its amazing",
-            rate = 1,
-            date = Date(),
-            user = "Samir lousif"
-        ),
-        Rating(id = 4, comment = "why people are bad ", rate = 2, date = Date(), user = "Ram ala"),
-        Rating(id = 5, comment = "make me fell buzzy ", rate = 5, date = Date(), user = "Kaso JJ "),
-        Rating(
-            id = 6,
-            comment = "dude im full of energy ilove the way people are using this app its " +
-                    "so magnificient the way its and how impact it is ",
-            rate = 0,
-            date = Date(),
-            user = "Morad alamdar"
-        ),
-    )
+    val feedbackRDS = FeedbackRemoteDataSource()
 
-    fun getRatings(): List<Rating> {
-        return ratings
+    var feedBacks = mutableStateListOf<FeedBack>()
+    var isLoading by mutableStateOf(false)
+    var isError by mutableStateOf(false)
+
+    fun getUserFeedbacks() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                isError = false
+                isLoading = true
+                feedBacks.addAll(async { feedbackRDS.getFeedbacks(TempSession.token,TempSession.user.id) }.await())
+            }
+            catch (e: Exception) {
+                e.printStackTrace()
+                isError = true
+            }
+            finally {
+                isLoading = false
+            }
+        }
     }
 }

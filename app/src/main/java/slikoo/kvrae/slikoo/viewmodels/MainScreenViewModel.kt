@@ -1,6 +1,8 @@
 package slikoo.kvrae.slikoo.viewmodels
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -12,20 +14,17 @@ import slikoo.kvrae.slikoo.utils.TempSession
 
 class MainScreenViewModel: ViewModel() {
 
-    val user = mutableStateOf(User())
+    var user = mutableStateOf(User())
     private val userRDS = UserRemoteDataSource()
     var ribMessage = mutableStateOf("")
-    var isLoading = false
-    var isError = false
+
+    var isLoading by mutableStateOf(false)
+    var isError by mutableStateOf(false)
+    var showDialog by  mutableStateOf(false)
 
 
-    init {
-        isError = false
-        getUser()
-    }
 
-
-    private fun getUser() {
+    fun getUser() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isLoading = true

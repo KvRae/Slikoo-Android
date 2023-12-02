@@ -18,9 +18,7 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.NotificationItem
 import slikoo.kvrae.slikoo.ui.components.NotificationItemShimmer
 import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
-import slikoo.kvrae.slikoo.ui.pages.TextWithButtonScreen
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
-import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.viewmodels.NotificationViewModel
 
 @Composable
@@ -59,13 +57,6 @@ fun NotificationScreen(navController: NavController) {
             }
             notificationViewModel.notifications.isEmpty() && !notificationViewModel.isLoading.value -> {
                 TextElementScreen(text = stringResource(id = R.string.no_element_found))
-            }
-            notificationViewModel.isError.value && !notificationViewModel.isLoading.value -> {
-                TextWithButtonScreen(
-                    text = stringResource(id = R.string.form_error),
-                    buttonText = stringResource(id = R.string.error_message_email),
-                    onClick = { navController.navigate(AppScreenNavigator.SignInAppScreen.route) }
-                )
             }
         }
     }

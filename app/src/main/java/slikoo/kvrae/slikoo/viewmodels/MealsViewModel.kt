@@ -21,18 +21,7 @@ class MealsViewModel(): ViewModel() {
     private val mealRemoteDataSource = MealRemoteDataSource()
     // Objects
     val user = mutableStateOf(User())
-    val meal = mutableStateOf(Meal(
-        localisation = "PSG",
-        type = " la pute",
-        genre = " la poeme",
-        genrenourriture = " la poeme",
-        description = "Gourmandise et convivialité sont les maîtres mots de ce repas. Venez découvrir les saveurs de la cuisine marocaine et partager un moment de partage et de convivialité.",
-        prix = "20",
-        nbr = "4",
-        date = "01/01/2021",
-        heure = "14:00",
-        iduser = "91",
-    ))
+    val meal = mutableStateOf(Meal())
     // Lists
     val myMeals = mutableStateListOf<Meal>()
     var meals = mutableStateListOf<Meal>()
@@ -40,6 +29,7 @@ class MealsViewModel(): ViewModel() {
     // Boolean mutable variables
     var isDialogOpen by mutableStateOf(false)
     var isLoading = mutableStateOf(true)
+    var navigate by mutableStateOf(false)
     // String mutable variables
     var searchText = mutableStateOf("")
     var dialogContext by mutableStateOf("")
@@ -62,6 +52,7 @@ class MealsViewModel(): ViewModel() {
                 if (meal.localisation.contains(filter,ignoreCase = true)
                     || meal.theme.contains(filter,ignoreCase = true)
                     || meal.genrenourriture.contains(filter,ignoreCase = true)
+                    || meal.type.contains(filter,ignoreCase = true)
                     || meal.prix.contains(filter,ignoreCase = true)
                     || meal.nbr.contains(filter,ignoreCase = true)
                     || meal.description.contains(filter,ignoreCase = true)

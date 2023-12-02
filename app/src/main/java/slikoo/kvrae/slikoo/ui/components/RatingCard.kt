@@ -1,6 +1,5 @@
 package slikoo.kvrae.slikoo.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -28,18 +26,19 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.data.datasources.entities.Rating
+import slikoo.kvrae.slikoo.data.datasources.entities.FeedBack
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 
 
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
-fun RatingCard(rating : Rating) {
+fun RatingCard(feedBack : FeedBack) {
     val dateFormat = java.text.SimpleDateFormat("dd/MM/yyyy",
         java.util.Locale.getDefault())
-    val date = dateFormat.format(rating.date)
+    val date = dateFormat.format(feedBack.date)
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -47,7 +46,6 @@ fun RatingCard(rating : Rating) {
             .height(140.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 4.dp,
-        onClick = { /*TODO*/ }
     ) {
         Column(
             modifier = Modifier
@@ -59,20 +57,20 @@ fun RatingCard(rating : Rating) {
                 .fillMaxWidth()
                 .padding(4.dp))
             {
-                Image(
-                    painter = painterResource(id = R.drawable.avatar),
+                AsyncImage(
+                    model = painterResource(id = R.drawable.avatar),
                     contentDescription = "avatar",
                     modifier = Modifier.size(40.dp)
                 )
                 Column( modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = rating.user, modifier = Modifier.padding(4.dp),
+                        text = feedBack.providerId, modifier = Modifier.padding(4.dp),
                         style = TextStyle(fontSize = 12.sp)
                     )
                     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         RatingBar(
-                            onRatingChanged = { rating.rate = it },
-                            currentRating = rating.rate
+                            onRatingChanged = { feedBack.rate = it },
+                            currentRating = feedBack.rate
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
@@ -84,7 +82,7 @@ fun RatingCard(rating : Rating) {
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = rating.comment,
+                text = feedBack.comment,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 style = TextStyle(fontSize = 12.sp),

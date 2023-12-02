@@ -9,7 +9,7 @@ import slikoo.kvrae.slikoo.data.api.ApiServices
 import slikoo.kvrae.slikoo.data.api.RetrofitInstance
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.data.datasources.entities.User
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.ParticiapteRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.ParticiapteRequest
 import java.io.File
 
 class MealRemoteDataSource {
@@ -17,7 +17,10 @@ class MealRemoteDataSource {
     suspend fun getAllMeals(meals: MutableList<Meal>) {
         try {
             meals.clear()
-            val response = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java).getAllMeals()
+            val response = RetrofitInstance
+                .getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .getAllMeals()
             if (response.isSuccessful)
                 response.body()?.meals?.let { meals.addAll(it) }
         }

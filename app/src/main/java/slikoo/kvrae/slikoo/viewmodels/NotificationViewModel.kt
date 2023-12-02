@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import slikoo.kvrae.slikoo.data.datasources.entities.Notification
 import slikoo.kvrae.slikoo.data.datasources.remote.NotificationRemoteDataSource
 import slikoo.kvrae.slikoo.utils.TempSession
@@ -22,20 +22,17 @@ class NotificationViewModel : ViewModel() {
     }
 
     private fun getNotifications() {
-        viewModelScope.launch {
-            try {
-                withContext(Dispatchers.IO) {
-                    notifications.clear()
-                    notifications.addAll(notificationRepository.getNotifications(
-                        token = TempSession.token,
-                        email = TempSession.email
-                    ))
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            val token = TempSession.token
+            val email = TempSession.email
+            val response = async { notificationRepository.getNotifications(token, email) }
+            val result = response.await()
+            if (result.isNotEmpty()) {
+                notifications.addAll(result)
                 isLoading.value = false
-            } catch (e: Exception) {
-                e.printStackTrace()
-                isLoading.value = false
+            } else {
                 isError.value = true
+                isLoading.value = false
             }
         }
     }

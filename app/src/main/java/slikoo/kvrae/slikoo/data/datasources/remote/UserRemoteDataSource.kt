@@ -8,9 +8,9 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import slikoo.kvrae.slikoo.data.api.ApiServices
 import slikoo.kvrae.slikoo.data.api.RetrofitInstance
 import slikoo.kvrae.slikoo.data.datasources.entities.User
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.ForgetPasswordRequest
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.LoginRequest
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.RibRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.ForgetPasswordRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.LoginRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.RibRequest
 import java.io.File
 import java.io.IOException
 

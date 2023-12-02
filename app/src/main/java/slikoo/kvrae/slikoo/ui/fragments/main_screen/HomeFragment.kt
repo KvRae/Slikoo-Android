@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.fragments.main_screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -112,9 +114,16 @@ fun RecipesCategorySection() {
     }
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun RatingListSection() {
-    val ratings = RatingViewModel().getRatings()
+    val viewModel : RatingViewModel = viewModel()
+    DisposableEffect(Unit) {
+        viewModel.getUserFeedbacks()
+        onDispose {  }
+    }
+
+    if (viewModel.feedBacks.isNotEmpty())
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -124,12 +133,13 @@ fun RatingListSection() {
             SectionHeader(title = stringResource(R.string.rating_list))
             Spacer(modifier = Modifier.padding(8.dp))
             LazyRow(modifier = Modifier.fillMaxWidth()) {
-                items(ratings.size) {
-                    RatingCard(ratings[it])
+                items(viewModel.feedBacks.size) {
+                    RatingCard(viewModel.feedBacks[it])
                 }
             }
         }
     }
+
 }
 
 @Composable

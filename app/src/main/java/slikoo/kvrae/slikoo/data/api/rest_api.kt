@@ -18,22 +18,23 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.ForgetPasswordRequest
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.LoginRequest
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.LoginResponse
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.MealDetailsResponse
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.MealResponse
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.NotificationsResponse
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.ParticiapteRequest
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.RibRequest
-import slikoo.kvrae.slikoo.data.datasources.remote.dto.UserResponse
+import slikoo.kvrae.slikoo.data.datasources.dto.FeedBacksResponse
+import slikoo.kvrae.slikoo.data.datasources.dto.ForgetPasswordRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.LoginRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.LoginResponse
+import slikoo.kvrae.slikoo.data.datasources.dto.MealDetailsResponse
+import slikoo.kvrae.slikoo.data.datasources.dto.MealResponse
+import slikoo.kvrae.slikoo.data.datasources.dto.NotificationsResponse
+import slikoo.kvrae.slikoo.data.datasources.dto.ParticiapteRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.RibRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.UserResponse
 
 
 interface ApiServices {
 
     /************************** Get Requests **************************/
 
-
+    //----------------------- Meals ----------------------------------//
     @Headers("Content-Type: application/json")
     @GET("get-all-repas")
     suspend fun getAllMeals(): Response<MealResponse>
@@ -57,7 +58,7 @@ interface ApiServices {
         @Header("Authorization") token: String,
         @Path("email") email: String
     ): Response<NotificationsResponse>
-
+    //----------------------- User ----------------------------------//
     @Headers("Content-Type: application/json")
     @POST("get-user-by-email/{email}")
     suspend fun getUserByEmail(
@@ -73,19 +74,22 @@ interface ApiServices {
     ): Response<UserResponse>
 
     @Headers("Content-Type: application/json")
-    @GET("getInvitation/{id}")
-    suspend fun getInvitations(
-        @Header("Authorization") token: String,
-        @Path("id") id: Int
-    ): Response<UserResponse>
-
-    @Headers("Content-Type: application/json")
     @GET("getUsetdetailsbyId/{id}")
     suspend fun getUserDetailsById(
         @Header("Authorization") token: String,
         @Path("id") id: Int
     ): Response<UserResponse>
 
+    //----------------------- Invitations ----------------------------------//
+    @Headers("Content-Type: application/json")
+    @GET("getInvitation/{id}")
+    suspend fun getInvitations(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<UserResponse>
+
+
+    //----------------------- Feedbacks ----------------------------------//
     @Headers("Content-Type: application/json")
     @GET("diplsayfeedbackbyid/{id}")
     suspend fun getFeedbackById(
@@ -102,10 +106,10 @@ interface ApiServices {
 
     @Headers("Content-Type: application/json")
     @GET("displaymyfeedback/{id}")
-    suspend fun getMyFeedback(
+    suspend fun getMyFeedbacks(
         @Header("Authorization") token: String,
         @Path("id") id: Int
-    ): Response<UserResponse>
+    ): Response<FeedBacksResponse>
 
     @Headers("Content-Type: application/json")
     @GET("displayfeedbackbyrepas/{id}")
@@ -113,6 +117,9 @@ interface ApiServices {
         @Header("Authorization") token: String,
         @Path("id") id: Int
     ): Response<UserResponse>
+
+
+    //----------------------- Participants ----------------------------------//
 
     @Headers("Content-Type: application/json")
     @GET("getlistParticipantConfirmer/{id}")

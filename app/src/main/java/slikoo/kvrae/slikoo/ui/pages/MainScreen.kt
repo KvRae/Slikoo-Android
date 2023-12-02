@@ -1,6 +1,7 @@
 package slikoo.kvrae.slikoo.ui.pages
 
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -38,12 +40,17 @@ import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 
 
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun MainScreen(navController: NavController, currentScreen: String = "Home") {
 
     val title = remember { mutableStateOf(currentScreen) }
-
     val viewModel: MainScreenViewModel = viewModel()
+
+    DisposableEffect(Unit){
+        viewModel.getUser()
+        onDispose { }
+    }
 
 
     val bottomNavigationItems = listOf(
@@ -76,7 +83,7 @@ fun MainScreen(navController: NavController, currentScreen: String = "Home") {
 
 
 
-    //if (viewModel.user.value.nom.isNotEmpty())
+    if (viewModel.user.value.nom.isNotBlank())
     Scaffold(
         modifier = Modifier
             .navigationBarsPadding()

@@ -29,10 +29,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -49,7 +46,6 @@ import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.components.ProfileImagePicker
-
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
@@ -58,9 +54,12 @@ import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 @Composable
 fun EditProfileScreen(navController: NavController) {
     val viewModel: MainScreenViewModel = viewModel()
-    var rib by remember { mutableStateOf("") }
-    val image = viewModel.user.value.avatarUrl+viewModel.user.value.avatar
-    var showDialog by remember { mutableStateOf(false) }
+
+    DisposableEffect(Unit){
+        viewModel.getUser()
+        onDispose { }
+    }
+
     Box(
         Modifier
             .fillMaxSize()
@@ -78,7 +77,7 @@ fun EditProfileScreen(navController: NavController) {
         ) {
             EditProfileTopBar(navController = navController)
             ProfileImagePicker(
-                imageUri = image.toUri(),
+                imageUri = (viewModel.user.value.avatarUrl+viewModel.user.value.avatar).toUri(),
                 onImageSelected = {})
             CustomTextField(
                 onChange = {viewModel.user.value.copy( nom = it)},
@@ -123,7 +122,7 @@ fun EditProfileScreen(navController: NavController) {
             CustomButton(text = stringResource(id = R.string.update),
                 onClick = { navController.navigate(AppScreenNavigator.MainAppScreen.route) })
             Row {
-                TextButton(onClick = { showDialog = true}) {
+                TextButton(onClick = { viewModel.showDialog = true}) {
                     Text(text = stringResource(R.string.add_rib), color = LightSurface)
                 }
                 Spacer(modifier = Modifier.weight(1f))
@@ -131,37 +130,36 @@ fun EditProfileScreen(navController: NavController) {
                     Text(text = stringResource(R.string.advanced_profile), color = LightSurface)
                 }
             }
-            if (showDialog)
+            if (viewModel.showDialog)
                 CustomAlertDialogWithContent(
                     title = stringResource(id = R.string.add_rib),
                     content = {
                         CustomTextField(
-                            onChange = {  rib = it},
-                            value = rib,
+                            onChange = {  viewModel.user.value.RIB = it},
+                            value = viewModel.user.value.RIB?:"",
                             label = stringResource(id = R.string.add_rib),
                             leadingIcon = Icons.Filled.AccountCircle
                         )
                     },
                     confirmText = stringResource(id = R.string.add),
                     dismissText = stringResource(id = R.string.dismiss),
-                    onDismiss = { showDialog = false },
+                    onDismiss = { viewModel.showDialog = false },
                     onConfirm = {
-                        viewModel.user.value.RIB = rib
+                        viewModel.user.value.RIB = viewModel.user.value.RIB
                         viewModel.addRib()
-                        showDialog = false
+                        viewModel.showDialog = false
                         makeToast(viewModel.ribMessage.value, navController.context)
                     })
 
         }
     }
-    if (viewModel.isLoading && !viewModel.isError) LoadingScreen()
+    if (viewModel.isLoading) LoadingScreen()
 
-    if (viewModel.isError && !viewModel.isLoading)
+    if (viewModel.isError)
         TextWithButtonScreen(text = stringResource(id = R.string.session_expired),
             buttonText = stringResource(id = R.string.reconnect),
             onClick = { navController.navigate(AppScreenNavigator.SignInAppScreen.route) }
         )
-    // on back pressed button on android devices
     BackHandler {
         navController.popBackStack()
     }

@@ -29,7 +29,11 @@ import java.util.Calendar
 
 
 @Composable
-fun TimePicker(time: String, modifier: Modifier = Modifier, onTimeChange: (String) -> Unit) {
+fun TimePicker(
+    time: String,
+    modifier: Modifier = Modifier,
+    onTimeChange: (String) -> Unit
+) {
     var timePicked by remember {
         mutableStateOf(time)
     }
@@ -48,7 +52,7 @@ fun TimePicker(time: String, modifier: Modifier = Modifier, onTimeChange: (Strin
         value = timePicked,
         shape = RoundedCornerShape(8.dp),
         placeholder = { Text(text = time) },
-        onValueChange = { updatedTime -> onTimeChange(updatedTime) },
+        onValueChange = { onTimeChange(it) },
         leadingIcon = {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.time_filled),
@@ -72,15 +76,20 @@ fun TimePicker(time: String, modifier: Modifier = Modifier, onTimeChange: (Strin
 }
 
 @Composable
-fun DatePicker(date: String, modifier: Modifier = Modifier, onDateChange: (String) -> Unit) {
+fun DatePicker(
+    date: String,
+    modifier: Modifier = Modifier,
+    onDateChange: (String) -> Unit
+) {
+    var selectedDate by remember {
+        mutableStateOf(date)
+    }
     val datePickerDialog = DatePickerDialog(
         LocalContext.current,
         R.style.DialogTheme,
-        { _, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            val selectedDate = date.ifEmpty {
-                "$mDayOfMonth/${mMonth + 1}/$mYear"
-            }
-            onDateChange(selectedDate)
+        { _, mYear: Int, mMonth: Int, mDay: Int ->
+            selectedDate = "$mDay/$mMonth/$mYear"
+            onDateChange(selectedDate) // Update the date using the callback
         },
         Calendar.getInstance().get(Calendar.YEAR),
         Calendar.getInstance().get(Calendar.MONTH),
@@ -88,10 +97,10 @@ fun DatePicker(date: String, modifier: Modifier = Modifier, onDateChange: (Strin
     )
 
     OutlinedTextField(
-        value = date,
+        value = selectedDate,
         shape = RoundedCornerShape(8.dp),
         placeholder = { Text(text = date) },
-        onValueChange = { updatedDate -> onDateChange(updatedDate) },
+        onValueChange = { onDateChange(it) },
         enabled = false,
         leadingIcon = {
             Icon(
