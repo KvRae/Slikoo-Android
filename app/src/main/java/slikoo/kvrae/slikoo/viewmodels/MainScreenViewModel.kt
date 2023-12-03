@@ -17,7 +17,6 @@ class MainScreenViewModel: ViewModel() {
     var user = mutableStateOf(User())
     private val userRDS = UserRemoteDataSource()
     var ribMessage = mutableStateOf("")
-
     var isLoading by mutableStateOf(false)
     var isError by mutableStateOf(false)
     var showDialog by  mutableStateOf(false)

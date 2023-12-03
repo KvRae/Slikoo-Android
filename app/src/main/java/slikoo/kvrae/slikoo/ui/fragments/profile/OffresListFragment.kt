@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.fragments.profile
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,10 +24,12 @@ import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.UserEventCard
+import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
 import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun UserOffersList(navController: NavController) {
     val viewModel : MealsViewModel = viewModel()
@@ -34,11 +37,10 @@ fun UserOffersList(navController: NavController) {
     var isOpen by remember { mutableStateOf(false) }
     var mealId by remember { mutableStateOf(0) }
 
+    if (viewModel.myMeals.isNullOrEmpty())
     DisposableEffect(Unit) {
         viewModel.getMyMeals()
-        onDispose {
-            viewModel.myMeals.clear()
-        }
+        onDispose {}
     }
 
     Box(
@@ -81,11 +83,12 @@ fun UserOffersList(navController: NavController) {
                 }
             )
             if (viewModel.myMeals.isEmpty()) TextElementScreen(backgound = LightError, text = "Aucune offre disponible")
+
         }
+        if (viewModel.isLoading.value) LoadingScreen()
     }
 }
 
 fun makeToast(context: android.content.Context, message : String) {
-    val toast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
-    toast.show()
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }

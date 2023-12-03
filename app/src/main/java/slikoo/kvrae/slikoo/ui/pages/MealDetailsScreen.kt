@@ -65,6 +65,7 @@ import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 fun MealsDetailScreen(navController: NavController,id : Int) {
     val mealsViewModel : MealsViewModel = viewModel()
 
+
     DisposableEffect(Unit ){
         mealsViewModel.getMealById(id)
         onDispose {}
@@ -102,7 +103,10 @@ fun MealsDetailScreen(navController: NavController,id : Int) {
                     eventParticipants = mealsViewModel.meal.value.nbr
                 )
 
-                MealDetailContent(mealsViewModel = mealsViewModel)
+                MealDetailContent(
+                    mealsViewModel = mealsViewModel,
+                    navController = navController
+                )
             }
 
         }
@@ -145,7 +149,10 @@ fun MealDetailHeader(navController : NavController) {
         title = {},
         navigationIcon = {
             IconButton(
-                onClick = { navController.navigate(AppScreenNavigator.MainAppScreen.route) },
+                onClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreenNavigator.MainAppScreen.route)
+                },
                 modifier = Modifier
                     .clip(shape = CircleShape)
                     .background(LightError)
@@ -226,7 +233,7 @@ fun MealDetailHeading(
 }
 
 @Composable
-fun MealDetailContent(mealsViewModel: MealsViewModel) {
+fun MealDetailContent(mealsViewModel: MealsViewModel, navController: NavController) {
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -248,7 +255,7 @@ fun MealDetailContent(mealsViewModel: MealsViewModel) {
             Divider(color = LightBackground, thickness = 0.5.dp)
             // Content Sub Header
             ContentSubHeader(mealsViewModel = mealsViewModel)
-            ContentBody(mealsViewModel = mealsViewModel)
+            ContentBody(mealsViewModel = mealsViewModel, navController = navController)
         }
     }
 }
@@ -338,7 +345,7 @@ fun ContentSubHeader(mealsViewModel: MealsViewModel) {
 }
 
 @Composable
-fun ContentBody( mealsViewModel: MealsViewModel) {
+fun ContentBody( mealsViewModel: MealsViewModel, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -357,7 +364,7 @@ fun ContentBody( mealsViewModel: MealsViewModel) {
         if(mealsViewModel.meal.value.iduser != TempSession.user.id.toString())
             DetailsContentBodyWithTextField(viewModel = mealsViewModel)
         else
-            DetailsContentBodyWithButtons(viewModel = mealsViewModel)
+            DetailsContentBodyWithButtons(viewModel = mealsViewModel, navController = navController)
     }
 }
 
@@ -394,7 +401,8 @@ fun DetailsContentBodyWithTextField(
 
 @Composable
 fun DetailsContentBodyWithButtons(
-    viewModel: MealsViewModel
+    viewModel: MealsViewModel,
+    navController: NavController
 ) {
     Row(
         modifier = Modifier
@@ -408,7 +416,9 @@ fun DetailsContentBodyWithButtons(
                 backgroundColor = LightSurface,
                 contentColor = LightPrimaryVariant
             ),
-            onClick = { /*TODO*/ }
+            onClick = {
+                navController.navigate("Organiser" + "/${viewModel.meal.value.id}")
+            }
         ) {
             Text(text = stringResource(id = R.string.updateRecipe),
                 style = TextStyle(

@@ -19,7 +19,7 @@
     <string name="previous">Précédent</string>
     <string name="finish">Terminer</string>
     <string name="skip">Passer</string>
-    <string name="welcome">Bienvenue sur Slikoo</string>
+    <string name="welcome">Bienvenue a Slikoo</string>
     <string name="welcome_description">Slikoo est un réseau social
     qui vous permet de partager vos photos et vidéos avec vos amis et votre famille.
 </string>
@@ -89,7 +89,7 @@
     <string name="step_three_event">3. Photo de couverture</string>
     <string name="description_event">Description repas</string>
     <string name="cancel">Annulez la creation</string>
-    <string name="cancel_message">Voullez vous annulez\nla creation ?</string>
+    <string name="cancel_message">Veuillez vous annulez\nla creation ?</string>
     <string name="location">Lieu</string>
     <string name="cid">Carte D\'identité</string>
     <string name="picture">picture</string>
@@ -131,6 +131,9 @@
     <string name="participate">Participer ?</string>
     <string name="book_meal_description">Voullez vous participer a cettte repas ?</string>
     <string name="select">Choisir une option</string>
+    <string name="no_invits_text">Vous n\'avez pas d\'invitations</string>
+    <string name="no_description">"Vous n'avez pas de description, Veuillez consulter votre profile avancé "</string>
+    <string name="complete_profile">Veuillez verifier votre profile !</string>
 
 
 </resources>

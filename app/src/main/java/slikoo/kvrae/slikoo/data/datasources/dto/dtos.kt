@@ -2,7 +2,6 @@ package slikoo.kvrae.slikoo.data.datasources.dto
 
 import com.google.gson.annotations.SerializedName
 import slikoo.kvrae.slikoo.data.datasources.entities.FeedBack
-import slikoo.kvrae.slikoo.data.datasources.entities.Invitation
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.data.datasources.entities.Notification
 import slikoo.kvrae.slikoo.data.datasources.entities.User
@@ -97,7 +96,5 @@ data class ParticiapteRequest(
     val motif: String
 )
 
-data class InvitationResponse(
-    val invitations: List<Invitation>
-)
+
 

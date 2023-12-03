@@ -25,13 +25,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.data.datasources.entities.User
+import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
+import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 
 
 @Composable
-fun BioFragment() {
-    Column(modifier = Modifier.padding(4.dp)) {
+fun BioFragment(user : User) {
+    if (user.Hasdetails )
+        Column(modifier = Modifier.padding(4.dp)) {
         BioHeaderSection(
             icon = R.drawable.fork_knife_icon,
             title = stringResource(R.string.allergies_alimentaires),
@@ -57,6 +61,10 @@ fun BioFragment() {
 
 
     }
+    else TextElementScreen(
+        backgound = LightError,
+        text = stringResource(id = R.string.no_description)
+    )
 }
 
 @Composable

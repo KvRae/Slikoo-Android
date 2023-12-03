@@ -176,7 +176,9 @@ fun EditProfileTopBar(navController: NavController) {
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = { navController.navigate(AppScreenNavigator.MainAppScreen.route) }) {
+        IconButton(onClick = {
+            navController.popBackStack()
+            navController.navigate(AppScreenNavigator.MainAppScreen.route) }) {
             Icon(
                 imageVector = Icons.Filled.ArrowBack,
                 contentDescription = null

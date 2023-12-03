@@ -104,7 +104,10 @@ fun ProfileScreen(navController: NavController) {
                 .background(LightError)
                 .padding(16.dp),
         ) {
-            ProfileContent(selectedMenuIndex = selectedMenuIndex, navController = navController)
+            ProfileContent(
+                viewModel = viewModel,
+                selectedMenuIndex = selectedMenuIndex,
+                navController = navController)
         }
     }
     if (viewModel.isLoading) LoadingScreen()
@@ -341,10 +344,13 @@ fun ProfileRowMenuList(
 }
 
 @Composable
-fun ProfileContent(selectedMenuIndex: String, navController: NavController) {
+fun ProfileContent(
+    viewModel: MainScreenViewModel,
+    selectedMenuIndex: String,
+    navController: NavController) {
     when (selectedMenuIndex) {
         stringResource(id = R.string.biographie) -> {
-            BioFragment()
+            BioFragment(user = viewModel.user.value)
         }
 
         stringResource(id = R.string.mes_offres) -> {

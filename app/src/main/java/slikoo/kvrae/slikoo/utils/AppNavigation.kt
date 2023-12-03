@@ -14,9 +14,9 @@ import androidx.navigation.navArgument
 import slikoo.kvrae.slikoo.ui.pages.AnimatedSplashScreen
 import slikoo.kvrae.slikoo.ui.pages.EditProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.EmailInput
-import slikoo.kvrae.slikoo.ui.pages.EventScreen
 import slikoo.kvrae.slikoo.ui.pages.LoginForm
 import slikoo.kvrae.slikoo.ui.pages.MainScreen
+import slikoo.kvrae.slikoo.ui.pages.MealOrganizeScreen
 import slikoo.kvrae.slikoo.ui.pages.MealsDetailScreen
 import slikoo.kvrae.slikoo.ui.pages.ProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.SignUp
@@ -28,7 +28,7 @@ fun App() {
 }
 
 sealed class AppScreenNavigator(val route: String) {
-    object EventScreen : MainScreenNavigator("Organiser")
+    object EventScreen : MainScreenNavigator("Organiser/{id}")
     object SplashAppScreen : AppScreenNavigator("splash_screen")
     object SignInAppScreen : AppScreenNavigator("sign_in_screen")
     object SignUpAppScreen : AppScreenNavigator("sign_up_screen")
@@ -95,8 +95,18 @@ fun Navigation() {
             ProfileScreen(navController = navController)
             mainScreenIndex.value = MainScreenNavigator.SettingsScreen.route
         }
-        composable(route = AppScreenNavigator.EventScreen.route) {
-            EventScreen(onBackPress = { mainScreenIndex.value = it }, navController = navController)
+        composable(
+            route = AppScreenNavigator.EventScreen.route,
+            arguments = listOf(navArgument("id") {
+                type = NavType.IntType
+            })
+        ) {
+            MealOrganizeScreen(
+                onBackPress = { mainScreenIndex.value = it },
+                navController = navController,
+                idMeal = it.arguments?.getInt("id") ?: 0
+            )
+
             mainScreenIndex.value = MainScreenNavigator.RecipeScreen.route
         }
         composable(

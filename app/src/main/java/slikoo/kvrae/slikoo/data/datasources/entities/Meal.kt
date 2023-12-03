@@ -3,6 +3,7 @@ package slikoo.kvrae.slikoo.data.datasources.entities
 data class Meal(
     //val avatarUrl: String =,
     var avatar: String = "",
+    val avatarUrl: String = "",
     var `data`: Any = Any(),
     var date: String = "",
     var datecreation: String = "",

@@ -61,7 +61,6 @@ import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 fun LoginForm(navController: NavController) {
     val signInViewModel : SignInViewModel = viewModel()
     val logo = R.drawable.slikoo_white
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -192,10 +191,12 @@ fun LoginContent(
                 })
 
             if (signInViewModel.navigate) {
-                onMakeToast(
-                    context = navController.context,
-                    message = stringResource(id = R.string.welcome))
+                val msg = stringResource(id = R.string.welcome)
                 DisposableEffect(Unit) {
+                    onMakeToast(
+                        context = navController.context,
+                        message = msg
+                    )
                     navController.popBackStack()
                     navController.navigate(AppScreenNavigator.MainAppScreen.route)
                     onDispose { signInViewModel.navigate = false }
@@ -261,8 +262,7 @@ fun onMakeToast(context: Context, message: String) {
     Toast.makeText(
         context,
         message,
-        Toast.LENGTH_SHORT
-    ).show()
+        Toast.LENGTH_SHORT).show()
 }
 
 //fun getGoogleSignInClient(context: Context ): GoogleSignInClient {

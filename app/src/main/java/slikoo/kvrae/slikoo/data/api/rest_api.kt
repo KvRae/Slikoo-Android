@@ -28,6 +28,7 @@ import slikoo.kvrae.slikoo.data.datasources.dto.NotificationsResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.ParticiapteRequest
 import slikoo.kvrae.slikoo.data.datasources.dto.RibRequest
 import slikoo.kvrae.slikoo.data.datasources.dto.UserResponse
+import slikoo.kvrae.slikoo.data.datasources.entities.Invitation
 
 
 interface ApiServices {
@@ -86,7 +87,7 @@ interface ApiServices {
     suspend fun getInvitations(
         @Header("Authorization") token: String,
         @Path("id") id: Int
-    ): Response<UserResponse>
+    ): Response<List<Invitation>>
 
 
     //----------------------- Feedbacks ----------------------------------//

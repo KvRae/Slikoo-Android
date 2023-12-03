@@ -8,6 +8,8 @@ data class Invitation(
     val iduserowner: String? = null,
     @SerializedName("status")
     val status: String? = null,
+    @SerializedName("datecreation")
+    val datecreation: String? = null,
     @SerializedName("motif")
     val motif: String? = null,
     @SerializedName("userDemander")

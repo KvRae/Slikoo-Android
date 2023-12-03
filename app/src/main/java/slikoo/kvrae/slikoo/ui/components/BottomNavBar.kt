@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondaryVariant
@@ -42,6 +43,7 @@ data class BottomNavItem(
 @Composable
 fun BottomNavigationBar(items : List<BottomNavItem>,
                         modifier : Modifier = Modifier,
+                        navController: NavController,
                         route: String = MainScreenNavigator.HomeScreen.route,
                         onItemClick : (route :String) -> Unit
 ) {
@@ -95,7 +97,7 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                                 }
                             } else {
                                 item.badgeCount = 0
-                                if (item.name == AppScreenNavigator.EventScreen.route) {
+                                if (item.route == AppScreenNavigator.EventScreen.route) {
                                     Box(
                                         contentAlignment = Alignment.Center,
                                         modifier = Modifier
@@ -127,6 +129,8 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                     selectedContentColor = LightPrimary,
                     unselectedContentColor = LightSecondaryVariant,
                     onClick = {
+                        if (item.name == "Organiser")
+                            navController.navigate("Organiser"+"/"+ "${0}")
                         onItemClick(item.route)
                     }
                 )

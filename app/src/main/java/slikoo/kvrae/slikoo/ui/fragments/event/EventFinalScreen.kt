@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
@@ -35,6 +36,7 @@ import java.io.InputStream
 
 @Composable
 fun EventFinalFragment(
+    idMeal : Int = 0,
     onFragmentChange: (String) -> Unit,
     navController: NavController,
     mealsVm : MealsViewModel
@@ -61,7 +63,9 @@ fun EventFinalFragment(
 
         ImagePickerField(
             onImageSelected = { mealsVm.mealUri = it!! },
-            imageUrl = mealsVm.mealUri,
+            imageUrl =
+            if (mealsVm.meal.value.avatar.isNotEmpty()) mealsVm.mealUri
+            else "${mealsVm.meal.value.avatar}".toUri(),
         )
 
         Spacer(modifier = Modifier.height(32.dp))

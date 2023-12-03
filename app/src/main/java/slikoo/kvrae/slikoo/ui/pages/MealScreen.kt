@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,9 +41,10 @@ import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
 @Composable
-fun EventScreen(
+fun MealOrganizeScreen(
     title: String = stringResource(R.string.home),
     onBackPress: (String) -> Unit,
+    idMeal : Int = 0,
     navController: NavController
 ) {
     var fragment by remember {
@@ -50,6 +52,11 @@ fun EventScreen(
     }
 
     val mealVM: MealsViewModel = viewModel()
+    if (idMeal > 0)
+        DisposableEffect(Unit) {
+            mealVM.getMealById(idMeal)
+            onDispose { }
+        }
 
 
     Box(
@@ -61,7 +68,9 @@ fun EventScreen(
     ) {
 
         Column(
-            modifier = Modifier.fillMaxSize().padding(8.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         )
@@ -89,7 +98,9 @@ fun EventScreen(
                     }
                     if (show) CustomAlertDialog(
                         onDismiss= { show = false },
-                        onConfirm = { navController.popBackStack()
+                        dismissText = stringResource(id = R.string.no),
+                        onConfirm = {
+                            navController.popBackStack()
                             navController.navigate(AppScreenNavigator.MainAppScreen.route) },
                         title = stringResource(id = R.string.cancel),
                         message = stringResource(id = R.string.cancel_message),
@@ -108,14 +119,14 @@ fun EventScreen(
                 }
                 stringResource(R.string.third) -> {
                     EventFinalFragment(
-                        { fragment = it },
+                        onFragmentChange = { fragment = it },
                         navController = navController,
-                        mealsVm = mealVM
+                        mealsVm = mealVM,
+                        idMeal = idMeal
                     )
                 }
                 else -> EventFirstFragment(mealVM) { fragment = it }
             }
-
         }
     }
 }
