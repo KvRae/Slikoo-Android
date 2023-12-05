@@ -5,6 +5,7 @@ import slikoo.kvrae.slikoo.data.datasources.entities.FeedBack
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.data.datasources.entities.Notification
 import slikoo.kvrae.slikoo.data.datasources.entities.User
+import slikoo.kvrae.slikoo.data.datasources.entities.UserDetails
 
 data class MealResponse(
     @SerializedName("repasList")
@@ -43,7 +44,14 @@ data class LoginRequest(
 )
 
 data class ForgetPasswordRequest(
-    val email: String
+    val email: String,
+    val newpassword: String,
+    val digitcode: String
+)
+
+data class ForgetPasswordResponse(
+    val message: String,
+    val error : String
 )
 
 data class UserResponse(
@@ -94,6 +102,13 @@ data class MealRequest(
 
 data class ParticiapteRequest(
     val motif: String
+)
+
+data class UserDetailResponse(
+    @SerializedName("message")
+    var message: String? = null,
+    @SerializedName("Userdetails")
+    var userDetails: UserDetails? = UserDetails()
 )
 
 

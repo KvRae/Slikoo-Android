@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.viewmodels
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -16,6 +17,7 @@ class MainScreenViewModel: ViewModel() {
 
     var user = mutableStateOf(User())
     private val userRDS = UserRemoteDataSource()
+    var avatarUrl by mutableStateOf((Uri.parse(user.value.avatarUrl+user.value.avatar)))
     var ribMessage = mutableStateOf("")
     var isLoading by mutableStateOf(false)
     var isError by mutableStateOf(false)
@@ -29,7 +31,7 @@ class MainScreenViewModel: ViewModel() {
                 isLoading = true
                 TempSession.user = async { userRDS.getUserByEmail(token = TempSession.token ,email = TempSession.email) }.await()
                 user.value = async { TempSession.user }.await()
-                async { if (user.value.RIB == null) user.value.RIB = "" }.await()
+                user.value.RIB = async { TempSession.user.RIB?: "" }.await()
                 isLoading = async { false }.await()
             } catch (e: Exception) {
                 e.printStackTrace()

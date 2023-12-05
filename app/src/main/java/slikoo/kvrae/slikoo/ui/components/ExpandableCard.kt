@@ -38,7 +38,9 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
+import slikoo.kvrae.slikoo.ui.theme.LightGrey
 
 
 @Composable
@@ -88,6 +90,7 @@ fun ExpandableCard(
                 Text(
                     text = title.ifBlank { placeholder },
                     modifier = Modifier.weight(1f),
+                    color = if (title.isBlank()) LightGrey else LightBackground,
                     style = TextStyle(fontSize = 14.sp),
                     maxLines = 1,
                 )

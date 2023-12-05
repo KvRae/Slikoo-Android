@@ -14,6 +14,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,40 +25,54 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.datasources.entities.User
+import slikoo.kvrae.slikoo.data.datasources.entities.UserDetails
 import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
+import slikoo.kvrae.slikoo.viewmodels.UserDetailsViewModel
 
 
 @Composable
 fun BioFragment(user : User) {
-    if (user.Hasdetails )
+    val viewModel: UserDetailsViewModel = viewModel()
+    if (user.Hasdetails) {
+        DisposableEffect(Unit ){
+            viewModel.getUserDetails()
+            onDispose {  }
+        }
+
+    }
+
+    if (user.Hasdetails && viewModel.userDetails.id != 0)
         Column(modifier = Modifier.padding(4.dp)) {
         BioHeaderSection(
             icon = R.drawable.fork_knife_icon,
             title = stringResource(R.string.allergies_alimentaires),
-            description = stringResource(id = R.string.welcome_sub_description)
+            description = viewModel.userDetails.algalimentaire.joinToString { it }
         )
         BioHeaderSection(
             icon = R.drawable.heart_icon,
             title = stringResource(R.string.centres_d_interet),
-            description = stringResource(id = R.string.welcome_sub_description)
+            description =  viewModel.userDetails.centreinteret.joinToString { it }
         )
         BioHeaderSection(
             icon = R.drawable.language_icon,
             title = stringResource(R.string.languages),
-            description = stringResource(id = R.string.welcome_sub_description)
+            description = viewModel.userDetails.langues.joinToString { it }
         )
-        BioDescriptionSection()
+        BioDescriptionSection(userDetail = viewModel.userDetails)
         BioHeaderSection(
             icon = R.drawable.ellipse_22,
             title = stringResource(R.string.plus_sur_moi),
-            description = stringResource(id = R.string.welcome_sub_description)
+            description = viewModel.userDetails.centreinteret.joinToString { it }
         )
-        SocialMediaSection()
+        SocialMediaSection(
+            userDetail = viewModel.userDetails
+        )
 
 
     }
@@ -111,27 +126,27 @@ data class UserDescriptionItem(
 )
 
 @Composable
-fun BioDescriptionSection() {
+fun BioDescriptionSection(userDetail: UserDetails) {
     val userDescriptionList = arrayListOf<UserDescriptionItem>(
         UserDescriptionItem(
             icon = R.drawable.cigarette_icon,
             title = stringResource(R.string.fumeur),
-            description = "oui"
+            description = userDetail.fumeur?:""
         ),
         UserDescriptionItem(
             icon = R.drawable.cup_icon,
             title = stringResource(R.string.alcohol),
-            description = "oui"
+            description = userDetail.alcohol?:""
         ),
         UserDescriptionItem(
             icon = R.drawable.person_search,
             title = stringResource(R.string.cherche_plus),
-            description = "oui"
+            description = userDetail.chercherplus.joinToString { it }
         ),
         UserDescriptionItem(
             icon = R.drawable.two_ppl_icon,
             title = stringResource(R.string.genre_recherche),
-            description = "Femmes"
+            description = userDetail.cherche.joinToString { it }
         ),
     )
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -183,7 +198,9 @@ fun BioDescriptionSection() {
 }
 
 @Composable
-fun SocialMediaSection() {
+fun SocialMediaSection(
+    userDetail: UserDetails
+) {
     val uriHandler = LocalUriHandler.current
 
     Row(
@@ -193,7 +210,7 @@ fun SocialMediaSection() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = { uriHandler.openUri("https://www.facebook.com/") })
+            onClick = { uriHandler.openUri(userDetail.Facebooklink?:"https://www.facebook.com/") })
         {
             Icon(
                 painter = painterResource(id = R.drawable.facebook_icon),
@@ -204,7 +221,7 @@ fun SocialMediaSection() {
             )
 
         }
-        IconButton(onClick = { uriHandler.openUri("https://www.instagram.com/") })
+        IconButton(onClick = { uriHandler.openUri(userDetail.InstagramLink?:"https://www.instagram.com/") })
         {
             Icon(
                 painter = painterResource(id = R.drawable.instagram_icon),
@@ -214,7 +231,7 @@ fun SocialMediaSection() {
             )
 
         }
-        IconButton(onClick = { uriHandler.openUri("https://www.linkedin.com/")} )
+        IconButton(onClick = { uriHandler.openUri(userDetail.LinkedinLink?:"https://www.linkedin.com/")} )
         {
             Icon(
                 painter = painterResource(id = R.drawable.linkedin_icon),
@@ -223,7 +240,7 @@ fun SocialMediaSection() {
                 modifier = Modifier.size(32.dp)
             )
         }
-        IconButton(onClick = { uriHandler.openUri("https://www.twitter.com/") })
+        IconButton(onClick = { uriHandler.openUri(userDetail.TwitterLink?:"https://www.twitter.com/") })
         {
             Icon(
                 painter = painterResource(id = R.drawable.twitter_icon),

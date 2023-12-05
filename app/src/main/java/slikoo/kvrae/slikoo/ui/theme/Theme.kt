@@ -23,14 +23,14 @@ import androidx.core.view.WindowCompat
 //     onSurface = DarkBackground
 //)
 
-private val LightColorScheme = lightColorScheme(
+private val lightColorScheme = lightColorScheme(
     primary = LightPrimary,
     secondary = LightPrimaryVariant,
     tertiary = LightSurface,
     background = LightSecondary,
     surface = LightSecondary,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
+    onPrimary = LightError,
+    onSecondary = LightError,
     onTertiary = LightSecondaryVariant,
     onBackground = LightBackground,
     onSurface = LightBackground,
@@ -41,7 +41,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun SlikooTheme(
 //    darkTheme: Boolean = isSystemInDarkTheme(),
-//    dynamicColor: Boolean = true, // Dynamic color is available on Android 12+
+    dynamicColor: Boolean = false, // Dynamic color is available on Android 12+
     content: @Composable () -> Unit
 ) {
 //    val colorScheme = when {
@@ -74,7 +74,7 @@ fun SlikooTheme(
     }
 
     MaterialTheme(
-        colorScheme = LightColorScheme,
+        colorScheme = lightColorScheme,
         typography = Typography,
         content = content
     )

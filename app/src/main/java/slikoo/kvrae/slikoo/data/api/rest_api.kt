@@ -20,6 +20,7 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import slikoo.kvrae.slikoo.data.datasources.dto.FeedBacksResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.ForgetPasswordRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.ForgetPasswordResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.LoginRequest
 import slikoo.kvrae.slikoo.data.datasources.dto.LoginResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.MealDetailsResponse
@@ -27,6 +28,7 @@ import slikoo.kvrae.slikoo.data.datasources.dto.MealResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.NotificationsResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.ParticiapteRequest
 import slikoo.kvrae.slikoo.data.datasources.dto.RibRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.UserDetailResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.UserResponse
 import slikoo.kvrae.slikoo.data.datasources.entities.Invitation
 
@@ -128,6 +130,13 @@ interface ApiServices {
         @Header("Authorization") token: String,
         @Path("id") id: Int
     ): Response<UserResponse>
+    //------------------------ UserDeatils ----------------------------------//
+    @Headers("Content-Type: application/www-form-urlencoded")
+    @GET("getUserdetailsbyId/{id}")
+    suspend fun getUserDetailsId(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<UserDetailResponse>
 
 
 
@@ -180,9 +189,31 @@ interface ApiServices {
         @Part("sex") sexe: RequestBody // blame the backend developer for this typo
     ): Response<String>
 
+    //----------------------------------- Forget Password -----------------------------------//
+
     @Headers("Content-Type: application/json", "Accept: application/html")
-    @POST("resetpwd")
-    suspend fun forgetPassword(@Body forgetPasswordRequest: ForgetPasswordRequest): Response<Int>
+    @POST("updatepasswordDigitcode/{email}")
+    suspend fun forgetPassword(@Path("email") email: String): Response<ForgetPasswordResponse>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("verifyDigitcode/{email}/{Digitcode}")
+    suspend fun verifyCode(
+        @Path("email") email: String,
+        @Path("Digitcode") code: String
+    ): Response<ForgetPasswordResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("updatepasswordafterdigitcode")
+    suspend fun updatePasswordAfterCode(
+        @Body updatePasswordRequest: ForgetPasswordRequest
+    ): Response<ForgetPasswordResponse>
+
+
+
+
+
+
 
 
     @Headers("Content-Type: application/json")
@@ -198,7 +229,7 @@ interface ApiServices {
 
     /************************** Delete Requests **************************/
     @Headers("Content-Type: application/json")
-    @DELETE("deleterepas/{idreoas}")
+    @DELETE("deleterepas/{idrepas}")
     suspend fun deleteMeal(
         @Header("Authorization") token: String,
         @Path("idreoas") id: Int

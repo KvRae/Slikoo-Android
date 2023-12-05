@@ -13,7 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import slikoo.kvrae.slikoo.ui.pages.AnimatedSplashScreen
 import slikoo.kvrae.slikoo.ui.pages.EditProfileScreen
-import slikoo.kvrae.slikoo.ui.pages.EmailInput
+import slikoo.kvrae.slikoo.ui.pages.ForgetPasswordScreen
 import slikoo.kvrae.slikoo.ui.pages.LoginForm
 import slikoo.kvrae.slikoo.ui.pages.MainScreen
 import slikoo.kvrae.slikoo.ui.pages.MealOrganizeScreen
@@ -34,8 +34,6 @@ sealed class AppScreenNavigator(val route: String) {
     object SignUpAppScreen : AppScreenNavigator("sign_up_screen")
     object MainAppScreen : AppScreenNavigator("main_screen")
     object ForgotPasswordAppScreen : AppScreenNavigator("forgot_password_screen")
-    object VerifyEmailAppScreen : AppScreenNavigator("verify_email_screen")
-    object ResetPasswordAppScreen : AppScreenNavigator("reset_password_screen")
     object EditProfileAppScreen : AppScreenNavigator("edit_profile_screen")
     object AdvancedEditProfilesAppScreen : AppScreenNavigator("advanced_edit_profile_screen")
     object EventDetailsAppScreen : AppScreenNavigator("event_details_screen/{id}")
@@ -84,7 +82,7 @@ fun Navigation() {
             AnimatedSplashScreen(navController = navController)
         }
         composable(route = AppScreenNavigator.ForgotPasswordAppScreen.route) {
-            EmailInput(navController = navController)
+            ForgetPasswordScreen(navController = navController)
         }
 
         composable(route = AppScreenNavigator.EditProfileAppScreen.route) {
@@ -120,13 +118,6 @@ fun Navigation() {
             )
             mainScreenIndex.value = MainScreenNavigator.RecipeScreen.route
         }
-
-//        composable(route = AppScreenNavigator.VerifyEmailAppScreen.route) {
-//            OtpInput(navController = navController)
-//        }
-//        composable(route = AppScreenNavigator.ResetPasswordAppScreen.route) {
-//            PasswordReset(navController = navController)
-//        }
     }
 }
 

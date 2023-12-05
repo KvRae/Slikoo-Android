@@ -104,7 +104,7 @@
     <string name="email_not_sent_message">Erreur servunu</string>
     <string name="email_not_found">Non trouvé</string>
     <string name="email_not_found_message">votre email n\'existe pas</string>
-    <string name="emailInvalid">andresse incorrect</string>
+    <string name="emailInvalid">adresse incorrect</string>
     <string name="add">Ajouter</string>
     <string name="dismiss">Annuler</string>
     <string name="thanks">Merci</string>
@@ -134,6 +134,17 @@
     <string name="no_invits_text">Vous n\'avez pas d\'invitations</string>
     <string name="no_description">"Vous n'avez pas de description, Veuillez consulter votre profile avancé "</string>
     <string name="complete_profile">Veuillez verifier votre profile !</string>
+    <string name="code">"Code "</string>
+    <string name="email_is_empty">Entrez votre e-mail</string>
+    <string name="verify">Verifier</string>
+    <string name="code_is_empty">Entrer votre code</string>
+    <string name="codeInvalid">Votre code est invalide</string>
+    <string name="confirm_password">Confirmer mot de passe</string>
+    <string name="password_is_empty">Mot de passe est vide</string>
+    <string name="password_short">Mot de passe est courte</string>
+    <string name="reset_password">"Entrez votre nouvelle mot de passe "</string>
+    <string name="server_error">Un erreur est survenue</string>
+    <string name="save">Enregistrer</string>
 
 
 </resources>

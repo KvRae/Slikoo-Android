@@ -1,7 +1,5 @@
 package slikoo.kvrae.slikoo.ui.pages
 
-import android.content.Context
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -78,7 +76,9 @@ fun EditProfileScreen(navController: NavController) {
             EditProfileTopBar(navController = navController)
             ProfileImagePicker(
                 imageUri = (viewModel.user.value.avatarUrl+viewModel.user.value.avatar).toUri(),
-                onImageSelected = {})
+                onImageSelected = {
+                    viewModel.avatarUrl = it
+                })
             CustomTextField(
                 onChange = {viewModel.user.value.copy( nom = it)},
                 value = viewModel.user.value.nom,
@@ -135,8 +135,8 @@ fun EditProfileScreen(navController: NavController) {
                     title = stringResource(id = R.string.add_rib),
                     content = {
                         CustomTextField(
-                            onChange = {  viewModel.user.value.RIB = it},
-                            value = viewModel.user.value.RIB?:"",
+                            onChange = { viewModel.user.value.copy(RIB = it) },
+                            value = viewModel.user.value.RIB!!,
                             label = stringResource(id = R.string.add_rib),
                             leadingIcon = Icons.Filled.AccountCircle
                         )
@@ -148,7 +148,7 @@ fun EditProfileScreen(navController: NavController) {
                         viewModel.user.value.RIB = viewModel.user.value.RIB
                         viewModel.addRib()
                         viewModel.showDialog = false
-                        makeToast(viewModel.ribMessage.value, navController.context)
+                        makeToast(navController.context, viewModel.ribMessage.value )
                     })
 
         }
@@ -165,12 +165,12 @@ fun EditProfileScreen(navController: NavController) {
     }
 }
 
-fun makeToast(message: String, context: Context) {
-    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-}
+
 
 @Composable
-fun EditProfileTopBar(navController: NavController) {
+fun EditProfileTopBar(
+    navController: NavController
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Start,

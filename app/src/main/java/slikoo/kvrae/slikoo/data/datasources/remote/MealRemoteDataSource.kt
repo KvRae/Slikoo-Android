@@ -7,9 +7,9 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import slikoo.kvrae.slikoo.data.api.ApiServices
 import slikoo.kvrae.slikoo.data.api.RetrofitInstance
+import slikoo.kvrae.slikoo.data.datasources.dto.ParticiapteRequest
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.data.datasources.entities.User
-import slikoo.kvrae.slikoo.data.datasources.dto.ParticiapteRequest
 import java.io.File
 
 class MealRemoteDataSource {

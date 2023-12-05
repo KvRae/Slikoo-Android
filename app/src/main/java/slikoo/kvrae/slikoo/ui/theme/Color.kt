@@ -30,5 +30,6 @@ val LightSecondaryVariant = Color(0xFFF1DBE2) // Inactive icons
 val LightBackground = Color(0xFF212121) //Primary Black Text
 val LightSurface = Color(0xFF16ABDB) // Default blue items
 val LightError = Color(0xFFFFFFFF)  // Error text
+val LightGrey = Color(0xFF7E7E7E) // Grey text
 
 

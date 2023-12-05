@@ -7,10 +7,10 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import slikoo.kvrae.slikoo.data.api.ApiServices
 import slikoo.kvrae.slikoo.data.api.RetrofitInstance
-import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.dto.ForgetPasswordRequest
 import slikoo.kvrae.slikoo.data.datasources.dto.LoginRequest
 import slikoo.kvrae.slikoo.data.datasources.dto.RibRequest
+import slikoo.kvrae.slikoo.data.datasources.entities.User
 import java.io.File
 import java.io.IOException
 
@@ -129,20 +129,6 @@ class UserRemoteDataSource {
 
     }
 
-    suspend fun forgotPassword(email : String): Int {
-        return try {
-            val forgetPasswordRequest = ForgetPasswordRequest(email = email)
-            val response =  RetrofitInstance
-                .getRetrofitInstance()
-                .create(ApiServices::class.java)
-                .forgetPassword(forgetPasswordRequest)
-            return response.code()
-            } catch (e: Exception) {
-            500
-        }
-
-    }
-
     suspend fun addRib(user : User, token: String): Int {
         return try {
             val response = RetrofitInstance
@@ -167,4 +153,59 @@ class UserRemoteDataSource {
     }
 
 
+    suspend fun forgotPasswordEmailVerify(email : String): Int {
+        return try {
+            val response =  RetrofitInstance
+                .getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .forgetPassword(email= email)
+            if (response.isSuccessful) 200
+
+            else 404
+        } catch (e: Exception) { 500 }
+    }
+
+    suspend fun forgetPasswordDcVerify(email: String, code: String): Int {
+        return try{
+            val response = RetrofitInstance
+                .getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .verifyCode(email= email, code = code)
+
+            if (response.isSuccessful) {
+                Log.d("response in data source", response.code().toString())
+                200
+            }
+            else{
+                Log.d("response in data source", response.code().toString())
+                404
+            }
+        }
+        catch (e: Exception){
+            Log.d("response in data source error", e.message.toString())
+            500
+
+        }
+    }
+
+    suspend fun forgetPasswordUpdatePwd(email: String, password: String, code: String) : Int{
+        return try {
+            val response = RetrofitInstance
+                .getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .updatePasswordAfterCode(
+                    ForgetPasswordRequest(
+                        email = email,
+                        newpassword = password,
+                        digitcode = code
+                    )
+                )
+            if (response.isSuccessful) 200
+            else 400
+
+        }
+        catch (e: Exception) {
+            500
+        }
+    }
 }

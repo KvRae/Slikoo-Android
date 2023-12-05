@@ -6,13 +6,14 @@ import androidx.room.PrimaryKey
 
 
 data class User(
+    val avatarUrl: String = "https://slikoo.com/UsersProfileImgs/",
+    val avatarbannerUrl: String = "https://slikoo.com/UsersBannerImgs/",
+    val cinavatarUrl: String = "https://slikoo.com/UsersCINimgs/",
     val Hasdetails: Boolean = false,
     var RIB: String? = "",
     var adressepostal: String = "",
-    val avatar: String = "",
-    val avatarUrl: String = "https://slikoo.com/UsersProfileImgs/",
+    var avatar: String = "",
     var avatarbanner: String = "",
-    val avatarbannerUrl: String = "https://slikoo.com/UsersBannerImgs/",
     val cinavatar: String = "",
     var codepostal: String = "",
     val datecreation: String= "",

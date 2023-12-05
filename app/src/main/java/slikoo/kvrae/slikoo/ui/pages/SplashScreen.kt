@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -22,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 
 
@@ -33,7 +31,7 @@ fun AnimatedSplashScreen(navController: NavController) {
         targetValue = if (startAnimation) 1f else 0f,
         animationSpec = tween(
             durationMillis = 3000
-        )
+        ), label = ""
     )
     LaunchedEffect(key1 = true) {
         startAnimation = true
@@ -51,17 +49,14 @@ fun AnimatedSplashScreen(navController: NavController) {
 
 @Composable
 fun Splash(alpha: Float) {
-    val logo = if (isSystemInDarkTheme()) R.drawable.slikoo_white else R.drawable.logo2
     Box(
         modifier = Modifier
-            .background(
-                if (isSystemInDarkTheme()) LightPrimary else LightError
-            )
+            .background(LightPrimary)
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = logo), // Load the drawable resource
+            painter = painterResource(id = R.drawable.slikoo_white), // Load the drawable resource
             contentDescription = "Logo",
             modifier = Modifier
                 .size(200.dp)

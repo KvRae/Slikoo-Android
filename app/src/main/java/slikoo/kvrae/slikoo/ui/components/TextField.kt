@@ -73,7 +73,7 @@ fun CustomTextField(
     Column {
         OutlinedTextField(
             value = value+"",
-            onValueChange = { onChange(it) },
+            onValueChange = { onChange(it+"") },
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = LightPrimary,
@@ -133,7 +133,7 @@ fun CustomTextField(
 
 
             )
-        if (errorMessage.isNotEmpty() && isError) {
+        if (isError) {
             Text(
                 text = errorMessage,
                 color = LightPrimary,
