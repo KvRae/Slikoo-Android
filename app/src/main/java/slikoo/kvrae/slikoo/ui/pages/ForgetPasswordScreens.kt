@@ -80,7 +80,6 @@ fun ForgetPasswordTopBar( navController: NavController) {
         ) {
             IconButton(onClick = {
                 navController.popBackStack()
-                navController.navigate(AppScreenNavigator.SignInAppScreen.route)
             }) {
                 Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
             }

@@ -158,6 +158,7 @@ fun LoginContent(
             CustomTextField(
                 onChange = {
                     signInViewModel.user = signInViewModel.user.copy(email = it)
+
                 },
                 value = signInViewModel.user.email,
                 label = stringResource(id = R.string.email),

@@ -19,8 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -55,7 +55,7 @@ fun MainScreen(navController: NavController,
                currentScreen: String = "Home",
 ) {
 
-    var title by remember { mutableStateOf(currentScreen) }
+    var title by rememberSaveable { mutableStateOf(currentScreen) }
     val viewModel: MainScreenViewModel = viewModel()
 
     DisposableEffect(Unit){
@@ -78,13 +78,13 @@ fun MainScreen(navController: NavController,
             0
         ),
         BottomNavItem("Organiser",
-            AppScreenNavigator.EventScreen.route,
+            title,
             Icons.Rounded.Add, 0),
         BottomNavItem(
             "Notifications",
             MainScreenNavigator.NotificationScreen.route,
             ImageVector.vectorResource(id = R.drawable.notification),
-            4
+            0
         ),
         BottomNavItem(
             "Parametres",
@@ -97,7 +97,7 @@ fun MainScreen(navController: NavController,
     val scaffoldState = rememberScaffoldState()
     val couroutineScope = rememberCoroutineScope()
 
-    if (viewModel.user.value.nom.isNotBlank())
+    if (viewModel.user.nom.isNotBlank())
     Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier
@@ -107,7 +107,7 @@ fun MainScreen(navController: NavController,
                 CustomMainMenuTopBar(
                     title = title,
                     onTitleChange = { title = it },
-                    user = viewModel.user.value
+                    user = viewModel.user
                 )
 
         },
@@ -124,15 +124,15 @@ fun MainScreen(navController: NavController,
             }
         },
         bottomBar = {
-
                 BottomNavigationBar(items = bottomNavigationItems,
                     route = title,
                     navController = navController,
-                    onItemClick = { title = it }
+                    onItemClick = { title = it },
+                    hasDetails = viewModel.user.Hasdetails
                 )
         },
         floatingActionButton = {
-            if (title == MainScreenNavigator.RecipeScreen.route && viewModel.user.value.Hasdetails)
+            if (title == MainScreenNavigator.RecipeScreen.route && viewModel.user.verified && viewModel.user.Hasdetails)
                 FloatingActionButton(
                     onClick = { navController.navigate("Organiser/"+"${0}" ) },
                     backgroundColor = LightPrimary,
@@ -156,11 +156,11 @@ fun MainScreen(navController: NavController,
                     "Home" -> HomeScreen(navController = navController)
                     "Repas" -> RecipeScreen(navController = navController)
                     "Notifications" -> NotificationScreen(navController = navController)
-                    "Parametres" -> SettingsScreen(navController = navController, user = viewModel.user.value)
+                    "Parametres" -> SettingsScreen(navController = navController, user = viewModel.user)
                 }
 
 
-                if (!viewModel.user.value.Hasdetails) {
+                if (!viewModel.user.verified) {
                     val msg = stringResource(id = R.string.complete_profile)
                     val msgAction = stringResource(id = R.string.ok)
                     DisposableEffect(scaffoldState.snackbarHostState) {

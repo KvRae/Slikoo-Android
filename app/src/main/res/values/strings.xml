@@ -146,4 +146,13 @@
     <string name="reset_password">"Entrez votre nouvelle mot de passe "</string>
     <string name="server_error">Un erreur est survenue</string>
     <string name="save">Enregistrer</string>
+    <string name="no_notifications">"Aucune notification trouvé "</string>
+    <string name="update_password">Modifier Mot de Passe</string>
+    <string name="old_password">Ancien mot de passe</string>
+    <string name="new_password">Nouveau mot de passe</string>
+    <string name="advanced_prof_msg">Veuillez completer votre profile avancé</string>
+    <string name="meal_for">"Repas dans "</string>
+    <string name="hour">Heure</string>
+    <string name="date">Date</string>
+    <string name="givenName">Prenom</string>
 </resources>

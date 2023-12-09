@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -15,10 +16,23 @@ import slikoo.kvrae.slikoo.utils.TempSession
 
 class MainScreenViewModel: ViewModel() {
 
-    var user = mutableStateOf(User())
+    var user by mutableStateOf(User())
     private val userRDS = UserRemoteDataSource()
-    var avatarUrl by mutableStateOf((Uri.parse(user.value.avatarUrl+user.value.avatar)))
+    val userAvatar = (user.avatarUrl.plus(user.avatar)).toUri()
+
+    var avatarUrl by mutableStateOf(userAvatar)
+    var cinUrl by mutableStateOf((Uri.parse(user.cinavatarUrl+user.cinavatar)))
+    var banner by mutableStateOf((Uri.parse(user.avatarbannerUrl+user.avatarbanner)))
+
     var ribMessage = mutableStateOf("")
+
+    var oldPassword by mutableStateOf("")
+    var newPassword by mutableStateOf("")
+    var confirmPassword by mutableStateOf("")
+
+    var resCode by mutableStateOf(0)
+
+
     var isLoading by mutableStateOf(false)
     var isError by mutableStateOf(false)
     var showDialog by  mutableStateOf(false)
@@ -30,12 +44,9 @@ class MainScreenViewModel: ViewModel() {
             try {
                 isLoading = true
                 TempSession.user = async { userRDS.getUserByEmail(token = TempSession.token ,email = TempSession.email) }.await()
-                user.value = async { TempSession.user }.await()
-                user.value.RIB = async { TempSession.user.RIB?: "" }.await()
-                isLoading = async { false }.await()
+                user = async { TempSession.user }.await()
             } catch (e: Exception) {
                 e.printStackTrace()
-                isLoading =  false
                 isError = true
             }
             finally {
@@ -44,16 +55,12 @@ class MainScreenViewModel: ViewModel() {
         }
     }
 
-    fun addRib() {
+    fun updatePassword(oldPassword: String, newPassword: String, confirmPassword: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                isLoading = async { true }.await()
-                ribMessage.value = async { userRDS.addRib(user = user.value, token = TempSession.token).toString() }.await()
-                user.value = async { TempSession.user }.await()
-                isLoading = async { false }.await()
+                isLoading =  true
+                resCode = async { userRDS.updatePassword(oldPassword = oldPassword, token = TempSession.token, newPassword = newPassword ) }.await()
             } catch (e: Exception) {
-                ribMessage.value ="Something went wrong"
-                isLoading =  false
                 isError =  true
             }
             finally {

@@ -14,20 +14,69 @@ import slikoo.kvrae.slikoo.utils.TempSession
 
 class UserDetailsViewModel: ViewModel() {
     val userDetailsRDS = UserDetailsRemoteDataSource()
-    var userDetails by mutableStateOf(UserDetails())
+    var userDetails by mutableStateOf(UserDetails(
+        iduser = TempSession.user.id.toString(),
+    ))
     var isLoading by mutableStateOf(false)
     var isError by mutableStateOf(false)
+    private var resCode by mutableStateOf(0)
 
-    fun getUserDetails() {
+    fun getUserDetails(id : Int = TempSession.user.id) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isLoading = true
                 userDetails = async { userDetailsRDS.getUserDetails(
                     TempSession.token,
-                    TempSession.user?.id!!
+                    id
+
                 ) }.await()
             } catch (e: Exception) {
                 e.printStackTrace()
+                isError = true
+
+            }
+            finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun addUserDetails(userDetails: UserDetails) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                isLoading = true
+                resCode = async {
+                    userDetailsRDS.addUserDetails(
+                    TempSession.token,
+                    userDetails
+
+                ) }.await()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                isError = true
+                resCode = 500
+
+            }
+            finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun updateUserDetails(userDetails: UserDetails) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                isLoading = true
+                resCode = async {
+                    userDetailsRDS.updateUserDetails(
+                    TempSession.token,
+                    userDetails
+
+                ) }.await()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                isError = true
+                resCode = 500
 
             }
             finally {

@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,8 +32,18 @@ fun RecipeScreen(navController: NavController) {
     val mealsViewModel: MealsViewModel = viewModel()
     val scrollState = rememberLazyGridState()
 
+    if (mealsViewModel.meals.isEmpty())
+    DisposableEffect(Unit) {
+        mealsViewModel.getAllMeals(
+            mealsViewModel.meals
+        )
+        onDispose { }
+    }
+
     Box(
-        modifier = Modifier.fillMaxSize().background(LightSecondary),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(LightSecondary),
         contentAlignment = Alignment.Center
     ) {
         Column(

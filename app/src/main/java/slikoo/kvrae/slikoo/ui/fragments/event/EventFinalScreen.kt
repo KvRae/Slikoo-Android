@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
@@ -63,17 +62,20 @@ fun EventFinalFragment(
 
         ImagePickerField(
             onImageSelected = { mealsVm.mealUri = it!! },
-            imageUrl =
-            if (mealsVm.meal.value.avatar.isNotEmpty()) mealsVm.mealUri
-            else "${mealsVm.meal.value.avatar}".toUri(),
+            imageUrl = mealsVm.mealUri,
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
         CustomButton(text = stringResource(id = R.string.finish)) {
+            if (idMeal == 0) {
             val mealFile = getRealPathFromURI(mealsVm.mealUri, context)?.let { File(it) }
-            mealsVm.onAddMeal(mealFile!!)
-            onMakeToast(context, mealsVm.mealMessage.value)
+            mealsVm.onAddMeal(mealFile!!)}
+            else {
+                val mealFile = getRealPathFromURI(mealsVm.mealUri, context)?.let { File(it) }
+                mealsVm.onUpdateMeal(mealFile!!, idMeal)
+            }
+
 
             /*navController.popBackStack()
             navController.navigate(AppScreenNavigator.MainAppScreen.route)*/

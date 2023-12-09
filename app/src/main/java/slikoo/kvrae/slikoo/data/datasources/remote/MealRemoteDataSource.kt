@@ -105,14 +105,15 @@ class MealRemoteDataSource {
         }
     }
 
-    suspend fun deleteMeal(token: String,id: Int): String {
+    suspend fun deleteMeal(token: String,id: Int): Int {
         return try {
             val response = RetrofitInstance.getRetrofitInstance()
                 .create(ApiServices::class.java).deleteMeal(token = "Bearer $token", id = id)
-            if (response.isSuccessful) response.body().toString()
-            else response.errorBody().toString()
+            if (response.isSuccessful) 200
+            else 400
         } catch (e: Exception) {
-            e.message.toString()
+            Log.e("Meals Error", e.message.toString())
+            500
         }
     }
 
@@ -122,19 +123,23 @@ class MealRemoteDataSource {
         userId: Int,
         ownerId: Int,
         motif : String
-    ): String{
+    ): Int{
         return try {
-            val reponse = RetrofitInstance
+            val response = RetrofitInstance
                 .getRetrofitInstance()
                 .create(ApiServices::class.java)
                 .participateMeal("Bearer $token",mealId,userId,ownerId, ParticiapteRequest(motif))
-            if (reponse.isSuccessful) reponse.body().toString()
-            else reponse.errorBody().toString()
+            if (response.isSuccessful) 200
+            else 400
         }
         catch (e: Exception) {
-            return e.message.toString()
+            500
         }
 
+    }
+
+    fun updateMeal(token: String, meal: Meal, mealBanner: File, id: Int): Int {
+        TODO("Not yet implemented")
     }
 
 

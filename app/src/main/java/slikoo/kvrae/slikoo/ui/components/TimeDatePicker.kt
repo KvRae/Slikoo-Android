@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.R
@@ -50,6 +51,7 @@ fun TimePicker(
     )
     OutlinedTextField(
         value = timePicked,
+        label = { Text(text = stringResource(id = R.string.hour), ) },
         shape = RoundedCornerShape(8.dp),
         placeholder = { Text(text = time) },
         onValueChange = { onTimeChange(it) },
@@ -88,7 +90,7 @@ fun DatePicker(
         LocalContext.current,
         R.style.DialogTheme,
         { _, mYear: Int, mMonth: Int, mDay: Int ->
-            selectedDate = "$mDay/$mMonth/$mYear"
+            selectedDate = "$mDay/${mMonth+1}/$mYear"
             onDateChange(selectedDate) // Update the date using the callback
         },
         Calendar.getInstance().get(Calendar.YEAR),
@@ -98,6 +100,7 @@ fun DatePicker(
 
     OutlinedTextField(
         value = selectedDate,
+        label = { Text(text = stringResource(id = R.string.date)) },
         shape = RoundedCornerShape(8.dp),
         placeholder = { Text(text = date) },
         onValueChange = { onDateChange(it) },

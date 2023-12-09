@@ -1,7 +1,5 @@
 package slikoo.kvrae.slikoo.ui.pages
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,8 +14,10 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
@@ -50,28 +50,28 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.DescriptionTextField
+import slikoo.kvrae.slikoo.ui.fragments.profile.makeToast
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
-import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.TempSession
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
 @Composable
-fun MealsDetailScreen(navController: NavController,id : Int) {
-    val mealsViewModel : MealsViewModel = viewModel()
+fun MealsDetailScreen(navController: NavController, id: Int) {
+    val mealsViewModel: MealsViewModel = viewModel()
 
 
-    DisposableEffect(Unit ){
+    DisposableEffect(Unit) {
         mealsViewModel.getMealById(id)
         onDispose {}
     }
 
-    if (mealsViewModel.meal.value.id != 0){
+    if (mealsViewModel.meal.value.id != 0) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -84,31 +84,43 @@ fun MealsDetailScreen(navController: NavController,id : Int) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(400.dp)
+                    .height(500.dp)
             )
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(400.dp)
-                .background(Color.Black.copy(alpha = 0.3f)))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(400.dp)
+                    .background(Color.Black.copy(alpha = 0.3f))
+            )
 
             //Content
             Column(modifier = Modifier.fillMaxWidth()) {
                 // TopAppBar
                 MealDetailHeader(navController = navController)
                 // Event Details
-                Spacer(modifier = Modifier.height(100.dp))
-                MealDetailHeading(
-                    eventName = mealsViewModel.meal.value.type,
-                    eventPlace = mealsViewModel.meal.value.localisation,
-                    eventParticipants = mealsViewModel.meal.value.nbr
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .statusBarsPadding()
+                        .navigationBarsPadding()
+                        .verticalScroll(rememberScrollState()),
+                    //.padding(top = 100.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top
+                ) {
+                    MealDetailHeading(
+                        eventName = mealsViewModel.meal.value.type,
+                        eventPlace = mealsViewModel.meal.value.localisation,
+                        eventParticipants = mealsViewModel.meal.value.nbr
+                    )
 
-                MealDetailContent(
-                    mealsViewModel = mealsViewModel,
-                    navController = navController
-                )
+                    MealDetailContent(
+                        mealsViewModel = mealsViewModel,
+                        navController = navController
+                    )
+                }
             }
-
         }
     }
     if (mealsViewModel.isLoading.value) LoadingScreen()
@@ -120,7 +132,7 @@ fun MealsDetailScreen(navController: NavController,id : Int) {
         onDismiss = { mealsViewModel.isDialogOpen = false },
         onConfirm = {
             mealsViewModel.deleteMeal(mealsViewModel.meal.value.id)
-            makeToast(navController.context, mealsViewModel.mealMessage.value)
+            makeToast(navController.context, "")
             mealsViewModel.isDialogOpen = false
         }
     )
@@ -135,7 +147,7 @@ fun MealsDetailScreen(navController: NavController,id : Int) {
                 mealsViewModel.meal.value.id,
                 mealsViewModel.meal.value.iduser.toInt()
             )
-            makeToast(navController.context, mealsViewModel.mealMessage.value)
+            makeToast(navController.context, "")
             mealsViewModel.isDialogOpen = false
         }
     )
@@ -151,7 +163,6 @@ fun MealDetailHeader(navController : NavController) {
             IconButton(
                 onClick = {
                     navController.popBackStack()
-                    navController.navigate(AppScreenNavigator.MainAppScreen.route)
                 },
                 modifier = Modifier
                     .clip(shape = CircleShape)
@@ -313,13 +324,6 @@ fun ContentHeader(mealsViewModel: MealsViewModel) {
 
 @Composable
 fun ContentSubHeader(mealsViewModel: MealsViewModel) {
-   Row(
-         modifier = Modifier
-             .fillMaxWidth()
-             .padding(bottom = 16.dp, top = 16.dp),
-         horizontalArrangement = Arrangement.SpaceAround,
-         verticalAlignment = Alignment.CenterVertically
-   ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -327,25 +331,32 @@ fun ContentSubHeader(mealsViewModel: MealsViewModel) {
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        SubHeaderItemCard(
-            title = "Genre Recherché",
-            description = mealsViewModel.meal.value.genre
-        )
-        SubHeaderItemCard(
-            title = "Type de nourriture",
-            description = mealsViewModel.meal.value.genrenourriture
-        )
-        SubHeaderItemCard(
-            title = "Type d'evenement",
-            description = mealsViewModel.meal.value.theme
-        )
-    }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp, top = 16.dp),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SubHeaderItemCard(
+                title = "Genre Recherché",
+                description = mealsViewModel.meal.value.genre
+            )
+            SubHeaderItemCard(
+                title = "Type de nourriture",
+                description = mealsViewModel.meal.value.genrenourriture
+            )
+            SubHeaderItemCard(
+                title = "Type d'evenement",
+                description = mealsViewModel.meal.value.theme
+            )
+        }
 
-   }
+    }
 }
 
 @Composable
-fun ContentBody( mealsViewModel: MealsViewModel, navController: NavController) {
+fun ContentBody(mealsViewModel: MealsViewModel, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -353,7 +364,8 @@ fun ContentBody( mealsViewModel: MealsViewModel, navController: NavController) {
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(text = mealsViewModel.meal.value.description,
+        Text(
+            text = mealsViewModel.meal.value.description,
             style = TextStyle(
                 color = LightBackground,
                 fontWeight = FontWeight.Bold,
@@ -361,8 +373,8 @@ fun ContentBody( mealsViewModel: MealsViewModel, navController: NavController) {
             )
         )
         Spacer(modifier = Modifier.height(8.dp))
-        if(mealsViewModel.meal.value.iduser != TempSession.user.id.toString())
-            DetailsContentBodyWithTextField(viewModel = mealsViewModel)
+        if (mealsViewModel.meal.value.iduser != TempSession.user.id.toString())
+            DetailsContentBodyWithTextField(viewModel = mealsViewModel, navController = navController)
         else
             DetailsContentBodyWithButtons(viewModel = mealsViewModel, navController = navController)
     }
@@ -370,8 +382,10 @@ fun ContentBody( mealsViewModel: MealsViewModel, navController: NavController) {
 
 @Composable
 fun DetailsContentBodyWithTextField(
-    viewModel: MealsViewModel
+    viewModel: MealsViewModel,
+    navController: NavController
 ) {
+    val msg = stringResource(id = R.string.advanced_prof_msg)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -379,7 +393,8 @@ fun DetailsContentBodyWithTextField(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(text = "Message a l'organisateur",
+        Text(
+            text = "Message a l'organisateur",
             style = TextStyle(
                 color = LightBackground,
                 fontWeight = FontWeight.Bold,
@@ -388,11 +403,15 @@ fun DetailsContentBodyWithTextField(
         )
         Spacer(modifier = Modifier.height(8.dp))
         DescriptionTextField(onChange = {}, value = "", label = "Message")
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(16.dp))
         CustomButton(text = stringResource(id = R.string.book),
             onClick = {
-                viewModel.dialogContext = "book"
-                viewModel.isDialogOpen = true
+                if (TempSession.user.Hasdetails) {
+                    viewModel.dialogContext = "book"
+                    viewModel.isDialogOpen = true
+                } else {
+                    makeToast(navController.context, msg)
+                }
             })
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
@@ -420,7 +439,8 @@ fun DetailsContentBodyWithButtons(
                 navController.navigate("Organiser" + "/${viewModel.meal.value.id}")
             }
         ) {
-            Text(text = stringResource(id = R.string.updateRecipe),
+            Text(
+                text = stringResource(id = R.string.updateRecipe),
                 style = TextStyle(
                     color = LightPrimaryVariant,
                     fontWeight = FontWeight.Bold,
@@ -440,7 +460,8 @@ fun DetailsContentBodyWithButtons(
                 viewModel.isDialogOpen = true
             }
         ) {
-            Text(text = stringResource(id = R.string.delete),
+            Text(
+                text = stringResource(id = R.string.delete),
                 style = TextStyle(
                     color = LightPrimaryVariant,
                     fontWeight = FontWeight.Bold,
@@ -455,8 +476,8 @@ fun DetailsContentBodyWithButtons(
 
 @Composable
 fun SubHeaderItemCard(
-    title : String = "",
-    description : String = ""
+    title: String = "",
+    description: String = ""
 ) {
     Card(
         modifier = Modifier,
@@ -469,14 +490,16 @@ fun SubHeaderItemCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = title,
+            Text(
+                text = title,
                 style = TextStyle(
                     color = LightPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 11.sp,
                 )
             )
-            Text(text = description,
+            Text(
+                text = description,
                 style = TextStyle(
                     color = LightBackground,
                     fontWeight = FontWeight.Bold,
@@ -485,10 +508,6 @@ fun SubHeaderItemCard(
             )
         }
     }
-}
-
-fun makeToast(context : Context, message : String) {
-    val toast = Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
 
