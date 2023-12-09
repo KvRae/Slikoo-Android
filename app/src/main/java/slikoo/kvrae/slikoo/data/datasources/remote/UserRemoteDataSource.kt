@@ -10,7 +10,9 @@ import slikoo.kvrae.slikoo.data.api.RetrofitInstance
 import slikoo.kvrae.slikoo.data.datasources.dto.ForgetPasswordRequest
 import slikoo.kvrae.slikoo.data.datasources.dto.LoginRequest
 import slikoo.kvrae.slikoo.data.datasources.dto.RibRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.UpdatePasswordRequest
 import slikoo.kvrae.slikoo.data.datasources.entities.User
+import slikoo.kvrae.slikoo.utils.TempSession.Companion.user
 import java.io.File
 import java.io.IOException
 
@@ -60,6 +62,53 @@ class UserRemoteDataSource {
             Log.e("Exception in data source", e.toString())
             e.message.toString()
         }
+    }
+
+    suspend fun updateUser(
+        id: Int,
+        user: User,
+        token: String,
+        avatar: File,
+        cin: File,
+        banner: File
+    ): Int {
+        return try {
+            val avatarRequestBody = avatar.asRequestBody("image/*".toMediaTypeOrNull())
+            val bannerRequestBody = banner.asRequestBody("image/*".toMediaTypeOrNull())
+
+            val response = RetrofitInstance
+                .getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .updateUser(
+                    token = "Bearer $token",
+                    id = id,
+                    nom = user.nom.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    prenom = user.prenom.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    email = user.email.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    numtel = user.numtel.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    adressepostal = user.adressepostal.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    ville = user.ville.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    codepostal = user.codepostal.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    description = user.description.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    sexe = user.sexe.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    avatar = if (avatar.name.isNotEmpty()) MultipartBody.Part.createFormData("avatar", avatar.name, avatarRequestBody) else null,
+                    banner = if (banner.name.isNotEmpty()) MultipartBody.Part.createFormData("banner", banner.name, bannerRequestBody) else null
+                )
+            if (response.isSuccessful) {
+                Log.d("Response from server 200", response.body().toString())
+                200
+            } else if (response.code() == 401) {
+                Log.d("Response from server 401", response.body().toString())
+                401
+            } else {
+                Log.d("Response from server 500", response.body().toString())
+                500
+            }
+        } catch (e: Exception) {
+            Log.d("response in data source 500 catch", e.message.toString())
+            500
+        }
+
     }
 
 
@@ -148,6 +197,33 @@ class UserRemoteDataSource {
         } catch (e: Exception) {
             Log.d("response in data source 500 catch", e.message.toString())
             500
+        }
+
+    }
+
+    suspend fun updatePassword(token: String, oldPassword: String, newPassword: String):Int {
+        val updateRequest = UpdatePasswordRequest(
+            id = user.id.toString(),
+            oldPassword = oldPassword,
+            newPassword = newPassword
+        )
+         try {
+            val response = RetrofitInstance
+                .getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .updatePassword(token = "Bearer $token", updatePasswordRequest = updateRequest)
+            if (response.isSuccessful)
+                 return 200
+            if (response.code() == 400)
+                return 400
+            if (response.code() == 401)
+                return 401
+            if (response.code() == 404)
+                return 404
+             return 500
+        }
+        catch (e: Exception){
+            return 500
         }
 
     }

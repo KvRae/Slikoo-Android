@@ -63,7 +63,7 @@ fun SettingsScreen(navController: NavController,user: User) {
                         avatar = if (user.avatar != "") user.avatarUrl + user.avatar else "",
                         icon = Icons.Filled.Person,
                         onClick = {
-                            navController.navigate(AppScreenNavigator.AdvancedEditProfilesAppScreen.route)
+                            navController.navigate(AppScreenNavigator.ProfileAppScreen.route)
                         })
                 }
                 item {
@@ -79,6 +79,7 @@ fun SettingsScreen(navController: NavController,user: User) {
                         actionIcon = Icons.Filled.KeyboardArrowRight,
                         icon = Icons.Filled.Info,
                         onClick = {
+                            navController.navigate("advanced_edit_profile_screen/${user.id}")
                         })
                 }
                 item {

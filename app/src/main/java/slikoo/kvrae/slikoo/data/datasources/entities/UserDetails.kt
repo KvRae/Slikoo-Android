@@ -7,11 +7,13 @@ data class UserDetails(
     @SerializedName("id")
     var id: Int? = null,
     @SerializedName("idusermain")
-    var iduser: String? = null,
+    var idusermain: String? = "",
+    @SerializedName("iduser")
+    var iduser: String? = "",
     @SerializedName("fumeur")
-    var fumeur: String? = null,
+    var fumeur: String? = "",
     @SerializedName("alcohol")
-    var alcohol: String? = null,
+    var alcohol: String? = "",
     @SerializedName("cherche")
     var cherche: ArrayList<String> = arrayListOf(),
     @SerializedName("algalimentaire")
@@ -23,12 +25,12 @@ data class UserDetails(
     @SerializedName("chercherplus")
     var chercherplus: ArrayList<String> = arrayListOf(),
     @SerializedName("Facebooklink")
-    var Facebooklink: String? = null,
+    var Facebooklink: String? = "",
     @SerializedName("InstagramLink")
-    var InstagramLink: String? = null,
+    var InstagramLink: String? = "",
     @SerializedName("TwitterLink")
-    var TwitterLink: String? = null,
+    var TwitterLink: String? = "",
     @SerializedName("LinkedinLink")
-    var LinkedinLink: String? = null
+    var LinkedinLink: String? = ""
 
 )

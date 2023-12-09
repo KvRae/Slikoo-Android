@@ -108,7 +108,30 @@ data class UserDetailResponse(
     @SerializedName("message")
     var message: String? = null,
     @SerializedName("Userdetails")
-    var userDetails: UserDetails? = UserDetails()
+    var userDetails: UserDetails? = UserDetails(),
+    @SerializedName("User details updated")
+    var userDetailsUpdated: UserDetails? = UserDetails()
+)
+
+data class UpdatePasswordRequest(
+    @SerializedName("id")
+    val id : String,
+    @SerializedName("oldpassword")
+    val oldPassword: String,
+    @SerializedName("newPassword")
+    val newPassword: String
+)
+
+data class UpdatePasswordResponse(
+    val message: String,
+    val error : String
+)
+
+data class ResponseSlk(
+    val message: String,
+    val error : String,
+    @SerializedName("User updated")
+    val user : User
 )
 
 

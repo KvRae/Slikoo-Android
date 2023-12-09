@@ -11,6 +11,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.UserRemoteDataSource
+import slikoo.kvrae.slikoo.utils.TempSession
 import java.io.File
 
 class SignUpViewModel: ViewModel() {
@@ -23,21 +24,9 @@ class SignUpViewModel: ViewModel() {
     var registerResult by mutableStateOf("")
 
 
-    var user = mutableStateOf(User(
-        nom = "Karam",
-        prenom = "MANNAI",
-        email = "karam.mannaii@esprit.tn",
-        password = "123456",
-        ville = "Tunis",
-        numtel = "12345678",
-        codepostal = "1234",
-        description = "description",
-        sexe = "homme",
-        adressepostal = "adressepostal",
+    var user = mutableStateOf(TempSession.user)
 
-    ))
-
-    var confirmPassword = mutableStateOf("123456")
+    var confirmPassword = mutableStateOf("")
 
     fun onValidateFirstName(): String {
         if (user.value.nom.isEmpty()) return "remplir ce champs"

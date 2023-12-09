@@ -62,7 +62,6 @@ import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
-import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 
 
@@ -77,7 +76,7 @@ fun ProfileScreen(navController: NavController) {
         viewModel.getUser()
         onDispose { }
     }
-    if (viewModel.user.value.id != -1)
+    if (viewModel.user.id != -1)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -85,7 +84,7 @@ fun ProfileScreen(navController: NavController) {
             .background(LightSecondary)
     ) {
         // Profile Header
-        ProfileHeader(navController = navController, user = viewModel.user.value)
+        ProfileHeader(navController = navController, user = viewModel.user)
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -166,7 +165,6 @@ fun ProfileAppBar(navController: NavController) {
         navigationIcon = {
             IconButton(onClick = {
                 navController.popBackStack()
-                navController.navigate(AppScreenNavigator.MainAppScreen.route)
 
             }) {
                 Icon(
@@ -282,7 +280,7 @@ fun UserProfileInfo(user : User = User()) {
 
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth(0.9f)
+                        .fillMaxWidth(0.8f)
                 ) {
                     Text(
                         text = stringResource(R.string.about),
@@ -350,7 +348,7 @@ fun ProfileContent(
     navController: NavController) {
     when (selectedMenuIndex) {
         stringResource(id = R.string.biographie) -> {
-            BioFragment(user = viewModel.user.value)
+            BioFragment(user = viewModel.user)
         }
 
         stringResource(id = R.string.mes_offres) -> {

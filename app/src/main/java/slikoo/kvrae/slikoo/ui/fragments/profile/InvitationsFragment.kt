@@ -14,6 +14,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
 import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
+import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.viewmodels.InvitationsViewModel
 
 
@@ -54,7 +55,7 @@ fun InvitationsFragment() {
                     }
                 }
             )
-        } else TextElementScreen(text = stringResource(R.string.no_invits_text))
+        } else TextElementScreen(backgound = LightError, text = stringResource(R.string.no_invits_text))
 
     }
     if (viewModel.isLoading)  LoadingScreen()

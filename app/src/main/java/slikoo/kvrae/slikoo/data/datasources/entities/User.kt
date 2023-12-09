@@ -6,32 +6,32 @@ import androidx.room.PrimaryKey
 
 
 data class User(
-    val avatarUrl: String = "https://slikoo.com/UsersProfileImgs/",
-    val avatarbannerUrl: String = "https://slikoo.com/UsersBannerImgs/",
-    val cinavatarUrl: String = "https://slikoo.com/UsersCINimgs/",
-    val Hasdetails: Boolean = false,
+    var avatarUrl: String = "https://slikoo.com/UsersProfileImgs/",
+    var avatarbannerUrl: String = "https://slikoo.com/UsersBannerImgs/",
+    var cinavatarUrl: String = "https://slikoo.com/UsersCINimgs/",
+    var Hasdetails: Boolean = false,
     var RIB: String? = "",
     var adressepostal: String = "",
     var avatar: String = "",
     var avatarbanner: String = "",
-    val cinavatar: String = "",
+    var cinavatar: String = "",
     var codepostal: String = "",
-    val datecreation: String= "",
+    var datecreation: String= "",
     var description: String= "",
-    val diplome: String= "",
-    val email: String= "",
-    val id: Int= 0,
+    var diplome: String= "",
+    var email: String= "",
+    var id: Int= 0,
     var nom: String= "",
     var numtel: String= "",
     var password: String= "",
-    val pays: String= "",
+    var pays: String= "",
     var prenom: String= "",
-    val roles: List<String> = listOf(),
-    val sexe: String= "",
-    val specialite: String= "",
-    val userIdentifier: String= "",
-    val verified: Boolean= false,
-    val ville: String= ""
+    var roles: List<String> = listOf(),
+    var sexe: String= "",
+    var specialite: String= "",
+    var userIdentifier: String= "",
+    var verified: Boolean= false,
+    var ville: String= ""
 )
 
 @Entity(tableName = "user")

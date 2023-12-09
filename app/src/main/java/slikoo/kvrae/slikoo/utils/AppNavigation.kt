@@ -11,12 +11,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import slikoo.kvrae.slikoo.ui.pages.AdvancedProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.AnimatedSplashScreen
 import slikoo.kvrae.slikoo.ui.pages.EditProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.ForgetPasswordScreen
 import slikoo.kvrae.slikoo.ui.pages.LoginForm
 import slikoo.kvrae.slikoo.ui.pages.MainScreen
 import slikoo.kvrae.slikoo.ui.pages.MealOrganizeScreen
+import slikoo.kvrae.slikoo.ui.pages.MealsByCategory
 import slikoo.kvrae.slikoo.ui.pages.MealsDetailScreen
 import slikoo.kvrae.slikoo.ui.pages.ProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.SignUp
@@ -35,8 +37,10 @@ sealed class AppScreenNavigator(val route: String) {
     object MainAppScreen : AppScreenNavigator("main_screen")
     object ForgotPasswordAppScreen : AppScreenNavigator("forgot_password_screen")
     object EditProfileAppScreen : AppScreenNavigator("edit_profile_screen")
-    object AdvancedEditProfilesAppScreen : AppScreenNavigator("advanced_edit_profile_screen")
+    object ProfileAppScreen : AppScreenNavigator("profile_screen")
+    object AdvancedEditProfilesAppScreen : AppScreenNavigator("advanced_edit_profile_screen/{id}")
     object EventDetailsAppScreen : AppScreenNavigator("event_details_screen/{id}")
+    object CategoryAppScreen : AppScreenNavigator("category_screen/{filter}")
 }
 
 sealed class SignUpNavigator(val route: String) {
@@ -69,7 +73,6 @@ fun Navigation() {
 
         composable(route = AppScreenNavigator.SignInAppScreen.route) {
             LoginForm(navController = navController)
-            mainScreenIndex.value = MainScreenNavigator.HomeScreen.route
 
         }
         composable(route = AppScreenNavigator.SignUpAppScreen.route) {
@@ -87,11 +90,9 @@ fun Navigation() {
 
         composable(route = AppScreenNavigator.EditProfileAppScreen.route) {
             EditProfileScreen(navController = navController)
-            mainScreenIndex.value = MainScreenNavigator.SettingsScreen.route
         }
-        composable(route = AppScreenNavigator.AdvancedEditProfilesAppScreen.route) {
+        composable(route = AppScreenNavigator.ProfileAppScreen.route) {
             ProfileScreen(navController = navController)
-            mainScreenIndex.value = MainScreenNavigator.SettingsScreen.route
         }
         composable(
             route = AppScreenNavigator.EventScreen.route,
@@ -100,12 +101,9 @@ fun Navigation() {
             })
         ) {
             MealOrganizeScreen(
-                onBackPress = { mainScreenIndex.value = it },
                 navController = navController,
                 idMeal = it.arguments?.getInt("id") ?: 0
             )
-
-            mainScreenIndex.value = MainScreenNavigator.RecipeScreen.route
         }
         composable(
             route = AppScreenNavigator.EventDetailsAppScreen.route,
@@ -116,7 +114,31 @@ fun Navigation() {
                 navController = navController,
                 id = it.arguments?.getInt("id") ?: 0
             )
-            mainScreenIndex.value = MainScreenNavigator.RecipeScreen.route
+        }
+
+        composable(
+            route = AppScreenNavigator.AdvancedEditProfilesAppScreen.route,
+            arguments = listOf(navArgument("id") {
+                type = NavType.IntType
+            })
+        )
+        {
+            AdvancedProfileScreen(
+                navController = navController,
+                id = it.arguments?.getInt("id") ?: 0
+            )
+        }
+        composable(
+            route = AppScreenNavigator.CategoryAppScreen.route,
+            arguments = listOf(navArgument("filter") {
+                type = NavType.StringType
+            })
+        )
+        {
+            MealsByCategory(
+                navController = navController,
+                filter = it.arguments?.getString("filter") ?: ""
+            )
         }
     }
 }

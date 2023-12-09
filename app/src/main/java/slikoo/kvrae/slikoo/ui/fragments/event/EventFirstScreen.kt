@@ -39,7 +39,7 @@ fun EventFirstFragment(mealsViewModel: MealsViewModel,
         "Soirée", "Fête",
         "Réunion",
         "Autre")
-    val themes = listOf("Theme 1", "THeme 2", "Theme 3")
+    val themes = listOf("Cocktail", "Dîner", "Déjeuner", "Brunch", "Goûter", "Autre")
     val preferences = listOf("Halal", "Casher", "Végétarien", "Végétalien", "Autre")
     val genres = listOf("Famille", "Amis", "Collègues", "Entre fille", "Entre mecs", "Autre")
 
@@ -65,17 +65,23 @@ fun EventFirstFragment(mealsViewModel: MealsViewModel,
             onChange = {mealsViewModel.meal.value = mealsViewModel.meal.value.copy(nbr = it)},
             value= mealsViewModel.meal.value.nbr,
             placeHolder = stringResource(id = R.string.ppl_nbr),
-            label = pplLabel, leadingIcon = Icons.Rounded.Person,
+            label = pplLabel,
+            leadingIcon = Icons.Rounded.Person,
             keyboardType = KeyboardType.Number
         )
 
-        ExpandableCard(items = invitationTypes, title = mealsViewModel.meal.value.lettre.toString(),
+        ExpandableCard(
+            items = invitationTypes,
+            title = mealsViewModel.meal.value.lettre?:"",
             onTitleChange = { mealsViewModel.meal.value.lettre = it},
             leadingIcon = ImageVector.vectorResource(id = R.drawable.person_add)
         )
 
-        ExpandableCard(items = themes , title = mealsViewModel.meal.value.theme ,
-            onTitleChange = { mealsViewModel.meal.value = mealsViewModel.meal.value.copy(theme = it)}, leadingIcon = ImageVector.vectorResource(id = R.drawable.category)
+        ExpandableCard(
+            items = themes ,
+            title = mealsViewModel.meal.value.theme ,
+            onTitleChange = { mealsViewModel.meal.value = mealsViewModel.meal.value.copy(theme = it)},
+            leadingIcon = ImageVector.vectorResource(id = R.drawable.category)
         )
 
         ExpandableCard(items = preferences , title = mealsViewModel.meal.value.genrenourriture ,

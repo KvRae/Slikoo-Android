@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.pages
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,19 +37,19 @@ import slikoo.kvrae.slikoo.ui.fragments.event.EventFirstFragment
 import slikoo.kvrae.slikoo.ui.fragments.event.EventSecondFragment
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
-import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
 @Composable
 fun MealOrganizeScreen(
-    title: String = stringResource(R.string.home),
-    onBackPress: (String) -> Unit,
     idMeal : Int = 0,
     navController: NavController
 ) {
     var fragment by remember {
         mutableStateOf("first")
+    }
+    var show by remember {
+        mutableStateOf(false)
     }
 
     val mealVM: MealsViewModel = viewModel()
@@ -57,8 +58,6 @@ fun MealOrganizeScreen(
             mealVM.getMealById(idMeal)
             onDispose { }
         }
-
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -86,9 +85,6 @@ fun MealOrganizeScreen(
                     fontWeight = FontWeight.Bold)
                         },
                 actions = {
-                    var show by remember {
-                        mutableStateOf(false)
-                    }
                     IconButton(onClick = { show = true }) {
                         Icon(
                             imageVector = Icons.Rounded.Close,
@@ -100,8 +96,7 @@ fun MealOrganizeScreen(
                         onDismiss= { show = false },
                         dismissText = stringResource(id = R.string.no),
                         onConfirm = {
-                            navController.popBackStack()
-                            navController.navigate(AppScreenNavigator.MainAppScreen.route) },
+                            navController.popBackStack() },
                         title = stringResource(id = R.string.cancel),
                         message = stringResource(id = R.string.cancel_message),
                     )
@@ -127,6 +122,9 @@ fun MealOrganizeScreen(
                 }
                 else -> EventFirstFragment(mealVM) { fragment = it }
             }
+        }
+        BackHandler {
+            show = true
         }
     }
 }

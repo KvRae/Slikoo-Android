@@ -6,6 +6,28 @@ class TempSession {
     companion object {
         var token = ""
         var email = ""
-        var user = User()
+        var user = User(
+            id = 0,
+            nom = "",
+            prenom = "",
+            numtel = "",
+            adressepostal = "",
+            avatar = "",
+            avatarbanner = "",
+            cinavatar = "",
+            avatarUrl = "",
+            cinavatarUrl = "",
+            avatarbannerUrl = "",
+            email = "",
+            password = "",
+            RIB = "",
+            ville = "",
+            codepostal = "",
+            description = "",
+            pays = "",
+            Hasdetails = false,
+            sexe = "",
+            specialite = "",
+        )
     }
 }

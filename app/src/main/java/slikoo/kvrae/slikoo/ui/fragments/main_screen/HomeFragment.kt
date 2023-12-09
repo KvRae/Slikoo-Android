@@ -56,7 +56,7 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.padding(8.dp))
             SearchBar(onSearch = {})
             if (mealsViewModel.meals.isNotEmpty()) OnlineRecipes(navController,mealsViewModel)
-            RecipesCategorySection()
+            RecipesCategorySection(navController)
             RatingListSection()
         }
     }
@@ -86,7 +86,7 @@ fun OnlineRecipes(navController: NavController,mealsViewModel : MealsViewModel )
 }
 
 @Composable
-fun RecipesCategorySection() {
+fun RecipesCategorySection(navController: NavController) {
     val categories = CategoryViewModel().getCategories()
     Box(
         modifier = Modifier
@@ -102,7 +102,9 @@ fun RecipesCategorySection() {
                 content = {
                     items(categories.size) {
                         AreaFilterCard(
-                            onClick =  {},
+                            onClick =  {
+                                       navController.navigate("category_screen/${categories[it].name}")
+                            },
                             name = categories[it].name,
                             image = categories[it].image
                         )

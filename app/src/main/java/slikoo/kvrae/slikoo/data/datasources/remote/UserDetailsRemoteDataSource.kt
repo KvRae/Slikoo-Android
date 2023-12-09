@@ -1,11 +1,13 @@
 package slikoo.kvrae.slikoo.data.datasources.remote
 
+import android.annotation.SuppressLint
 import slikoo.kvrae.slikoo.data.api.ApiServices
 import slikoo.kvrae.slikoo.data.api.RetrofitInstance
 import slikoo.kvrae.slikoo.data.datasources.entities.UserDetails
 
 class UserDetailsRemoteDataSource {
 
+    @SuppressLint("SuspiciousIndentation")
     suspend fun getUserDetails(token : String, id : Int): UserDetails {
         return try{
             val response = RetrofitInstance
@@ -23,5 +25,43 @@ class UserDetailsRemoteDataSource {
             UserDetails()
         }
     }
+
+    suspend fun addUserDetails(token : String, userDetails: UserDetails): Int {
+        return try{
+            val response = RetrofitInstance
+                .getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .addUserDetails(
+                    token = "Bearer ${token}", user = userDetails)
+                if (response.isSuccessful)
+                    200
+                else
+                    400
+        }
+        catch (e: Exception){
+            e.printStackTrace()
+            500
+        }
+    }
+
+    suspend fun updateUserDetails(token : String, userDetails: UserDetails): Int {
+        return try{
+            val response = RetrofitInstance
+                .getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .updateUserDetails(
+                    token = "Bearer ${token}", user = userDetails)
+                if (response.isSuccessful)
+                    200
+                else
+                    400
+        }
+        catch (e: Exception){
+            e.printStackTrace()
+            500
+        }
+    }
+
+
 
 }

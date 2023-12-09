@@ -77,7 +77,7 @@ fun UserOffersList(navController: NavController) {
                 onDismiss = { isOpen = false },
                 onConfirm = {
                     viewModel.deleteMeal(mealId)
-                    makeToast(navController.context, viewModel.mealMessage.value )
+                    makeToast(navController.context, "" )
                     mealId = 0
                     isOpen = false
                 }

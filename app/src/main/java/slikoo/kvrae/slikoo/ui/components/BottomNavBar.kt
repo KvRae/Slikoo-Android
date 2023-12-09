@@ -14,19 +14,19 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.pages.onMakeToast
+import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondaryVariant
-import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.MainScreenNavigator
 
 
@@ -36,7 +36,7 @@ data class BottomNavItem(
     val name :String,
     val route :String,
     val icon :ImageVector,
-    var badgeCount :Int = 0
+    var badgeCount :Int = 0,
 )
 
 
@@ -45,11 +45,10 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                         modifier : Modifier = Modifier,
                         navController: NavController,
                         route: String = MainScreenNavigator.HomeScreen.route,
-                        onItemClick : (route :String) -> Unit
+                        onItemClick : (route :String) -> Unit,
+                        hasDetails :Boolean = false,
 ) {
-
-        val bottomNavBarColor = remember { mutableStateOf(Color.White) }
-
+    val msg = stringResource(R.string.advanced_prof_msg)
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -59,7 +58,7 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
     ) {
         BottomNavigation(
             elevation = 16.dp,
-            backgroundColor = bottomNavBarColor.value,
+            backgroundColor = LightError,
 
             modifier = modifier
                 .clip(
@@ -97,12 +96,12 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                                 }
                             } else {
                                 item.badgeCount = 0
-                                if (item.route == AppScreenNavigator.EventScreen.route) {
+                                if (item.name == "Organiser") {
                                     Box(
                                         contentAlignment = Alignment.Center,
                                         modifier = Modifier
                                             .background(
-                                                if (selected) Color.White else LightPrimary,
+                                                LightPrimary,
                                                 shape = RoundedCornerShape(12.dp)
                                             )
                                             .padding(8.dp)
@@ -110,11 +109,10 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                                     ) {
                                         Icon(
                                             imageVector = item.icon,
+                                            tint = LightError,
                                             contentDescription = item.name,
                                             modifier = Modifier.size(26.dp)
                                         ) // Event Icon
-                                        bottomNavBarColor.value =
-                                            if (!selected) Color.White else LightPrimary
                                     }
 
                                 } else Icon(
@@ -129,8 +127,12 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                     selectedContentColor = LightPrimary,
                     unselectedContentColor = LightSecondaryVariant,
                     onClick = {
-                        if (item.name == "Organiser")
+                        if (item.name == "Organiser" && hasDetails){
                             navController.navigate("Organiser"+"/"+ "${0}")
+                        }
+                        if (!hasDetails && item.name == "Organiser"){
+                            onMakeToast(navController.context, msg)
+                        }
                         onItemClick(item.route)
                     }
                 )

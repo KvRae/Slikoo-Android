@@ -18,6 +18,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 import slikoo.kvrae.slikoo.data.datasources.dto.FeedBacksResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.ForgetPasswordRequest
 import slikoo.kvrae.slikoo.data.datasources.dto.ForgetPasswordResponse
@@ -27,10 +28,14 @@ import slikoo.kvrae.slikoo.data.datasources.dto.MealDetailsResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.MealResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.NotificationsResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.ParticiapteRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.ResponseSlk
 import slikoo.kvrae.slikoo.data.datasources.dto.RibRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.UpdatePasswordRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.UpdatePasswordResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.UserDetailResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.UserResponse
 import slikoo.kvrae.slikoo.data.datasources.entities.Invitation
+import slikoo.kvrae.slikoo.data.datasources.entities.UserDetails
 
 
 interface ApiServices {
@@ -187,7 +192,7 @@ interface ApiServices {
         @Part avatar: MultipartBody.Part,
         @Part cinavatar: MultipartBody.Part,
         @Part("sex") sexe: RequestBody // blame the backend developer for this typo
-    ): Response<String>
+    ): Response<ResponseSlk>
 
     //----------------------------------- Forget Password -----------------------------------//
 
@@ -209,10 +214,20 @@ interface ApiServices {
         @Body updatePasswordRequest: ForgetPasswordRequest
     ): Response<ForgetPasswordResponse>
 
+    //----------------------------------- User Details -----------------------------------//
+    @Headers("Content-Type: application/json")
+    @POST("adduserdetailsJsonBody")
+    suspend fun addUserDetails(
+        @Header("Authorization") token: String,
+        @Body user: UserDetails
+    ): Response<UserDetailResponse>
 
-
-
-
+    @Headers("Content-Type: application/json")
+    @POST("updateuserdetailsJsonBody")
+    suspend fun updateUserDetails(
+        @Header("Authorization") token: String,
+        @Body user: UserDetails
+    ): Response<UserDetailResponse>
 
 
 
@@ -223,8 +238,35 @@ interface ApiServices {
                                 @Path("iduserconnected") iduserconnected: Int,
                                 @Path("iduserOwner") iduserOwner: Int,
                                 @Body motif: ParticiapteRequest
-    ): Response<String>
+    ): Response<ResponseSlk>
     /************************** Put Requests **************************/
+
+    @Headers("Content-Type: application/json")
+    @POST("updatepassword")
+    fun updatePassword(
+        @Header("Authorization") token: String,
+        @Body updatePasswordRequest: UpdatePasswordRequest
+    ): Response<UpdatePasswordResponse>
+
+    @Multipart
+    @POST("updateUser")
+    suspend fun updateUser(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int,
+        @Part("email") email: RequestBody,
+        @Part("nom") nom: RequestBody,
+        @Part("prenom") prenom: RequestBody,
+        @Part("numtel") numtel: RequestBody,
+        @Part("adressepostal") adressepostal: RequestBody,
+        @Part("ville") ville: RequestBody,
+        @Part("codepostal") codepostal: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part avatar: MultipartBody.Part?,
+        @Part banner : MultipartBody.Part?,
+        @Part("sex") sexe: RequestBody // blame the backend developer for this typo
+    ): Response<String>
+
+
 
 
     /************************** Delete Requests **************************/
@@ -232,8 +274,8 @@ interface ApiServices {
     @DELETE("deleterepas/{idrepas}")
     suspend fun deleteMeal(
         @Header("Authorization") token: String,
-        @Path("idreoas") id: Int
-    ): Response<String>
+        @Path("idrepas") id: Int
+    ): Response<ResponseSlk>
 }
 
 
