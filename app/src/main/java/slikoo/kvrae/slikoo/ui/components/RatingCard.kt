@@ -37,8 +37,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightSurface
 
 @Composable
 fun RatingCard(feedBack : FeedBack) {
-    val dateFormat = java.text.SimpleDateFormat("dd/MM/yyyy",
-        java.util.Locale.getDefault())
+    val dateFormat = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
     val date = dateFormat.format(feedBack.date)
     Card(
         modifier = Modifier

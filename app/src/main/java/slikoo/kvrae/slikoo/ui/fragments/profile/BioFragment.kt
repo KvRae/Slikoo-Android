@@ -73,7 +73,7 @@ fun BioFragment(user : User) {
         )
         BioDescriptionSection(userDetail = viewModel.userDetails)
         BioHeaderSection(
-            icon = R.drawable.heart_icon,
+            icon = R.drawable.feedback,
             title = stringResource(R.string.comments),
             description = viewModel.userDetails.centreinteret.joinToString { it }
         )

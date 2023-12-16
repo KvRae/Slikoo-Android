@@ -56,7 +56,7 @@ fun AdvancedProfileScreen(
             .statusBarsPadding()
             .navigationBarsPadding()
             .background(color = LightSecondary)
-            .padding(16.dp),
+           ,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -65,7 +65,6 @@ fun AdvancedProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .navigationBarsPadding()
-                .statusBarsPadding()
                 .verticalScroll(rememberScrollState())
                 .padding(top = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,

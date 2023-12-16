@@ -28,7 +28,7 @@ fun ThemeCard(
     Card(
         modifier = Modifier
             .padding(16.dp)
-            .size(100.dp)
+            .size(150.dp)
 
     ) {
         Box(

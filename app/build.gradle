@@ -95,6 +95,11 @@ dependencies {
     // shimmer
     implementation 'com.valentinilk.shimmer:compose-shimmer:1.0.5'
 
+    // swipe refresh
+    implementation 'com.google.accompanist:accompanist-swiperefresh:0.27.0'
+    // android lifecycle viewmodel
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01'
+
 
 
 
