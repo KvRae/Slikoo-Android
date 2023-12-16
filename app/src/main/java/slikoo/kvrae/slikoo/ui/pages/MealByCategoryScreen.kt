@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.ui.components.LoadingDialog
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
@@ -30,10 +31,13 @@ fun MealsByCategory(
     filter : String = ""
 ) {
     val viewModel : MealsViewModel = viewModel()
+    var filteredMeals = mutableListOf<Meal>()
 
-    if (filter != "") {
+
+    if (filter.isNotEmpty()) {
         DisposableEffect(Unit) {
-            viewModel.getMealsByCategory(filter)
+            filteredMeals.clear()
+            filteredMeals = viewModel.getMealsByCategory(filter=filter)
             onDispose { }
         }
     }
@@ -46,6 +50,7 @@ fun MealsByCategory(
     ) {
         EditProfileTopBar(
             navController = navController,
+
             title = stringResource(id = R.string.meal_for) + filter
         )
         Spacer(modifier = Modifier.padding(16.dp))
@@ -53,18 +58,18 @@ fun MealsByCategory(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            if (viewModel.filteredMeals.isNotEmpty())
+            if (filteredMeals.isNotEmpty())
                 LazyVerticalGrid(columns = GridCells.Fixed(2),
-                    userScrollEnabled = false,
+                    userScrollEnabled = true,
                     content = {
-                        items(viewModel.filteredMeals.size) { index ->
+                        items(filteredMeals.size) { index ->
                             RecipeCardContent(
-                                meal = viewModel.filteredMeals[index],
+                                meal = filteredMeals[index],
                                 navController = navController
                             )
                         }
                     })
-            if (viewModel.filteredMeals.isEmpty() && !viewModel.isLoading.value)
+            if (filteredMeals.isEmpty() && !viewModel.isLoading.value)
                 TextElementScreen(
                     text = stringResource(id = R.string.no_element_found)
                 )

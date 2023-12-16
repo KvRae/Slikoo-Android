@@ -47,7 +47,7 @@ fun TextElementScreen(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(1f)
             .background(color = backgound),
         contentAlignment = Alignment.Center
     ) {

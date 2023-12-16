@@ -25,7 +25,6 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Search
@@ -45,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondaryVariant
-import slikoo.kvrae.slikoo.ui.theme.LightSurface
 
 @Composable
 fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
@@ -179,7 +177,7 @@ fun SearchBarWithFilter(
             )
 
             // Filter Button
-            IconButton(
+            /*IconButton(
                 onClick = {
                     isToggled = !isToggled
                     onFilter(isToggled)
@@ -197,7 +195,7 @@ fun SearchBarWithFilter(
                     contentDescription = "Filter",
                     tint = LightSurface
                 )
-            }
+            }*/
         }
         // filter list
         DropdownMenu(expanded = isToggled,

@@ -29,5 +29,34 @@ class TempSession {
             sexe = "",
             specialite = "",
         )
+        fun clear() {
+            token = ""
+            email = ""
+            user = User(
+                id = 0,
+                nom = "",
+                prenom = "",
+                numtel = "",
+                adressepostal = "",
+                avatar = "",
+                avatarbanner = "",
+                cinavatar = "",
+                avatarUrl = "",
+                cinavatarUrl = "",
+                avatarbannerUrl = "",
+                email = "",
+                password = "",
+                RIB = "",
+                ville = "",
+                codepostal = "",
+                description = "",
+                pays = "",
+                Hasdetails = false,
+                sexe = "",
+                specialite = "",
+            )
+        }
     }
+
+
 }

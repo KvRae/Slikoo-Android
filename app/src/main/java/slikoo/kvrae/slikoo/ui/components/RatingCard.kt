@@ -1,6 +1,7 @@
 package slikoo.kvrae.slikoo.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -108,6 +109,26 @@ fun RatingBar(
                 tint = if (index < currentRating) LightSurface else Color.Gray,
                 modifier = Modifier
                     //.clickable { onRatingChanged(index + 1) }
+                    .size(12.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun FeedbackRatingBar(
+    maxRating: Int = 5,
+    currentRating: Int = 0,
+    onRatingChanged: (Int) -> Unit
+) {
+    Row(Modifier.padding(4.dp)) {
+        repeat(maxRating) { index ->
+            Icon(
+                imageVector = if (index < currentRating) Icons.Filled.Star else Icons.Outlined.Star,
+                contentDescription = null,
+                tint = if (index < currentRating) LightSurface else Color.Gray,
+                modifier = Modifier
+                    .clickable { onRatingChanged(index + 1) }
                     .size(12.dp)
             )
         }

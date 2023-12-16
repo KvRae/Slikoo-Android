@@ -29,6 +29,7 @@ class NotificationViewModel : ViewModel() {
             val result = response.await()
             if (result.isNotEmpty()) {
                 notifications.addAll(result)
+                notifications.reverse()
                 isLoading.value = false
             } else {
                 isError.value = true

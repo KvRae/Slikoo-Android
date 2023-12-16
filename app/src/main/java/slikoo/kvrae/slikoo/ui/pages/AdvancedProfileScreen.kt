@@ -25,6 +25,8 @@ import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.ExpandableCard
 import slikoo.kvrae.slikoo.ui.components.LoadingDialog
+import slikoo.kvrae.slikoo.ui.components.MultiChoiceExpendableCard
+import slikoo.kvrae.slikoo.ui.fragments.profile.makeToast
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.viewmodels.UserDetailsViewModel
 
@@ -34,8 +36,12 @@ fun AdvancedProfileScreen(
     navController: NavController,
     id : Int = 0
 ) {
-    var viewModel: UserDetailsViewModel = viewModel()
+    val viewModel: UserDetailsViewModel = viewModel()
     val choices = listOf("oui","non")
+    val suggestions = ArrayList<String>()
+    suggestions.add("oui")
+    suggestions.add("non")
+
 
     if (id != 0) {
         DisposableEffect(key1 = id) {
@@ -65,31 +71,33 @@ fun AdvancedProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            ExpandableCard(items = choices,
+
+            ExpandableCard(
+                items = choices,
                 placeholder ="Fumeur" ,
-                title = viewModel.userDetails.fumeur?:"",
+                value = viewModel.userDetails.fumeur?:"",
+                label = stringResource(R.string.fumer)  ,
                 onTitleChange = { viewModel.userDetails = viewModel.userDetails.copy(fumeur = it) },
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.cigarette_icon)
             )
             ExpandableCard(
                 items = choices,
-                title = viewModel.userDetails.alcohol?:"",
-                placeholder = "Alcool",
+                label = stringResource(R.string.alcoholic),
+                value = viewModel.userDetails.alcohol?:"",
+                placeholder = stringResource(R.string.alcoholic),
                 onTitleChange = { viewModel.userDetails = viewModel.userDetails.copy(alcohol = it) },
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.cup_icon)
             )
-            CustomTextField(
-                onChange = {
-                    viewModel.userDetails.algalimentaire.add(it)
-                },
+            MultiChoiceExpendableCard(
+                items = choices,
+                onTitleChange = { viewModel.userDetails.algalimentaire.add(it) },
                 value = viewModel.userDetails.algalimentaire.joinToString(),
                 label = "Allergie alimentaire",
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.fork_knife_icon)
             )
-            CustomTextField(
-                onChange = {
-                    viewModel.userDetails = viewModel.userDetails.copy(langues = ArrayList(it.split(",")))
-                },
+            MultiChoiceExpendableCard(
+                items = choices,
+                onTitleChange = { viewModel.userDetails.langues.add(it) },
                 value = viewModel.userDetails.langues.joinToString(),
                 label = "Langues",
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.language_icon)
@@ -147,13 +155,27 @@ fun AdvancedProfileScreen(
             CustomButton(
                 text = stringResource(id = R.string.save),
                 onClick = {
-                    if (id != 0) {
+                    if (viewModel.userDetails.idusermain!!.isNotEmpty()) {
                         viewModel.updateUserDetails(viewModel.userDetails)
                     } else {
                         viewModel.addUserDetails(viewModel.userDetails)
                     }
                 },
             )
+
+        }
+    }
+    if (viewModel.isError) {
+        //ErrorDialog(error = viewModel.error)
+    }
+    if (viewModel.navigate) {
+        val toastMsg = stringResource(id = R.string.profile_updated)
+        DisposableEffect(Unit){
+            navController.popBackStack()
+            makeToast(navController.context,toastMsg)
+            onDispose {
+                viewModel.navigate = false
+            }
         }
     }
     if (viewModel.isLoading) {

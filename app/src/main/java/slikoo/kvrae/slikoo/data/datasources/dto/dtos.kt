@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import slikoo.kvrae.slikoo.data.datasources.entities.FeedBack
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.data.datasources.entities.Notification
+import slikoo.kvrae.slikoo.data.datasources.entities.Reservation
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.entities.UserDetails
 
@@ -71,20 +72,22 @@ data class UserDetailsRequest(
     var id: Int? = null,
     @SerializedName("idusermain")
     var idusermain: String? = null,
+    @SerializedName("iduser")
+    var iduser: String? = null,
     @SerializedName("fumeur")
     var fumeur: String? = null,
     @SerializedName("alcohol")
     var alcohol: String? = null,
     @SerializedName("cherche")
-    var cherche: ArrayList<String> = arrayListOf(),
+    var cherche: String? = null,
     @SerializedName("algalimentaire")
-    var algalimentaire: ArrayList<String> = arrayListOf(),
+    var algalimentaire: String = "",
     @SerializedName("centreinteret")
-    var centreinteret: ArrayList<String> = arrayListOf(),
+    var centreinteret: String? = null,
     @SerializedName("langues")
-    var langues: ArrayList<String> = arrayListOf(),
+    var langues: String? = null,
     @SerializedName("chercherplus")
-    var chercherplus: ArrayList<String> = arrayListOf(),
+    var chercherplus: String? = null,
     @SerializedName("Facebooklink")
     var Facebooklink: String? = null,
     @SerializedName("InstagramLink")
@@ -118,7 +121,7 @@ data class UpdatePasswordRequest(
     val id : String,
     @SerializedName("oldpassword")
     val oldPassword: String,
-    @SerializedName("newPassword")
+    @SerializedName("newpassword")
     val newPassword: String
 )
 
@@ -128,11 +131,36 @@ data class UpdatePasswordResponse(
 )
 
 data class ResponseSlk(
-    val message: String,
-    val error : String,
+    val code: Int? = null,
+    val message: String = "",
+    val error : String = "",
+    @SerializedName("Result")
+    val result : Boolean = false,
+    @SerializedName("Status")
+    val status : String = "",
     @SerializedName("User updated")
-    val user : User
+    val user : User = User(),
 )
 
+data class ReservationsResponse(
+    @SerializedName("Reservation list")
+    val reservations: MutableList<Reservation>
+)
 
+data class ReservationRequest(
+    @SerializedName("iduserdemander")
+    val idUser: Int,
+)
+
+data class InvitationRequest (
+    @SerializedName("iduserdemander")
+    var idDemander: String? = null,
+    @SerializedName("iduserowner")
+    var idOwner: String? = null,
+    @SerializedName("idrepas")
+    var idMeal: String? = null,
+    @SerializedName("informationComp")
+    var informationComp: String? = null
+
+)
 

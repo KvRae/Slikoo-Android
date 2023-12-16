@@ -44,6 +44,8 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.MainScreenNavigator
+import slikoo.kvrae.slikoo.utils.SessionDataStore
+import slikoo.kvrae.slikoo.utils.TempSession
 import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 
 
@@ -57,10 +59,20 @@ fun MainScreen(navController: NavController,
 
     var title by rememberSaveable { mutableStateOf(currentScreen) }
     val viewModel: MainScreenViewModel = viewModel()
+    val coroutineScope = rememberCoroutineScope()
 
-    DisposableEffect(Unit){
+    DisposableEffect(Unit) {
         viewModel.getUser()
-        onDispose { }
+        onDispose {
+            if (TempSession.token != "" && TempSession.email != "")
+            coroutineScope.launch {
+                SessionDataStore(navController.context).setUserLoggedIn(
+                    token = TempSession.token,
+                    email = TempSession.email,
+                    isLogged = true
+                )
+            }
+        }
     }
 
 
@@ -187,5 +199,12 @@ fun MainScreen(navController: NavController,
                 navController.navigate(AppScreenNavigator.SignInAppScreen.route)
             }
         )
+//    if (!isInternetAvailable)
+//        TextWithButtonScreen(text = stringResource(id = R.string.no_internet),
+//            buttonText = stringResource(id = R.string.reconnect),
+//            onClick = {
+//                navController.navigate(AppScreenNavigator.SignInAppScreen.route)
+//            }
+//        )
 }
 

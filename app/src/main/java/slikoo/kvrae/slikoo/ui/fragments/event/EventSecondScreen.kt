@@ -33,7 +33,7 @@ import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 @Composable
 fun EventSecondFragment(onFragmentChange: (String) -> Unit,
                         navController: NavController,
-                        mealsViewModel: MealsViewModel
+                        mealsViewModel: MealsViewModel,
 ) {
 
     val context = LocalContext.current
@@ -65,6 +65,14 @@ fun EventSecondFragment(onFragmentChange: (String) -> Unit,
             label = stringResource(id = R.string.price),
             leadingIcon = ImageVector.vectorResource(id = R.drawable.round_euro),
             keyboardType = KeyboardType.Number
+        )
+
+        CustomTextField(
+            onChange = {mealsViewModel.meal.value = mealsViewModel.meal.value.copy(type = it) } ,
+            value = mealsViewModel.meal.value.type,
+            label = stringResource(id = R.string.type),
+            leadingIcon = ImageVector.vectorResource(id = R.drawable.cup_icon),
+            keyboardType = KeyboardType.Text
         )
 
         TimePicker(

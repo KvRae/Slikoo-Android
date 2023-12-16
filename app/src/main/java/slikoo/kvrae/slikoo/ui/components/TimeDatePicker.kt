@@ -90,7 +90,7 @@ fun DatePicker(
         LocalContext.current,
         R.style.DialogTheme,
         { _, mYear: Int, mMonth: Int, mDay: Int ->
-            selectedDate = "$mDay/${mMonth+1}/$mYear"
+            selectedDate = "${mMonth+1}/$mDay/$mYear"
             onDateChange(selectedDate) // Update the date using the callback
         },
         Calendar.getInstance().get(Calendar.YEAR),

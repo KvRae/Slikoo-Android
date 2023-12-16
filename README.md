@@ -1,6 +1,13 @@
 
 # Slikoo
 
+![Kotlin](https://img.shields.io/badge/Kotlin-1.5.10-blue.svg)
+![Compose](https://img.shields.io/badge/Compose-1.0.0--beta09-blue.svg)
+![Gradle](https://img.shields.io/badge/Gradle-7.0.0-blue.svg)
+![Android Studio](https://img.shields.io/badge/Android%20Studio-4.2.1-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
+
+
 
 ![logo](https://github.com/KvRae/Slikoo-Android/assets/58667227/94fee035-631a-498e-93ca-22f6b113e490)
 

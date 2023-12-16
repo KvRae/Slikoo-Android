@@ -69,12 +69,16 @@ class UserRemoteDataSource {
         user: User,
         token: String,
         avatar: File,
-        cin: File,
         banner: File
     ): Int {
+        val avatarRequestBody = avatar.asRequestBody("image/*".toMediaTypeOrNull())
+        val bannerRequestBody = banner.asRequestBody("image/*".toMediaTypeOrNull())
+
+        val avatarPart = if (avatar.name == "") null else MultipartBody.Part.createFormData("avatar", avatar.name, avatarRequestBody)
+        val bannerPart = if (banner.name == "") null else MultipartBody.Part.createFormData("banner", banner.name, bannerRequestBody)
+
         return try {
-            val avatarRequestBody = avatar.asRequestBody("image/*".toMediaTypeOrNull())
-            val bannerRequestBody = banner.asRequestBody("image/*".toMediaTypeOrNull())
+
 
             val response = RetrofitInstance
                 .getRetrofitInstance()
@@ -91,9 +95,10 @@ class UserRemoteDataSource {
                     codepostal = user.codepostal.toRequestBody("text/plain".toMediaTypeOrNull()),
                     description = user.description.toRequestBody("text/plain".toMediaTypeOrNull()),
                     sexe = user.sexe.toRequestBody("text/plain".toMediaTypeOrNull()),
-                    avatar = if (avatar.name.isNotEmpty()) MultipartBody.Part.createFormData("avatar", avatar.name, avatarRequestBody) else null,
-                    banner = if (banner.name.isNotEmpty()) MultipartBody.Part.createFormData("banner", banner.name, bannerRequestBody) else null
+                    avatar = avatarPart,
+                    banner = bannerPart
                 )
+
             if (response.isSuccessful) {
                 Log.d("Response from server 200", response.body().toString())
                 200
@@ -131,8 +136,10 @@ class UserRemoteDataSource {
     suspend fun getUserByEmail(token: String, email: String) : User {
 
        return try {
-           val retIn = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
-           val response = retIn.getUserByEmail(token= "Bearer $token", email = email)
+           val response = RetrofitInstance
+               .getRetrofitInstance()
+               .create(ApiServices::class.java)
+               .getUserByEmail(token= "Bearer $token", email = email)
            if (response.code() == 200) {
                Log.d("user in data source ok", response.body()?.user.toString())
                response.body()?.user!!
@@ -150,10 +157,13 @@ class UserRemoteDataSource {
 
     suspend fun getUserById(token: String, id: Int) : User {
        return try {
-           val retIn = RetrofitInstance.getRetrofitInstance().create(ApiServices::class.java)
-           val response = retIn.getUserDetailsById(token= "Bearer $token", id = id)
-           if (response.code() == 200) {
-                response.body()?.user!!
+
+           val response =  RetrofitInstance
+               .getRetrofitInstance()
+               .create(ApiServices::class.java)
+               .getUserById(token= "Bearer $token", id = id)
+           if (response.isSuccessful) {
+                response.body()?.user1!!
             } else {
                 User()
             }
@@ -178,12 +188,12 @@ class UserRemoteDataSource {
 
     }
 
-    suspend fun addRib(user : User, token: String): Int {
+    suspend fun addRib(rib: String, email : String, token: String): Int {
         return try {
             val response = RetrofitInstance
                 .getRetrofitInstance()
                 .create(ApiServices::class.java).
-                addRib(token = "Bearer $token" , ribRequest = RibRequest(email = user.email, rib = user.RIB?:""))
+                addRib(token = "Bearer $token" , ribRequest = RibRequest(email = email, rib = rib))
             if (response.code() == 200) {
                 Log.d("Response from server 200", response.body().toString())
                 200
@@ -211,7 +221,8 @@ class UserRemoteDataSource {
             val response = RetrofitInstance
                 .getRetrofitInstance()
                 .create(ApiServices::class.java)
-                .updatePassword(token = "Bearer $token", updatePasswordRequest = updateRequest)
+                .updatePassword(token = "Bearer $token",
+                    updatePasswordRequest = updateRequest)
             if (response.isSuccessful)
                  return 200
             if (response.code() == 400)

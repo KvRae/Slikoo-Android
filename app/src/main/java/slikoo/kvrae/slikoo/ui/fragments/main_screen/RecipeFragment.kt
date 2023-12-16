@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.fragments.main_screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,16 +28,15 @@ import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun RecipeScreen(navController: NavController) {
     val mealsViewModel: MealsViewModel = viewModel()
     val scrollState = rememberLazyGridState()
 
-    if (mealsViewModel.meals.isEmpty())
+    if (mealsViewModel.meals.value.isEmpty())
     DisposableEffect(Unit) {
-        mealsViewModel.getAllMeals(
-            mealsViewModel.meals
-        )
+        mealsViewModel.getAllMeals()
         onDispose { }
     }
 

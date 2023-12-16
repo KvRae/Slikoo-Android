@@ -48,15 +48,13 @@ class ForgetPasswordViewModel: ViewModel() {
     private fun onSendEmailToVerify(email : String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+
                 isLoading = true
                 resCode = async { userRp.forgotPasswordEmailVerify(email) }.await()
                 onNavigate = async { resCode == 200 }.await()
-                emailError = onEmailErrorChange(resCode)
             }
             catch (e: Exception){
                 isEmailValid = false
-                emailError = onEmailErrorChange(resCode)
-
             }
             finally {
                 isLoading = false
@@ -67,14 +65,6 @@ class ForgetPasswordViewModel: ViewModel() {
         onEmailChange(this.email)
         if (isEmailValid)
             onSendEmailToVerify(email)
-    }
-    fun onEmailErrorChange(resCode : Int) : String{
-        return when (resCode) {
-            200 -> "code envoyé par email"
-            404 -> "email introuvable"
-            500 -> " erreur serveur"
-            else -> " erreur serveur"
-        }
     }
 
     // OTP Code methods

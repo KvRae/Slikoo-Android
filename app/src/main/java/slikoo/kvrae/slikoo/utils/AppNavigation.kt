@@ -22,6 +22,8 @@ import slikoo.kvrae.slikoo.ui.pages.MealsByCategory
 import slikoo.kvrae.slikoo.ui.pages.MealsDetailScreen
 import slikoo.kvrae.slikoo.ui.pages.ProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.SignUp
+import slikoo.kvrae.slikoo.ui.pages.UpdatePasswordScreen
+import slikoo.kvrae.slikoo.ui.pages.UserProfileScreen
 
 
 @Composable
@@ -41,6 +43,8 @@ sealed class AppScreenNavigator(val route: String) {
     object AdvancedEditProfilesAppScreen : AppScreenNavigator("advanced_edit_profile_screen/{id}")
     object EventDetailsAppScreen : AppScreenNavigator("event_details_screen/{id}")
     object CategoryAppScreen : AppScreenNavigator("category_screen/{filter}")
+    object UpadtePasswordAppScreen : AppScreenNavigator("update_password_screen")
+    object UserProfilAppScreen : AppScreenNavigator("user_profile_screen/{id}")
 }
 
 sealed class SignUpNavigator(val route: String) {
@@ -138,6 +142,22 @@ fun Navigation() {
             MealsByCategory(
                 navController = navController,
                 filter = it.arguments?.getString("filter") ?: ""
+            )
+        }
+        composable(route = AppScreenNavigator.UpadtePasswordAppScreen.route) {
+           UpdatePasswordScreen(navController = navController)
+        }
+
+        composable(
+            route = AppScreenNavigator.UserProfilAppScreen.route,
+            arguments = listOf(navArgument("id") {
+                type = NavType.IntType
+            })
+        )
+        {
+            UserProfileScreen(
+                navController = navController,
+                id = it.arguments?.getInt("id") ?: 0
             )
         }
     }

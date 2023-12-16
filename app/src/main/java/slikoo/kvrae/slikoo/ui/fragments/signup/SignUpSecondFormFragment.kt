@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Phone
+import androidx.compose.material.icons.rounded.Place
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -43,7 +43,6 @@ import slikoo.kvrae.slikoo.viewmodels.SignUpViewModel
 
 @Composable
 fun SignUpSecondForm(onChange: (String) -> Unit) {
-    val context = LocalContext.current
     val userViewModel: SignUpViewModel = viewModel()
     var isErrors by remember{ mutableStateOf(false)}
     Box(
@@ -87,6 +86,17 @@ fun SignUpSecondForm(onChange: (String) -> Unit) {
                 errorMessage = userViewModel.onValidatePostalCode(),
                 isError = userViewModel.onValidatePostalCode().isNotEmpty() && isErrors
             )
+
+            CustomTextField(
+                onChange = { userViewModel.user.value= userViewModel.user.value.copy(adressepostal = it) },
+                value = userViewModel.user.value.adressepostal,
+                label = stringResource(id = R.string.postal_code),
+                keyboardType = KeyboardType.Text,
+                leadingIcon = Icons.Rounded.Place,
+                errorMessage = userViewModel.onValidatePostalCode(),
+                isError = userViewModel.onValidatePostalCode().isNotEmpty() && isErrors
+            )
+
 
             DescriptionTextField(
                 onChange = { userViewModel.user.value = userViewModel.user.value.copy(description = it)},

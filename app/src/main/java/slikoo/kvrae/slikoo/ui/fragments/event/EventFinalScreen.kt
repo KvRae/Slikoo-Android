@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,18 +14,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlidingBar
 import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.components.LoadingDialog
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
+import slikoo.kvrae.slikoo.utils.compressFile
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -38,10 +39,10 @@ fun EventFinalFragment(
     idMeal : Int = 0,
     onFragmentChange: (String) -> Unit,
     navController: NavController,
-    mealsVm : MealsViewModel
+    mealsVm : MealsViewModel,
 
 ) {
-    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -68,12 +69,19 @@ fun EventFinalFragment(
         Spacer(modifier = Modifier.height(32.dp))
 
         CustomButton(text = stringResource(id = R.string.finish)) {
-            if (idMeal == 0) {
-            val mealFile = getRealPathFromURI(mealsVm.mealUri, context)?.let { File(it) }
-            mealsVm.onAddMeal(mealFile!!)}
-            else {
-                val mealFile = getRealPathFromURI(mealsVm.mealUri, context)?.let { File(it) }
-                mealsVm.onUpdateMeal(mealFile!!, idMeal)
+            coroutineScope.launch {
+                if (idMeal == 0) {
+                    val mealFile =
+                        compressFile(
+                            navController.context,
+                            File(getRealPathFromURI(mealsVm.mealUri, navController.context)!!)
+                        )
+                    mealsVm.onAddMeal(mealFile!!)
+                } else {
+                    val mealFile =
+                        getRealPathFromURI(mealsVm.mealUri, navController.context)?.let { File(it) }
+                    mealsVm.onUpdateMeal(mealFile!!, idMeal)
+                }
             }
 
 
@@ -81,7 +89,7 @@ fun EventFinalFragment(
             navController.navigate(AppScreenNavigator.MainAppScreen.route)*/
         }
 
-        TextButton(onClick = { onFragmentChange(context.getString(R.string.second)) }) {
+        TextButton(onClick = { onFragmentChange(navController.context.getString(R.string.second)) }) {
             Text(
                 text = stringResource(id = R.string.previous),
                 color = LightSurface
@@ -91,11 +99,6 @@ fun EventFinalFragment(
     }
 }
 
-
-
-fun onMakeToast(context: Context, message: String) {
-    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-}
 
 fun getRealPathFromURI(uri: Uri, context: Context): String? {
     val returnCursor = context.contentResolver.query(uri, null, null, null, null)

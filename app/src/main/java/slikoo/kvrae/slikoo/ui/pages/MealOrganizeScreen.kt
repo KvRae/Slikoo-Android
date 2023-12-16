@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Icon
@@ -53,6 +54,7 @@ fun MealOrganizeScreen(
     }
 
     val mealVM: MealsViewModel = viewModel()
+
     if (idMeal > 0)
         DisposableEffect(Unit) {
             mealVM.getMealById(idMeal)
@@ -62,6 +64,7 @@ fun MealOrganizeScreen(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
+            .navigationBarsPadding()
             .background(LightSecondary),
         contentAlignment = Alignment.TopCenter
     ) {
@@ -103,24 +106,27 @@ fun MealOrganizeScreen(
                 }
             )
             when (fragment) {
-                stringResource(R.string.first) -> EventFirstFragment(mealVM) { fragment = it }
+                stringResource(R.string.first) -> EventFirstFragment(
+                    mealsViewModel = mealVM
+
+                ) { fragment = it }
                 stringResource(R.string.second) -> {
                     EventSecondFragment(
                         { fragment = it },
                         navController = navController,
                         mealVM
                     )
-
                 }
                 stringResource(R.string.third) -> {
                     EventFinalFragment(
                         onFragmentChange = { fragment = it },
                         navController = navController,
                         mealsVm = mealVM,
-                        idMeal = idMeal
+                        idMeal = idMeal,
                     )
                 }
-                else -> EventFirstFragment(mealVM) { fragment = it }
+                else -> EventFirstFragment(
+                    mealVM) { fragment = it }
             }
         }
         BackHandler {

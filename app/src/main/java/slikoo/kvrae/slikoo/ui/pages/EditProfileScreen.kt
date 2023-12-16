@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -32,6 +33,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +44,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialogWithContent
@@ -49,10 +52,13 @@ import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.components.ProfileImagePicker
+import slikoo.kvrae.slikoo.ui.fragments.event.getRealPathFromURI
 import slikoo.kvrae.slikoo.ui.fragments.profile.makeToast
+import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
+import slikoo.kvrae.slikoo.utils.compressFile
 import slikoo.kvrae.slikoo.viewmodels.EditProfileViewModel
 import java.io.File
 
@@ -60,6 +66,7 @@ import java.io.File
 @Composable
 fun EditProfileScreen(navController: NavController) {
     val viewModel: EditProfileViewModel = viewModel()
+    val coroutineScope = rememberCoroutineScope()
     var user by remember {
         mutableStateOf(User())
     }
@@ -81,7 +88,7 @@ fun EditProfileScreen(navController: NavController) {
                 .fillMaxSize()
                 .background(LightSecondary)
         ) {
-            EditProfileTopBar(navController = navController)
+            EditProfileTopBar(navController = navController, enableShadow = true)
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -147,16 +154,53 @@ fun EditProfileScreen(navController: NavController) {
                 )
                 CustomButton(text = stringResource(id = R.string.update),
                     onClick = {
-                        val userAvatar = File(viewModel.userAvatar.toString())
-                        val userBanner = File(viewModel.userBanner.toString())
-                        val cin = File(viewModel.userCin.toString())
-                        viewModel.updateUser(
-                            user = user,
-                            userAvatar = userAvatar,
-                            userBanner = userBanner,
-                            cin = cin
-                        )
-                        //navController.navigate(AppScreenNavigator.MainAppScreen.route)
+                            coroutineScope.launch {
+
+                                val userAvatar =
+                                    if (viewModel.userAvatar.toString().contains("https") || viewModel.userAvatar.toString().isNullOrEmpty())
+                                        null
+                                    else
+                                        compressFile(
+                                            navController.context,
+                                            File(
+                                                getRealPathFromURI(
+                                                    context = navController.context,
+                                                    uri = viewModel.userAvatar
+                                                ) ?: ""
+                                            ))
+                                val userBanner =
+                                    if (viewModel.userBanner.toString().contains("https") || viewModel.userBanner.toString().isNullOrEmpty())
+                                        null
+                                    else
+                                        compressFile(
+                                            navController.context,
+                                            File(
+                                                getRealPathFromURI(
+                                                    context = navController.context,
+                                                    uri = viewModel.userBanner
+                                                ) ?: ""
+                                            )
+                                        )
+                                val cin =
+                                    if (viewModel.userCin.toString().contains("https") || viewModel.userCin.toString().isNullOrEmpty())
+                                        null
+                                    else
+                                        compressFile(
+                                            navController.context,
+                                            File(
+                                                getRealPathFromURI(
+                                                    context = navController.context,
+                                                    uri = viewModel.userCin
+                                                ) ?: ""
+                                            )
+                                        )
+                                viewModel.updateUser(
+                                    user = user,
+                                    userAvatar = userAvatar,
+                                    userBanner = userBanner,
+                                    cin = cin
+                                )
+                            }
                     })
                 Row {
                     TextButton(onClick = { viewModel.showDialog = true }) {
@@ -174,7 +218,9 @@ fun EditProfileScreen(navController: NavController) {
                             CustomTextField(
                                 onChange = { user = user.copy(RIB = it) },
                                 value = user.RIB ?: "",
-                                label = stringResource(id = R.string.add_rib),
+                                placeHolder = stringResource(id = R.string.add_rib),
+                                label = if (!user.RIB.isNullOrEmpty()) stringResource(id = R.string.add_rib) else viewModel.user.RIB
+                                    ?: "",
                                 leadingIcon = Icons.Filled.AccountCircle
                             )
                         },
@@ -182,14 +228,18 @@ fun EditProfileScreen(navController: NavController) {
                         dismissText = stringResource(id = R.string.dismiss),
                         onDismiss = { viewModel.showDialog = false },
                         onConfirm = {
-                            viewModel.addRib()
+                            viewModel.addRib(
+                                rib = user.RIB ?: ""
+                            )
                             viewModel.showDialog = false
-                            makeToast(navController.context, "")
-                        })
+                        }
+                    )
 
             }
         }
     }
+
+
     if (viewModel.isLoading) LoadingScreen()
 
     if (viewModel.isError)
@@ -197,6 +247,17 @@ fun EditProfileScreen(navController: NavController) {
             buttonText = stringResource(id = R.string.reconnect),
             onClick = { navController.navigate(AppScreenNavigator.SignInAppScreen.route) }
         )
+    if (viewModel.navigate){
+    val toastMsg = stringResource(id = R.string.profile_updated)
+        DisposableEffect(Unit ){
+            navController.popBackStack()
+            makeToast(navController.context,toastMsg )
+            onDispose {
+                viewModel.navigate = false
+            }
+        }
+    }
+
     BackHandler {
         navController.popBackStack()
     }
@@ -207,19 +268,28 @@ fun EditProfileScreen(navController: NavController) {
 @Composable
 fun EditProfileTopBar(
     navController: NavController,
-    title : String = stringResource(R.string.edit_profile)
+    title : String = stringResource(R.string.edit_profile),
+    enableShadow : Boolean = false // this is to enable shadow inside the top bar
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = {
+        IconButton(
+            modifier = Modifier
+                .padding(16.dp)
+                .background(LightSecondary, shape = CircleShape),
+            onClick = {
             navController.popBackStack()
         }) {
             Icon(
                 imageVector = Icons.Filled.ArrowBack,
-                contentDescription = null
+                contentDescription = "",
+                tint = LightBackground,
+                modifier = Modifier
+
             )
         }
         Spacer(modifier = Modifier.width(32.dp))

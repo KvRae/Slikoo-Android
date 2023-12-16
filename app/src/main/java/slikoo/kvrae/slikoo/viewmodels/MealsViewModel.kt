@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -18,20 +17,24 @@ import slikoo.kvrae.slikoo.data.datasources.remote.MealRemoteDataSource
 import slikoo.kvrae.slikoo.utils.TempSession
 import java.io.File
 
-class MealsViewModel(): ViewModel() {
+class MealsViewModel: ViewModel() {
 
 
     private val mealRemoteDataSource = MealRemoteDataSource()
     // Objects
-    val user = mutableStateOf(User())
-    val meal = mutableStateOf(Meal())
+    var user = mutableStateOf(User())
+    var meal = mutableStateOf(Meal())
+
+    var motif by mutableStateOf("")
     // Lists
     var myMeals = mutableStateListOf<Meal>()
-    var meals = mutableStateListOf<Meal>()
-    var filteredMeals = mutableStateListOf<Meal>()
+
+    var meals = mutableStateOf(mutableListOf<Meal>())
+    var filteredMeals by mutableStateOf(mutableListOf<Meal>())
     // Boolean mutable variables
     var isDialogOpen by mutableStateOf(false)
     var isLoading = mutableStateOf(true)
+    var isParticipating by mutableStateOf(false)
     var isError by mutableStateOf(false)
     var navigate by mutableStateOf(false)
     // String mutable variables
@@ -39,20 +42,20 @@ class MealsViewModel(): ViewModel() {
     var dialogContext by mutableStateOf("")
     var resCode by mutableStateOf(0)
     // Uri mutable variables
-    var mealUri: Uri by mutableStateOf((meal.value.avatarUrl.plus(meal.value.avatarUrl)).toUri())
+    var mealUri: Uri by mutableStateOf(Uri.parse(meal.value.avatarUrl.plus(meal.value.avatar)))
 
     init {
-        getAllMeals(meals)
+        getAllMeals()
     }
 
     fun filterMealsList(filter: String) {
         filteredMeals.clear()
         if (filter.isEmpty()) {
             filteredMeals.clear()
-            filteredMeals.addAll(meals)
+            filteredMeals.addAll(meals.value)
         }
         if (filter.isNotEmpty())
-            for (meal in meals) {
+            for (meal in meals.value) {
                 if (
                     meal.localisation.contains(filter, ignoreCase = true)
                     || meal.theme.contains(filter, ignoreCase = true)
@@ -68,16 +71,16 @@ class MealsViewModel(): ViewModel() {
             }
     }
 
-    fun getAllMeals(meals : MutableList<Meal>)  {
+    fun getAllMeals()  {
         viewModelScope.launch {
             try {
                 isError = false
-                meals.clear()
-                async {mealRemoteDataSource.getAllMeals(meals)}.await()
-                async { filteredMeals.addAll(meals) }.await()
+                meals.value.clear()
+                meals.value = async {mealRemoteDataSource.getAllMeals()}.await()
+                async { filteredMeals.addAll(meals.value) }.await()
 
             } catch (e: Exception) {
-                meals.clear()
+                meals.value.clear()
                 isError = true
             }
             finally {
@@ -91,8 +94,11 @@ class MealsViewModel(): ViewModel() {
             meal.value = Meal()
             if (id != 0) {
                 try {
+                    isError = false
+                    isLoading.value = true
                     meal.value = async { mealRemoteDataSource.getMealById(id = id) }.await()
                     user.value = async { mealRemoteDataSource.getUserById(id = meal.value.iduser.toInt() , token = TempSession.token) }.await()
+
                 } catch (e: Exception) {
                     Log.e("Meals Error", e.message.toString())
                     isError = true
@@ -147,9 +153,12 @@ class MealsViewModel(): ViewModel() {
     }
 
     fun deleteMeal(id: Int) {
+        resCode = 0
         viewModelScope.launch(Dispatchers.IO) {
+
             resCode = try {
                 async { mealRemoteDataSource.deleteMeal(token = TempSession.token, id = id) }.await()
+
             } catch (e: Exception) {
                 500
             } finally {
@@ -157,7 +166,7 @@ class MealsViewModel(): ViewModel() {
             }
         }
         if (resCode == 200) {
-            meals.remove(meal.value)
+            meals.value.remove(meal.value)
             navigate = true
         }
 
@@ -166,6 +175,7 @@ class MealsViewModel(): ViewModel() {
     }
 
     fun onAddMeal(mealBanner: File) {
+        resCode = 0
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isError = false
@@ -176,6 +186,10 @@ class MealsViewModel(): ViewModel() {
                         meal = meal.value,
                         mealBanner = mealBanner,
                     ) }.await()
+                val asyncList =async {
+                    getAllMeals()
+                }
+                asyncList.await()
             } catch (e: Exception) {
                 resCode = 500
             }
@@ -186,6 +200,7 @@ class MealsViewModel(): ViewModel() {
     }
 
     fun onUpdateMeal(mealBanner: File, id: Int) {
+        resCode = 0
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isError = false
@@ -207,7 +222,9 @@ class MealsViewModel(): ViewModel() {
     }
 
     fun participateMeal(idrepas: Int, iduserOwner: Int) {
+        resCode = 0
         viewModelScope.launch(Dispatchers.IO) {
+            isLoading.value = true
             resCode = try {
                 isError = false
                 async { mealRemoteDataSource.participate(
@@ -215,35 +232,60 @@ class MealsViewModel(): ViewModel() {
                     mealId = idrepas,
                     userId = TempSession.user.id,
                     ownerId = iduserOwner,
-                    motif= "Je veux participer ma man"
+                    motif= motif
                 )
                 }.await()
             } catch (e: Exception) {
                 isError = true
                 500
             }
+            finally {
+                if (resCode == 200) {
+                    isParticipating = true
+                }
+                isLoading.value = false
+            }
         }
     }
 
-    fun getMealsByCategory(filter : String) {
+    fun getMealsByCategory(filter: String): MutableList<Meal> {
+        val mealsFiltered = mutableListOf<Meal>()
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isError = false
-                filteredMeals.clear()
-                if (filter.isEmpty()){
-                    filteredMeals.clear()
-                    filteredMeals.addAll(meals)
-                }
-                if (filter.isNotEmpty())
-                    for (meal in meals){
-                        if (meal.localisation.contains(filter,ignoreCase = true))
-                            filteredMeals.add(meal)
-                    }
+                isLoading.value = true
+                if (filter.isNotEmpty()) mealsFiltered.clear()
+                async { getAllMeals() }.await()
+                async {
+                    for (meal in meals.value) {
+                        if (meal.localisation.contains(filter, ignoreCase = true)
+                            || meal.theme.contains(filter, ignoreCase = true)
+                            || meal.genrenourriture.contains(filter, ignoreCase = true)
+                        ) mealsFiltered.add(meal)
+                    }}.await()
             } catch (e: Exception) {
                 isError = true
                 filteredMeals.clear()
             } finally {
                 isLoading.value = false
+            }
+        }
+        Log.e("Meals filtered for ${filter}", mealsFiltered.joinToString())
+        return mealsFiltered
+    }
+
+    fun checkIfParticipating(idrepas: Int, iduser: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                isError = false
+                val isParticipatingResponse  = async { mealRemoteDataSource.ifUserParticipated(
+                    token = TempSession.token,
+                    mealId = idrepas,
+                    userId = iduser)
+                }.await()
+                isParticipating = async { isParticipatingResponse.result }.await()
+            } catch (e: Exception) {
+                isError = true
             }
         }
     }

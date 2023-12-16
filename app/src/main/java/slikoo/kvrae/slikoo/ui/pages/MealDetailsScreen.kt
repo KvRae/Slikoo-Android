@@ -31,6 +31,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
@@ -62,12 +63,17 @@ import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
 @Composable
-fun MealsDetailScreen(navController: NavController, id: Int) {
+fun MealsDetailScreen(navController: NavController,
+                      id: Int
+) {
     val mealsViewModel: MealsViewModel = viewModel()
-
 
     DisposableEffect(Unit) {
         mealsViewModel.getMealById(id)
+        mealsViewModel.checkIfParticipating(
+            idrepas = id,
+            iduser = TempSession.user.id
+        )
         onDispose {}
     }
 
@@ -143,12 +149,13 @@ fun MealsDetailScreen(navController: NavController, id: Int) {
         dismissText = stringResource(id = R.string.no),
         onDismiss = { mealsViewModel.isDialogOpen = false },
         onConfirm = {
-            mealsViewModel.participateMeal(
-                mealsViewModel.meal.value.id,
-                mealsViewModel.meal.value.iduser.toInt()
-            )
-            makeToast(navController.context, "")
-            mealsViewModel.isDialogOpen = false
+            if (mealsViewModel.motif.isNotEmpty() && mealsViewModel.motif.length > 5) {
+                mealsViewModel.participateMeal(
+                    mealsViewModel.meal.value.id,
+                    mealsViewModel.meal.value.iduser.toInt()
+                )
+                mealsViewModel.isDialogOpen = false
+            }
         }
     )
 
@@ -177,7 +184,22 @@ fun MealDetailHeader(navController : NavController) {
         },
         backgroundColor = Color.Transparent,
         elevation = 0.dp,
-        actions = {},
+        actions = {
+            IconButton(
+                onClick = {
+                    makeToast(navController.context, "Report")
+                },
+                modifier = Modifier
+                    .clip(shape = CircleShape)
+                    .background(LightError)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Warning,
+                    contentDescription = "Report",
+                    tint = LightPrimary
+                )
+            }
+        },
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
@@ -373,10 +395,17 @@ fun ContentBody(mealsViewModel: MealsViewModel, navController: NavController) {
             )
         )
         Spacer(modifier = Modifier.height(8.dp))
-        if (mealsViewModel.meal.value.iduser != TempSession.user.id.toString())
-            DetailsContentBodyWithTextField(viewModel = mealsViewModel, navController = navController)
-        else
-            DetailsContentBodyWithButtons(viewModel = mealsViewModel, navController = navController)
+        when{
+            mealsViewModel.isParticipating && mealsViewModel.meal.value.iduser != TempSession.user.id.toString() ->
+                DetailsContentParticipation(mealsViewModel = mealsViewModel)
+
+            mealsViewModel.meal.value.iduser != TempSession.user.id.toString() ->
+                DetailsContentBodyWithTextField(viewModel = mealsViewModel, navController = navController)
+
+            mealsViewModel.meal.value.iduser == TempSession.user.id.toString() ->
+                DetailsContentBodyWithButtons(viewModel = mealsViewModel, navController = navController)
+        }
+
     }
 }
 
@@ -386,6 +415,7 @@ fun DetailsContentBodyWithTextField(
     navController: NavController
 ) {
     val msg = stringResource(id = R.string.advanced_prof_msg)
+    val msg2 = stringResource(id = R.string.motif_user)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -394,7 +424,7 @@ fun DetailsContentBodyWithTextField(
         verticalArrangement = Arrangement.Top
     ) {
         Text(
-            text = "Message a l'organisateur",
+            text = stringResource(R.string.message_organisateur),
             style = TextStyle(
                 color = LightBackground,
                 fontWeight = FontWeight.Bold,
@@ -402,15 +432,29 @@ fun DetailsContentBodyWithTextField(
             )
         )
         Spacer(modifier = Modifier.height(8.dp))
-        DescriptionTextField(onChange = {}, value = "", label = "Message")
+        DescriptionTextField(
+            onChange = {
+                viewModel.motif = it
+            },
+            value = viewModel.motif,
+            placeHolder = stringResource(id = R.string.motif_user),
+            errorMessage = if (viewModel.motif.length>5) stringResource(id = R.string.text_is_empty) else "",
+            label = stringResource(R.string.motif_user)
+        )
         Spacer(modifier = Modifier.height(16.dp))
         CustomButton(text = stringResource(id = R.string.book),
             onClick = {
-                if (TempSession.user.Hasdetails) {
-                    viewModel.dialogContext = "book"
-                    viewModel.isDialogOpen = true
-                } else {
-                    makeToast(navController.context, msg)
+                when{
+                    !TempSession.user.Hasdetails -> {
+                        makeToast(navController.context, msg)
+                    }
+                    viewModel.motif.length<5 -> {
+                        makeToast(navController.context,msg2 )
+                    }
+                    else ->{
+                        viewModel.dialogContext = "book"
+                        viewModel.isDialogOpen = true
+                    }
                 }
             })
         Spacer(modifier = Modifier.navigationBarsPadding())
@@ -436,7 +480,7 @@ fun DetailsContentBodyWithButtons(
                 contentColor = LightPrimaryVariant
             ),
             onClick = {
-                navController.navigate("Organiser" + "/${viewModel.meal.value.id}")
+                navController.navigate("Organiser/${viewModel.meal.value.id}")
             }
         ) {
             Text(
@@ -470,6 +514,23 @@ fun DetailsContentBodyWithButtons(
                 modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)
             )
         }
+    }
+
+}
+
+@Composable
+fun DetailsContentParticipation(
+    mealsViewModel: MealsViewModel
+) {
+    Column {
+        Text(
+            text = "Vous participez a cet evenement",
+            style = TextStyle(
+                color = LightBackground,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+            )
+        )
     }
 
 }

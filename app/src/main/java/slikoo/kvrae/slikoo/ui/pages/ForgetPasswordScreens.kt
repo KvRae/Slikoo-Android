@@ -38,6 +38,7 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.PasswordTextField
+import slikoo.kvrae.slikoo.ui.fragments.profile.makeToast
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.viewmodels.ForgetPasswordViewModel
@@ -139,8 +140,10 @@ fun EmailInput(
             )
         }
         if (viewModel.onNavigate){
+            val toastMsg = stringResource(id = R.string.email_sent)
             DisposableEffect(Unit){
                 onScreenChange("OTP")
+                makeToast(context, toastMsg)
                 viewModel.onNavigate = false
                 onDispose {
                     viewModel.onNavigate = false
@@ -195,6 +198,7 @@ fun OtpInput(
                 })
         }
         if (viewModel.onNavigate){
+            val toastMsg = stringResource(id = R.string.code_verified)
             DisposableEffect(Unit){
                 onScreenChange("PASSWORD")
                 viewModel.onNavigate = false
@@ -251,11 +255,12 @@ fun PasswordReset(
             text = stringResource(id = R.string.verify)
         )
         if (viewModel.onNavigate){
+            val toastMsg = stringResource(id = R.string.password_changed)
             DisposableEffect(Unit){
                 onNavigateTo(navController, AppScreenNavigator
                     .SignInAppScreen
                     .route)
-
+                makeToast(navController.context, toastMsg)
                 onDispose {
                     viewModel.onNavigate = false
                     onScreenChange("EMAIL")

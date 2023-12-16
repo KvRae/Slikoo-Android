@@ -27,8 +27,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -37,6 +35,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,6 +54,7 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.fragments.profile.BioFragment
+import slikoo.kvrae.slikoo.ui.fragments.profile.FeedbackFragment
 import slikoo.kvrae.slikoo.ui.fragments.profile.InvitationsFragment
 import slikoo.kvrae.slikoo.ui.fragments.profile.ReservationFragment
 import slikoo.kvrae.slikoo.ui.fragments.profile.UserOffersList
@@ -70,7 +70,7 @@ import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 fun ProfileScreen(navController: NavController) {
     val viewModel: MainScreenViewModel = viewModel()
     val bio = stringResource(id = R.string.biographie)
-    var selectedMenuIndex by remember { mutableStateOf(bio) }
+    var selectedMenuIndex by rememberSaveable { mutableStateOf(bio) }
 
     DisposableEffect(Unit) {
         viewModel.getUser()
@@ -137,20 +137,6 @@ fun ProfileAppBar(navController: NavController) {
                         ItemMenu(
                             text = stringResource(R.string.report),
                             icon = Icons.Default.Warning
-                        )
-                    }
-                    Divider()
-                    DropdownMenuItem(onClick = { /* Handle settings! */ }) {
-                        ItemMenu(
-                            text = stringResource(R.string.settings),
-                            icon = Icons.Default.Settings
-                        )
-                    }
-                    Divider()
-                    DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
-                        ItemMenu(
-                            text = stringResource(R.string.send_feedback),
-                            icon = Icons.Default.Send
                         )
                     }
                 }
@@ -313,7 +299,8 @@ fun ProfileRowMenuList(
         stringResource(R.string.biographie),
         stringResource(R.string.mes_offres),
         stringResource(R.string.invitations),
-        stringResource(R.string.reservations)
+        stringResource(R.string.reservations),
+        stringResource(R.string.feedback),
     )
     LazyRow(content = {
         items(menuList.size) {
@@ -338,7 +325,6 @@ fun ProfileRowMenuList(
         }
 
     })
-
 }
 
 @Composable
@@ -356,11 +342,19 @@ fun ProfileContent(
         }
 
         stringResource(id = R.string.invitations) -> {
-            InvitationsFragment()
+            InvitationsFragment(
+                navController = navController,
+            )
         }
 
         stringResource(id = R.string.reservations) -> {
-            ReservationFragment()
+            ReservationFragment(
+                navController = navController,
+            )
+        }
+
+        stringResource(id = R.string.feedback) ->{
+            FeedbackFragment()
         }
     }
 }

@@ -20,6 +20,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,12 +44,16 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 @Composable
 fun ImagePickerField(
     imageUrl : Uri? = null ,
-    onImageSelected: (Uri?) -> Unit = { it }
+    onImageSelected: (Uri?) -> Unit
 ) {
-
+    var selectedImageUrl by remember { mutableStateOf(imageUrl) }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { onImageSelected(it)}
+        onResult = { pickedUri ->
+            // Update the local variable with the picked URI or keep the existing one
+            selectedImageUrl = pickedUri ?: selectedImageUrl
+            onImageSelected(selectedImageUrl)
+        }
         )
 
     Box(
@@ -101,18 +109,25 @@ fun ImagePickerField(
                 }
         }
     }
+//    BackHandler {
+//        onImageSelected(imageUrl)
+//    }
 }
 
 
 @Composable
 fun ProfileImagePicker(
     imageUri : Uri? = null ,
-    onImageSelected: (Uri?) -> Unit = { it }
+    onImageSelected: (Uri?) -> Unit = {}
 ) {
+    var selectedImageUrl by remember { mutableStateOf(imageUri) }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri ->
-            onImageSelected(uri ?: Uri.EMPTY)
+        onResult = { pickedUri ->
+            // Update the local variable with the picked URI or keep the existing one
+            selectedImageUrl = pickedUri ?: selectedImageUrl
+            onImageSelected(selectedImageUrl)
+
         })
 
     Box(
@@ -169,5 +184,7 @@ fun ProfileImagePicker(
             }
         }
     }
+//    BackHandler {
+//    }
 }
 

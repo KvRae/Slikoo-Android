@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 
@@ -55,32 +56,34 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 @Composable
 fun CustomTextField(
     onChange: (String) -> Unit,
-    value: String, label: String,
+    value: String?,
+    label: String,
     modifier: Modifier = Modifier,
     placeHolder: String = "",
     keyboardType: KeyboardType = KeyboardType.Text,
     keyboardActions: KeyboardActions = KeyboardActions(),
     leadingIcon: ImageVector? = null,
+    readOnly: Boolean = false,
     isError: Boolean = false,
     trailingIcon: ImageVector? = null,
     errorMessage: String = "",
-
-    ) {
+) {
     val focusManager = LocalFocusManager.current
     var isFocused by remember { mutableStateOf(false) }
 
-
     Column {
         OutlinedTextField(
-            value = value,
+            value = value.orEmpty(), // Use the safe call operator to handle null value
             onValueChange = { onChange(it) },
+            readOnly = readOnly,
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = LightPrimary,
+                textColor = LightBackground,
                 errorBorderColor = LightPrimary,
                 errorCursorColor = LightPrimary,
                 cursorColor = LightPrimary,
-                unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(
+                unfocusedBorderColor = if (value?.isEmpty() == true) Color.Transparent else Color.Gray.copy(
                     alpha = 0.3f
                 ),
                 backgroundColor = LightError,
@@ -103,10 +106,9 @@ fun CustomTextField(
             visualTransformation = VisualTransformation.None,
             isError = if (errorMessage.isNotEmpty() && isError) true else isError,
             trailingIcon = {
-                if (value.isNotEmpty()) {
+                if (value?.isNotEmpty() == true && trailingIcon == null) {
                     IconButton(onClick = {
                         onChange("")
-
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.Clear,
@@ -114,6 +116,12 @@ fun CustomTextField(
                             tint = if (!isFocused) Color.Gray else LightPrimary
                         )
                     }
+                } else if (trailingIcon != null) {
+                    Icon(
+                        imageVector = trailingIcon,
+                        contentDescription = "",
+                        tint = if (!isFocused) Color.Gray else LightPrimary
+                    )
                 }
             },
 
@@ -123,16 +131,13 @@ fun CustomTextField(
                     contentDescription = "",
                     modifier = Modifier
                         .padding(end = 8.dp)
-                        .size(24.dp)
-                    ,
+                        .size(24.dp),
                     tint = if (!isFocused) Color.Gray else LightPrimary
                 )
             },
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-
-
-            )
+        )
         if (isError) {
             Text(
                 text = errorMessage,
@@ -206,6 +211,7 @@ fun PasswordTextField(
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = LightPrimary,
                 backgroundColor = LightError,
+                textColor = LightBackground,
                 cursorColor = LightPrimary,
                 unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(alpha = 0.3f),
                 disabledBorderColor = Color.Transparent,
@@ -326,6 +332,7 @@ fun PasswordTextField(
                 shape = RoundedCornerShape(8.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = LightPrimary,
+                    textColor = LightBackground,
                     cursorColor = LightPrimary,
                     unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(
                         alpha = 0.3f

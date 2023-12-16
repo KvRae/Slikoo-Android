@@ -8,24 +8,27 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import slikoo.kvrae.slikoo.data.api.ApiServices
 import slikoo.kvrae.slikoo.data.api.RetrofitInstance
 import slikoo.kvrae.slikoo.data.datasources.dto.ParticiapteRequest
+import slikoo.kvrae.slikoo.data.datasources.dto.ResponseSlk
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import java.io.File
 
 class MealRemoteDataSource {
-
-    suspend fun getAllMeals(meals: MutableList<Meal>) {
-        try {
-            meals.clear()
+    suspend fun getAllMeals(): MutableList<Meal> {
+        return try {
             val response = RetrofitInstance
                 .getRetrofitInstance()
                 .create(ApiServices::class.java)
                 .getAllMeals()
             if (response.isSuccessful)
-                response.body()?.meals?.let { meals.addAll(it) }
+                response.body()?.meals!! as MutableList<Meal>
+            else {
+                mutableListOf()
+            }
         }
         catch (e: Exception) {
             Log.e("Meals Error", e.message.toString())
+            mutableListOf()
         }
     }
 
@@ -140,6 +143,33 @@ class MealRemoteDataSource {
 
     fun updateMeal(token: String, meal: Meal, mealBanner: File, id: Int): Int {
         TODO("Not yet implemented")
+    }
+
+    suspend fun ifUserParticipated(token: String, mealId: Int, userId: Int): ResponseSlk {
+        return try {
+            val response = RetrofitInstance
+                .getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .ifUserIsParticipated(token="Bearer $token",mealId,userId)
+            if (response.isSuccessful)
+                ResponseSlk(
+                    code = response.code(),
+                    message = response.message(),
+                    result= response.body()?.result!!,
+                    status = response.body()?.status!!,
+                )
+            else ResponseSlk(
+                code = response.code(),
+                message = response.message(),
+            )
+        }
+        catch (e: Exception) {
+               Log.e("Meals Error", e.message.toString())
+                ResponseSlk(
+                    code = 500,
+                    message = e.message.toString(),
+                )
+        }
     }
 
 

@@ -19,6 +19,7 @@ class UserDetailsViewModel: ViewModel() {
     ))
     var isLoading by mutableStateOf(false)
     var isError by mutableStateOf(false)
+    var navigate by mutableStateOf(false)
     private var resCode by mutableStateOf(0)
 
     fun getUserDetails(id : Int = TempSession.user.id) {
@@ -44,6 +45,7 @@ class UserDetailsViewModel: ViewModel() {
     fun addUserDetails(userDetails: UserDetails) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                navigate = false
                 isLoading = true
                 resCode = async {
                     userDetailsRDS.addUserDetails(
@@ -59,6 +61,7 @@ class UserDetailsViewModel: ViewModel() {
             }
             finally {
                 isLoading = false
+                navigate = resCode == 200
             }
         }
     }
@@ -66,6 +69,7 @@ class UserDetailsViewModel: ViewModel() {
     fun updateUserDetails(userDetails: UserDetails) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                navigate = false
                 isLoading = true
                 resCode = async {
                     userDetailsRDS.updateUserDetails(
@@ -81,6 +85,7 @@ class UserDetailsViewModel: ViewModel() {
             }
             finally {
                 isLoading = false
+                navigate = resCode == 200
             }
         }
     }

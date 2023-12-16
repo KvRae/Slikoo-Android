@@ -3,7 +3,9 @@ package slikoo.kvrae.slikoo.data.datasources.remote
 import android.annotation.SuppressLint
 import slikoo.kvrae.slikoo.data.api.ApiServices
 import slikoo.kvrae.slikoo.data.api.RetrofitInstance
+import slikoo.kvrae.slikoo.data.datasources.dto.UserDetailsRequest
 import slikoo.kvrae.slikoo.data.datasources.entities.UserDetails
+import slikoo.kvrae.slikoo.utils.TempSession
 
 class UserDetailsRemoteDataSource {
 
@@ -32,7 +34,20 @@ class UserDetailsRemoteDataSource {
                 .getRetrofitInstance()
                 .create(ApiServices::class.java)
                 .addUserDetails(
-                    token = "Bearer ${token}", user = userDetails)
+                    token = "Bearer ${token}", user = UserDetailsRequest(
+                        iduser = TempSession.user.id.toString(),
+                        fumeur = userDetails.fumeur,
+                        alcohol = userDetails.alcohol,
+                        algalimentaire = userDetails.algalimentaire.joinToString(),
+                        centreinteret = userDetails.centreinteret.joinToString (),
+                        cherche = userDetails.cherche.joinToString(),
+                        langues = userDetails.langues.joinToString(),
+                        chercherplus = userDetails.chercherplus.joinToString(),
+                        Facebooklink = userDetails.Facebooklink,
+                        InstagramLink = userDetails.InstagramLink,
+                        TwitterLink = userDetails.TwitterLink,
+                        LinkedinLink = userDetails.LinkedinLink
+                    ))
                 if (response.isSuccessful)
                     200
                 else
@@ -50,9 +65,22 @@ class UserDetailsRemoteDataSource {
                 .getRetrofitInstance()
                 .create(ApiServices::class.java)
                 .updateUserDetails(
-                    token = "Bearer ${token}", user = userDetails)
+                    token = "Bearer $token", user = UserDetailsRequest(
+                        iduser = userDetails.idusermain,
+                        fumeur = userDetails.fumeur,
+                        alcohol = userDetails.alcohol,
+                        algalimentaire = userDetails.algalimentaire.joinToString(),
+                        centreinteret = userDetails.centreinteret.joinToString (),
+                        cherche = userDetails.cherche.joinToString(),
+                        langues = userDetails.langues.joinToString(),
+                        chercherplus = userDetails.chercherplus.joinToString(),
+                        Facebooklink = userDetails.Facebooklink,
+                        InstagramLink = userDetails.InstagramLink,
+                        TwitterLink = userDetails.TwitterLink,
+                        LinkedinLink = userDetails.LinkedinLink
+                    ))
                 if (response.isSuccessful)
-                    200
+                    response.code()
                 else
                     400
         }
@@ -61,7 +89,4 @@ class UserDetailsRemoteDataSource {
             500
         }
     }
-
-
-
 }

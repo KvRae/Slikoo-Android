@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -51,41 +51,56 @@ fun CustomAlertDialog(
     onConfirm: () -> Unit = {}
 ) {
     if (showDialog)
-    AlertDialog(
-        onDismissRequest = { onDismiss() },
-        title = {
-            Text(
-                text = title,
-                color = LightBackground,
-                fontWeight = FontWeight.Bold,
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                //.background(LightBackground.copy(alpha = 0.4f))
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            AlertDialog(
+                onDismissRequest = { onDismiss() },
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false,
 
-            )
+
+                    ),
+                title = {
+                    Text(
+                        text = title,
+                        color = LightBackground,
+                        fontWeight = FontWeight.Bold,
+
+                        )
                 },
-        text = { Text(text = message) },
-        confirmButton = {
-            Button(
-                onClick = { onConfirm() },
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = LightPrimary,
-                    contentColor = LightError
-                )
-            ) {
-                Text(text = confirmText)
-            }
-        },
-        dismissButton = {
-            if (dismissText.isNotEmpty()) TextButton(onClick = { onDismiss() }) {
-                Text(
-                    text = dismissText,
-                    color = LightSurface,
-                )
-            }
-        },
-        backgroundColor = LightSecondary,
-        contentColor = LightBackground,
-        shape = RoundedCornerShape(16.dp)
-    )
+
+                text = { Text(text = message) },
+                confirmButton = {
+                    Button(
+                        onClick = { onConfirm() },
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = LightPrimary,
+                            contentColor = LightError
+                        )
+                    ) {
+                        Text(text = confirmText)
+                    }
+                },
+                dismissButton = {
+                    if (dismissText.isNotEmpty()) TextButton(onClick = { onDismiss() }) {
+                        Text(
+                            text = dismissText,
+                            color = LightSurface,
+                        )
+                    }
+                },
+                backgroundColor = LightError,
+                contentColor = LightBackground,
+                shape = RoundedCornerShape(16.dp)
+            )
+        }
     else
         return
 
@@ -114,7 +129,7 @@ fun CustomAlertDialogWithContent(
         text = {
             content()
         },
-        title = {},
+        title = {  },
         shape = RoundedCornerShape(16.dp),
         confirmButton = {
             Button(
@@ -154,7 +169,7 @@ fun LoadingDialog() {
             contentAlignment= Alignment.Center,
             modifier = Modifier
                 .size(100.dp)
-                .background(Color.Transparent, shape = RoundedCornerShape(8.dp))
+                .background(LightError, shape = RoundedCornerShape(8.dp))
         ) {
             CircularProgressIndicator(
                 color = LightPrimary,
@@ -222,6 +237,49 @@ fun MaterialAlertBox() {
                 content = { Text(text = "Delete") }
             )
         }
+    }
+}
+
+
+@Composable
+fun FeedbackAlertForm(
+    showDialog: Boolean = true,
+    onDismiss: () -> Unit = {},
+    onConfirm: () -> Unit = {}
+) {
+    var rating: Int = 0
+    AlertDialog(
+
+        buttons = {
+        },
+        onDismissRequest = {
+            onDismiss(
+            )
+        },
+         text = {FeedbackContent()},
+    )
+
+}
+
+@Composable
+fun FeedbackContent(
+    rating :Int = 0,
+    onChange: (Int)->Unit = {}
+) {
+    Column(
+        modifier = Modifier
+            .background(LightSecondary)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = stringResource(id = R.string.feedback_form_title))
+        Spacer(modifier = Modifier.size(16.dp))
+        Text(text = stringResource(id = R.string.feedback_form_message))
+        RatingBar(
+            onRatingChanged =
+            { onChange(it)},
+            currentRating = rating
+        )
     }
 
 }

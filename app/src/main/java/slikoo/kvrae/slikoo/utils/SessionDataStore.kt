@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -46,34 +47,49 @@ class SessionDataStore(private val context : Context) {
         return emailFlow.first()
     }
 
-    suspend fun clearUserToken(){
+
+    suspend fun setUserIsLogged(isLogged : Boolean){
+        context.dataStore.edit { preferences ->
+            preferences[booleanPreferencesKey("user_is_logged")] = isLogged
+        }
+    }
+
+    suspend fun getUserIsLogged() : Boolean{
+        val dataStoreKey = booleanPreferencesKey("user_is_logged")
+        val isLoggedFlow = context.dataStore.data.map { preferences ->
+            preferences[dataStoreKey] ?: false
+        }
+        return isLoggedFlow.first()
+    }
+
+    private suspend fun clearUserToken(){
         context.dataStore.edit { preferences ->
             preferences[stringPreferencesKey("user_token")] = ""
         }
     }
 
-    suspend fun setUserIsLogged(isLogged : Boolean){
+    private suspend fun clearUserEmail(){
         context.dataStore.edit { preferences ->
-            preferences[stringPreferencesKey("user_is_logged")] = isLogged.toString()
+            preferences[stringPreferencesKey("user_email")] = ""
         }
     }
 
-    suspend fun getUserIsLogged() : Boolean{
-        val dataStoreKey = stringPreferencesKey("user_is_logged")
-        val isLoggedFlow = context.dataStore.data.map { preferences ->
-            preferences[dataStoreKey] ?: ""
+    private suspend fun clearUserIsLogged(){
+        context.dataStore.edit { preferences ->
+            preferences[booleanPreferencesKey("user_is_logged")] = false
         }
-        return isLoggedFlow.first().toBoolean()
     }
 
-    suspend fun decodeToken(token : String) : String{
-        val dataStoreKey = stringPreferencesKey("user_token")
-        val tokenFlow = context.dataStore.data.map { preferences ->
-            preferences[dataStoreKey] ?: ""
-        }
-        return tokenFlow.first()
+    suspend fun clearUser(){
+        clearUserToken()
+        clearUserEmail()
+        clearUserIsLogged()
     }
 
-
+    suspend fun setUserLoggedIn(isLogged : Boolean, token : String, email : String){
+        setUserIsLogged(isLogged)
+        setUserToken(token)
+        setUserEmail(email)
+    }
 
 }

@@ -29,6 +29,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.CustomButton
@@ -55,12 +57,15 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
+import slikoo.kvrae.slikoo.utils.SessionDataStore
+import slikoo.kvrae.slikoo.utils.TempSession
 
 
 @Composable
 fun LoginForm(navController: NavController) {
     val signInViewModel : SignInViewModel = viewModel()
     val logo = R.drawable.slikoo_white
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -129,6 +134,7 @@ fun LoginContent(
     signInViewModel: SignInViewModel,
     navController: NavController
 )  {
+    val coroutineScope = rememberCoroutineScope()
     var isError by remember { mutableStateOf(signInViewModel.isError) }
     Surface(
         color = LightSecondary,
@@ -194,6 +200,7 @@ fun LoginContent(
             if (signInViewModel.navigate) {
                 val msg = stringResource(id = R.string.welcome)
                 DisposableEffect(Unit) {
+
                     onMakeToast(
                         context = navController.context,
                         message = msg

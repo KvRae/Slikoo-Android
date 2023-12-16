@@ -20,6 +20,7 @@ class SignUpViewModel: ViewModel() {
     var profilePictureUri by mutableStateOf(Uri.EMPTY)
     var cid by mutableStateOf(Uri.EMPTY)
     var isLoading by mutableStateOf(false)
+    var navigate by mutableStateOf(false)
 
     var registerResult by mutableStateOf("")
 
@@ -109,6 +110,7 @@ class SignUpViewModel: ViewModel() {
         cidAvatar: File) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                navigate = false
                 isLoading = true
                 registerResult= async { userRepository.register(user, avatar, cidAvatar) }.await()
             } catch (e: Exception) {
@@ -116,6 +118,7 @@ class SignUpViewModel: ViewModel() {
             }
             finally {
                 isLoading = false
+                navigate = true
             }
         }
     }

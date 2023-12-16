@@ -20,11 +20,13 @@ import slikoo.kvrae.slikoo.viewmodels.InvitationsViewModel
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun InvitationsFragment() {
+fun InvitationsFragment(
+    navController: androidx.navigation.NavController
+) {
     val viewModel: InvitationsViewModel = viewModel()
 
-    if (viewModel.invitations.isNullOrEmpty())
-    DisposableEffect(Unit) {
+    if (viewModel.invitations.isEmpty())
+    DisposableEffect(viewModel.invitations) {
         viewModel.getInvitations()
 
         onDispose {
@@ -38,19 +40,37 @@ fun InvitationsFragment() {
             .fillMaxHeight(1f),
         verticalArrangement = Arrangement.Center
     ) {
-        if (!viewModel.invitations.isNullOrEmpty()) {
+        if (viewModel.invitations.isNotEmpty()) {
             LazyColumn(
                 content = {
                     items(viewModel.invitations.size) { index ->
                         ReservationCard(
                             title = "Invité",
-                            subtitle = viewModel.invitations[index].userDemander?.nom
-                                ?: "utilisateur inconnu",
+                            status = viewModel.invitations[index].status?: "inconnu",
+                            subtitle = (viewModel.invitations[index].userDemander?.nom +
+                                    " " + viewModel.invitations[index].userDemander?.prenom)
+                            ,
+                            mealAvatar = viewModel.invitations[index].meal?.avatarUrl
+                                .plus(viewModel.invitations[index].meal?.avatar),
                             description = viewModel.invitations[index].motif ?: "pas de motif",
                             dissmissText = stringResource(R.string.delete),
-                            onDismiss = { /* TODO */ },
+                            onDismiss = {
+                                viewModel.declineInvitation(
+                                    idMeal = viewModel.invitations[index].meal?.id ?: 0,
+                                    idDemander = viewModel.invitations[index].userDemander?.id ?: 0,
+                                    )
+                            },
                             confirmText = stringResource(R.string.accept),
-                            onConfirm = { /* TODO */ }
+                            navController = navController,
+                            onConfirm = {
+                                viewModel.acceptInvitation(
+                                    idMeal = viewModel.invitations[index].meal?.id.toString() ?: "",
+                                    informationComp = "",
+                                    idDemander = viewModel.invitations[index].userDemander?.id.toString()
+                                        ?: ""
+                                )
+                            },
+                            idUser = viewModel.invitations[index].userDemander?.id ?: 0,
                         )
                     }
                 }

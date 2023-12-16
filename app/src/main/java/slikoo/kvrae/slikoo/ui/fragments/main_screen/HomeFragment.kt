@@ -17,7 +17,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -27,16 +26,15 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.data.datasources.entities.Theme
 import slikoo.kvrae.slikoo.ui.components.AreaFilterCard
-import slikoo.kvrae.slikoo.ui.components.RatingCard
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
-import slikoo.kvrae.slikoo.ui.components.SearchBar
+import slikoo.kvrae.slikoo.ui.components.ThemeCard
 import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.viewmodels.CategoryViewModel
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
-import slikoo.kvrae.slikoo.viewmodels.RatingViewModel
 
 
 @Composable
@@ -54,14 +52,15 @@ fun HomeScreen(navController: NavController) {
                 .padding(8.dp)
         ) {
             Spacer(modifier = Modifier.padding(8.dp))
-            SearchBar(onSearch = {})
-            if (mealsViewModel.meals.isNotEmpty()) OnlineRecipes(navController,mealsViewModel)
+            if (mealsViewModel.meals.value.isNotEmpty()) OnlineRecipes(navController,mealsViewModel)
+            Spacer(modifier = Modifier.padding(8.dp))
+            ThemeListSection()
+            Spacer(modifier = Modifier.padding(8.dp))
             RecipesCategorySection(navController)
-            RatingListSection()
         }
     }
 
-    if (mealsViewModel.meals.isEmpty() && mealsViewModel.isLoading.value) LoadingScreen()
+    if (mealsViewModel.meals.value.isEmpty() && mealsViewModel.isLoading.value) LoadingScreen()
 }
 
 
@@ -77,8 +76,8 @@ fun OnlineRecipes(navController: NavController,mealsViewModel : MealsViewModel )
             SectionHeader(title = stringResource(R.string.online_recipes))
             Spacer(modifier = Modifier.padding(8.dp))
             LazyRow(modifier = Modifier.fillMaxWidth()) {
-                items(meals.size) {
-                    RecipeCardContent(meals[it], navController = navController)
+                items(meals.value.size) {
+                    RecipeCardContent(meals.value[it], navController = navController)
                 }
             }
         }
@@ -118,25 +117,26 @@ fun RecipesCategorySection(navController: NavController) {
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun RatingListSection() {
-    val viewModel : RatingViewModel = viewModel()
-    DisposableEffect(Unit) {
-        viewModel.getUserFeedbacks()
-        onDispose {  }
-    }
+fun ThemeListSection() {
+    val themes = listOf<Theme>(
+        Theme(0, "Lecture", R.drawable.lecture),
+        Theme(1, "L'ecriture", R.drawable.lecriture),
+        Theme(2, "Philosophies", R.drawable.philosophie),
+        Theme(3, "La dance", R.drawable.danse),
+        Theme(4, "La musique", R.drawable.musique),
+    )
 
-    if (viewModel.feedBacks.isNotEmpty())
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            SectionHeader(title = stringResource(R.string.rating_list))
+            SectionHeader(title = stringResource(R.string.theme_header))
             Spacer(modifier = Modifier.padding(8.dp))
             LazyRow(modifier = Modifier.fillMaxWidth()) {
-                items(viewModel.feedBacks.size) {
-                    RatingCard(viewModel.feedBacks[it])
+                items(themes.size) {
+                    ThemeCard(name = themes[it].name,  image =  themes[it].image, onClick = {})
                 }
             }
         }

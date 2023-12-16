@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -41,14 +42,20 @@ fun BioFragment(user : User) {
     val viewModel: UserDetailsViewModel = viewModel()
     if (user.Hasdetails) {
         DisposableEffect(Unit ){
-            viewModel.getUserDetails()
+            viewModel.getUserDetails(id = user.id)
             onDispose {  }
         }
 
     }
 
     if (user.Hasdetails && viewModel.userDetails.id != 0)
-        Column(modifier = Modifier.padding(4.dp)) {
+        Column(modifier = Modifier
+            .fillMaxSize(1f)
+            .padding(4.dp)) {
+            SocialMediaSection(
+                userDetail = viewModel.userDetails
+            )
+            Spacer(modifier = Modifier.padding(16.dp))
         BioHeaderSection(
             icon = R.drawable.fork_knife_icon,
             title = stringResource(R.string.allergies_alimentaires),
@@ -66,13 +73,11 @@ fun BioFragment(user : User) {
         )
         BioDescriptionSection(userDetail = viewModel.userDetails)
         BioHeaderSection(
-            icon = R.drawable.ellipse_22,
-            title = stringResource(R.string.plus_sur_moi),
+            icon = R.drawable.heart_icon,
+            title = stringResource(R.string.comments),
             description = viewModel.userDetails.centreinteret.joinToString { it }
         )
-        SocialMediaSection(
-            userDetail = viewModel.userDetails
-        )
+
 
 
     }

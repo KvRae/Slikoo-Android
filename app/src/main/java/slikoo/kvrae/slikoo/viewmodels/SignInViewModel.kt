@@ -15,7 +15,7 @@ class SignInViewModel : ViewModel() {
     private val userRDS = UserRemoteDataSource()
 
     var user by mutableStateOf(User(
-        email = "hamzabenmahmoud9898@gmail.com",
+        email = "karamelmannai@gmail.com",
         password = "12345678")
     )
 

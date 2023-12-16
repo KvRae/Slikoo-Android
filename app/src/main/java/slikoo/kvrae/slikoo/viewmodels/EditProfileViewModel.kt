@@ -21,6 +21,7 @@ class EditProfileViewModel : ViewModel() {
     var isError by mutableStateOf(false)
     var showDialog by mutableStateOf(false)
     var resCode by mutableStateOf(0)
+    var navigate by mutableStateOf(false)
 
     var user by mutableStateOf(TempSession.user)
 
@@ -54,12 +55,15 @@ class EditProfileViewModel : ViewModel() {
         }
     }
 
-    fun addRib() {
+    fun addRib(rib: String ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isLoading = async { true }.await()
-                resCode = async { userRDS.addRib(user = user, token = TempSession.token) }.await()
-                user = async { TempSession.user }.await()
+                resCode = async { userRDS.addRib(
+                    rib = rib,
+                    email=TempSession.email,
+                    token = TempSession.token
+                ) }.await()
                 isLoading = async { false }.await()
             } catch (e: Exception) {
                 resCode = 500
@@ -81,19 +85,21 @@ class EditProfileViewModel : ViewModel() {
         user.sexe.ifEmpty { user.sexe = TempSession.user.sexe }
         user.ville.ifEmpty { user.ville = TempSession.user.ville }
         user.description.ifEmpty { user.description = TempSession.user.description }
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                navigate = false
                 isLoading = true
                 resCode = async {
                     userRDS.updateUser(
                         id = TempSession.user.id,
                         user = user,
                         token = TempSession.token,
-                        avatar = userAvatar!!,
-                        banner = userBanner!!,
-                        cin = cin!!
+                        avatar = userAvatar?: File(""),
+                        banner = userBanner ?: File(""),
                     )
                 }.await()
+                navigate = async { resCode == 200 }.await()
                 isLoading = async { false }.await()
             } catch (e: Exception) {
                 resCode = 500
@@ -107,4 +113,17 @@ class EditProfileViewModel : ViewModel() {
 
     fun userToViewModel(userParam: User) {
     }
+
+    fun onValidateRib(rib: String) {
+        val ribRegex = Regex("^FR/d{2}/s?/d{5}/s?/d{5}/s?/d{11}/s?/d{2}$")
+        if (ribRegex.matches(rib)) {
+            addRib(rib)
+            showDialog = false
+
+        } else {
+            showDialog = true
+        }
+    }
+
+
 }

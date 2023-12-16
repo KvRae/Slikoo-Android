@@ -45,6 +45,7 @@ class MainScreenViewModel: ViewModel() {
                 isLoading = true
                 TempSession.user = async { userRDS.getUserByEmail(token = TempSession.token ,email = TempSession.email) }.await()
                 user = async { TempSession.user }.await()
+                isError = async { TempSession.user.id == 0 }.await()
             } catch (e: Exception) {
                 e.printStackTrace()
                 isError = true
@@ -54,6 +55,7 @@ class MainScreenViewModel: ViewModel() {
             }
         }
     }
+
 
     fun updatePassword(oldPassword: String, newPassword: String, confirmPassword: String) {
         viewModelScope.launch(Dispatchers.IO) {
