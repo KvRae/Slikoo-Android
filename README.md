@@ -1,10 +1,10 @@
 
 # Slikoo
 
-![Kotlin](https://img.shields.io/badge/Kotlin-1.5.10-blue.svg)
-![Compose](https://img.shields.io/badge/Compose-1.0.0--beta09-blue.svg)
-![Gradle](https://img.shields.io/badge/Gradle-7.0.0-blue.svg)
-![Android Studio](https://img.shields.io/badge/Android%20Studio-4.2.1-blue.svg)
+![Kotlin](https://img.shields.io/badge/Kotlin-1.5.10-pink.svg)
+![Compose](https://img.shields.io/badge/Compose-1.8.1-red.svg)
+![Gradle](https://img.shields.io/badge/Gradle-7.0.0-yellow.svg)
+![Android Studio](https://img.shields.io/badge/Android%20Studio-4.2.1-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 
