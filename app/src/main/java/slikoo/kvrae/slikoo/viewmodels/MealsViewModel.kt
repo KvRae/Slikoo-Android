@@ -154,30 +154,32 @@ class MealsViewModel: ViewModel() {
 
     fun deleteMeal(id: Int) {
         resCode = 0
+        navigate = false
         viewModelScope.launch(Dispatchers.IO) {
-
             resCode = try {
-                async { mealRemoteDataSource.deleteMeal(token = TempSession.token, id = id) }.await()
+                async {
+                    mealRemoteDataSource.deleteMeal(
+                        token = TempSession.token,
+                        id = id
+                    )
+                }.await()
 
             } catch (e: Exception) {
                 500
             } finally {
-                getMyMeals()
+                if (resCode in 200..299) {
+                    meals.value.remove(meal.value)
+                    navigate = true
+                }
             }
         }
-        if (resCode == 200) {
-            meals.value.remove(meal.value)
-            navigate = true
-        }
-
-
-
     }
 
     fun onAddMeal(mealBanner: File) {
         resCode = 0
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                navigate = false
                 isError = false
                 isLoading.value = true
                 resCode = async { mealRemoteDataSource
@@ -195,6 +197,7 @@ class MealsViewModel: ViewModel() {
             }
             finally {
                 isLoading.value = false
+                navigate = (resCode in 200..299)
             }
         }
     }
@@ -224,6 +227,7 @@ class MealsViewModel: ViewModel() {
     fun participateMeal(idrepas: Int, iduserOwner: Int) {
         resCode = 0
         viewModelScope.launch(Dispatchers.IO) {
+            navigate = false
             isLoading.value = true
             resCode = try {
                 isError = false
@@ -242,6 +246,7 @@ class MealsViewModel: ViewModel() {
             finally {
                 if (resCode == 200) {
                     isParticipating = true
+                    navigate = true
                 }
                 isLoading.value = false
             }
@@ -249,29 +254,7 @@ class MealsViewModel: ViewModel() {
     }
 
     fun getMealsByCategory(filter: String): MutableList<Meal> {
-        val mealsFiltered = mutableListOf<Meal>()
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                isError = false
-                isLoading.value = true
-                if (filter.isNotEmpty()) mealsFiltered.clear()
-                async { getAllMeals() }.await()
-                async {
-                    for (meal in meals.value) {
-                        if (meal.localisation.contains(filter, ignoreCase = true)
-                            || meal.theme.contains(filter, ignoreCase = true)
-                            || meal.genrenourriture.contains(filter, ignoreCase = true)
-                        ) mealsFiltered.add(meal)
-                    }}.await()
-            } catch (e: Exception) {
-                isError = true
-                filteredMeals.clear()
-            } finally {
-                isLoading.value = false
-            }
-        }
-        Log.e("Meals filtered for ${filter}", mealsFiltered.joinToString())
-        return mealsFiltered
+        return meals.value.filter { it.localisation.contains(filter, ignoreCase = true) }.toMutableList()
     }
 
     fun checkIfParticipating(idrepas: Int, iduser: Int) {

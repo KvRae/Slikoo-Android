@@ -33,11 +33,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
-import slikoo.kvrae.slikoo.ui.fragments.event.EventFinalFragment
-import slikoo.kvrae.slikoo.ui.fragments.event.EventFirstFragment
-import slikoo.kvrae.slikoo.ui.fragments.event.EventSecondFragment
+import slikoo.kvrae.slikoo.ui.fragments.meal.EventFinalFragment
+import slikoo.kvrae.slikoo.ui.fragments.meal.EventFirstFragment
+import slikoo.kvrae.slikoo.ui.fragments.meal.EventSecondFragment
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
+import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
@@ -79,13 +80,13 @@ fun MealOrganizeScreen(
         {
             TopAppBar(
                 modifier = Modifier.fillMaxWidth(),
-                elevation = 0.dp,
                 backgroundColor = Color.Transparent,
                 title = { Text(
                     text = stringResource(id = R.string.organize),
                     color = LightBackground,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold)
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
+                )
                         },
                 actions = {
                     IconButton(onClick = { show = true }) {
@@ -129,6 +130,12 @@ fun MealOrganizeScreen(
                     mealVM) { fragment = it }
             }
         }
+        if (mealVM.navigate)
+            DisposableEffect(Unit) {
+                navController.popBackStack()
+                navController.navigate(AppScreenNavigator.MainAppScreen.route)
+                onDispose { }
+            }
         BackHandler {
             show = true
         }

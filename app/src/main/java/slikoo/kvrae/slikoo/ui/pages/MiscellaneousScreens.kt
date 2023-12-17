@@ -22,6 +22,7 @@ import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.theme.LightGrey
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
+import slikoo.kvrae.slikoo.ui.theme.LightSecondaryVariant
 
 
 @Composable
@@ -58,12 +59,13 @@ fun TextElementScreen(
 @Composable
 fun TextWithImageScreen(
     imageVector: ImageVector,
-    text: String
+    text: String,
+    backgound: Color = LightSecondaryVariant
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = LightSecondary),
+            .background(color = backgound),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

@@ -24,7 +24,7 @@ import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSliderPointers
 import slikoo.kvrae.slikoo.ui.components.LoadingDialog
 import slikoo.kvrae.slikoo.ui.components.ProfileImagePicker
-import slikoo.kvrae.slikoo.ui.fragments.event.getRealPathFromURI
+import slikoo.kvrae.slikoo.ui.fragments.meal.getRealPathFromURI
 import slikoo.kvrae.slikoo.ui.fragments.profile.makeToast
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.SignUpNavigator

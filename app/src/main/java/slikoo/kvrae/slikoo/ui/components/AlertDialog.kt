@@ -54,7 +54,7 @@ fun CustomAlertDialog(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                //.background(LightBackground.copy(alpha = 0.4f))
+                .background(LightBackground.copy(alpha = 0.2f))
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -101,8 +101,6 @@ fun CustomAlertDialog(
                 shape = RoundedCornerShape(16.dp)
             )
         }
-    else
-        return
 
 }
 

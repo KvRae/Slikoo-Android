@@ -21,6 +21,7 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 import slikoo.kvrae.slikoo.data.datasources.dto.FeedBacksResponse
+import slikoo.kvrae.slikoo.data.datasources.dto.FeedbackResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.ForgetPasswordRequest
 import slikoo.kvrae.slikoo.data.datasources.dto.ForgetPasswordResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.InvitationRequest
@@ -114,13 +115,20 @@ interface ApiServices {
     suspend fun getMySubmittedFeedbacks(
         @Header("Authorization") token: String,
         @Path("id") id: Int
-    ): Response<UserResponse>
+    ): Response<FeedbackResponse>
 
     @Headers("Content-Type: application/json")
     @GET("displaymyfeedback/{id}")
     suspend fun getMyFeedbacks(
         @Header("Authorization") token: String,
         @Path("id") id: Int
+    ): Response<FeedBacksResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("displayfeedbackbyrepas/{idrepas}")
+    suspend fun getFeedbacksByMeal(
+        @Header("Authorization") token: String,
+        @Path("idrepas") id: Int
     ): Response<FeedBacksResponse>
 
 

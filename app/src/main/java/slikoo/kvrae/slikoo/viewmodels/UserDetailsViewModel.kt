@@ -17,6 +17,16 @@ class UserDetailsViewModel: ViewModel() {
     var userDetails by mutableStateOf(UserDetails(
         iduser = TempSession.user.id.toString(),
     ))
+    val choices = listOf("oui","non")
+    val langues = listOf(
+        "Le mandarin",
+        "Espagonl",
+        "Francais",
+        "Anglais",
+
+        )
+    val intrests = listOf<String>()
+
     var isLoading by mutableStateOf(false)
     var isError by mutableStateOf(false)
     var navigate by mutableStateOf(false)

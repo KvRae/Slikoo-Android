@@ -150,7 +150,7 @@
     <string name="old_password">Ancien mot de passe</string>
     <string name="new_password">Nouveau mot de passe</string>
     <string name="advanced_prof_msg">Veuillez completer votre profile avancé</string>
-    <string name="meal_for">"Repas dans "</string>
+    <string name="meal_for">"Repas pour "</string>
     <string name="hour">Heure</string>
     <string name="date">Date</string>
     <string name="givenName">Prenom</string>
@@ -187,6 +187,10 @@
     <string name="pending">En attente</string>
     <string name="accepted">Acceptée</string>
     <string name="rejected">Rejetée</string>
+    <string name="by">Par:</string>
+    <string name="booked">Invitation envoyée</string>
+    <string name="submit">Envoyer</string>
+    <string name="your_feeback">Votre Avis</string>
 
 
 </resources>

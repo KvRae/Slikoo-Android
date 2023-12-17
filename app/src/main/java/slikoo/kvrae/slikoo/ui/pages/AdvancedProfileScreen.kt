@@ -37,11 +37,6 @@ fun AdvancedProfileScreen(
     id : Int = 0
 ) {
     val viewModel: UserDetailsViewModel = viewModel()
-    val choices = listOf("oui","non")
-    val suggestions = ArrayList<String>()
-    suggestions.add("oui")
-    suggestions.add("non")
-
 
     if (id != 0) {
         DisposableEffect(key1 = id) {
@@ -49,7 +44,6 @@ fun AdvancedProfileScreen(
             onDispose { }
         }
     }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,7 +66,7 @@ fun AdvancedProfileScreen(
         ) {
 
             ExpandableCard(
-                items = choices,
+                items = viewModel.choices,
                 placeholder ="Fumeur" ,
                 value = viewModel.userDetails.fumeur?:"",
                 label = stringResource(R.string.fumer)  ,
@@ -80,7 +74,7 @@ fun AdvancedProfileScreen(
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.cigarette_icon)
             )
             ExpandableCard(
-                items = choices,
+                items = viewModel.choices,
                 label = stringResource(R.string.alcoholic),
                 value = viewModel.userDetails.alcohol?:"",
                 placeholder = stringResource(R.string.alcoholic),
@@ -88,14 +82,14 @@ fun AdvancedProfileScreen(
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.cup_icon)
             )
             MultiChoiceExpendableCard(
-                items = choices,
+                items = viewModel.choices,
                 onTitleChange = { viewModel.userDetails.algalimentaire.add(it) },
                 value = viewModel.userDetails.algalimentaire.joinToString(),
                 label = "Allergie alimentaire",
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.fork_knife_icon)
             )
             MultiChoiceExpendableCard(
-                items = choices,
+                items = viewModel.choices,
                 onTitleChange = { viewModel.userDetails.langues.add(it) },
                 value = viewModel.userDetails.langues.joinToString(),
                 label = "Langues",

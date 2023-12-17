@@ -54,7 +54,7 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.padding(8.dp))
             if (mealsViewModel.meals.value.isNotEmpty()) OnlineRecipes(navController,mealsViewModel)
             Spacer(modifier = Modifier.padding(8.dp))
-            ThemeListSection()
+            ThemeListSection(navController)
             Spacer(modifier = Modifier.padding(8.dp))
             RecipesCategorySection(navController)
         }
@@ -117,7 +117,9 @@ fun RecipesCategorySection(navController: NavController) {
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun ThemeListSection() {
+fun ThemeListSection(
+    navController: NavController
+) {
     val themes = listOf<Theme>(
         Theme(0, "Lecture", R.drawable.lecture),
         Theme(1, "L'ecriture", R.drawable.lecriture),
@@ -136,7 +138,13 @@ fun ThemeListSection() {
             Spacer(modifier = Modifier.padding(8.dp))
             LazyRow(modifier = Modifier.fillMaxWidth()) {
                 items(themes.size) {
-                    ThemeCard(name = themes[it].name,  image =  themes[it].image, onClick = {})
+                    ThemeCard(
+                        name = themes[it].name,
+                        image =  themes[it].image,
+                        onClick = {
+                            navController.navigate("category_screen/${themes[it].name}")
+                        }
+                    )
                 }
             }
         }

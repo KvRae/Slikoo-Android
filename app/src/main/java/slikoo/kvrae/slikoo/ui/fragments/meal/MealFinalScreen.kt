@@ -1,4 +1,4 @@
-package slikoo.kvrae.slikoo.ui.fragments.event
+package slikoo.kvrae.slikoo.ui.fragments.meal
 
 import android.content.Context
 import android.net.Uri
@@ -40,7 +40,6 @@ fun EventFinalFragment(
     onFragmentChange: (String) -> Unit,
     navController: NavController,
     mealsVm : MealsViewModel,
-
 ) {
     val coroutineScope = rememberCoroutineScope()
     Column(
@@ -96,6 +95,7 @@ fun EventFinalFragment(
             )
         }
         if (mealsVm.isLoading.value) LoadingDialog()
+
     }
 }
 

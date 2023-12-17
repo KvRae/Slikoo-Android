@@ -31,13 +31,13 @@ fun MealsByCategory(
     filter : String = ""
 ) {
     val viewModel : MealsViewModel = viewModel()
-    var filteredMeals = mutableListOf<Meal>()
+    val filteredMeals = mutableListOf<Meal>()
 
 
     if (filter.isNotEmpty()) {
         DisposableEffect(Unit) {
             filteredMeals.clear()
-            filteredMeals = viewModel.getMealsByCategory(filter=filter)
+            filteredMeals.addAll(viewModel.getMealsByCategory(filter=filter))
             onDispose { }
         }
     }

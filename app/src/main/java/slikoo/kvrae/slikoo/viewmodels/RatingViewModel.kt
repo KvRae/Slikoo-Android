@@ -8,16 +8,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import slikoo.kvrae.slikoo.data.datasources.entities.FeedBack
+import slikoo.kvrae.slikoo.data.datasources.entities.Feedback
 import slikoo.kvrae.slikoo.data.datasources.remote.FeedbackRemoteDataSource
-import slikoo.kvrae.slikoo.utils.TempSession
 
 class RatingViewModel : ViewModel() {
     val feedbackRDS = FeedbackRemoteDataSource()
 
-    var feedBacks = mutableStateListOf<FeedBack>()
+    var feedBacks = mutableStateListOf<Feedback>()
     var isLoading by mutableStateOf(false)
     var isError by mutableStateOf(false)
 
@@ -26,7 +24,7 @@ class RatingViewModel : ViewModel() {
             try {
                 isError = false
                 isLoading = true
-                feedBacks.addAll(async { feedbackRDS.getFeedbacks(TempSession.token,TempSession.user.id) }.await())
+                //feedBacks.addAll(async { feedbackRDS.getFeedbacks(TempSession.token,TempSession.user.id) }.await())
             }
             catch (e: Exception) {
                 e.printStackTrace()

@@ -34,6 +34,10 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -67,6 +71,9 @@ fun MealsDetailScreen(navController: NavController,
                       id: Int
 ) {
     val mealsViewModel: MealsViewModel = viewModel()
+    var toastMsg by remember {
+        mutableStateOf("")
+    }
 
     DisposableEffect(Unit) {
         mealsViewModel.getMealById(id)
@@ -138,8 +145,8 @@ fun MealsDetailScreen(navController: NavController,
         onDismiss = { mealsViewModel.isDialogOpen = false },
         onConfirm = {
             mealsViewModel.deleteMeal(mealsViewModel.meal.value.id)
-            makeToast(navController.context, "")
             mealsViewModel.isDialogOpen = false
+            toastMsg = "Repas supprimé"
         }
     )
     if (mealsViewModel.isDialogOpen && mealsViewModel.dialogContext == "book") CustomAlertDialog(
@@ -154,12 +161,11 @@ fun MealsDetailScreen(navController: NavController,
                     mealsViewModel.meal.value.id,
                     mealsViewModel.meal.value.iduser.toInt()
                 )
+                toastMsg = "Vous participez a cet evenement"
                 mealsViewModel.isDialogOpen = false
             }
         }
     )
-
-
 }
 
 @Composable

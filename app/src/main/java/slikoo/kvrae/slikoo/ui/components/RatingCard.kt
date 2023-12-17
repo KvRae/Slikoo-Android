@@ -29,14 +29,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
-import slikoo.kvrae.slikoo.data.datasources.entities.FeedBack
+import slikoo.kvrae.slikoo.data.datasources.entities.Feedback
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 
 
 
 
 @Composable
-fun RatingCard(feedBack : FeedBack) {
+fun RatingCard(feedBack : Feedback) {
     val dateFormat = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
     val date = dateFormat.format(feedBack.date)
     Card(
@@ -118,6 +118,7 @@ fun RatingBar(
 fun FeedbackRatingBar(
     maxRating: Int = 5,
     currentRating: Int = 0,
+    iconsSize : Int = 12,
     onRatingChanged: (Int) -> Unit
 ) {
     Row(Modifier.padding(4.dp)) {
@@ -128,8 +129,16 @@ fun FeedbackRatingBar(
                 tint = if (index < currentRating) LightSurface else Color.Gray,
                 modifier = Modifier
                     .clickable { onRatingChanged(index + 1) }
-                    .size(12.dp)
+                    .size(iconsSize.dp)
             )
         }
+    }
+}
+
+
+@Composable
+fun UserRatingBar() {
+    Row() {
+
     }
 }

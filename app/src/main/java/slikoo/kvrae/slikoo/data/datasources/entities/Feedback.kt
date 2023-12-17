@@ -2,7 +2,7 @@ package slikoo.kvrae.slikoo.data.datasources.entities
 
 import com.google.gson.annotations.SerializedName
 
-data class FeedBack(
+data class Feedback(
     val id: Int,
     @SerializedName("etoiles")
     var rate: Int,

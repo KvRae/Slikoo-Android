@@ -66,6 +66,7 @@ fun RecipeScreen(navController: NavController) {
                     )
             if (mealsViewModel.filteredMeals.isEmpty() && mealsViewModel.searchText.value.isNotEmpty())
                 TextElementScreen(text = stringResource(id = R.string.no_element_found))
+
             LazyVerticalGrid(columns = GridCells.Fixed(2),
                 userScrollEnabled = true,
                 state = scrollState,

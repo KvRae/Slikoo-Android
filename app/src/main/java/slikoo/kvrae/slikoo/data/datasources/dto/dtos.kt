@@ -1,7 +1,7 @@
 package slikoo.kvrae.slikoo.data.datasources.dto
 
 import com.google.gson.annotations.SerializedName
-import slikoo.kvrae.slikoo.data.datasources.entities.FeedBack
+import slikoo.kvrae.slikoo.data.datasources.entities.Feedback
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.data.datasources.entities.Notification
 import slikoo.kvrae.slikoo.data.datasources.entities.Reservation
@@ -64,7 +64,7 @@ data class UserResponse(
 
 data class FeedBacksResponse(
     @SerializedName("Feedbacks")
-    val feedbacks: List<FeedBack>
+    val feedbacks: List<Feedback>
 )
 
 data class UserDetailsRequest(
@@ -162,5 +162,10 @@ data class InvitationRequest (
     @SerializedName("informationComp")
     var informationComp: String? = null
 
+)
+
+data class FeedbackResponse(
+    @SerializedName("Feedbacks")
+    val feedbacks: MutableList<Feedback>
 )
 

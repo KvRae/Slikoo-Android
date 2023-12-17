@@ -354,7 +354,9 @@ fun ProfileContent(
         }
 
         stringResource(id = R.string.feedback) ->{
-            FeedbackFragment()
+            FeedbackFragment(
+                navController = navController,
+            )
         }
     }
 }

@@ -1,4 +1,4 @@
-package slikoo.kvrae.slikoo.ui.fragments.event
+package slikoo.kvrae.slikoo.ui.fragments.meal
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

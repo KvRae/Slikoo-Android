@@ -37,8 +37,8 @@ fun UserOffersList(navController: NavController) {
     var isOpen by remember { mutableStateOf(false) }
     var mealId by remember { mutableStateOf(0) }
 
-    if (viewModel.myMeals.isNullOrEmpty())
-    DisposableEffect(Unit) {
+
+    DisposableEffect(viewModel.myMeals) {
         viewModel.getMyMeals()
         onDispose {}
     }
@@ -77,9 +77,9 @@ fun UserOffersList(navController: NavController) {
                 onDismiss = { isOpen = false },
                 onConfirm = {
                     viewModel.deleteMeal(mealId)
-                    makeToast(navController.context, "" )
-                    mealId = 0
                     isOpen = false
+
+
                 }
             )
             if (viewModel.myMeals.isEmpty()) TextElementScreen(backgound = LightError, text = "Aucune offre disponible")

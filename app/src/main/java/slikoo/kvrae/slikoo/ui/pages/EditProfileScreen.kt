@@ -52,7 +52,7 @@ import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.components.ProfileImagePicker
-import slikoo.kvrae.slikoo.ui.fragments.event.getRealPathFromURI
+import slikoo.kvrae.slikoo.ui.fragments.meal.getRealPathFromURI
 import slikoo.kvrae.slikoo.ui.fragments.profile.makeToast
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
