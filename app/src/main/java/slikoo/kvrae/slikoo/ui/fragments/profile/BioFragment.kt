@@ -30,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.entities.UserDetails
+import slikoo.kvrae.slikoo.ui.components.UserRatingBar
 import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
@@ -38,49 +39,76 @@ import slikoo.kvrae.slikoo.viewmodels.UserDetailsViewModel
 
 
 @Composable
-fun BioFragment(user : User) {
+fun BioFragment(user: User) {
     val viewModel: UserDetailsViewModel = viewModel()
     if (user.Hasdetails) {
-        DisposableEffect(Unit ){
+        DisposableEffect(Unit) {
             viewModel.getUserDetails(id = user.id)
-            onDispose {  }
+            onDispose { }
         }
 
     }
 
     if (user.Hasdetails && viewModel.userDetails.id != 0)
-        Column(modifier = Modifier
-            .fillMaxSize(1f)
-            .padding(4.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(1f)
+                .padding(4.dp)
+        ) {
             SocialMediaSection(
                 userDetail = viewModel.userDetails
             )
             Spacer(modifier = Modifier.padding(16.dp))
-        BioHeaderSection(
-            icon = R.drawable.fork_knife_icon,
-            title = stringResource(R.string.allergies_alimentaires),
-            description = viewModel.userDetails.algalimentaire.joinToString { it }
-        )
-        BioHeaderSection(
-            icon = R.drawable.heart_icon,
-            title = stringResource(R.string.centres_d_interet),
-            description =  viewModel.userDetails.centreinteret.joinToString { it }
-        )
-        BioHeaderSection(
-            icon = R.drawable.language_icon,
-            title = stringResource(R.string.languages),
-            description = viewModel.userDetails.langues.joinToString { it }
-        )
-        BioDescriptionSection(userDetail = viewModel.userDetails)
-        BioHeaderSection(
-            icon = R.drawable.feedback,
-            title = stringResource(R.string.comments),
-            description = viewModel.userDetails.centreinteret.joinToString { it }
-        )
+            Divider(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .fillMaxWidth()
+            )
+            BioHeaderSection(
+                icon = R.drawable.fork_knife_icon,
+                title = stringResource(R.string.allergies_alimentaires),
+                description = viewModel.userDetails.algalimentaire.joinToString { it }
+            )
+            Divider(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .fillMaxWidth()
+            )
+            BioHeaderSection(
+                icon = R.drawable.heart_icon,
+                title = stringResource(R.string.centres_d_interet),
+                description = viewModel.userDetails.centreinteret.joinToString { it }
+            )
+            Divider(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .fillMaxWidth()
+            )
+            BioHeaderSection(
+                icon = R.drawable.language_icon,
+                title = stringResource(R.string.languages),
+                description = viewModel.userDetails.langues.joinToString { it }
+            )
+            Divider(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .fillMaxWidth()
+            )
+            BioDescriptionSection(userDetail = viewModel.userDetails)
+            Divider(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .fillMaxWidth()
+            )
+            BioHeaderSection(
+                icon = R.drawable.feedback,
+                title = stringResource(R.string.comments),
+            )
 
 
 
-    }
+
+        }
     else TextElementScreen(
         backgound = LightError,
         text = stringResource(id = R.string.no_description)
@@ -88,7 +116,7 @@ fun BioFragment(user : User) {
 }
 
 @Composable
-fun BioHeaderSection(icon: Int, title: String, description: String = "null") {
+fun BioHeaderSection(icon: Int, title: String, description: String = "") {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -105,22 +133,28 @@ fun BioHeaderSection(icon: Int, title: String, description: String = "null") {
                 fontWeight = FontWeight.Bold
             )
         }
-        Spacer(modifier = Modifier.padding(4.dp))
-        Text(
-            text = description,
-            color = Color.Gray,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 2,
-
-
+        if (description.isNotEmpty()) {
+            Spacer(modifier = Modifier.padding(4.dp))
+            Text(
+                text = description,
+                color = Color.Gray,
+                fontSize = 12.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.Medium
             )
-        Divider(
-            modifier = Modifier
-                .padding(4.dp)
-                .fillMaxWidth()
-        )
+        }
+
+        if (title == stringResource(id = R.string.comments)) {
+
+            Column {
+                repeat(
+                    5
+                ){
+                    UserRatingBar()
+                }
+            }
+        }
     }
 }
 

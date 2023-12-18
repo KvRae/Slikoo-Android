@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Done
-import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -65,7 +64,9 @@ fun FeedbackFragment(navController: NavController) {
 
         }
         if (viewModel.isLoading)
-            LoadingScreen()
+            LoadingScreen(
+                background = LightError
+            )
     }
 
 }
@@ -82,37 +83,39 @@ fun MealsSection(
         LazyRow(
             content = {
                 items(vm.reservations.size) {
-                    for (feedback in vm.feedbacks) {
-                        if (feedback.providerId == vm.reservations[it].user?.id.toString()) {
-                            MealCardWrapper(
-                                title =
-                                stringResource(id = R.string.by) +
-                                        (vm.reservations[it].user?.nom
-                                            ?: "") + " " + (vm.reservations[it].user?.prenom
-                                    ?: ""),
-                                image = (vm.reservations[it].meal?.avatarUrl.plus(vm.reservations[it].meal?.avatar)),
-                                color = LightGreen,
-                                icon = Icons.Rounded.Check,
-                                onClick = {
-                                    navController.navigate("feedback/${vm.reservations[it].meal?.id}")
-                                }
-                            )
-                        } else {
-                            MealCardWrapper(
-                                title =
-                                stringResource(id = R.string.by) +
-                                        (vm.reservations[it].user?.nom
-                                            ?: "") + " " + (vm.reservations[it].user?.prenom
-                                    ?: ""),
-                                image = (vm.reservations[it].meal?.avatarUrl.plus(vm.reservations[it].meal?.avatar)),
-                                color = LightGreen,
-                                icon = Icons.Rounded.Place,
-                                onClick = {
-                                    navController.navigate("feedback_screen/${vm.reservations[it].meal?.id}/${0}")
-                                }
-                            )
-                        }
-                    }
+                    //for (feedback in vm.feedbacks){
+                    //if (feedback.providerId == vm.reservations[it].user?.id.toString()) {
+                    if (vm.reservations[it].user != null  && vm.reservations[it].meal != null)
+                        MealCardWrapper(
+                            title =
+                            stringResource(id = R.string.by) +
+                                    (vm.reservations[it].user?.nom
+                                        ?: "") + " " + (vm.reservations[it].user?.prenom
+                                ?: ""),
+                            image = (vm.reservations[it].meal?.avatarUrl.plus(vm.reservations[it].meal?.avatar)),
+                            color = LightGreen,
+                            icon = Icons.Rounded.Check,
+                            onClick = {
+                                navController.navigate("feedback_screen/${vm.reservations[it].meal?.id}/${vm.reservations[it].user?.id}")
+                            }
+                        )
+                    //} else {
+//                            MealCardWrapper(
+//                                title =
+//                                stringResource(id = R.string.by) +
+//                                        (vm.reservations[it].user?.nom
+//                                            ?: "") + " " + (vm.reservations[it].user?.prenom
+//                                    ?: ""),
+//                                image = (vm.reservations[it].meal?.avatarUrl.plus(vm.reservations[it].meal?.avatar)),
+//                                color = LightGreen,
+//                                icon = Icons.Rounded.Place,
+//                                onClick = {
+//                                    navController.navigate("feedback_screen/${vm.reservations[it].meal?.id}/${0}")
+//                                }
+//                            )
+//                        }
+//                }
+
 
                 }
 

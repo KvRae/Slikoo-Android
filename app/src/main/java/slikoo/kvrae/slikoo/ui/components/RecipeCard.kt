@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -38,6 +39,7 @@ import com.valentinilk.shimmer.shimmer
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.ui.theme.LightError
+import slikoo.kvrae.slikoo.ui.theme.LightGrey
 import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 
 
@@ -169,12 +171,12 @@ fun ShimmerRecipeCard() {
 
 
 @Composable
-fun UserEventCard(meal : Meal,
-                  navController: NavController,
-                  onDelete: () -> Unit = {},
+fun UserEventCard(
+    meal: Meal,
+    navController: NavController,
+    onDelete: () -> Unit = {},
+    onEdit: () -> Unit = {}
 ) {
-
-
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -184,11 +186,16 @@ fun UserEventCard(meal : Meal,
         elevation = 4.dp,
 
         ) {
-        Column(modifier= Modifier.fillMaxSize()) {
+        Column(modifier= Modifier.fillMaxSize(1f)) {
             RecipeCardContent(meal = meal , navController = navController )
+            Divider(color = LightGrey, thickness = 0.5.dp,
+                modifier = Modifier.padding(
+                    start = 8.dp,
+                    end = 8.dp)
+            )
             EventManagementBar(onDelete = {
                 onDelete()
-            }, onEdit = { /*TODO*/ })
+            }, onEdit = { onEdit() })
         }
 
     }

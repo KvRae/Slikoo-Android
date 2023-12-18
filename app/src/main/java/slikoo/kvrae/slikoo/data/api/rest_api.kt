@@ -40,6 +40,7 @@ import slikoo.kvrae.slikoo.data.datasources.dto.UpdatePasswordResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.UserDetailResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.UserDetailsRequest
 import slikoo.kvrae.slikoo.data.datasources.dto.UserResponse
+import slikoo.kvrae.slikoo.data.datasources.entities.Feedback
 import slikoo.kvrae.slikoo.data.datasources.entities.Invitation
 
 
@@ -159,13 +160,8 @@ interface ApiServices {
 
 
 
-
-
-
-
-
-
     /************************** Post Requests **************************/
+
 
 
 
@@ -286,6 +282,14 @@ interface ApiServices {
     suspend fun acceptInvitation(
         @Header("Authorization") token: String,
         @Body body : InvitationRequest
+    ): Response<ResponseSlk>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("makefeedback")
+    suspend fun makeFeedback(
+        @Header("Authorization") token: String,
+        @Body body : Feedback
     ): Response<ResponseSlk>
 
 

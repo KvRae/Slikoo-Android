@@ -34,6 +34,7 @@ class ReservationViewModel : ViewModel() {
                 isError = true
             } finally {
                 isLoading = false
+                reservations.reverse()
             }
         }
     }

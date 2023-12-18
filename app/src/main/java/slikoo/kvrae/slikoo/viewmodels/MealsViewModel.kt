@@ -28,7 +28,6 @@ class MealsViewModel: ViewModel() {
     var motif by mutableStateOf("")
     // Lists
     var myMeals = mutableStateListOf<Meal>()
-
     var meals = mutableStateOf(mutableListOf<Meal>())
     var filteredMeals by mutableStateOf(mutableListOf<Meal>())
     // Boolean mutable variables
@@ -75,9 +74,11 @@ class MealsViewModel: ViewModel() {
         viewModelScope.launch {
             try {
                 isError = false
+                isLoading.value = true
                 meals.value.clear()
                 meals.value = async {mealRemoteDataSource.getAllMeals()}.await()
-                async { filteredMeals.addAll(meals.value) }.await()
+                filteredMeals.clear()
+                filteredMeals.addAll(async { (meals.value) }.await())
 
             } catch (e: Exception) {
                 meals.value.clear()
@@ -111,14 +112,24 @@ class MealsViewModel: ViewModel() {
     }
 
 
-    fun getMyMeals()  {
+    fun getMyMeals() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                isLoading.value = true
                 isError = false
-                async { mealRemoteDataSource.getMyMeals(meals = myMeals, token = TempSession.token, id = TempSession.user.id) }.await()
+                val result = async {
+                    myMeals.clear()
+                    mealRemoteDataSource.getMyMeals(
+                        meals = myMeals,
+                        token = TempSession.token, id = TempSession.user.id
+                    )
+                }
+                result.await()
             } catch (e: Exception) {
                 isError = true
                 myMeals.clear()
+            } finally {
+                isLoading.value = false
             }
 
         }

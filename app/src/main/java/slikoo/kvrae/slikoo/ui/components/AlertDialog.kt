@@ -18,6 +18,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -44,63 +45,57 @@ import slikoo.kvrae.slikoo.ui.theme.LightSurface
 fun CustomAlertDialog(
     title: String = stringResource(R.string.title),
     message: String = stringResource(R.string.message),
-    dismissText : String = "",
-    confirmText : String = stringResource(R.string.yes),
+    dismissText: String = "",
+    confirmText: String = stringResource(R.string.yes),
     showDialog: Boolean = true,
     onDismiss: () -> Unit = {},
     onConfirm: () -> Unit = {}
 ) {
     if (showDialog)
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(LightBackground.copy(alpha = 0.2f))
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            AlertDialog(
-                onDismissRequest = { onDismiss() },
-                properties = DialogProperties(
-                    dismissOnBackPress = false,
-                    dismissOnClickOutside = false,
+
+        AlertDialog(
+            onDismissRequest = { onDismiss() },
+            properties = DialogProperties(
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false,
 
 
-                    ),
-                title = {
+                ),
+            title = {
+                Text(
+                    text = title,
+                    color = LightBackground,
+                    fontWeight = FontWeight.Bold,
+
+                    )
+            },
+
+            text = { Text(text = message) },
+            confirmButton = {
+                Button(
+                    onClick = { onConfirm() },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = LightPrimary,
+                        contentColor = LightError
+                    )
+                ) {
+                    Text(text = confirmText)
+                }
+            },
+            dismissButton = {
+                if (dismissText.isNotEmpty()) TextButton(onClick = { onDismiss() }) {
                     Text(
-                        text = title,
-                        color = LightBackground,
-                        fontWeight = FontWeight.Bold,
+                        text = dismissText,
+                        color = LightSurface,
+                    )
+                }
+            },
+            backgroundColor = LightError,
+            contentColor = LightBackground,
+            shape = RoundedCornerShape(16.dp)
+        )
 
-                        )
-                },
-
-                text = { Text(text = message) },
-                confirmButton = {
-                    Button(
-                        onClick = { onConfirm() },
-                        shape = RoundedCornerShape(16.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = LightPrimary,
-                            contentColor = LightError
-                        )
-                    ) {
-                        Text(text = confirmText)
-                    }
-                },
-                dismissButton = {
-                    if (dismissText.isNotEmpty()) TextButton(onClick = { onDismiss() }) {
-                        Text(
-                            text = dismissText,
-                            color = LightSurface,
-                        )
-                    }
-                },
-                backgroundColor = LightError,
-                contentColor = LightBackground,
-                shape = RoundedCornerShape(16.dp)
-            )
-        }
 
 }
 

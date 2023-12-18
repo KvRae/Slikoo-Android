@@ -21,13 +21,14 @@ class NotificationViewModel : ViewModel() {
         getNotifications()
     }
 
-    private fun getNotifications() {
+    fun getNotifications() {
         viewModelScope.launch(Dispatchers.IO) {
             val token = TempSession.token
             val email = TempSession.email
             val response = async { notificationRepository.getNotifications(token, email) }
             val result = response.await()
             if (result.isNotEmpty()) {
+                notifications.clear()
                 notifications.addAll(result)
                 notifications.reverse()
                 isLoading.value = false

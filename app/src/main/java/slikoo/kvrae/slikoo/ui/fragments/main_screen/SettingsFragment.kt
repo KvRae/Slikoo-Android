@@ -72,7 +72,7 @@ fun SettingsScreen(navController: NavController, user: User) {
                         actionIcon = Icons.Filled.KeyboardArrowRight,
                         icon = Icons.Filled.Lock,
                         onClick = {
-                            navController.navigate(AppScreenNavigator.UpadtePasswordAppScreen.route)
+                            navController.navigate(AppScreenNavigator.UpdatePasswordAppScreen.route)
                         })
                 }
                 item {

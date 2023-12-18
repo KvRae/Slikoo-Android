@@ -22,15 +22,16 @@ import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.theme.LightGrey
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
-import slikoo.kvrae.slikoo.ui.theme.LightSecondaryVariant
 
 
 @Composable
-fun LoadingScreen() {
+fun LoadingScreen(
+    background: Color = LightSecondary
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = LightSecondary),
+            .background(color = background),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
@@ -60,7 +61,7 @@ fun TextElementScreen(
 fun TextWithImageScreen(
     imageVector: ImageVector,
     text: String,
-    backgound: Color = LightSecondaryVariant
+    backgound: Color = LightSecondary
 ) {
     Column(
         modifier = Modifier

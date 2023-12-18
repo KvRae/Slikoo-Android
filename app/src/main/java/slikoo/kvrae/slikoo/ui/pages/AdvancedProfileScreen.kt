@@ -50,7 +50,7 @@ fun AdvancedProfileScreen(
             .statusBarsPadding()
             .navigationBarsPadding()
             .background(color = LightSecondary)
-           ,
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -64,7 +64,6 @@ fun AdvancedProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-
             ExpandableCard(
                 items = viewModel.choices,
                 placeholder ="Fumeur" ,
@@ -89,15 +88,25 @@ fun AdvancedProfileScreen(
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.fork_knife_icon)
             )
             MultiChoiceExpendableCard(
-                items = viewModel.choices,
-                onTitleChange = { viewModel.userDetails.langues.add(it) },
+                items = viewModel.langues,
+                onTitleChange = {
+                                if (viewModel.userDetails.langues.contains(it)) {
+                                    viewModel.userDetails.langues.remove(it)
+                                } else {
+                                    viewModel.userDetails.langues.add(it)
+                                }
+                },
                 value = viewModel.userDetails.langues.joinToString(),
                 label = "Langues",
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.language_icon)
             )
             CustomTextField(
                 onChange = {
-                    viewModel.userDetails.centreinteret.add(it)
+                    if (viewModel.userDetails.centreinteret.contains(it)) {
+                        viewModel.userDetails.centreinteret.remove(it)
+                    } else {
+                        viewModel.userDetails.centreinteret.add(it)
+                    }
                 },
                 value = viewModel.userDetails.centreinteret.joinToString(),
                 label = "Centres d'interet",

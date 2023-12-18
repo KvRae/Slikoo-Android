@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import slikoo.kvrae.slikoo.ui.pages.AdvancedProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.AnimatedSplashScreen
+import slikoo.kvrae.slikoo.ui.pages.EditMealScreen
 import slikoo.kvrae.slikoo.ui.pages.EditProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.FeedbackForm
 import slikoo.kvrae.slikoo.ui.pages.ForgetPasswordScreen
@@ -33,7 +34,7 @@ fun App() {
 }
 
 sealed class AppScreenNavigator(val route: String) {
-    object EventScreen : MainScreenNavigator("Organiser/{id}")
+    object EventScreen : MainScreenNavigator("organiser")
     object SplashAppScreen : AppScreenNavigator("splash_screen")
     object SignInAppScreen : AppScreenNavigator("sign_in_screen")
     object SignUpAppScreen : AppScreenNavigator("sign_up_screen")
@@ -44,9 +45,11 @@ sealed class AppScreenNavigator(val route: String) {
     object AdvancedEditProfilesAppScreen : AppScreenNavigator("advanced_edit_profile_screen/{id}")
     object EventDetailsAppScreen : AppScreenNavigator("event_details_screen/{id}")
     object CategoryAppScreen : AppScreenNavigator("category_screen/{filter}")
-    object UpadtePasswordAppScreen : AppScreenNavigator("update_password_screen")
-    object UserProfilAppScreen : AppScreenNavigator("user_profile_screen/{id}")
+    object UpdatePasswordAppScreen : AppScreenNavigator("update_password_screen")
+    object UserProfileAppScreen : AppScreenNavigator("user_profile_screen/{id}")
     object FeedbackAppScreen : AppScreenNavigator("feedback_screen/{idMeal}/{idUser}")
+    object EditMealAppScreen : AppScreenNavigator("edit_meal_screen/{idMeal}")
+
 }
 
 sealed class SignUpNavigator(val route: String) {
@@ -100,16 +103,8 @@ fun Navigation() {
         composable(route = AppScreenNavigator.ProfileAppScreen.route) {
             ProfileScreen(navController = navController)
         }
-        composable(
-            route = AppScreenNavigator.EventScreen.route,
-            arguments = listOf(navArgument("id") {
-                type = NavType.IntType
-            })
-        ) {
-            MealOrganizeScreen(
-                navController = navController,
-                idMeal = it.arguments?.getInt("id") ?: 0
-            )
+        composable(route = AppScreenNavigator.EventScreen.route) {
+            MealOrganizeScreen(navController = navController,)
         }
         composable(
             route = AppScreenNavigator.EventDetailsAppScreen.route,
@@ -146,12 +141,12 @@ fun Navigation() {
                 filter = it.arguments?.getString("filter") ?: ""
             )
         }
-        composable(route = AppScreenNavigator.UpadtePasswordAppScreen.route) {
+        composable(route = AppScreenNavigator.UpdatePasswordAppScreen.route) {
            UpdatePasswordScreen(navController = navController)
         }
 
         composable(
-            route = AppScreenNavigator.UserProfilAppScreen.route,
+            route = AppScreenNavigator.UserProfileAppScreen.route,
             arguments = listOf(navArgument("id") {
                 type = NavType.IntType
             })
@@ -178,6 +173,17 @@ fun Navigation() {
                 navController = navController,
                 idMeal = it.arguments?.getInt("idMeal") ?: 0,
                 idUser = it.arguments?.getInt("idUser") ?: 0
+            )
+        }
+        composable(route = AppScreenNavigator.EditMealAppScreen.route,
+            arguments = listOf(navArgument("idMeal") {
+                type = NavType.IntType
+            })
+        )
+        {
+            EditMealScreen(
+                navController = navController,
+                idMeal = it.arguments?.getInt("idMeal") ?: 0
             )
         }
     }

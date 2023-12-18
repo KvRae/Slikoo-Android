@@ -146,7 +146,7 @@ fun MainScreen(navController: NavController,
         floatingActionButton = {
             if (title == MainScreenNavigator.RecipeScreen.route && viewModel.user.verified && viewModel.user.Hasdetails)
                 FloatingActionButton(
-                    onClick = { navController.navigate("Organiser/"+"${0}" ) },
+                    onClick = { navController.navigate("Organiser" ) },
                     backgroundColor = LightPrimary,
                     contentColor = LightError
                 ) {

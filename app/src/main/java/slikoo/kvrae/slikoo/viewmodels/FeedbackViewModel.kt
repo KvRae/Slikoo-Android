@@ -19,9 +19,10 @@ import slikoo.kvrae.slikoo.data.datasources.remote.ReservationRemoteDataSource
 import slikoo.kvrae.slikoo.utils.TempSession
 
 class FeedbackViewModel : ViewModel() {
-    val reservationRDS: ReservationRemoteDataSource = ReservationRemoteDataSource()
-    val invitationRDS: InvitationsRemoteDataSource = InvitationsRemoteDataSource()
-    val feedbackRDS: FeedbackRemoteDataSource = FeedbackRemoteDataSource()
+
+    private val reservationRDS: ReservationRemoteDataSource = ReservationRemoteDataSource()
+    private val invitationRDS: InvitationsRemoteDataSource = InvitationsRemoteDataSource()
+    private val feedbackRDS: FeedbackRemoteDataSource = FeedbackRemoteDataSource()
 
     var reservations = mutableStateListOf<Reservation>()
     val invitations = mutableStateListOf<Invitation>()
@@ -34,7 +35,7 @@ class FeedbackViewModel : ViewModel() {
     private fun getAllReservations() {
         viewModelScope.launch(Dispatchers.IO) {
             val filteredReservations: MutableList<Reservation>
-            reservations.clear()
+
             try {
                 isLoading = true
                 filteredReservations = async {
@@ -61,7 +62,7 @@ class FeedbackViewModel : ViewModel() {
     private fun getAllInvitations() {
         viewModelScope.launch(Dispatchers.IO) {
             val invitationsFiltered = mutableListOf<Invitation>()
-            invitations.clear()
+
             try {
                 isLoading = true
                 async {
@@ -91,7 +92,9 @@ class FeedbackViewModel : ViewModel() {
             try {
                 isLoading = true
                 val result = async {
+                    invitations.clear()
                     getAllInvitations()
+                    reservations.clear()
                     getAllReservations()
                     getMySubmittedFeedbacks()
                 }
@@ -125,6 +128,10 @@ class FeedbackViewModel : ViewModel() {
                 Log.d ("feedbacks for feedback", feedbacks.size.toString())
             }
         }
+    }
+
+    fun getFeedbackById(){
+
     }
 
 }

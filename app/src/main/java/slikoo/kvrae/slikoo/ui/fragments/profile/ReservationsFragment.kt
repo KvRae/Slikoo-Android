@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,7 +27,6 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -36,9 +36,16 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
 import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
+import slikoo.kvrae.slikoo.ui.theme.LightBackground
+import slikoo.kvrae.slikoo.ui.theme.LightError
+import slikoo.kvrae.slikoo.ui.theme.LightGreen
+import slikoo.kvrae.slikoo.ui.theme.LightGrey
+import slikoo.kvrae.slikoo.ui.theme.LightRed
 import slikoo.kvrae.slikoo.ui.theme.LightYellow
 import slikoo.kvrae.slikoo.viewmodels.ReservationViewModel
 
@@ -47,24 +54,31 @@ import slikoo.kvrae.slikoo.viewmodels.ReservationViewModel
 fun ReservationFragment(
     navController: NavController
 ) {
-    val viewModel : ReservationViewModel = viewModel()
+    val viewModel: ReservationViewModel = viewModel()
     if (viewModel.reservations.isEmpty()) {
-        DisposableEffect(Unit){
+        DisposableEffect(Unit) {
             viewModel.getAllReservations()
-            onDispose {  }
+            onDispose { }
         }
     }
 
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(8.dp)
-        ) {
-            if (viewModel.reservations.isNotEmpty())
+    Box(
+        modifier = Modifier
+            .fillMaxSize(1f)
+    ) {
+        if (viewModel.reservations.isNotEmpty())
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(
+                    isRefreshing = viewModel.isLoading
+                ),
+                onRefresh = {
+                    viewModel.getAllReservations()
+                }
+            ) {
                 LazyColumn() {
                     items(viewModel.reservations.size) { index ->
+
                         ReservationCard(
                             navController = navController,
                             title = stringResource(R.string.organiser),
@@ -78,20 +92,29 @@ fun ReservationFragment(
                             description = viewModel.reservations[index].motif ?: "",
                             status = viewModel.reservations[index].status ?: "",
                             dissmissText = stringResource(R.string.cancel_pay),
-                            onDismiss = { viewModel.declineReservation(
-                                idMeal = viewModel.reservations[index].meal?.id ?: 0,
-                            ) },
+                            onDismiss = {
+                                viewModel.declineReservation(
+                                    idMeal = viewModel.reservations[index].meal?.id ?: 0,
+                                )
+                            },
                             confirmText = stringResource(R.string.pay),
                             onConfirm = { /*TODO*/ }
                         )
+
                     }
                 }
-            if (viewModel.reservations.isEmpty()) TextElementScreen(text = stringResource(id = R.string.no_reservations))
-            if (viewModel.isLoading) LoadingScreen()
-            if (viewModel.isError) {
-                TextElementScreen(text = "Something went wrong")
             }
+        if (viewModel.reservations.isEmpty())
+            TextElementScreen(
+                text = stringResource(id = R.string.no_reservations)
+            )
+        if (viewModel.isLoading) LoadingScreen(
+            background = LightError
+        )
+        if (viewModel.isError) {
+            TextElementScreen(text = "Something went wrong")
         }
+    }
 }
 
 
@@ -99,22 +122,22 @@ fun ReservationFragment(
 fun ReservationCard(
     title: String = "",
     subtitle: String = "",
-    offreText : String = "",
-    status : String = "",
-    description : String = "",
-    dissmissText : String,
-    idUser : Int = 0,
-    mealAvatar : String = "",
-    onDismiss : () -> Unit,
-    confirmText : String,
+    offreText: String = "",
+    status: String = "",
+    description: String = "",
+    dissmissText: String,
+    idUser: Int = 0,
+    mealAvatar: String = "",
+    onDismiss: () -> Unit,
+    confirmText: String,
     navController: NavController,
-    onConfirm : () -> Unit
+    onConfirm: () -> Unit
 ) {
     val offerColor = when (offreText) {
-        "Pending" -> Color(0xFFFFC107)
-        "Accepted" -> Color(0xFF00FF00)
-        "Rejected" -> Color(0xFFFF0000)
-        else -> Color(0xFF000000)
+        "Pending" -> LightYellow
+        "Accepted" -> LightGreen
+        "Rejected" -> LightRed
+        else -> LightBackground
     }
     val offerValue = when (offreText) {
         "Pending" -> stringResource(R.string.pending)
@@ -133,7 +156,7 @@ fun ReservationCard(
         Row {
             AsyncImage(
                 model = mealAvatar,
-                contentDescription =  "image",
+                contentDescription = "image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth(0.3f)
@@ -151,7 +174,8 @@ fun ReservationCard(
                         .fillMaxWidth(1f),
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                 ) {
-                    Text(text = title,
+                    Text(
+                        text = title,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -170,33 +194,37 @@ fun ReservationCard(
 
                 }
 
-                Text(text = subtitle,
+                Text(
+                    text = subtitle,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium
                 )
-                Text(text = offerValue,
+                Text(
+                    text = offerValue,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium,
                     color = offerColor
                 )
 
-                Text(text = "Motif",
+                Text(
+                    text = "Motif",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium
                 )
-                Text(text = description,
+                Text(
+                    text = description,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium
                 )
-                Divider(Modifier.padding(8.dp), Color(0xFF818181), thickness = 0.5.dp)
+                Divider(Modifier.padding(8.dp), LightGrey, thickness = 0.5.dp)
                 when (status) {
                     "Pending" -> Row {
                         OutlinedButton(
                             onClick = { onDismiss() },
                             shape = RoundedCornerShape(16.dp),
-                            border = BorderStroke(1.dp, Color(0xFFFF0000)),
+                            border = BorderStroke(1.dp, LightRed),
                             colors = ButtonDefaults.outlinedButtonColors(
-                                contentColor = Color(0xFFFF0000),
+                                contentColor = LightRed,
                             )
                         ) {
                             Icon(imageVector = Icons.Rounded.Close, contentDescription = "")
@@ -212,9 +240,9 @@ fun ReservationCard(
                         OutlinedButton(
                             onClick = { onConfirm() },
                             shape = RoundedCornerShape(16.dp),
-                            border = BorderStroke(1.dp, Color(0xFF00FF00)),
+                            border = BorderStroke(1.dp, LightGreen),
                             colors = ButtonDefaults.outlinedButtonColors(
-                                contentColor = Color(0xFF00FF00),
+                                contentColor = LightGreen,
                             )
                         ) {
                             Icon(imageVector = Icons.Rounded.Check, contentDescription = "")
@@ -227,28 +255,33 @@ fun ReservationCard(
                             )
                         }
                     }
+
                     "Accepted" -> Row(
                         modifier = Modifier
                             .fillMaxWidth(1f),
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(text = stringResource(R.string.invitation_accepted),
+                        Text(
+                            text = stringResource(R.string.invitation_accepted),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color(0xFF00FF00)
+                            color = LightGreen
                         )
                     }
+
                     "Rejected" -> Row(
                         modifier = Modifier
                             .fillMaxWidth(1f),
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(text = stringResource(R.string.invitation_rejected),
+                        Text(
+                            text = stringResource(R.string.invitation_rejected),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color(0xFFFF0000)
+                            color = LightRed
                         )
                     }
+
                     else -> Row {}
                 }
 

@@ -40,43 +40,70 @@ private val lightColorScheme = lightColorScheme(
 
 @Composable
 fun SlikooTheme(
-//    darkTheme: Boolean = isSystemInDarkTheme(),
-//    dynamicColor: Boolean = false, // Dynamic color is available on Android 12+
     content: @Composable () -> Unit
 ) {
-//    val colorScheme = when {
-////        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-////            val context = LocalContext.current
-////            if (darkTheme) dynamicLightColorScheme(context) else dynamicLightColorScheme(context)
-////        }
-//
-//        darkTheme -> LightColorScheme
-//        else -> LightColorScheme
-//    }
-    // Set the status bar to be transparent
     val view = LocalView.current
+
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = Color.Transparent.toArgb()
             window.navigationBarColor = Color.Transparent.toArgb()
-            WindowCompat.getInsetsController(window, view)
-                .isAppearanceLightStatusBars = false //dynamicColor || darkTheme
 
+            WindowCompat.getInsetsController(window, view).apply {
+                isAppearanceLightStatusBars = false // Set to true for light text, false for dark text
+                isAppearanceLightNavigationBars = false // Set to true for light text, false for dark text
+            }
         }
     }
-
-    // Set the navigation bar to be transparent and light
-    SideEffect {
-        val window = (view.context as Activity).window
-        window.navigationBarColor = Color.Transparent.toArgb()
-        WindowCompat.getInsetsController(window, view)
-            .isAppearanceLightNavigationBars =  false //dynamicColor || darkTheme
-    }
-
     MaterialTheme(
         colorScheme = lightColorScheme,
         typography = Typography,
         content = content
     )
 }
+
+
+
+//@Composable
+//fun SlikooTheme(
+////    darkTheme: Boolean = isSystemInDarkTheme(),
+////    dynamicColor: Boolean = false, // Dynamic color is available on Android 12+
+//    content: @Composable () -> Unit
+//) {
+////    val colorScheme = when {
+//////        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+//////            val context = LocalContext.current
+//////            if (darkTheme) dynamicLightColorScheme(context) else dynamicLightColorScheme(context)
+//////        }
+////
+////        darkTheme -> LightColorScheme
+////        else -> LightColorScheme
+////    }
+//    // Set the status bar to be transparent
+//    val view = LocalView.current
+//    if (!view.isInEditMode) {
+//        SideEffect {
+//            val window = (view.context as Activity).window
+//            window.statusBarColor = Color.Transparent.toArgb()
+//            window.navigationBarColor = Color.Transparent.toArgb()
+//            WindowCompat.getInsetsController(window, view)
+//                .isAppearanceLightStatusBars = false //dynamicColor || darkTheme
+//
+//        }
+//    }
+//
+//    // Set the navigation bar to be transparent and light
+//    SideEffect {
+//        val window = (view.context as Activity).window
+//        window.navigationBarColor = Color.Transparent.toArgb()
+//        WindowCompat.getInsetsController(window, view)
+//            .isAppearanceLightNavigationBars =  false //dynamicColor || darkTheme
+//    }
+//
+//    MaterialTheme(
+//        colorScheme = lightColorScheme,
+//        typography = Typography,
+//        content = content
+//    )
+//}

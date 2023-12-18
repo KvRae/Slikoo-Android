@@ -11,11 +11,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.NotificationItem
 import slikoo.kvrae.slikoo.ui.components.NotificationItemShimmer
@@ -27,6 +32,9 @@ import slikoo.kvrae.slikoo.viewmodels.NotificationViewModel
 fun NotificationScreen(navController: NavController) {
     val notificationViewModel: NotificationViewModel = viewModel()
     val scrollState = rememberScrollState()
+    val isLoading by remember {
+        mutableStateOf(notificationViewModel.isLoading.value)
+    }
 
     Box(
         modifier = Modifier
@@ -36,12 +44,21 @@ fun NotificationScreen(navController: NavController) {
     ) {
         when {
             notificationViewModel.isLoading.value && notificationViewModel.notifications.isEmpty() -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                SwipeRefresh(
+                    state = rememberSwipeRefreshState(
+                        isRefreshing = isLoading
+                    ),
+                    onRefresh = {
+                        notificationViewModel.getNotifications()
+                    }
                 ) {
-                    items(6) {
-                        NotificationItemShimmer()
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        items(6) {
+                            NotificationItemShimmer()
+                        }
                     }
                 }
             }

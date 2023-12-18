@@ -41,8 +41,8 @@ class SignInViewModel : ViewModel() {
                 isLoading = true
                 token = async { userRDS.authUser(user) }.await()
                 isError = async { token.length <= 1 }.await()
-                if (token.length == 1) errorMessage = async {   "Bad credentials"  }.await()
-                if (token.isEmpty()) errorMessage =  async { "Something went wrong" }.await()
+                if (token.length == 1) errorMessage = async {   "informations d’identification Incorrect"  }.await()
+                if (token.isEmpty()) errorMessage =  async { "une erreur est survenue" }.await()
                 if (!isError) async { TempSession.token = token; TempSession.email =  user.email;navigate = true }.await()
             } catch (e: Exception) {
                 e.printStackTrace()

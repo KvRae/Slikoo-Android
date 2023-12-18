@@ -11,6 +11,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
 import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
@@ -36,47 +38,56 @@ fun InvitationsFragment(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(1f)
             .fillMaxHeight(1f),
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top,
     ) {
         if (viewModel.invitations.isNotEmpty()) {
-            LazyColumn(
-                content = {
-                    items(viewModel.invitations.size) { index ->
-                        ReservationCard(
-                            title = "Invité",
-                            status = viewModel.invitations[index].status?: "inconnu",
-                            subtitle = (viewModel.invitations[index].userDemander?.nom +
-                                    " " + viewModel.invitations[index].userDemander?.prenom)
-                            ,
-                            mealAvatar = viewModel.invitations[index].meal?.avatarUrl
-                                .plus(viewModel.invitations[index].meal?.avatar),
-                            description = viewModel.invitations[index].motif ?: "pas de motif",
-                            dissmissText = stringResource(R.string.delete),
-                            onDismiss = {
-                                viewModel.declineInvitation(
-                                    idMeal = viewModel.invitations[index].meal?.id ?: 0,
-                                    idDemander = viewModel.invitations[index].userDemander?.id ?: 0,
-                                    )
-                            },
-                            confirmText = stringResource(R.string.accept),
-                            navController = navController,
-                            onConfirm = {
-                                viewModel.acceptInvitation(
-                                    idMeal = viewModel.invitations[index].meal?.id.toString() ?: "",
-                                    informationComp = "",
-                                    idDemander = viewModel.invitations[index].userDemander?.id.toString()
-                                        ?: ""
+            SwipeRefresh(
+                state =  rememberSwipeRefreshState(isRefreshing = viewModel.isLoading),
+                onRefresh = { viewModel.getInvitations() }
+            ) {
+                LazyColumn(
+                    content = {
+                        items(viewModel.invitations.size) { index ->
+                            if (viewModel.invitations[index].meal != null){
+                                ReservationCard(
+                                    title = "Invité",
+                                    status = viewModel.invitations[index].status ?: "inconnu",
+                                    subtitle = (viewModel.invitations[index].userDemander?.nom +
+                                            " " + viewModel.invitations[index].userDemander?.prenom),
+                                    mealAvatar = viewModel.invitations[index].meal?.avatarUrl
+                                        .plus(viewModel.invitations[index].meal?.avatar),
+                                    description = viewModel.invitations[index].motif ?: "pas de motif",
+                                    dissmissText = stringResource(R.string.delete),
+                                    onDismiss = {
+                                        viewModel.declineInvitation(
+                                            idMeal = viewModel.invitations[index].meal?.id ?: 0,
+                                            idDemander = viewModel.invitations[index].userDemander?.id
+                                                ?: 0,
+                                        )
+                                    },
+                                    confirmText = stringResource(R.string.accept),
+                                    navController = navController,
+                                    onConfirm = {
+                                        viewModel.acceptInvitation(
+                                            idMeal = viewModel.invitations[index].meal?.id.toString()
+                                                ?: "",
+                                            informationComp = "",
+                                            idDemander = viewModel.invitations[index].userDemander?.id.toString()
+                                                ?: ""
+                                        )
+                                    },
+                                    idUser = viewModel.invitations[index].userDemander?.id ?: 0,
                                 )
-                            },
-                            idUser = viewModel.invitations[index].userDemander?.id ?: 0,
-                        )
+                            }
+                        }
                     }
-                }
-            )
-        } else TextElementScreen(backgound = LightError, text = stringResource(R.string.no_invits_text))
+                )
+            }
+        } else
+            TextElementScreen(backgound = LightError, text = stringResource(R.string.no_invits_text))
 
     }
-    if (viewModel.isLoading)  LoadingScreen()
+    if (viewModel.isLoading)  LoadingScreen(background = LightError)
 }

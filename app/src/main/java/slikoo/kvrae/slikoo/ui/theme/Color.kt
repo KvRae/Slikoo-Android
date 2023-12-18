@@ -32,7 +32,7 @@ val LightSurface = Color(0xFF16ABDB) // Default blue items
 val LightError = Color(0xFFFFFFFF)  // Error text
 val LightGrey = Color(0xFF7E7E7E) // Grey text
 val LightYellow = Color(0xFFFFC107) // Yellow text
-val LightGreen = Color(0xFF4CAF50) // Green text
+val LightGreen = Color(0xFF00FF00) // Green text
 val LightRed = Color(0xFFE53935) // Red text
 
 

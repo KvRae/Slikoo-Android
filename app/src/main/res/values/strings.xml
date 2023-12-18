@@ -192,4 +192,5 @@
     <string name="booked">Invitation envoyée</string>
     <string name="submit">Envoyer</string>
     <string name="your_feeback">Votre Avis</string>
+    <string name="no_meals">Pas de repas</string>
 </resources>

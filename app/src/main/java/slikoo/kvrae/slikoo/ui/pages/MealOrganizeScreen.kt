@@ -81,6 +81,7 @@ fun MealOrganizeScreen(
             TopAppBar(
                 modifier = Modifier.fillMaxWidth(),
                 backgroundColor = Color.Transparent,
+                elevation = 0.dp,
                 title = { Text(
                     text = stringResource(id = R.string.organize),
                     color = LightBackground,

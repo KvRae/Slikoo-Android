@@ -30,4 +30,28 @@ class FeedbackRemoteDataSource {
         }
     }
 
+    suspend fun submitFeedback(
+        feedback: Feedback,
+        token: String
+    ): Int {
+        return try {
+            val response = RetrofitInstance
+                .getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .makeFeedback(
+                    body = feedback,
+                    token = token
+                )
+            if (response.isSuccessful) {
+                response.body()?.code ?: 400
+            } else {
+                400
+            }
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+            500
+        }
+    }
+
 }

@@ -128,7 +128,7 @@ fun BottomNavigationBar(items : List<BottomNavItem>,
                     unselectedContentColor = LightSecondaryVariant,
                     onClick = {
                         if (item.name == "Organiser" && hasDetails){
-                            navController.navigate("Organiser"+"/"+ "${0}")
+                            navController.navigate("organiser")
                         }
                         if (!hasDetails && item.name == "Organiser"){
                             onMakeToast(navController.context, msg)

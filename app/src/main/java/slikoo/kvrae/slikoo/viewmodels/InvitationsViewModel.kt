@@ -34,6 +34,7 @@ class InvitationsViewModel : ViewModel() {
                 isError = true
             } finally {
                 isLoading = false
+                invitations.reverse()
             }
         }
 

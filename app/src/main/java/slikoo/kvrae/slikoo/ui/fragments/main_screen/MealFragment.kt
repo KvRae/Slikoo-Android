@@ -19,6 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBarWithFilter
@@ -67,17 +69,28 @@ fun RecipeScreen(navController: NavController) {
             if (mealsViewModel.filteredMeals.isEmpty() && mealsViewModel.searchText.value.isNotEmpty())
                 TextElementScreen(text = stringResource(id = R.string.no_element_found))
 
-            LazyVerticalGrid(columns = GridCells.Fixed(2),
-                userScrollEnabled = true,
-                state = scrollState,
-                content = {
-                    if (mealsViewModel.filteredMeals.isEmpty() && mealsViewModel.isLoading.value) items(6){ ShimmerRecipeCard() }
-                    items(mealsViewModel.filteredMeals.size) {
-                        RecipeCardContent(meal = mealsViewModel.filteredMeals[it],
-                            navController = navController)
-                    }
+            SwipeRefresh(
+                state =  rememberSwipeRefreshState(isRefreshing = mealsViewModel.isLoading.value),
+                onRefresh = {
+                    mealsViewModel.getAllMeals()
                 }
-            )
+            ) {
+                LazyVerticalGrid(columns = GridCells.Fixed(2),
+                    userScrollEnabled = true,
+                    state = scrollState,
+                    content = {
+                        if (mealsViewModel.filteredMeals.isEmpty() && mealsViewModel.isLoading.value) items(
+                            6
+                        ) { ShimmerRecipeCard() }
+                        items(mealsViewModel.filteredMeals.size) {
+                            RecipeCardContent(
+                                meal = mealsViewModel.filteredMeals[it],
+                                navController = navController
+                            )
+                        }
+                    }
+                )
+            }
             if (mealsViewModel.filteredMeals.isEmpty() && !mealsViewModel.isLoading.value)
                 TextElementScreen(text = stringResource(id = R.string.no_element_found))
 

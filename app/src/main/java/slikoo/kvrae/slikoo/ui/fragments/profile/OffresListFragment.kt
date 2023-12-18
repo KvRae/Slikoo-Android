@@ -17,15 +17,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.UserEventCard
 import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
-import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
+import slikoo.kvrae.slikoo.ui.pages.TextWithImageScreen
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
@@ -37,38 +41,50 @@ fun UserOffersList(navController: NavController) {
     var isOpen by remember { mutableStateOf(false) }
     var mealId by remember { mutableStateOf(0) }
 
-
-    DisposableEffect(viewModel.myMeals) {
-        viewModel.getMyMeals()
-        onDispose {}
-    }
+    if (viewModel.myMeals.isEmpty())
+        DisposableEffect(viewModel.myMeals) {
+            viewModel.getMyMeals()
+            onDispose {}
+        }
 
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize(1f),
         contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(1f)
                 .padding(4.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
         ) {
             if (viewModel.myMeals.isNotEmpty())
-                LazyVerticalGrid(columns = GridCells.Fixed(2),
-                userScrollEnabled = true,
-                state = scrollState,
-                content = {
-                    items(viewModel.myMeals.size) {
-                        UserEventCard(meal = viewModel.myMeals[it],
-                            navController = navController,
-                            onDelete = {
-                                isOpen = true
-                                mealId = viewModel.myMeals[it].id
-                            }
-                        )
+                SwipeRefresh(
+                    state = rememberSwipeRefreshState(
+                        isRefreshing = viewModel.isLoading.value
+                    ),
+                    onRefresh = {
+                        viewModel.getMyMeals()
                     }
-                })
+                ) {
+                    LazyVerticalGrid(columns = GridCells.Fixed(2),
+                        userScrollEnabled = true,
+                        state = scrollState,
+                        content = {
+                            items(viewModel.myMeals.size) {
+                                UserEventCard(meal = viewModel.myMeals[it],
+                                    navController = navController,
+                                    onDelete = {
+                                        isOpen = true
+                                        mealId = viewModel.myMeals[it].id
+                                    },
+                                    onEdit = {
+                                        navController.navigate("edit_meal/${viewModel.myMeals[it].id}")
+                                    }
+                                )
+                            }
+                        })
+                }
             if (isOpen) CustomAlertDialog(
                 title = stringResource(id = R.string.delete),
                 message = stringResource(R.string.delete_meal_description),
@@ -82,10 +98,14 @@ fun UserOffersList(navController: NavController) {
 
                 }
             )
-            if (viewModel.myMeals.isEmpty()) TextElementScreen(backgound = LightError, text = "Aucune offre disponible")
-
         }
-        if (viewModel.isLoading.value) LoadingScreen()
+        if (viewModel.myMeals.isEmpty() && !viewModel.isLoading.value) TextWithImageScreen(
+            imageVector = ImageVector.vectorResource(id =R.drawable.no_food),
+            text = stringResource(id = R.string.no_meals),
+            backgound = LightError)
+        if (viewModel.isLoading.value) LoadingScreen(
+            background = LightError
+        )
     }
 }
 

@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -22,9 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -135,10 +141,52 @@ fun FeedbackRatingBar(
     }
 }
 
-
+@Preview(showBackground = true)
 @Composable
 fun UserRatingBar() {
-    Row() {
+    Column(
 
+    ) {
+        Row {
+            //AsyncImage(model = , contentDescription = )
+            Image(painter = painterResource(
+                id =R.drawable.avatar),
+                contentDescription = "Avatar",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(30.dp)
+                    .padding(4.dp)
+            )
+
+            Column {
+                Text(
+                    text = "Karam Mannai",
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 10.sp,
+                    modifier = Modifier.padding(end = 4.dp, top = 1.dp, bottom = 0.dp),
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                )
+                FeedbackRatingBar(
+                    currentRating = 3,
+                    onRatingChanged = {},
+                    iconsSize = 8
+                )
+            }
+
+
+        }
+        Text(text = stringResource(id = R.string.welcome_sub_description),
+            fontSize = 8.sp,
+            fontWeight = FontWeight.Light,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 2,
+            modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 0.dp, bottom = 0.dp),
+        )
+        Divider(
+            modifier = Modifier
+                .padding(4.dp)
+                .fillMaxWidth()
+        )
     }
 }
