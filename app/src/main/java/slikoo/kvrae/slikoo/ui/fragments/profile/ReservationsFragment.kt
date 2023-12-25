@@ -27,8 +27,10 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -41,6 +43,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
 import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
+import slikoo.kvrae.slikoo.ui.pages.TextWithImageScreen
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightGreen
@@ -98,15 +101,17 @@ fun ReservationFragment(
                                 )
                             },
                             confirmText = stringResource(R.string.pay),
-                            onConfirm = { /*TODO*/ }
+                            onConfirm = { /*TODO*/ },
                         )
 
                     }
                 }
             }
         if (viewModel.reservations.isEmpty())
-            TextElementScreen(
-                text = stringResource(id = R.string.no_reservations)
+            TextWithImageScreen(
+                text = stringResource(id = R.string.no_reservations),
+                imageVector = ImageVector.vectorResource(id = R.drawable.no_drinks),
+                backgound = LightError
             )
         if (viewModel.isLoading) LoadingScreen(
             background = LightError
@@ -218,7 +223,7 @@ fun ReservationCard(
                 )
                 Divider(Modifier.padding(8.dp), LightGrey, thickness = 0.5.dp)
                 when (status) {
-                    "Pending" -> Row {
+                    "Accepted" -> Row {
                         OutlinedButton(
                             onClick = { onDismiss() },
                             shape = RoundedCornerShape(16.dp),
@@ -256,17 +261,28 @@ fun ReservationCard(
                         }
                     }
 
-                    "Accepted" -> Row(
+                    "Pending" -> Row(
                         modifier = Modifier
                             .fillMaxWidth(1f),
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(
-                            text = stringResource(R.string.invitation_accepted),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = LightGreen
-                        )
+                        OutlinedButton(
+                            onClick = { onDismiss() },
+                            shape = RoundedCornerShape(16.dp),
+                            border = BorderStroke(1.dp, LightRed),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = LightRed,
+                            )
+                        ) {
+                            Icon(imageVector = Icons.Rounded.Close, contentDescription = "")
+                            Text(
+                                text = dissmissText,
+                                style = TextStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 12.sp
+                                )
+                            )
+                        }
                     }
 
                     "Rejected" -> Row(
@@ -275,7 +291,7 @@ fun ReservationCard(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = stringResource(R.string.invitation_rejected),
+                            text = stringResource(R.string.reservation_rejected),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium,
                             color = LightRed

@@ -77,7 +77,7 @@ fun TextWithImageScreen(
             modifier = Modifier.size(128.dp)
         )
 
-        Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(32.dp))
         Text(text = text,
             color = LightGrey,
             fontWeight = FontWeight.Medium,

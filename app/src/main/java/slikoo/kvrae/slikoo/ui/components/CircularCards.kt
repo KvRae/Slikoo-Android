@@ -58,7 +58,8 @@ fun MealCardWrapper(
     title : String = "Meal Name",
     image : String = "banner",
     color : Color = LightPrimary,
-    icon : ImageVector = Icons.Filled.ThumbUp
+    icon : ImageVector = Icons.Filled.ThumbUp,
+
 ) {
     Column(
         modifier = modifier

@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -40,13 +43,14 @@ import slikoo.kvrae.slikoo.viewmodels.UserDetailsViewModel
 
 @Composable
 fun BioFragment(user: User) {
+
     val viewModel: UserDetailsViewModel = viewModel()
     if (user.Hasdetails) {
         DisposableEffect(Unit) {
             viewModel.getUserDetails(id = user.id)
-            onDispose { }
+            viewModel.getFeedbacks(id = user.id)
+            onDispose {}
         }
-
     }
 
     if (user.Hasdetails && viewModel.userDetails.id != 0)
@@ -54,6 +58,10 @@ fun BioFragment(user: User) {
             modifier = Modifier
                 .fillMaxSize(1f)
                 .padding(4.dp)
+                .verticalScroll(
+                    enabled = true,
+                    state = rememberScrollState()
+                )
         ) {
             SocialMediaSection(
                 userDetail = viewModel.userDetails
@@ -95,11 +103,6 @@ fun BioFragment(user: User) {
                     .fillMaxWidth()
             )
             BioDescriptionSection(userDetail = viewModel.userDetails)
-            Divider(
-                modifier = Modifier
-                    .padding(4.dp)
-                    .fillMaxWidth()
-            )
             BioHeaderSection(
                 icon = R.drawable.feedback,
                 title = stringResource(R.string.comments),
@@ -116,7 +119,12 @@ fun BioFragment(user: User) {
 }
 
 @Composable
-fun BioHeaderSection(icon: Int, title: String, description: String = "") {
+fun BioHeaderSection(
+    icon: Int,
+                     title: String,
+                     description: String = "",
+    vm : UserDetailsViewModel = viewModel()
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -146,13 +154,17 @@ fun BioHeaderSection(icon: Int, title: String, description: String = "") {
         }
 
         if (title == stringResource(id = R.string.comments)) {
-
+            Spacer(modifier = Modifier.padding(4.dp))
             Column {
-                repeat(
-                    5
-                ){
-                    UserRatingBar()
-                }
+                if (vm.feedbacks.isNotEmpty()) {
+                    vm.feedbacks.forEach {
+                        UserRatingBar(feedBack = it)
+                        Spacer(modifier = Modifier.padding(4.dp))
+                    }
+                } else TextElementScreen(
+                    backgound = LightError,
+                    text = stringResource(id = R.string.no_feedback)
+                )
             }
         }
     }
@@ -166,7 +178,7 @@ data class UserDescriptionItem(
 
 @Composable
 fun BioDescriptionSection(userDetail: UserDetails) {
-    val userDescriptionList = arrayListOf<UserDescriptionItem>(
+    val userDescriptionList = arrayListOf(
         UserDescriptionItem(
             icon = R.drawable.cigarette_icon,
             title = stringResource(R.string.fumeur),
@@ -192,6 +204,7 @@ fun BioDescriptionSection(userDetail: UserDetails) {
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(50.dp)
                 .padding(4.dp),
             userScrollEnabled = false,
             columns = GridCells.Adaptive(minSize = 150.dp),

@@ -8,15 +8,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -32,9 +30,13 @@ import slikoo.kvrae.slikoo.viewmodels.NotificationViewModel
 fun NotificationScreen(navController: NavController) {
     val notificationViewModel: NotificationViewModel = viewModel()
     val scrollState = rememberScrollState()
-    val isLoading by remember {
-        mutableStateOf(notificationViewModel.isLoading.value)
-    }
+
+    if (notificationViewModel.notifications.value!!.isEmpty())
+        DisposableEffect(Unit) {
+            notificationViewModel.isLoading.value = true
+            notificationViewModel.getNotifications()
+            onDispose { }
+        }
 
     Box(
         modifier = Modifier
@@ -43,10 +45,10 @@ fun NotificationScreen(navController: NavController) {
         contentAlignment = Alignment.Center
     ) {
         when {
-            notificationViewModel.isLoading.value && notificationViewModel.notifications.isEmpty() -> {
+            notificationViewModel.isLoading.value -> {
                 SwipeRefresh(
                     state = rememberSwipeRefreshState(
-                        isRefreshing = isLoading
+                        isRefreshing = notificationViewModel.isLoading.value
                     ),
                     onRefresh = {
                         notificationViewModel.getNotifications()
@@ -62,24 +64,36 @@ fun NotificationScreen(navController: NavController) {
                     }
                 }
             }
-            notificationViewModel.notifications.isNotEmpty() -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .scrollable(scrollState, Orientation.Vertical),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    items(notificationViewModel.notifications.size) {
-                        NotificationItem(notification = notificationViewModel.notifications[it])
+
+
+
+            notificationViewModel.notifications.value!!.isNotEmpty() -> {
+                SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = notificationViewModel.isLoading.value),
+                    onRefresh = { notificationViewModel.getNotifications()}) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .scrollable(scrollState, Orientation.Vertical),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        items(notificationViewModel.notifications.value?.size ?: 0, key = { it }) {
+                            NotificationItem(
+                                notification = notificationViewModel.notifications?.value!![it]
+                                    ?: return@items
+                            )
+                        }
                     }
                 }
             }
-            notificationViewModel.notifications.isEmpty() && !notificationViewModel.isLoading.value -> {
+
+            notificationViewModel.notifications.value!!.isEmpty() && !notificationViewModel.isLoading.value -> {
                 TextWithImageScreen(
-                    imageVector = Icons.Rounded.Notifications,
-                    text =  stringResource(id = R.string.no_notifications)
+                    imageVector = ImageVector.vectorResource(R.drawable.no_notifications),
+                    text = stringResource(id = R.string.no_notifications),
+                    backgound = LightSecondary
                 )
             }
+
         }
     }
 }

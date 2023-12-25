@@ -26,6 +26,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
@@ -62,6 +63,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
+import slikoo.kvrae.slikoo.utils.TempSession
 import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
 
 
@@ -119,7 +121,10 @@ fun ProfileScreen(navController: NavController) {
 }
 
 @Composable
-fun ProfileAppBar(navController: NavController) {
+fun ProfileAppBar(
+    navController: NavController,
+    user : User
+) {
     TopAppBar(
         modifier = Modifier.statusBarsPadding(),
         elevation = 0.dp,
@@ -133,11 +138,22 @@ fun ProfileAppBar(navController: NavController) {
                     tint = LightError
                 )
                 DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                    if (user.id != TempSession.user.id)
                     DropdownMenuItem(onClick = { showAlertDialog = true }) {
                         ItemMenu(
                             text = stringResource(R.string.report),
                             icon = Icons.Default.Warning
                         )
+                    }
+                    if (user.id == TempSession.user.id){
+                        DropdownMenuItem(onClick = {
+                            //TODO: Delete Account
+                        }) {
+                            ItemMenu(
+                                text = stringResource(R.string.delete_account),
+                                icon = Icons.Default.Delete
+                            )
+                        }
                     }
                 }
                 CustomAlertDialog(
@@ -191,7 +207,10 @@ fun ProfileHeader(navController: NavController ,user: User) {
             contentScale = ContentScale.Crop
         )
         // TopAppBar
-        ProfileAppBar(navController = navController)
+        ProfileAppBar(
+            navController = navController,
+            user = user
+        )
 
     }
 }

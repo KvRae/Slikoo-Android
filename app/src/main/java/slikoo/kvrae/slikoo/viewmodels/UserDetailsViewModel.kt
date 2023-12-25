@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,16 +9,26 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import slikoo.kvrae.slikoo.data.datasources.entities.Feedback
 import slikoo.kvrae.slikoo.data.datasources.entities.UserDetails
+import slikoo.kvrae.slikoo.data.datasources.remote.FeedbackRemoteDataSource
 import slikoo.kvrae.slikoo.data.datasources.remote.UserDetailsRemoteDataSource
 import slikoo.kvrae.slikoo.utils.TempSession
 
-class UserDetailsViewModel: ViewModel() {
-    val userDetailsRDS = UserDetailsRemoteDataSource()
-    var userDetails by mutableStateOf(UserDetails(
-        iduser = TempSession.user.id.toString(),
-    ))
-    val choices = listOf("oui","non")
+class UserDetailsViewModel : ViewModel() {
+
+    private val userDetailsRDS = UserDetailsRemoteDataSource()
+    private val feedbackRDS = FeedbackRemoteDataSource()
+
+
+    var feedbacks by mutableStateOf(mutableListOf<Feedback>())
+
+    var userDetails by mutableStateOf(
+        UserDetails(
+            iduser = TempSession.user.id.toString(),
+        )
+    )
+    val choices = listOf("oui", "non")
     val langues = listOf(
         "Le mandarin",
         "Espagonl",
@@ -26,6 +37,9 @@ class UserDetailsViewModel: ViewModel() {
 
         )
     val intrests = listOf<String>()
+
+
+
 
     var isLoading by mutableStateOf(false)
     var isError by mutableStateOf(false)
@@ -41,6 +55,7 @@ class UserDetailsViewModel: ViewModel() {
                     id
 
                 ) }.await()
+
             } catch (e: Exception) {
                 e.printStackTrace()
                 isError = true
@@ -96,6 +111,26 @@ class UserDetailsViewModel: ViewModel() {
             finally {
                 isLoading = false
                 navigate = resCode == 200
+            }
+        }
+    }
+
+    fun getFeedbacks(id : Int = TempSession.user.id) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                isLoading = true
+                feedbacks = async { feedbackRDS
+                    .getMyReceivedFeedbacks(
+                    token = TempSession.token,
+                    id = id
+                ) }.await()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                isError = true
+            }
+            finally {
+                isLoading = false
+                Log.d("Feedbacks", feedbacks.size.toString())
             }
         }
     }

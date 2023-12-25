@@ -16,6 +16,7 @@ class InvitationsRemoteDataSource {
                 .create(ApiServices::class.java)
                 .getInvitations(token = "Bearer $token", id = id)
             if (response.isSuccessful) {
+                invitations.clear()
                 invitations.addAll(response.body() ?: emptyList())
             } else
                 Log.d("Invitations Error", response.message())

@@ -62,6 +62,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
+import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.TempSession
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
@@ -137,6 +138,7 @@ fun MealsDetailScreen(navController: NavController,
         }
     }
     if (mealsViewModel.isLoading.value) LoadingScreen()
+
     if (mealsViewModel.isDialogOpen && mealsViewModel.dialogContext == "delete") CustomAlertDialog(
         title = stringResource(id = R.string.delete),
         message = stringResource(id = R.string.delete_meal_description),
@@ -166,6 +168,18 @@ fun MealsDetailScreen(navController: NavController,
             }
         }
     )
+    if (mealsViewModel.navigate) {
+        toastMsg = stringResource(id = R.string.meal_deleted)
+        DisposableEffect(Unit) {
+            makeToast(navController.context, toastMsg)
+            navController.navigate(AppScreenNavigator.MainAppScreen.route) {
+                popUpTo(AppScreenNavigator.MainAppScreen.route) {
+                    inclusive = true
+                }
+            }
+            onDispose {}
+        }
+    }
 }
 
 @Composable
@@ -528,9 +542,15 @@ fun DetailsContentBodyWithButtons(
 fun DetailsContentParticipation(
     mealsViewModel: MealsViewModel
 ) {
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp, bottom = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         Text(
-            text = "Vous participez a cet evenement",
+            text = stringResource(R.string.participate_msg),
             style = TextStyle(
                 color = LightBackground,
                 fontWeight = FontWeight.Bold,

@@ -35,6 +35,7 @@ class MealsViewModel: ViewModel() {
     var isLoading = mutableStateOf(true)
     var isParticipating by mutableStateOf(false)
     var isError by mutableStateOf(false)
+    var isDeleted by mutableStateOf(false)
     var navigate by mutableStateOf(false)
     // String mutable variables
     var searchText = mutableStateOf("")
@@ -73,6 +74,7 @@ class MealsViewModel: ViewModel() {
     fun getAllMeals()  {
         viewModelScope.launch {
             try {
+                navigate = false
                 isError = false
                 isLoading.value = true
                 meals.value.clear()
@@ -86,6 +88,8 @@ class MealsViewModel: ViewModel() {
             }
             finally {
                 isLoading.value = false
+                if (meals.value.isNotEmpty()){meals.value.shuffle()}
+
             }
         }
     }
@@ -95,6 +99,7 @@ class MealsViewModel: ViewModel() {
             meal.value = Meal()
             if (id != 0) {
                 try {
+                    navigate = false
                     isError = false
                     isLoading.value = true
                     meal.value = async { mealRemoteDataSource.getMealById(id = id) }.await()
@@ -135,39 +140,14 @@ class MealsViewModel: ViewModel() {
         }
     }
 
-    fun dateConverter(date: String,time : String): String {
-        val timeList = date.split("T")
-        val dateList = timeList[0].split("-")
 
-        val hour = time.split("T")[1].subSequence(0,2)
-        val minute = time.split("T")[1].subSequence(3,5)
-
-
-        val day = dateList[2]
-        var month = dateList[1]
-        val year = dateList[0]
-        when (month) {
-            "01" -> month = "Janvier"
-            "02" -> month = "Fevrier"
-            "03" -> month = "Mars"
-            "04" -> month = "Avril"
-            "05" -> month = "Mai"
-            "06" -> month = "Juin"
-            "07" -> month = "Juillet"
-            "08" -> month = "Aout"
-            "09" -> month = "Septembre"
-            "10" -> month = "Octobre"
-            "11" -> month = "Novembre"
-            "12" -> month = "Decembre"
-        }
-        return "$day $month $year à $hour:$minute"
-    }
 
     fun deleteMeal(id: Int) {
         resCode = 0
-        navigate = false
         viewModelScope.launch(Dispatchers.IO) {
             resCode = try {
+                isDeleted = false
+                navigate = false
                 async {
                     mealRemoteDataSource.deleteMeal(
                         token = TempSession.token,
@@ -180,7 +160,7 @@ class MealsViewModel: ViewModel() {
             } finally {
                 if (resCode in 200..299) {
                     meals.value.remove(meal.value)
-                    navigate = true
+                    isDeleted = true
                 }
             }
         }
@@ -264,8 +244,33 @@ class MealsViewModel: ViewModel() {
         }
     }
 
-    fun getMealsByCategory(filter: String): MutableList<Meal> {
-        return meals.value.filter { it.localisation.contains(filter, ignoreCase = true) }.toMutableList()
+    fun getMealsByLocalisation(filter: String, mealsFiltered: MutableList<Meal>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                isError = false
+                isLoading.value = true
+
+                mealsFiltered.clear()
+                val allMeals = async {
+                    mealRemoteDataSource.getAllMeals()
+                }.await()
+
+                val filteredMeals = async {
+                    allMeals.filter { meal ->
+                        meal.localisation.contains(filter, ignoreCase = true)
+                                || meal.theme.contains(filter, ignoreCase = true)
+                    }
+                }.await()
+
+                mealsFiltered.addAll(filteredMeals)
+
+            } catch (e: Exception) {
+                isError = true
+                mealsFiltered.clear()
+            } finally {
+                isLoading.value = false
+            }
+        }
     }
 
     fun checkIfParticipating(idrepas: Int, iduser: Int) {
@@ -282,6 +287,34 @@ class MealsViewModel: ViewModel() {
                 isError = true
             }
         }
+    }
+
+    fun dateConverter(date: String,time : String): String {
+        val timeList = date.split("T")
+        val dateList = timeList[0].split("-")
+
+        val hour = time.split("T")[1].subSequence(0,2)
+        val minute = time.split("T")[1].subSequence(3,5)
+
+
+        val day = dateList[2]
+        var month = dateList[1]
+        val year = dateList[0]
+        when (month) {
+            "01" -> month = "Janvier"
+            "02" -> month = "Fevrier"
+            "03" -> month = "Mars"
+            "04" -> month = "Avril"
+            "05" -> month = "Mai"
+            "06" -> month = "Juin"
+            "07" -> month = "Juillet"
+            "08" -> month = "Aout"
+            "09" -> month = "Septembre"
+            "10" -> month = "Octobre"
+            "11" -> month = "Novembre"
+            "12" -> month = "Decembre"
+        }
+        return "$day $month $year à $hour:$minute"
     }
 }
 

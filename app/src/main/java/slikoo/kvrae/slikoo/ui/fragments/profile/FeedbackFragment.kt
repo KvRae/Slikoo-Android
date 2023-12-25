@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,13 +31,13 @@ import slikoo.kvrae.slikoo.ui.pages.TextWithImageScreen
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightGreen
+import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.viewmodels.FeedbackViewModel
 
 @Composable
 fun FeedbackFragment(navController: NavController) {
 
-    val viewModel : FeedbackViewModel = viewModel()
-
+    val viewModel: FeedbackViewModel = viewModel()
     DisposableEffect(key1 = viewModel.invitations, key2 = viewModel.reservations) {
         viewModel.getFeedbacks()
         onDispose {
@@ -53,16 +53,24 @@ fun FeedbackFragment(navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            MealsSection(
-                vm = viewModel,
-                navController = navController
-            )
-            InvitationsSection(
-                vm = viewModel,
-                navController = navController
-            )
+            if (viewModel.reservations.isNotEmpty())
+                MealsSection(
+                    vm = viewModel,
+                    navController = navController
+                )
+            if (viewModel.invitations.isNotEmpty())
+                InvitationsSection(
+                    vm = viewModel,
+                    navController = navController
+                )
 
         }
+        if (viewModel.reservations.isEmpty() && viewModel.invitations.isEmpty())
+            TextWithImageScreen(
+                imageVector = ImageVector.vectorResource(id = R.drawable.no_speaker),
+                text = stringResource(id = R.string.no_feedback),
+                backgound = LightError
+            )
         if (viewModel.isLoading)
             LoadingScreen(
                 background = LightError
@@ -76,90 +84,88 @@ fun MealsSection(
     vm: FeedbackViewModel,
     navController: NavController
 ) {
-
     Column {
         SectionHeader(text = stringResource(id = slikoo.kvrae.slikoo.R.string.meals))
         Spacer(modifier = Modifier.height(16.dp))
         LazyRow(
             content = {
                 items(vm.reservations.size) {
-                    //for (feedback in vm.feedbacks){
-                    //if (feedback.providerId == vm.reservations[it].user?.id.toString()) {
-                    if (vm.reservations[it].user != null  && vm.reservations[it].meal != null)
-                        MealCardWrapper(
-                            title =
-                            stringResource(id = R.string.by) +
-                                    (vm.reservations[it].user?.nom
-                                        ?: "") + " " + (vm.reservations[it].user?.prenom
-                                ?: ""),
-                            image = (vm.reservations[it].meal?.avatarUrl.plus(vm.reservations[it].meal?.avatar)),
-                            color = LightGreen,
-                            icon = Icons.Rounded.Check,
-                            onClick = {
-                                navController.navigate("feedback_screen/${vm.reservations[it].meal?.id}/${vm.reservations[it].user?.id}")
-                            }
+                    MealCardWrapper(
+                        title =
+                        stringResource(id = R.string.by) +
+                                (vm.reservations[it].user?.nom
+                                    ?: "") + " " +
+                                (vm.reservations[it].user?.prenom
+                            ?: ""),
+                        image = (vm.reservations[it].meal?.avatarUrl.plus(vm.reservations[it].meal?.avatar)),
+                        color = if (vm.verifyFeedbackSubmitted(
+                                vm.reservations[it].user?.id ?: 0,
+                                vm.reservations[it].meal?.id ?: 0
+                            )
                         )
-                    //} else {
-//                            MealCardWrapper(
-//                                title =
-//                                stringResource(id = R.string.by) +
-//                                        (vm.reservations[it].user?.nom
-//                                            ?: "") + " " + (vm.reservations[it].user?.prenom
-//                                    ?: ""),
-//                                image = (vm.reservations[it].meal?.avatarUrl.plus(vm.reservations[it].meal?.avatar)),
-//                                color = LightGreen,
-//                                icon = Icons.Rounded.Place,
-//                                onClick = {
-//                                    navController.navigate("feedback_screen/${vm.reservations[it].meal?.id}/${0}")
-//                                }
-//                            )
-//                        }
-//                }
-
-
+                            LightGreen
+                        else
+                            LightPrimary,
+                        icon = if (vm.verifyFeedbackSubmitted(
+                                vm.reservations[it].user?.id ?: 0,
+                                vm.reservations[it].meal?.id ?: 0
+                            )
+                        )
+                            Icons.Rounded.Done
+                        else
+                            Icons.Rounded.Add,
+                        onClick = {
+                            navController.navigate("feedback_screen/${vm.reservations[it].meal?.id}/${vm.reservations[it].user?.id}")
+                        },
+                    )
                 }
-
             }
         )
     }
-
 }
 
 @Composable
 fun InvitationsSection(
     vm: FeedbackViewModel,
-    navController : NavController
+    navController: NavController
 ) {
 
     Column {
-        if (vm.invitations.isNotEmpty()) {
-            SectionHeader(text = stringResource(id = slikoo.kvrae.slikoo.R.string.invitations))
-            Spacer(modifier = Modifier.height(8.dp))
-            LazyRow(
-                content = {
-                    items(vm.invitations.size) {
-                        MealCardWrapper(
-                            title = (vm.invitations[it].userDemander?.nom ?: "") + " " + (vm.invitations[it].userDemander?.prenom
-                                ?: ""),
-                            image = (vm.invitations[it].userDemander?.avatarUrl.plus(vm.invitations[it].userDemander?.avatar)),
-                            color = LightGreen,
-                            icon = Icons.Rounded.Done,
-                            onClick = {
-
-                            }
+        SectionHeader(text = stringResource(id = slikoo.kvrae.slikoo.R.string.invitations))
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyRow(
+            content = {
+                items(vm.invitations.size) {
+                    MealCardWrapper(
+                        title = (vm.invitations[it].userDemander?.nom
+                            ?: "") + " " + (vm.invitations[it].userDemander?.prenom
+                            ?: ""),
+                        image = (vm.invitations[it].userDemander?.avatarUrl.plus(vm.invitations[it].userDemander?.avatar)),
+                        color = if (vm.verifyFeedbackSubmitted(
+                                vm.invitations[it].userDemander?.id ?: 0,
+                                vm.invitations[it].meal?.id ?: 0
+                            )
                         )
-                    }
-
+                            LightGreen
+                        else
+                            LightPrimary,
+                        icon = if (vm.verifyFeedbackSubmitted(
+                                vm.invitations[it].userDemander?.id ?: 0,
+                                vm.invitations[it].meal?.id ?: 0)
+                            )
+                            Icons.Rounded.Done
+                        else
+                            Icons.Rounded.Add,
+                        onClick = {
+                            navController.navigate("feedback_screen/${vm.invitations[it].meal?.id}/${vm.invitations[it].userDemander?.id}")
+                        }
+                    )
                 }
 
-            )
-        }
-        else
-            TextWithImageScreen(
-                backgound = LightError,
-                imageVector = ImageVector.vectorResource(id = R.drawable.email),
-                text =  stringResource(id = R.string.no_element_found)
-            )
+            }
+
+        )
+
     }
 }
 

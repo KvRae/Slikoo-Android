@@ -14,11 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.R
@@ -26,7 +28,9 @@ import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomSlidingBar
 import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.components.LoadingDialog
+import slikoo.kvrae.slikoo.ui.fragments.profile.makeToast
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
+import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.compressFile
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 import java.io.File
@@ -39,11 +43,14 @@ fun EventFinalFragment(
     idMeal : Int = 0,
     onFragmentChange: (String) -> Unit,
     navController: NavController,
-    mealsVm : MealsViewModel,
+
 ) {
+    val mealsVm : MealsViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
     Column(
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
@@ -69,23 +76,13 @@ fun EventFinalFragment(
 
         CustomButton(text = stringResource(id = R.string.finish)) {
             coroutineScope.launch {
-                if (idMeal == 0) {
-                    val mealFile =
-                        compressFile(
-                            navController.context,
-                            File(getRealPathFromURI(mealsVm.mealUri, navController.context)!!)
-                        )
-                    mealsVm.onAddMeal(mealFile!!)
-                } else {
-                    val mealFile =
-                        getRealPathFromURI(mealsVm.mealUri, navController.context)?.let { File(it) }
-                    mealsVm.onUpdateMeal(mealFile!!, idMeal)
-                }
+                val mealFile =
+                    compressFile(
+                        navController.context,
+                        File(getRealPathFromURI(mealsVm.mealUri, navController.context)!!)
+                    )
+                mealsVm.onAddMeal(mealFile!!)
             }
-
-
-            /*navController.popBackStack()
-            navController.navigate(AppScreenNavigator.MainAppScreen.route)*/
         }
 
         TextButton(onClick = { onFragmentChange(navController.context.getString(R.string.second)) }) {
@@ -95,6 +92,20 @@ fun EventFinalFragment(
             )
         }
         if (mealsVm.isLoading.value) LoadingDialog()
+        if (mealsVm.navigate)
+            DisposableEffect(key1 = mealsVm.navigate) {
+                makeToast(
+                    navController.context,
+                    navController.context.getString(R.string.meal_added)
+                )
+                navController.navigate(AppScreenNavigator.MainAppScreen.route) {
+                    popUpTo(AppScreenNavigator.MainAppScreen.route) {
+                        inclusive = true
+                    }
+                }
+                onDispose { mealsVm.navigate = false }
+            }
+
 
     }
 }

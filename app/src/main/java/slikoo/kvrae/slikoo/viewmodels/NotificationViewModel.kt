@@ -2,6 +2,7 @@ package slikoo.kvrae.slikoo.viewmodels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -12,30 +13,33 @@ import slikoo.kvrae.slikoo.data.datasources.remote.NotificationRemoteDataSource
 import slikoo.kvrae.slikoo.utils.TempSession
 
 class NotificationViewModel : ViewModel() {
-    var isLoading = mutableStateOf(true)
-    var isError = mutableStateOf(false)
-    var notifications = mutableStateListOf<Notification>()
+    val isLoading = mutableStateOf(true)
+    val isError = mutableStateOf(false)
+    val notifications = MutableLiveData<MutableList<Notification>>(mutableStateListOf())
     private val notificationRepository = NotificationRemoteDataSource()
 
-    init {
-        getNotifications()
-    }
-
     fun getNotifications() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val token = TempSession.token
-            val email = TempSession.email
-            val response = async { notificationRepository.getNotifications(token, email) }
-            val result = response.await()
-            if (result.isNotEmpty()) {
-                notifications.clear()
-                notifications.addAll(result)
-                notifications.reverse()
-                isLoading.value = false
-            } else {
-                isError.value = true
-                isLoading.value = false
+        try {
+            isLoading.value = true
+            viewModelScope.launch(Dispatchers.IO) {
+                val token = TempSession.token
+                val email = TempSession.email
+                val response = async { notificationRepository.getNotifications(token, email) }
+                val result = response.await()
+                if (result.isNotEmpty()) {
+                    notifications.value?.clear()
+                    notifications.value?.addAll(result)
+                    notifications.value?.reverse()
+                } else {
+                    notifications.value?.clear()
+                }
             }
+        } catch (e: Exception) {
+            isError.value = true
+            notifications.value?.clear()
+        }
+        finally {
+            isLoading.value = false
         }
     }
 }

@@ -19,7 +19,7 @@ class CategoryViewModel : ViewModel() {
             ),
             Category(
                 3,
-                "Montpelier",
+                "Montpellier",
                 R.drawable.montpellier,
             ),
         )

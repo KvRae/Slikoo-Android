@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.datasources.entities.Theme
 import slikoo.kvrae.slikoo.ui.components.AreaFilterCard
@@ -40,23 +42,33 @@ import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 @Composable
 fun HomeScreen(navController: NavController) {
     val mealsViewModel : MealsViewModel  = viewModel()
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = LightSecondary)
-            .verticalScroll(rememberScrollState())
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing = mealsViewModel.isLoading.value),
+        onRefresh = {
+            mealsViewModel.getAllMeals()
+        }
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp)
+                .background(color = LightSecondary)
+                .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.padding(8.dp))
-            if (mealsViewModel.meals.value.isNotEmpty()) OnlineRecipes(navController,mealsViewModel)
-            Spacer(modifier = Modifier.padding(8.dp))
-            ThemeListSection(navController)
-            Spacer(modifier = Modifier.padding(8.dp))
-            RecipesCategorySection(navController)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+            ) {
+                Spacer(modifier = Modifier.padding(8.dp))
+                if (mealsViewModel.meals.value.isNotEmpty()) OnlineRecipes(
+                    navController,
+                    mealsViewModel
+                )
+                Spacer(modifier = Modifier.padding(8.dp))
+                ThemeListSection(navController)
+                Spacer(modifier = Modifier.padding(8.dp))
+                RecipesCategorySection(navController)
+            }
         }
     }
 
@@ -67,6 +79,7 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun OnlineRecipes(navController: NavController,mealsViewModel : MealsViewModel ) {
     val meals = mealsViewModel.meals
+    val size = if (meals.value.size > 6) 6 else meals.value.size
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -76,7 +89,7 @@ fun OnlineRecipes(navController: NavController,mealsViewModel : MealsViewModel )
             SectionHeader(title = stringResource(R.string.online_recipes))
             Spacer(modifier = Modifier.padding(8.dp))
             LazyRow(modifier = Modifier.fillMaxWidth()) {
-                items(meals.value.size) {
+                items(size) {
                     RecipeCardContent(meals.value[it], navController = navController)
                 }
             }

@@ -1,6 +1,5 @@
 package slikoo.kvrae.slikoo.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
@@ -22,15 +22,14 @@ import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -70,7 +69,7 @@ fun RatingCard(feedBack : Feedback) {
                 )
                 Column( modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = feedBack.providerId, modifier = Modifier.padding(4.dp),
+                        text = feedBack.provider.nom, modifier = Modifier.padding(4.dp),
                         style = TextStyle(fontSize = 12.sp)
                     )
                     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -141,43 +140,44 @@ fun FeedbackRatingBar(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun UserRatingBar() {
+fun UserRatingBar(
+    feedBack: Feedback? = null,
+) {
     Column(
 
     ) {
         Row {
-            //AsyncImage(model = , contentDescription = )
-            Image(painter = painterResource(
-                id =R.drawable.avatar),
-                contentDescription = "Avatar",
+            AsyncImage(
+                model = (feedBack?.provider?.avatarUrl.plus(feedBack?.provider?.avatar))?: painterResource(id = R.drawable.avatar),
+                contentDescription = "avatar",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(50.dp)
                     .padding(4.dp)
+                    .clip(CircleShape)
             )
 
             Column {
                 Text(
-                    text = "Karam Mannai",
+                    text = (feedBack?.provider?.nom + feedBack?.provider?.prenom),
                     fontWeight = FontWeight.Medium,
-                    fontSize = 10.sp,
+                    fontSize = 14.sp,
                     modifier = Modifier.padding(end = 4.dp, top = 1.dp, bottom = 0.dp),
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                 )
                 FeedbackRatingBar(
-                    currentRating = 3,
+                    currentRating = feedBack?.rate ?: 0,
                     onRatingChanged = {},
-                    iconsSize = 8
+                    iconsSize = 10
                 )
             }
 
 
         }
-        Text(text = stringResource(id = R.string.welcome_sub_description),
-            fontSize = 8.sp,
+        Text(text = feedBack?.comment ?: "",
+            fontSize = 12.sp,
             fontWeight = FontWeight.Light,
             overflow = TextOverflow.Ellipsis,
             maxLines = 2,

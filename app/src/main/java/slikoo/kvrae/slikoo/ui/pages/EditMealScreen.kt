@@ -23,6 +23,7 @@ import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.DescriptionTextField
 import slikoo.kvrae.slikoo.ui.components.ExpandableCard
 import slikoo.kvrae.slikoo.viewmodels.EditMealViewModel
+import java.io.File
 
 
 @Composable
@@ -91,7 +92,12 @@ fun EditMealScreen(
             )
             CustomButton(
                 text = stringResource(id = R.string.update),
-                onClick = {},
+                onClick = {
+                          viewModel.onUpdateMeal(
+                              mealBanner = File(""),
+                              id = idMeal
+                          )
+                },
             )
         }
     }

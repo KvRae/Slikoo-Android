@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.data.datasources.entities.Invitation
 import slikoo.kvrae.slikoo.data.datasources.remote.InvitationsRemoteDataSource
@@ -19,15 +20,19 @@ class InvitationsViewModel : ViewModel() {
     var isError by mutableStateOf(false)
 
     fun getInvitations() {
-        invitations.clear()
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isLoading = true
-                invitationRDS.getInvitations(
-                    invitations = invitations,
-                    token = TempSession.token,
-                    id = TempSession.user.id
-                )
+                val result = async {
+
+                    invitationRDS.getInvitations(
+                        invitations = invitations,
+                        token = TempSession.token,
+                        id = TempSession.user.id
+                    )
+                }
+                result.await()
             } catch (e: Exception) {
                 e.printStackTrace()
                 invitations.addAll(emptyList())

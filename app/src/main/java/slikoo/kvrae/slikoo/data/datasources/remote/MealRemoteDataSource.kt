@@ -34,12 +34,15 @@ class MealRemoteDataSource {
 
     suspend fun getMyMeals(meals: MutableList<Meal>, token: String, id: Int) {
         try {
-            meals.clear()
+
             val response = RetrofitInstance.getRetrofitInstance()
                 .create(ApiServices::class.java)
                 .getMyMeals(token = "Bearer $token", id = id)
-            if (response.isSuccessful)
-                response.body()?.meals?.let { meals.addAll(it) }
+            if (response.isSuccessful){
+                response.body()?.meals?.let {
+                    meals.clear()
+                    meals.addAll(it)
+                } }
         }
         catch (e: Exception) {
             Log.e("Meals Error", e.message.toString())

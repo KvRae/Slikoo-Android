@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -19,6 +21,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.ui.components.LoadingDialog
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
@@ -32,14 +35,13 @@ fun MealsByCategory(
     filter: String = ""
 ) {
     val viewModel: MealsViewModel = viewModel()
+    val filteredMeals = remember { mutableStateListOf<Meal>() }
 
-    if (filter.isNotEmpty()) {
-        DisposableEffect(Unit) {
-            viewModel.filterMealsList(filter = filter)
-            onDispose {
-
-            }
-        }
+    LaunchedEffect(Unit) {
+        viewModel.getMealsByLocalisation(
+            filter = filter,
+            mealsFiltered = filteredMeals
+        )
     }
 
     Column(
@@ -56,7 +58,7 @@ fun MealsByCategory(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            if (viewModel.filteredMeals.isNotEmpty())
+            if (filteredMeals.isNotEmpty())
                 SwipeRefresh(
                     state = rememberSwipeRefreshState(
                         isRefreshing = viewModel.isLoading.value
@@ -68,15 +70,15 @@ fun MealsByCategory(
                     LazyVerticalGrid(columns = GridCells.Fixed(2),
                         userScrollEnabled = true,
                         content = {
-                            items(viewModel.filteredMeals.size) { index ->
+                            items(filteredMeals.size) { index ->
                                 RecipeCardContent(
-                                    meal = viewModel.filteredMeals[index],
+                                    meal = filteredMeals[index],
                                     navController = navController
                                 )
                             }
                         })
                 }
-            if (viewModel.filteredMeals.isEmpty() && !viewModel.isLoading.value)
+            if (filteredMeals.isEmpty() && !viewModel.isLoading.value)
                 TextWithImageScreen(
                     imageVector = ImageVector.vectorResource(id = R.drawable.no_food),
                     text = stringResource(id = R.string.no_meals),

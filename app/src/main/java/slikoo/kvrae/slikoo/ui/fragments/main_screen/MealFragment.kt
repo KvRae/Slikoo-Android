@@ -15,7 +15,9 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -25,7 +27,7 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
 import slikoo.kvrae.slikoo.ui.components.SearchBarWithFilter
 import slikoo.kvrae.slikoo.ui.components.ShimmerRecipeCard
-import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
+import slikoo.kvrae.slikoo.ui.pages.TextWithImageScreen
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
@@ -66,8 +68,12 @@ fun RecipeScreen(navController: NavController) {
                                     },
                     onFilter = { }
                     )
-            if (mealsViewModel.filteredMeals.isEmpty() && mealsViewModel.searchText.value.isNotEmpty())
-                TextElementScreen(text = stringResource(id = R.string.no_element_found))
+            if (mealsViewModel.filteredMeals.isEmpty() && !mealsViewModel.searchText.value.isEmpty())
+                TextWithImageScreen(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.no_meals),
+                    text = stringResource(id = R.string.no_element_found),
+                    backgound = LightSecondary
+                )
 
             SwipeRefresh(
                 state =  rememberSwipeRefreshState(isRefreshing = mealsViewModel.isLoading.value),
@@ -92,7 +98,11 @@ fun RecipeScreen(navController: NavController) {
                 )
             }
             if (mealsViewModel.filteredMeals.isEmpty() && !mealsViewModel.isLoading.value)
-                TextElementScreen(text = stringResource(id = R.string.no_element_found))
+                TextWithImageScreen(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.no_food),
+                    text = stringResource(id = R.string.no_meals),
+                    backgound = LightSecondary
+                )
 
         }
     }

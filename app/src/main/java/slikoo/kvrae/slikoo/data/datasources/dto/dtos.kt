@@ -10,7 +10,11 @@ import slikoo.kvrae.slikoo.data.datasources.entities.UserDetails
 
 data class MealResponse(
     @SerializedName("repasList")
-    val meals: List<Meal>
+    val meals: List<Meal>,
+    @SerializedName("repas")
+    val meal: Meal,
+    @SerializedName("message")
+    val message: String
 )
 
 data class MealDetailsResponse(
@@ -167,5 +171,20 @@ data class InvitationRequest (
 data class FeedbackResponse(
     @SerializedName("Feedbacks")
     val feedbacks: MutableList<Feedback>
+)
+
+data class FeedbackRequest(
+    @SerializedName("idusersender")
+    var idUserSender: Int,
+    @SerializedName("iduserreceiver")
+    val idUserReceiver: String,
+    @SerializedName("idrepas")
+    val idMeal: Int,
+    @SerializedName("commantaire")
+    val comment: String,
+    @SerializedName("nbretoile")
+    val rating: Int,
+    @SerializedName("image_files")
+    val imageProvider: List<String>
 )
 

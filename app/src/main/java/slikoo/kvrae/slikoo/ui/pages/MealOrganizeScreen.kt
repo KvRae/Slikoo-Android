@@ -38,7 +38,6 @@ import slikoo.kvrae.slikoo.ui.fragments.meal.EventFirstFragment
 import slikoo.kvrae.slikoo.ui.fragments.meal.EventSecondFragment
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
-import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
@@ -123,7 +122,6 @@ fun MealOrganizeScreen(
                     EventFinalFragment(
                         onFragmentChange = { fragment = it },
                         navController = navController,
-                        mealsVm = mealVM,
                         idMeal = idMeal,
                     )
                 }
@@ -131,12 +129,6 @@ fun MealOrganizeScreen(
                     mealVM) { fragment = it }
             }
         }
-        if (mealVM.navigate)
-            DisposableEffect(Unit) {
-                navController.popBackStack()
-                navController.navigate(AppScreenNavigator.MainAppScreen.route)
-                onDispose { }
-            }
         BackHandler {
             show = true
         }

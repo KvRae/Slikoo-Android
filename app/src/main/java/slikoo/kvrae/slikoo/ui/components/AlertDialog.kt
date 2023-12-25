@@ -1,6 +1,7 @@
 package slikoo.kvrae.slikoo.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,13 +26,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
@@ -39,6 +44,7 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
+import slikoo.kvrae.slikoo.viewmodels.FeedbackViewModel
 
 
 @Composable
@@ -93,7 +99,9 @@ fun CustomAlertDialog(
             },
             backgroundColor = LightError,
             contentColor = LightBackground,
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.border(1.dp, LightBackground.copy(alpha = 0.1f),
+             RoundedCornerShape(16.dp))
         )
 
 
@@ -173,62 +181,80 @@ fun LoadingDialog() {
 }
 
 
-@Preview
-@Composable
-fun MaterialAlertBox() {
-    Column(
-        modifier = Modifier
-            .background(LightSecondary)
-            .padding(16.dp),
-    ){
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .background(LightPrimaryVariant)
-            .clip(shape = RoundedCornerShape(32.dp))
-            .padding(8.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            IconButton(
-                onClick = { /*TODO*/ },
-                Modifier
-                    .clip(shape = CircleShape)
-                    .background(LightPrimary)
-                    .padding(8.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.home_icon),
-                    contentDescription = "",
-                    tint = LightSecondary,
-                    modifier = Modifier.size(30.dp)
-                )
-            }
-        }
-        Text(text= "Delete this item ?")
-        Text(text = "This action cannot be undone")
 
-        Row(modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
+@Composable
+fun MaterialAlertBox(
+    icon : Int = R.drawable.celebration,
+    title: String = "",
+    message: String = "",
+    onClick : () -> Unit = {}
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(LightBackground.copy(alpha = 0.5f))
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier
+                .background(LightSecondary, shape = RoundedCornerShape(16.dp))
+                .padding(16.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(LightPrimaryVariant)
+                    .clip(shape = RoundedCornerShape(32.dp))
+                    .padding(8.dp),
+                contentAlignment = Alignment.Center
             ) {
-            Button(
-                modifier = Modifier.fillMaxWidth(0.5f),
-                onClick = { /*TODO*/ },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = LightPrimaryVariant,
-                    contentColor = LightBackground
-                ),
-                content = { Text(text = "Cancel") }
+                IconButton(
+                    onClick = { },
+                    Modifier
+                        .clip(shape = CircleShape)
+                        .background(LightPrimary)
+                        .padding(8.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = icon),
+                        contentDescription = "",
+                        tint = LightSecondary,
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.size(16.dp))
+            Text(
+                text = title,
+                color = LightBackground,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(8.dp)
+            )
+            Text(
+                text = message,
+                color = LightBackground,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(8.dp)
             )
             Spacer(modifier = Modifier.size(16.dp))
-            Button(
-                modifier = Modifier.fillMaxWidth(1f),
-                onClick = { /*TODO*/ },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = LightPrimary,
-                    contentColor = LightError
-                ),
-                content = { Text(text = "Delete") }
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(1f),
+                    onClick = { onClick() },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = LightPrimary,
+                        contentColor = LightError
+                    ),
+                    content = { Text(text = stringResource(R.string.proceed)) }
+                )
+            }
         }
     }
 }
@@ -236,43 +262,115 @@ fun MaterialAlertBox() {
 
 @Composable
 fun FeedbackAlertForm(
-    showDialog: Boolean = true,
-    onDismiss: () -> Unit = {},
-    onConfirm: () -> Unit = {}
+    viewModel: FeedbackViewModel,
+    idMeal: Int,
+    idUser: Int,
+    onDismiss: () -> Unit = {}
 ) {
-    var rating: Int = 0
-    AlertDialog(
-
-        buttons = {
-        },
+    Dialog(
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true,
+        ),
         onDismissRequest = {
-            onDismiss(
+            onDismiss()
+        },
+        content = {
+            FeedbackContent(
+                viewModel = viewModel,
+                idMeal = idMeal,
+                idUser = idUser
             )
         },
-         text = {FeedbackContent()},
     )
-
 }
 
 @Composable
 fun FeedbackContent(
-    rating :Int = 0,
-    onChange: (Int)->Unit = {}
+    viewModel: FeedbackViewModel,
+    idMeal: Int,
+    idUser: Int
 ) {
-    Column(
+    Surface(
         modifier = Modifier
-            .background(LightSecondary)
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(color = LightSecondary),
+        shape = RoundedCornerShape(16.dp),
+        elevation = 4.dp,
     ) {
-        Text(text = stringResource(id = R.string.feedback_form_title))
-        Spacer(modifier = Modifier.size(16.dp))
-        Text(text = stringResource(id = R.string.feedback_form_message))
-        RatingBar(
-            onRatingChanged =
-            { onChange(it)},
-            currentRating = rating
-        )
+        Column(
+            modifier = Modifier
+                .background(color = LightSecondary)
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Surface(
+                modifier = Modifier
+                    .size(60.dp)
+                    .background(color = LightSecondary),
+                shape = CircleShape,
+                elevation = 8.dp
+
+            ) {
+                AsyncImage(
+                    model = (viewModel.feedback.recipient.avatarUrl.plus(viewModel.feedback.recipient.avatar)),
+                    contentDescription = "Image",
+                    contentScale = ContentScale.Crop,
+                )
+            }
+            Spacer(modifier = Modifier.size(8.dp))
+            Text(
+                text = viewModel.feedback.recipient.nom + " " + viewModel.feedback.recipient.prenom,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = stringResource(R.string.your_feedback),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.size(4.dp))
+                FeedbackRatingBar(
+                    iconsSize = 24,
+                    currentRating = viewModel.feedback.rate,
+                    onRatingChanged = {
+                        if (!viewModel.verifyFeedbackSubmitted(idUser, idMeal))
+                            viewModel.feedback.rate = it
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.size(8.dp))
+            CustomTextField(
+                onChange = {
+                    if (!viewModel.verifyFeedbackSubmitted(idUser, idMeal))
+                        viewModel.feedback = viewModel.feedback.copy(comment = it)
+                },
+                leadingIcon = ImageVector.vectorResource(id = R.drawable.feedback),
+                value = viewModel.feedback.comment,
+                label = stringResource(R.string.comment),
+                readOnly = viewModel.verifyFeedbackSubmitted(idUser, idMeal)
+            )
+            Spacer(modifier = Modifier.size(12.dp))
+            if (idMeal != 0 && idUser != 0 &&
+                !viewModel.verifyFeedbackSubmitted(idUser, idMeal)
+            )
+                CustomButton(
+                    text = stringResource(id = R.string.submit),
+                    onClick = {
+                        viewModel.addFeedback(
+                            idReciver = idUser,
+                            idMeal = idMeal,
+                            comment = viewModel.feedback.comment,
+                            rate = viewModel.feedback.rate
+                        )
+                    }
+                )
+        }
     }
 
 }

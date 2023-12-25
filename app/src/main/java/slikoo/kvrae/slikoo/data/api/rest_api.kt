@@ -40,7 +40,6 @@ import slikoo.kvrae.slikoo.data.datasources.dto.UpdatePasswordResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.UserDetailResponse
 import slikoo.kvrae.slikoo.data.datasources.dto.UserDetailsRequest
 import slikoo.kvrae.slikoo.data.datasources.dto.UserResponse
-import slikoo.kvrae.slikoo.data.datasources.entities.Feedback
 import slikoo.kvrae.slikoo.data.datasources.entities.Invitation
 
 
@@ -180,7 +179,7 @@ interface ApiServices {
         @Part("date") date: RequestBody,
         @Part("heure") heure: RequestBody,
         @Part avatar: MultipartBody.Part,
-    ): Response<String>
+    ): Response<MealResponse>
 
     @Headers("Content-Type: application/json")
     @POST("mobile-login")
@@ -285,11 +284,15 @@ interface ApiServices {
     ): Response<ResponseSlk>
 
 
-    @Headers("Content-Type: application/json")
+    @Multipart
     @POST("makefeedback")
     suspend fun makeFeedback(
         @Header("Authorization") token: String,
-        @Body body : Feedback
+        @Part("idusersender") idSender: RequestBody,
+        @Part("iduserreceiver") idReceiver: RequestBody,
+        @Part("idrepas") idMeal: RequestBody,
+        @Part("commantaire") comment: RequestBody,
+        @Part("nbretoile") rate: RequestBody,
     ): Response<ResponseSlk>
 
 

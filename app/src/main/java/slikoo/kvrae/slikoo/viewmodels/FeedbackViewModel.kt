@@ -13,9 +13,11 @@ import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.data.datasources.entities.Feedback
 import slikoo.kvrae.slikoo.data.datasources.entities.Invitation
 import slikoo.kvrae.slikoo.data.datasources.entities.Reservation
+import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.FeedbackRemoteDataSource
 import slikoo.kvrae.slikoo.data.datasources.remote.InvitationsRemoteDataSource
 import slikoo.kvrae.slikoo.data.datasources.remote.ReservationRemoteDataSource
+import slikoo.kvrae.slikoo.data.datasources.remote.UserRemoteDataSource
 import slikoo.kvrae.slikoo.utils.TempSession
 
 class FeedbackViewModel : ViewModel() {
@@ -23,11 +25,16 @@ class FeedbackViewModel : ViewModel() {
     private val reservationRDS: ReservationRemoteDataSource = ReservationRemoteDataSource()
     private val invitationRDS: InvitationsRemoteDataSource = InvitationsRemoteDataSource()
     private val feedbackRDS: FeedbackRemoteDataSource = FeedbackRemoteDataSource()
+    private val userRDS: UserRemoteDataSource = UserRemoteDataSource()
 
     var reservations = mutableStateListOf<Reservation>()
     val invitations = mutableStateListOf<Invitation>()
-    val feedbacks = mutableStateListOf<Feedback>()
 
+    val feedbacks = mutableStateListOf<Feedback>()
+    var feedback by mutableStateOf(Feedback())
+
+
+    var resCode by mutableStateOf(0)
     var isLoading by mutableStateOf(false)
     var isError by mutableStateOf(false)
 
@@ -108,6 +115,7 @@ class FeedbackViewModel : ViewModel() {
         }
     }
 
+
     private fun getMySubmittedFeedbacks (){
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -130,8 +138,68 @@ class FeedbackViewModel : ViewModel() {
         }
     }
 
-    fun getFeedbackById(){
-
+    fun addFeedback(
+        idReciver : Int,
+        idMeal : Int,
+        comment : String,
+        rate : Int
+    ){
+     viewModelScope.launch(Dispatchers.IO) {
+         try {
+             isLoading = true
+              resCode = async {
+                 feedbackRDS.submitFeedback(
+                     feedback = Feedback(
+                            id = 0,
+                            rate = rate,
+                            comment = comment,
+                            date = "",
+                            provider = TempSession.user,
+                            recipient = User(id = idReciver),
+                            imageProvider = listOf()
+                     ),
+                     idMeal = idMeal,
+                     token = TempSession.token
+                 )
+             }.await()
+         } catch (e: Exception) {
+             e.printStackTrace()
+             isError = true
+         } finally {
+             isLoading = false
+         }
+     }
     }
+
+    fun getFeedbackById(){
+        // TODO
+    }
+
+    fun verifyFeedbackSubmitted(idUser: Int, idMeal: Int): Boolean {
+        try {
+            feedbacks.forEach {
+                if (it.recipientId == idUser.toString() && it.idMeal == idMeal.toString())
+                    return true
+            }
+        } catch (e: Exception) {
+            return false
+        }
+        return false
+    }
+
+    fun getFeedbackByUserId(idUser: Int){
+        try {
+            feedbacks.forEach {
+                if (it.recipientId == idUser.toString())
+                  feedback = it
+            }
+        } catch (e: Exception) {
+
+        }
+    }
+
+
+
+
 
 }
