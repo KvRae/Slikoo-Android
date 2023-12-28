@@ -15,7 +15,6 @@ import slikoo.kvrae.slikoo.ui.pages.AdvancedProfileScreen
 import slikoo.kvrae.slikoo.ui.pages.AnimatedSplashScreen
 import slikoo.kvrae.slikoo.ui.pages.EditMealScreen
 import slikoo.kvrae.slikoo.ui.pages.EditProfileScreen
-import slikoo.kvrae.slikoo.ui.pages.FeedbackForm
 import slikoo.kvrae.slikoo.ui.pages.ForgetPasswordScreen
 import slikoo.kvrae.slikoo.ui.pages.LoginForm
 import slikoo.kvrae.slikoo.ui.pages.MainScreen
@@ -47,7 +46,6 @@ sealed class AppScreenNavigator(val route: String) {
     object CategoryAppScreen : AppScreenNavigator("category_screen/{filter}")
     object UpdatePasswordAppScreen : AppScreenNavigator("update_password_screen")
     object UserProfileAppScreen : AppScreenNavigator("user_profile_screen/{id}")
-    object FeedbackAppScreen : AppScreenNavigator("feedback_screen/{idMeal}/{idUser}")
     object EditMealAppScreen : AppScreenNavigator("edit_meal_screen/{idMeal}")
 
 }
@@ -104,7 +102,9 @@ fun Navigation() {
             ProfileScreen(navController = navController)
         }
         composable(route = AppScreenNavigator.EventScreen.route) {
-            MealOrganizeScreen(navController = navController,)
+            MealOrganizeScreen(navController = navController)
+            mainScreenIndex.value = "Repas"
+
         }
         composable(
             route = AppScreenNavigator.EventDetailsAppScreen.route,
@@ -155,24 +155,6 @@ fun Navigation() {
             UserProfileScreen(
                 navController = navController,
                 id = it.arguments?.getInt("id") ?: 0
-            )
-        }
-        composable(
-            route = AppScreenNavigator.FeedbackAppScreen.route,
-            arguments = listOf(
-                navArgument("idMeal") {
-                    type = NavType.IntType
-                },
-                navArgument("idUser") {
-                    type = NavType.IntType
-                }
-            )
-        )
-        {
-            FeedbackForm(
-                navController = navController,
-                idMeal = it.arguments?.getInt("idMeal") ?: 0,
-                idUser = it.arguments?.getInt("idUser") ?: 0
             )
         }
         composable(route = AppScreenNavigator.EditMealAppScreen.route,

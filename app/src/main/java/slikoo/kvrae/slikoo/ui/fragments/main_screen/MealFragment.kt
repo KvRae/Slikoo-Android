@@ -38,8 +38,7 @@ fun RecipeScreen(navController: NavController) {
     val mealsViewModel: MealsViewModel = viewModel()
     val scrollState = rememberLazyGridState()
 
-    if (mealsViewModel.meals.value.isEmpty())
-    DisposableEffect(Unit) {
+    DisposableEffect(mealsViewModel.meals) {
         mealsViewModel.getAllMeals()
         onDispose { }
     }
@@ -72,7 +71,7 @@ fun RecipeScreen(navController: NavController) {
                 TextWithImageScreen(
                     imageVector = ImageVector.vectorResource(id = R.drawable.no_meals),
                     text = stringResource(id = R.string.no_element_found),
-                    backgound = LightSecondary
+                    background = LightSecondary
                 )
 
             SwipeRefresh(
@@ -101,7 +100,7 @@ fun RecipeScreen(navController: NavController) {
                 TextWithImageScreen(
                     imageVector = ImageVector.vectorResource(id = R.drawable.no_food),
                     text = stringResource(id = R.string.no_meals),
-                    backgound = LightSecondary
+                    background = LightSecondary
                 )
 
         }

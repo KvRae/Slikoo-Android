@@ -75,6 +75,12 @@ class EditProfileViewModel : ViewModel() {
         }
     }
 
+    fun verifyRib(rib: String) : Boolean {
+        val ribRegex = Regex("^FR/d{2}/s?/d{5}/s?/d{5}/s?/d{11}/s?/d{2}$")
+        return ribRegex.matches(rib)
+
+    }
+
     fun updateUser(user: User, userAvatar: File?, userBanner: File?, cin: File?) {
         user.nom.ifEmpty { user.nom = TempSession.user.nom }
         user.prenom.ifEmpty { user.prenom = TempSession.user.prenom }
@@ -114,16 +120,6 @@ class EditProfileViewModel : ViewModel() {
     fun userToViewModel(userParam: User) {
     }
 
-    fun onValidateRib(rib: String) {
-        val ribRegex = Regex("^FR/d{2}/s?/d{5}/s?/d{5}/s?/d{11}/s?/d{2}$")
-        if (ribRegex.matches(rib)) {
-            addRib(rib)
-            showDialog = false
-
-        } else {
-            showDialog = true
-        }
-    }
 
 
 }

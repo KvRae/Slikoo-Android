@@ -50,7 +50,8 @@ fun TextElementScreen(
     Box(
         modifier = Modifier
             .fillMaxSize(1f)
-            .background(color = backgound),
+            .background(color = backgound)
+            .padding(8.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(text = text)
@@ -61,12 +62,12 @@ fun TextElementScreen(
 fun TextWithImageScreen(
     imageVector: ImageVector,
     text: String,
-    backgound: Color = LightSecondary
+    background: Color = LightSecondary
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = backgound),
+            .background(color = background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -102,6 +103,7 @@ fun TextWithButtonScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(text = text)
+        Spacer(modifier = Modifier.size(16.dp))
         CustomButton(text = buttonText, onClick = onClick)
     }
 

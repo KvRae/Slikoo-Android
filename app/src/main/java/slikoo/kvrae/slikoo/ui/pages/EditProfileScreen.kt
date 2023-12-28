@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -218,20 +219,23 @@ fun EditProfileScreen(navController: NavController) {
                             CustomTextField(
                                 onChange = { user = user.copy(RIB = it) },
                                 value = user.RIB ?: "",
+                                isError = !viewModel.verifyRib(user.RIB ?: ""),
+                                errorMessage = stringResource(id = R.string.invalid_rib),
                                 placeHolder = stringResource(id = R.string.add_rib),
-                                label = if (!user.RIB.isNullOrEmpty()) stringResource(id = R.string.add_rib) else viewModel.user.RIB
-                                    ?: "",
-                                leadingIcon = Icons.Filled.AccountCircle
+                                label = viewModel.user.RIB ?: stringResource(id = R.string.add_rib),
+                                leadingIcon = Icons.Rounded.AccountBox
                             )
                         },
-                        confirmText = stringResource(id = R.string.add),
+                        confirmText = stringResource(id = R.string.save),
                         dismissText = stringResource(id = R.string.dismiss),
                         onDismiss = { viewModel.showDialog = false },
                         onConfirm = {
-                            viewModel.addRib(
-                                rib = user.RIB ?: ""
-                            )
-                            viewModel.showDialog = false
+                            if(viewModel.verifyRib(user.RIB ?: "")){
+                                viewModel.addRib(
+                                    rib = user.RIB ?: ""
+                                )
+                                viewModel.showDialog = false
+                            }
                         }
                     )
 

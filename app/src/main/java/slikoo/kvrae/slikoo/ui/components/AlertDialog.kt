@@ -23,6 +23,9 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +41,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.data.datasources.entities.Feedback
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
@@ -106,7 +110,6 @@ fun CustomAlertDialog(
 
 
 }
-
 @Composable
 fun CustomAlertDialogWithContent(
     title: String = stringResource(R.string.title),
@@ -153,6 +156,9 @@ fun CustomAlertDialogWithContent(
                 )
             }
         },
+        modifier = Modifier
+            .border(1.dp, LightBackground.copy(alpha = 0.1f),
+            RoundedCornerShape(16.dp))
     )
 }
 
@@ -170,7 +176,8 @@ fun LoadingDialog() {
             contentAlignment= Alignment.Center,
             modifier = Modifier
                 .size(100.dp)
-                .background(LightError, shape = RoundedCornerShape(8.dp))
+                .background(color = LightError, shape = RoundedCornerShape(8.dp))
+                .border(1.dp, LightBackground.copy(alpha = 0.1f), RoundedCornerShape(8.dp))
         ) {
             CircularProgressIndicator(
                 color = LightPrimary,
@@ -260,120 +267,8 @@ fun MaterialAlertBox(
 }
 
 
-@Composable
-fun FeedbackAlertForm(
-    viewModel: FeedbackViewModel,
-    idMeal: Int,
-    idUser: Int,
-    onDismiss: () -> Unit = {}
-) {
-    Dialog(
-        properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true,
-        ),
-        onDismissRequest = {
-            onDismiss()
-        },
-        content = {
-            FeedbackContent(
-                viewModel = viewModel,
-                idMeal = idMeal,
-                idUser = idUser
-            )
-        },
-    )
-}
 
-@Composable
-fun FeedbackContent(
-    viewModel: FeedbackViewModel,
-    idMeal: Int,
-    idUser: Int
-) {
-    Surface(
-        modifier = Modifier
-            .background(color = LightSecondary),
-        shape = RoundedCornerShape(16.dp),
-        elevation = 4.dp,
-    ) {
-        Column(
-            modifier = Modifier
-                .background(color = LightSecondary)
-                .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Surface(
-                modifier = Modifier
-                    .size(60.dp)
-                    .background(color = LightSecondary),
-                shape = CircleShape,
-                elevation = 8.dp
 
-            ) {
-                AsyncImage(
-                    model = (viewModel.feedback.recipient.avatarUrl.plus(viewModel.feedback.recipient.avatar)),
-                    contentDescription = "Image",
-                    contentScale = ContentScale.Crop,
-                )
-            }
-            Spacer(modifier = Modifier.size(8.dp))
-            Text(
-                text = viewModel.feedback.recipient.nom + " " + viewModel.feedback.recipient.prenom,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.size(16.dp))
-
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = stringResource(R.string.your_feedback),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.size(4.dp))
-                FeedbackRatingBar(
-                    iconsSize = 24,
-                    currentRating = viewModel.feedback.rate,
-                    onRatingChanged = {
-                        if (!viewModel.verifyFeedbackSubmitted(idUser, idMeal))
-                            viewModel.feedback.rate = it
-                    }
-                )
-            }
-            Spacer(modifier = Modifier.size(8.dp))
-            CustomTextField(
-                onChange = {
-                    if (!viewModel.verifyFeedbackSubmitted(idUser, idMeal))
-                        viewModel.feedback = viewModel.feedback.copy(comment = it)
-                },
-                leadingIcon = ImageVector.vectorResource(id = R.drawable.feedback),
-                value = viewModel.feedback.comment,
-                label = stringResource(R.string.comment),
-                readOnly = viewModel.verifyFeedbackSubmitted(idUser, idMeal)
-            )
-            Spacer(modifier = Modifier.size(12.dp))
-            if (idMeal != 0 && idUser != 0 &&
-                !viewModel.verifyFeedbackSubmitted(idUser, idMeal)
-            )
-                CustomButton(
-                    text = stringResource(id = R.string.submit),
-                    onClick = {
-                        viewModel.addFeedback(
-                            idReciver = idUser,
-                            idMeal = idMeal,
-                            comment = viewModel.feedback.comment,
-                            rate = viewModel.feedback.rate
-                        )
-                    }
-                )
-        }
-    }
-
-}
 
 
 

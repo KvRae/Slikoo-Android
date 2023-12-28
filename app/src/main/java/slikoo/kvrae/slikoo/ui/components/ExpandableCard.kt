@@ -129,9 +129,6 @@ fun MultiChoiceExpendableCard(
         Icons.Filled.KeyboardArrowUp //it requires androidx.compose.material:material-icons-extended
     else
         Icons.Filled.KeyboardArrowDown
-
-    var selectedItems by remember { mutableStateOf(listOf<String>()) }
-
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -177,14 +174,7 @@ fun MultiChoiceExpendableCard(
         ) {
             items.forEach { label ->
                 DropdownMenuItem(onClick = {
-                    selectedItems = selectedItems.toMutableList().apply {
-                        if (selectedItems.contains(label)) {
-                            remove(label)
-                        } else {
-                            add(label)
-                        }
-                    }
-                    onTitleChange(selectedItems.joinToString(","))
+                    onTitleChange(label)
                     expanded = false
                 }) {
                     Text(text = label)

@@ -27,6 +27,7 @@ class EditMealViewModel: ViewModel() {
     private val mealRDS = MealRemoteDataSource()
     var meal by mutableStateOf(Meal())
     var bannerUrl = (meal.avatarUrl.plus(meal.avatar)).toUri()
+    val banner  = mutableStateOf(bannerUrl)
     var resCode by mutableStateOf(0)
 
     var isLoading by mutableStateOf(false)
@@ -40,10 +41,9 @@ class EditMealViewModel: ViewModel() {
             try {
                 isLoading = true
                 meal = async { mealRDS.getMealById(id) }.await()
-
-
             }catch (e : Exception) {
                 e.message
+                isError = true
             }
             finally {
                 isLoading = false
@@ -51,8 +51,17 @@ class EditMealViewModel: ViewModel() {
         }
     }
 
-    fun onUpdateMeal(mealBanner: File, id: Int) {
+    fun onUpdateMeal(mealBanner: File?, id: Int) {
         resCode = 0
+//        meal.nom.ifEmpty { m.nom = TempSession.user.nom }
+//        user.prenom.ifEmpty { user.prenom = TempSession.user.prenom }
+//        user.numtel.ifEmpty { user.numtel = TempSession.user.numtel }
+//        user.codepostal.ifEmpty { user.codepostal = TempSession.user.codepostal }
+//        user.ville.ifEmpty { user.ville = TempSession.user.ville }
+//        user.adressepostal.ifEmpty { user.adressepostal = TempSession.user.adressepostal }
+//        user.sexe.ifEmpty { user.sexe = TempSession.user.sexe }
+//        user.ville.ifEmpty { user.ville = TempSession.user.ville }
+//        user.description.ifEmpty { user.description = TempSession.user.description }
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isError = false
@@ -62,7 +71,7 @@ class EditMealViewModel: ViewModel() {
                     .updateMeal(
                         token = TempSession.token,
                         meal = meal,
-                        mealBanner = mealBanner,
+                        mealBanner = mealBanner ?: File(""),
                         id = id
                     ) }.await()
             } catch (e: Exception) {

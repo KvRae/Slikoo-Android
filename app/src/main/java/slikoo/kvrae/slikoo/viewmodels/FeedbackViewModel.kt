@@ -31,7 +31,6 @@ class FeedbackViewModel : ViewModel() {
     val invitations = mutableStateListOf<Invitation>()
 
     val feedbacks = mutableStateListOf<Feedback>()
-    var feedback by mutableStateOf(Feedback())
 
 
     var resCode by mutableStateOf(0)
@@ -171,10 +170,24 @@ class FeedbackViewModel : ViewModel() {
      }
     }
 
-    fun getFeedbackById(){
-        // TODO
-    }
+    fun getMyFeedbackByUserMeal(idUser: Int, idMeal: Int): Feedback {
+        var feedback = Feedback()
+        try {
+            isLoading = true
+            feedbacks.forEach {
+                if (it.recipientId == idUser.toString() && it.idMeal == idMeal.toString())
+                    feedback = it
 
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            isError = true
+        } finally {
+            isLoading = false
+        }
+        return feedback
+
+    }
     fun verifyFeedbackSubmitted(idUser: Int, idMeal: Int): Boolean {
         try {
             feedbacks.forEach {
@@ -185,17 +198,6 @@ class FeedbackViewModel : ViewModel() {
             return false
         }
         return false
-    }
-
-    fun getFeedbackByUserId(idUser: Int){
-        try {
-            feedbacks.forEach {
-                if (it.recipientId == idUser.toString())
-                  feedback = it
-            }
-        } catch (e: Exception) {
-
-        }
     }
 
 

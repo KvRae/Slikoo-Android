@@ -82,7 +82,7 @@ fun MealsByCategory(
                 TextWithImageScreen(
                     imageVector = ImageVector.vectorResource(id = R.drawable.no_food),
                     text = stringResource(id = R.string.no_meals),
-                    backgound = LightSecondary,
+                    background = LightSecondary,
                 )
             if (viewModel.isLoading.value)
                 LoadingDialog()

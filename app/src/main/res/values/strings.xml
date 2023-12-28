@@ -192,7 +192,7 @@
     <string name="submit">Envoyer</string>
     <string name="your_feeback">Votre Avis</string>
     <string name="no_meals">Pas de repas</string>
-    <string name="no_feedback">Vous n\'avez pas d\'avis</string>
+    <string name="no_feedback">Ils n\'y a pas d\'avis</string>
     <string name="meal_added">Repas Ajouter</string>
     <string name="account_created">Vous avez créé votre compte avec succès.</string>
     <string name="congratulations">Félicitations!</string>
@@ -202,6 +202,10 @@
     <string name="participate_msg">Vous participez a cet evenement</string>
     <string name="reservation_rejected">Reservation Rejetée</string>
     <string name="your_feedback">Votre avis</string>
-    <string name="comment">Ajouter un commentaire</string>
+    <string name="comment">Votre commentaire</string>
     <string name="delete_account">Supprimer mom profile</string>
+    <string name="invalid_rib">Respectez le format de Rib</string>
+    <string name="invalid_link">Renseignez un lien valide</string>
+    <string name="canceled">Annulée</string>
+    <string name="meal_update">Mettre a jour le repas</string>
 </resources>

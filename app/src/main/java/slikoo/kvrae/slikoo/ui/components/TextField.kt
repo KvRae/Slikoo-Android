@@ -106,7 +106,7 @@ fun CustomTextField(
             visualTransformation = VisualTransformation.None,
             isError = if (errorMessage.isNotEmpty() && isError) true else isError,
             trailingIcon = {
-                if (value?.isNotEmpty() == true && trailingIcon == null) {
+                if (value?.isNotEmpty() == true && trailingIcon == null && !readOnly) {
                     IconButton(onClick = {
                         onChange("")
                     }) {

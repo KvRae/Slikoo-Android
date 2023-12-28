@@ -41,11 +41,14 @@ fun UserOffersList(navController: NavController) {
     var isOpen by remember { mutableStateOf(false) }
     var mealId by remember { mutableStateOf(0) }
 
-    if (viewModel.myMeals.isEmpty())
-        DisposableEffect(viewModel.myMeals) {
-            viewModel.getMyMeals()
-            onDispose {}
+
+    DisposableEffect(key1 = viewModel.myMeals, key2 = viewModel.isDeleted) {
+        viewModel.getMyMeals()
+        onDispose {
+            viewModel.isLoading.value = false
+            viewModel.isDeleted = false
         }
+    }
 
     Box(
         modifier = Modifier
@@ -79,7 +82,7 @@ fun UserOffersList(navController: NavController) {
                                         mealId = viewModel.myMeals[it].id
                                     },
                                     onEdit = {
-                                        navController.navigate("edit_meal/${viewModel.myMeals[it].id}")
+                                        navController.navigate("edit_meal_screen/${viewModel.myMeals[it].id}")
                                     }
                                 )
                             }
@@ -93,6 +96,7 @@ fun UserOffersList(navController: NavController) {
                 onDismiss = { isOpen = false },
                 onConfirm = {
                     viewModel.deleteMeal(mealId)
+                    viewModel.myMeals.removeIf { it.id == mealId }
                     isOpen = false
 
 
@@ -102,7 +106,7 @@ fun UserOffersList(navController: NavController) {
         if (viewModel.myMeals.isEmpty() && !viewModel.isLoading.value) TextWithImageScreen(
             imageVector = ImageVector.vectorResource(id =R.drawable.no_food),
             text = stringResource(id = R.string.no_meals),
-            backgound = LightError)
+            background = LightError)
         if (viewModel.isLoading.value) LoadingScreen(
             background = LightError
         )

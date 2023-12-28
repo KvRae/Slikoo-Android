@@ -34,7 +34,7 @@ import slikoo.kvrae.slikoo.viewmodels.UserDetailsViewModel
 @Composable
 fun AdvancedProfileScreen(
     navController: NavController,
-    id : Int = 0
+    id: Int = 0
 ) {
     val viewModel: UserDetailsViewModel = viewModel()
 
@@ -54,7 +54,10 @@ fun AdvancedProfileScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        EditProfileTopBar(navController = navController, title = stringResource(id = R.string.advanced_profile))
+        EditProfileTopBar(
+            navController = navController,
+            title = stringResource(id = R.string.advanced_profile)
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -66,97 +69,108 @@ fun AdvancedProfileScreen(
         ) {
             ExpandableCard(
                 items = viewModel.choices,
-                placeholder ="Fumeur" ,
-                value = viewModel.userDetails.fumeur?:"",
-                label = stringResource(R.string.fumer)  ,
+                placeholder = "Fumeur",
+                value = viewModel.userDetails.fumeur ?: "",
+                label = stringResource(R.string.fumer),
                 onTitleChange = { viewModel.userDetails = viewModel.userDetails.copy(fumeur = it) },
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.cigarette_icon)
             )
             ExpandableCard(
                 items = viewModel.choices,
                 label = stringResource(R.string.alcoholic),
-                value = viewModel.userDetails.alcohol?:"",
+                value = viewModel.userDetails.alcohol ?: "",
                 placeholder = stringResource(R.string.alcoholic),
-                onTitleChange = { viewModel.userDetails = viewModel.userDetails.copy(alcohol = it) },
+                onTitleChange = {
+                    viewModel.userDetails = viewModel.userDetails.copy(alcohol = it)
+                },
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.cup_icon)
             )
             MultiChoiceExpendableCard(
-                items = viewModel.choices,
-                onTitleChange = { viewModel.userDetails.algalimentaire.add(it) },
+                items = viewModel.foodAlergies,
+                onTitleChange = {
+                    viewModel.onFoodAlergiesChange(
+                        it
+                    )
+                },
                 value = viewModel.userDetails.algalimentaire.joinToString(),
                 label = "Allergie alimentaire",
+                leadingIcon = ImageVector.vectorResource(id = R.drawable.person_search)
+            )
+            MultiChoiceExpendableCard(
+                items = viewModel.lookingFor,
+                onTitleChange = { viewModel.onLookingForChange(it) },
+                value = viewModel.userDetails.cherche.joinToString(),
+                label = "Genre Recherché",
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.fork_knife_icon)
             )
             MultiChoiceExpendableCard(
-                items = viewModel.langues,
-                onTitleChange = {
-                                if (viewModel.userDetails.langues.contains(it)) {
-                                    viewModel.userDetails.langues.remove(it)
-                                } else {
-                                    viewModel.userDetails.langues.add(it)
-                                }
-                },
+                items = viewModel.languages,
+                onTitleChange = { viewModel.onLanguagesChange(it)},
                 value = viewModel.userDetails.langues.joinToString(),
                 label = "Langues",
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.language_icon)
             )
-            CustomTextField(
-                onChange = {
-                    if (viewModel.userDetails.centreinteret.contains(it)) {
-                        viewModel.userDetails.centreinteret.remove(it)
-                    } else {
-                        viewModel.userDetails.centreinteret.add(it)
-                    }
-                },
+            MultiChoiceExpendableCard(
+                onTitleChange = { it -> viewModel.onAreaOfInterestChange(it) },
+                items = viewModel.areaOfInterest,
                 value = viewModel.userDetails.centreinteret.joinToString(),
                 label = "Centres d'interet",
                 leadingIcon = ImageVector.vectorResource(id = R.drawable.heart_icon)
             )
-            CustomTextField(onChange = {
-
-            },
+            MultiChoiceExpendableCard(
+                items = viewModel.lookingPlus,
+                onTitleChange = { viewModel.onLookingPlusChange(it) },
                 value = viewModel.userDetails.chercherplus.joinToString(),
                 label = "Vous cherchez plus",
-                leadingIcon = ImageVector.vectorResource(id = R.drawable.person_search)
+                leadingIcon = ImageVector.vectorResource(id = R.drawable.person_add)
             )
             CustomTextField(
                 onChange = {
                     viewModel.userDetails = viewModel.userDetails.copy(Facebooklink = it)
                 },
-                value = viewModel.userDetails.Facebooklink?:"",
-                label ="Facebook",
+                value = viewModel.userDetails.Facebooklink ?: "",
+                label = "Facebook",
                 placeHolder = "www.facebook.com/johnDOE",
-                leadingIcon =  ImageVector.vectorResource(id = R.drawable.facebook_out_icon)
+                isError = !viewModel.onValidateFacebookLink(viewModel.userDetails.Facebooklink ?: ""),
+                errorMessage = stringResource(id = R.string.invalid_link),
+                leadingIcon = ImageVector.vectorResource(id = R.drawable.facebook_out_icon)
             )
             CustomTextField(
-                onChange = {viewModel.userDetails = viewModel.userDetails.copy(TwitterLink = it)},
-                value = viewModel.userDetails.TwitterLink?:"",
-                label ="X(Twitter)",
+                onChange = { viewModel.userDetails = viewModel.userDetails.copy(TwitterLink = it) },
+                value = viewModel.userDetails.TwitterLink ?: "",
+                label = "X(Twitter)",
+                isError = !viewModel.onValidateTwitterLink(viewModel.userDetails.TwitterLink ?: ""),
+                errorMessage = stringResource(id = R.string.invalid_link),
                 placeHolder = "www.twitter.com/johnDOE",
-                leadingIcon =  ImageVector.vectorResource(id = R.drawable.x_out_icon)
+                leadingIcon = ImageVector.vectorResource(id = R.drawable.x_out_icon)
             )
             CustomTextField(
                 onChange = {
                     viewModel.userDetails = viewModel.userDetails.copy(InstagramLink = it)
                 },
-                value = viewModel.userDetails.InstagramLink?:"",
-                label ="Instagram",
+                value = viewModel.userDetails.InstagramLink ?: "",
+                isError = !viewModel.onValidateInstagramLink(viewModel.userDetails.InstagramLink ?: ""),
+                errorMessage = stringResource(id = R.string.invalid_link),
+                label = "Instagram",
                 placeHolder = "www.instagram.com/johnDOE",
-                leadingIcon =  ImageVector.vectorResource(id = R.drawable.instagram_out_icon)
+                leadingIcon = ImageVector.vectorResource(id = R.drawable.instagram_out_icon)
             )
             CustomTextField(
                 onChange = {
                     viewModel.userDetails = viewModel.userDetails.copy(LinkedinLink = it)
                 },
-                value = viewModel.userDetails.LinkedinLink?:"",
-                label ="LinkedIn",
+                value = viewModel.userDetails.LinkedinLink ?: "",
+                label = "LinkedIn",
+                isError = !viewModel.onValidateLinkedinLink(viewModel.userDetails.LinkedinLink ?: ""),
+                errorMessage = stringResource(id = R.string.invalid_link),
                 placeHolder = "www.linkedin.com/johnDOE",
-                leadingIcon =  ImageVector.vectorResource(id = R.drawable.linkedin_out_icon)
+                leadingIcon = ImageVector.vectorResource(id = R.drawable.linkedin_out_icon)
             )
             Spacer(modifier = Modifier.padding(16.dp))
             CustomButton(
                 text = stringResource(id = R.string.save),
                 onClick = {
+                    viewModel.isError = false
                     if (viewModel.userDetails.idusermain!!.isNotEmpty()) {
                         viewModel.updateUserDetails(viewModel.userDetails)
                     } else {
@@ -168,13 +182,19 @@ fun AdvancedProfileScreen(
         }
     }
     if (viewModel.isError) {
-        //ErrorDialog(error = viewModel.error)
+        val toastMsg = stringResource(id = R.string.form_error_message)
+        DisposableEffect(Unit) {
+            makeToast(navController.context, toastMsg)
+            onDispose {
+                viewModel.isError = false
+            }
+        }
     }
     if (viewModel.navigate) {
         val toastMsg = stringResource(id = R.string.profile_updated)
-        DisposableEffect(Unit){
+        DisposableEffect(Unit) {
             navController.popBackStack()
-            makeToast(navController.context,toastMsg)
+            makeToast(navController.context, toastMsg)
             onDispose {
                 viewModel.navigate = false
             }

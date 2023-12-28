@@ -1,9 +1,9 @@
 package slikoo.kvrae.slikoo.ui.fragments.profile
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -51,29 +51,26 @@ import slikoo.kvrae.slikoo.ui.theme.LightYellow
 import slikoo.kvrae.slikoo.viewmodels.InvitationsViewModel
 
 
-@SuppressLint("SuspiciousIndentation")
+
 @Composable
 fun InvitationsFragment(
-    navController: androidx.navigation.NavController
+    navController: NavController
 ) {
     val viewModel: InvitationsViewModel = viewModel()
-
-    if (viewModel.invitations.isEmpty())
     DisposableEffect(viewModel.invitations) {
         viewModel.getInvitations()
-
         onDispose {
-            // Clean up resources if needed
+            viewModel.isLoading = false
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxWidth(1f)
             .fillMaxHeight(1f),
-        verticalArrangement = Arrangement.Top,
+        contentAlignment = Alignment.TopCenter
     ) {
-        if (viewModel.invitations.isNotEmpty()) {
+        if (viewModel.invitations.size > 0 && viewModel.invitations.isNotEmpty()) {
             SwipeRefresh(
                 state =  rememberSwipeRefreshState(isRefreshing = viewModel.isLoading),
                 onRefresh = { viewModel.getInvitations() }
@@ -119,7 +116,7 @@ fun InvitationsFragment(
         } else
             TextWithImageScreen(
                 imageVector = ImageVector.vectorResource(id = R.drawable.no_meals),
-                backgound = LightError,
+                background = LightError,
                 text = stringResource(R.string.no_invits_text))
 
     }
@@ -283,7 +280,6 @@ fun InvitationCard(
                             color = LightRed
                         )
                     }
-
                     else -> Row {}
                 }
 

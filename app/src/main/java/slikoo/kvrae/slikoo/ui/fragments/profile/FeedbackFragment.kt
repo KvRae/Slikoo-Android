@@ -1,5 +1,6 @@
 package slikoo.kvrae.slikoo.ui.fragments.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,16 +8,29 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Done
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,7 +38,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import slikoo.kvrae.slikoo.R
+import slikoo.kvrae.slikoo.data.datasources.entities.Feedback
+import slikoo.kvrae.slikoo.ui.components.CustomButton
+import slikoo.kvrae.slikoo.ui.components.CustomTextField
+import slikoo.kvrae.slikoo.ui.components.FeedbackRatingBar
 import slikoo.kvrae.slikoo.ui.components.MealCardWrapper
 import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
 import slikoo.kvrae.slikoo.ui.pages.TextWithImageScreen
@@ -32,16 +51,17 @@ import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightGreen
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
+import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.viewmodels.FeedbackViewModel
 
 @Composable
 fun FeedbackFragment(navController: NavController) {
-
     val viewModel: FeedbackViewModel = viewModel()
+
     DisposableEffect(key1 = viewModel.invitations, key2 = viewModel.reservations) {
         viewModel.getFeedbacks()
         onDispose {
-
+            viewModel.isLoading = false
         }
     }
 
@@ -53,23 +73,23 @@ fun FeedbackFragment(navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            if (viewModel.reservations.isNotEmpty())
+            if (!(viewModel.reservations.size <= 0 && viewModel.reservations.isEmpty()))
                 MealsSection(
-                    vm = viewModel,
-                    navController = navController
+                    vm = viewModel
                 )
-            if (viewModel.invitations.isNotEmpty())
+            if (!(viewModel.invitations.size <= 0 && viewModel.invitations.isEmpty()))
                 InvitationsSection(
-                    vm = viewModel,
-                    navController = navController
+                    vm = viewModel
                 )
+
+
 
         }
         if (viewModel.reservations.isEmpty() && viewModel.invitations.isEmpty())
             TextWithImageScreen(
                 imageVector = ImageVector.vectorResource(id = R.drawable.no_speaker),
                 text = stringResource(id = R.string.no_feedback),
-                backgound = LightError
+                background = LightError
             )
         if (viewModel.isLoading)
             LoadingScreen(
@@ -79,11 +99,27 @@ fun FeedbackFragment(navController: NavController) {
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MealsSection(
-    vm: FeedbackViewModel,
-    navController: NavController
+    vm: FeedbackViewModel
 ) {
+    val isExpanded = remember {
+        mutableStateOf(false)
+    }
+    val idMeal = remember {
+        mutableStateOf(0)
+    }
+    val idUser = remember {
+        mutableStateOf(0)
+    }
+    val image = remember {
+        mutableStateOf("")
+    }
+    val title = remember {
+        mutableStateOf("")
+    }
+
     Column {
         SectionHeader(text = stringResource(id = slikoo.kvrae.slikoo.R.string.meals))
         Spacer(modifier = Modifier.height(16.dp))
@@ -115,20 +151,64 @@ fun MealsSection(
                         else
                             Icons.Rounded.Add,
                         onClick = {
-                            navController.navigate("feedback_screen/${vm.reservations[it].meal?.id}/${vm.reservations[it].user?.id}")
+                            isExpanded.value = true
+                            idMeal.value = vm.reservations[it].meal?.id ?: 0
+                            idUser.value = vm.reservations[it].user?.id ?: 0
+                            image.value = (vm.reservations[it].meal?.avatarUrl.plus(vm.reservations[it].meal?.avatar))
+                            title.value = (vm.reservations[it].user?.nom ?: "") + " " + (vm.reservations[it].user?.prenom ?: "")
+
                         },
                     )
                 }
             }
         )
     }
+    if (isExpanded.value){
+        ModalBottomSheet(
+            modifier = Modifier
+                .fillMaxWidth()
+                .statusBarsPadding()
+                .navigationBarsPadding(),
+            sheetState = rememberModalBottomSheetState(),
+            onDismissRequest = { isExpanded.value = false },
+            content = {
+                FeedbackContent(
+                    viewModel = vm,
+                    idMeal = idMeal.value,
+                    idUser = idUser.value,
+                    image = image.value,
+                    title = title.value,
+                    onClick = {
+                        isExpanded.value = false
+                    }
+
+                )
+            }
+        )
+    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InvitationsSection(
-    vm: FeedbackViewModel,
-    navController: NavController
+    vm: FeedbackViewModel
 ) {
+
+    val isExpanded = remember {
+        mutableStateOf(false)
+    }
+    val idMeal = remember {
+        mutableStateOf(0)
+    }
+    val idUser = remember {
+        mutableStateOf(0)
+    }
+    val image = remember {
+        mutableStateOf("")
+    }
+    val title = remember {
+        mutableStateOf("")
+    }
 
     Column {
         SectionHeader(text = stringResource(id = slikoo.kvrae.slikoo.R.string.invitations))
@@ -157,15 +237,40 @@ fun InvitationsSection(
                         else
                             Icons.Rounded.Add,
                         onClick = {
-                            navController.navigate("feedback_screen/${vm.invitations[it].meal?.id}/${vm.invitations[it].userDemander?.id}")
-                        }
+                            isExpanded.value = true
+                            idMeal.value = vm.invitations[it].meal?.id ?: 0
+                            idUser.value = vm.invitations[it].userDemander?.id ?: 0
+                            image.value = (vm.invitations[it].userDemander?.avatarUrl.plus(vm.invitations[it].userDemander?.avatar))
+                            title.value = (vm.invitations[it].userDemander?.nom ?: "") + " " + (vm.invitations[it].userDemander?.prenom ?: "")
+                           }
                     )
                 }
 
             }
 
         )
-
+    }
+    if (isExpanded.value){
+        ModalBottomSheet(
+            modifier = Modifier
+                .fillMaxWidth()
+                .statusBarsPadding()
+                .navigationBarsPadding(),
+            sheetState = rememberModalBottomSheetState(),
+            onDismissRequest = { isExpanded.value = false },
+            content = {
+                FeedbackContent(
+                    viewModel = vm,
+                    idMeal = idMeal.value,
+                    idUser = idUser.value,
+                    image = image.value,
+                    title = title.value,
+                    onClick = {
+                        isExpanded.value = false
+                    }
+                )
+            }
+        )
     }
 }
 
@@ -182,5 +287,112 @@ fun SectionHeader(
             fontSize = 16.sp
         )
     )
+
+}
+
+@Composable
+fun FeedbackContent(
+    viewModel: FeedbackViewModel,
+    idMeal: Int,
+    idUser: Int,
+    image: String,
+    title: String,
+    onClick: () -> Unit = {}
+) {
+    val feedback = remember {
+        mutableStateOf(Feedback())
+    }
+
+    DisposableEffect(Unit){
+        feedback.value = viewModel.getMyFeedbackByUserMeal(
+            idUser = idUser,
+            idMeal = idMeal
+        )
+        onDispose { }
+    }
+    Surface(
+        modifier = Modifier
+            .background(color = LightSecondary),
+        shape = RoundedCornerShape(16.dp),
+        elevation = 4.dp,
+    ) {
+        Column(
+            modifier = Modifier
+                .background(color = LightSecondary)
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Surface(
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(color = LightSecondary),
+                shape = CircleShape,
+                elevation = 8.dp
+
+            ) {
+                AsyncImage(
+                    model = image,
+                    contentDescription = "Image",
+                    contentScale = ContentScale.Crop,
+                )
+            }
+            Spacer(modifier = Modifier.size(8.dp))
+            androidx.compose.material.Text(
+                text = title,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                horizontalAlignment = Alignment.Start,
+
+            ) {
+                androidx.compose.material.Text(
+                    text = stringResource(R.string.your_feedback),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.size(4.dp))
+                FeedbackRatingBar(
+                    iconsSize = 24,
+                    currentRating = feedback.value.rate,
+                    onRatingChanged = {
+                        if (!viewModel.verifyFeedbackSubmitted(
+                                idUser= idUser, idMeal =  idMeal))
+                            feedback.value = feedback.value.copy(rate = it)
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.size(8.dp))
+            CustomTextField(
+                onChange = {
+                    if (!viewModel.verifyFeedbackSubmitted(idUser, idMeal))
+                        feedback.value = feedback.value.copy(comment = it)
+                },
+                leadingIcon = ImageVector.vectorResource(id = R.drawable.feedback),
+                value = feedback.value.comment,
+                label = stringResource(R.string.comment),
+                readOnly = viewModel.verifyFeedbackSubmitted(idUser, idMeal)
+            )
+            Spacer(modifier = Modifier.size(12.dp))
+            if (idMeal != 0 && idUser != 0 &&
+                !viewModel.verifyFeedbackSubmitted(idUser, idMeal)
+            )
+                CustomButton(
+                    text = stringResource(id = R.string.submit),
+                    onClick = {
+                        viewModel.addFeedback(
+                            idReciver = idUser,
+                            idMeal = idMeal,
+                            comment = feedback.value.comment,
+                            rate = feedback.value.rate
+                        )
+                        onClick()
+                    }
+                )
+        }
+    }
 
 }

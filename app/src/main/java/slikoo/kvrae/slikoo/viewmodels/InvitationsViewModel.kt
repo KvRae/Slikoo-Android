@@ -1,6 +1,7 @@
 package slikoo.kvrae.slikoo.viewmodels
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -15,7 +16,7 @@ import slikoo.kvrae.slikoo.utils.TempSession
 class InvitationsViewModel : ViewModel() {
     private val invitationRDS = InvitationsRemoteDataSource()
 
-    var invitations = mutableListOf<Invitation>()
+    var invitations = mutableStateListOf<Invitation>()
     var isLoading by mutableStateOf(false)
     var isError by mutableStateOf(false)
 

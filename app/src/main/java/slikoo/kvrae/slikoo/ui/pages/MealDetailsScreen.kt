@@ -68,9 +68,7 @@ import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 
 
 @Composable
-fun MealsDetailScreen(navController: NavController,
-                      id: Int
-) {
+fun MealsDetailScreen(navController: NavController, id: Int) {
     val mealsViewModel: MealsViewModel = viewModel()
     var toastMsg by remember {
         mutableStateOf("")
@@ -82,7 +80,9 @@ fun MealsDetailScreen(navController: NavController,
             idrepas = id,
             iduser = TempSession.user.id
         )
-        onDispose {}
+        onDispose {
+            mealsViewModel.isLoading.value = false
+        }
     }
 
     if (mealsViewModel.meal.value.id != 0) {
@@ -500,7 +500,7 @@ fun DetailsContentBodyWithButtons(
                 contentColor = LightPrimaryVariant
             ),
             onClick = {
-                navController.navigate("Organiser/${viewModel.meal.value.id}")
+                navController.navigate("edit_meal_screen/${viewModel.meal.value.id}")
             }
         ) {
             Text(

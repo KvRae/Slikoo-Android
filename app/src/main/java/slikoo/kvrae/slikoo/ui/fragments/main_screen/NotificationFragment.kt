@@ -31,8 +31,7 @@ fun NotificationScreen(navController: NavController) {
     val notificationViewModel: NotificationViewModel = viewModel()
     val scrollState = rememberScrollState()
 
-    if (notificationViewModel.notifications.value!!.isEmpty())
-        DisposableEffect(Unit) {
+        DisposableEffect(notificationViewModel.notifications) {
             notificationViewModel.isLoading.value = true
             notificationViewModel.getNotifications()
             onDispose { }
@@ -90,7 +89,7 @@ fun NotificationScreen(navController: NavController) {
                 TextWithImageScreen(
                     imageVector = ImageVector.vectorResource(R.drawable.no_notifications),
                     text = stringResource(id = R.string.no_notifications),
-                    backgound = LightSecondary
+                    background = LightSecondary
                 )
             }
 

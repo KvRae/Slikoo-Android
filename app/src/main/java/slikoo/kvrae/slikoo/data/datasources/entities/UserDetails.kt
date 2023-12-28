@@ -15,15 +15,15 @@ data class UserDetails(
     @SerializedName("alcohol")
     var alcohol: String? = "",
     @SerializedName("cherche")
-    var cherche: ArrayList<String> = arrayListOf(),
+    var cherche: MutableList<String> = mutableListOf(),
     @SerializedName("algalimentaire")
-    var algalimentaire: ArrayList<String> = arrayListOf(),
+    var algalimentaire: MutableList<String> = mutableListOf(),
     @SerializedName("centreinteret")
-    var centreinteret: ArrayList<String> = arrayListOf(),
+    var centreinteret: MutableList<String> = mutableListOf(),
     @SerializedName("langues")
-    var langues: ArrayList<String> = arrayListOf(),
+    var langues: MutableList<String> = mutableListOf(),
     @SerializedName("chercherplus")
-    var chercherplus: ArrayList<String> = arrayListOf(),
+    var chercherplus: MutableList<String> = mutableListOf(),
     @SerializedName("Facebooklink")
     var Facebooklink: String? = "",
     @SerializedName("InstagramLink")

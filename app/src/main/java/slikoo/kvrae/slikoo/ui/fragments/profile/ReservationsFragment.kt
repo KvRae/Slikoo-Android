@@ -58,10 +58,12 @@ fun ReservationFragment(
     navController: NavController
 ) {
     val viewModel: ReservationViewModel = viewModel()
-    if (viewModel.reservations.isEmpty()) {
-        DisposableEffect(Unit) {
-            viewModel.getAllReservations()
-            onDispose { }
+
+    DisposableEffect(key1 = viewModel.reservations) {
+        viewModel.getAllReservations()
+        onDispose {
+            viewModel.isLoading = false
+            viewModel.isError = false
         }
     }
 
@@ -111,7 +113,7 @@ fun ReservationFragment(
             TextWithImageScreen(
                 text = stringResource(id = R.string.no_reservations),
                 imageVector = ImageVector.vectorResource(id = R.drawable.no_drinks),
-                backgound = LightError
+                background = LightError
             )
         if (viewModel.isLoading) LoadingScreen(
             background = LightError
@@ -142,12 +144,14 @@ fun ReservationCard(
         "Pending" -> LightYellow
         "Accepted" -> LightGreen
         "Rejected" -> LightRed
+        "Canceled" -> LightRed
         else -> LightBackground
     }
     val offerValue = when (offreText) {
         "Pending" -> stringResource(R.string.pending)
         "Accepted" -> stringResource(R.string.accepted)
         "Rejected" -> stringResource(R.string.rejected)
+        "Canceled" -> stringResource(R.string.canceled)
         else -> ""
     }
     Card(

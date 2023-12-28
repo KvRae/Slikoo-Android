@@ -262,7 +262,15 @@ fun SocialMediaSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = { uriHandler.openUri(userDetail.Facebooklink?:"https://www.facebook.com/") })
+            onClick = {
+                try {
+                    uriHandler.openUri(userDetail.Facebooklink?:"https://www.facebook.com/")
+                }
+                catch (e : Exception) {
+                    uriHandler.openUri("https://www.facebook.com/")
+                }
+
+            })
         {
             Icon(
                 painter = painterResource(id = R.drawable.facebook_icon),
@@ -273,7 +281,15 @@ fun SocialMediaSection(
             )
 
         }
-        IconButton(onClick = { uriHandler.openUri(userDetail.InstagramLink?:"https://www.instagram.com/") })
+        IconButton(onClick = {
+            try {
+                uriHandler.openUri(userDetail.InstagramLink?:"https://www.instagram.com/")
+            }
+            catch (e : Exception) {
+                e.printStackTrace()
+                uriHandler.openUri("https://www.instagram.com/")
+            }
+        })
         {
             Icon(
                 painter = painterResource(id = R.drawable.instagram_icon),
@@ -283,7 +299,15 @@ fun SocialMediaSection(
             )
 
         }
-        IconButton(onClick = { uriHandler.openUri(userDetail.LinkedinLink?:"https://www.linkedin.com/")} )
+        IconButton(onClick = {
+            try {
+                uriHandler.openUri(userDetail.LinkedinLink?:"https://www.linkedin.com/")
+            }
+            catch (e : Exception) {
+                e.printStackTrace()
+                uriHandler.openUri("https://www.linkedin.com/")
+            }
+        } )
         {
             Icon(
                 painter = painterResource(id = R.drawable.linkedin_icon),
@@ -292,7 +316,15 @@ fun SocialMediaSection(
                 modifier = Modifier.size(32.dp)
             )
         }
-        IconButton(onClick = { uriHandler.openUri(userDetail.TwitterLink?:"https://www.twitter.com/") })
+        IconButton(onClick = {
+            try {
+                uriHandler.openUri(userDetail.TwitterLink?:"https://www.twitter.com/")
+            }
+            catch (e : Exception) {
+                e.printStackTrace()
+                uriHandler.openUri("https://www.twitter.com/")
+            }
+        })
         {
             Icon(
                 painter = painterResource(id = R.drawable.twitter_icon),

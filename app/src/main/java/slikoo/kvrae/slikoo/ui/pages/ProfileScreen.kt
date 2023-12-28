@@ -241,11 +241,13 @@ fun UserProfileInfo(user : User = User()) {
                         text = user.nom + " " + user.prenom,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
+                        color = LightBackground,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
                         text = user.email,
+                        color = LightBackground,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 11.sp,
@@ -256,6 +258,7 @@ fun UserProfileInfo(user : User = User()) {
                     )
                     Text(
                         text = user.adressepostal,
+                        color = LightBackground,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         lineHeight = 15.sp,
@@ -267,6 +270,7 @@ fun UserProfileInfo(user : User = User()) {
                     Text(
                         text = user.numtel,
                         maxLines = 1,
+                        color = LightBackground,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Normal,
@@ -291,6 +295,7 @@ fun UserProfileInfo(user : User = User()) {
                         text = stringResource(R.string.about),
                         maxLines = 1,
                         fontSize = 14.sp,
+                        color = LightBackground,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
@@ -298,10 +303,10 @@ fun UserProfileInfo(user : User = User()) {
                         maxLines = 5,
                         letterSpacing = 0.5.sp,
                         lineHeight = 15.sp,
+                        color = LightBackground,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 11.sp,
                         modifier = Modifier.padding(top = 4.dp)
-
                     )
                 }
             }
