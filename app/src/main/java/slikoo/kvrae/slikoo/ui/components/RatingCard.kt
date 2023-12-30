@@ -160,7 +160,7 @@ fun UserRatingBar(
 
             Column {
                 Text(
-                    text = (feedBack?.provider?.nom + feedBack?.provider?.prenom),
+                    text = (feedBack?.provider?.nom + " " + feedBack?.provider?.prenom),
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp,
                     modifier = Modifier.padding(end = 4.dp, top = 1.dp, bottom = 0.dp),

@@ -16,109 +16,109 @@ class ForgetPasswordViewModel: ViewModel() {
     private val userRp = UserRemoteDataSource()
 
     // Fields
-    var email by mutableStateOf("")
-    var code by mutableStateOf("")
-    var password by   mutableStateOf("")
-    var confirmPassword by  mutableStateOf("")
+    val email = mutableStateOf("")
+    val code = mutableStateOf("")
+    val password =   mutableStateOf("")
+    val confirmPassword =  mutableStateOf("")
 
     // Response code
-    var resCode by mutableStateOf(0)
+    private val resCode = mutableStateOf(0)
 
     // Validation
-    var isEmailValid by  mutableStateOf(false)
-    var isCodeValid by  mutableStateOf(false)
-    var isPasswordValid by  mutableStateOf(false)
+    val isEmailValid =  mutableStateOf(false)
+    val isCodeValid =  mutableStateOf(false)
+    val isPasswordValid =  mutableStateOf(false)
 
 
 
     // Navigation and loading
-    var onNavigate by mutableStateOf(false)
-    var isLoading by mutableStateOf(false)
+    val onNavigate = mutableStateOf(false)
+    val isLoading = mutableStateOf(false)
 
     // Error messages
-    var emailError by mutableStateOf("")
-    var codeError by mutableStateOf("")
+    val emailError by mutableStateOf("")
+    val codeError by mutableStateOf("")
     var passwordError by mutableStateOf("")
 
     // Email methods
-    fun onEmailChange(email: String) {
-        this.email = email
-        isEmailValid = EMAIL_ADDRESS.matcher(email).matches() && email.isNotEmpty()
+    private fun onEmailChange(email: String) {
+        this.email.value = email
+        isEmailValid.value = EMAIL_ADDRESS.matcher(email).matches() && email.isNotEmpty()
     }
     private fun onSendEmailToVerify(email : String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
 
-                isLoading = true
-                resCode = async { userRp.forgotPasswordEmailVerify(email) }.await()
-                onNavigate = async { resCode == 200 }.await()
+                isLoading.value = true
+                resCode.value = async { userRp.forgotPasswordEmailVerify(email) }.await()
+                onNavigate.value = async { resCode.value == 200 }.await()
             }
             catch (e: Exception){
-                isEmailValid = false
+                isEmailValid.value = false
             }
             finally {
-                isLoading = false
+                isLoading.value = false
             }
         }
     }
     fun onEmailVerify(){
-        onEmailChange(this.email)
-        if (isEmailValid)
-            onSendEmailToVerify(email)
+        onEmailChange(this.email.value)
+        if (isEmailValid.value)
+            onSendEmailToVerify(email.value)
     }
 
     // OTP Code methods
-    fun onCodeChange(code: String) {
-        this.code = code
-        isCodeValid = code.isNotEmpty() && code.length == 6
+    private fun onCodeChange(code: String) {
+        this.code.value = code
+        isCodeValid.value = code.isNotEmpty() && code.length == 6
     }
     private fun onSendCodeToVerify(email : String, code : String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                isLoading = true
-                resCode = async { userRp.forgetPasswordDcVerify(email, code) }.await()
-                onNavigate = async { resCode == 200 }.await()
+                isLoading.value = true
+                resCode.value = async { userRp.forgetPasswordDcVerify(email, code) }.await()
+                onNavigate.value = async { resCode.value == 200 }.await()
             }
             catch (e: Exception){
-                onNavigate = false
+                onNavigate.value = false
             }
             finally {
-                isLoading = false
+                isLoading.value = false
             }
         }
     }
     fun onCodeVerify(){
-        onCodeChange(code)
-        if (isCodeValid)
-            onSendCodeToVerify(email, code)
+        onCodeChange(code.value)
+        if (isCodeValid.value)
+            onSendCodeToVerify(email.value, code.value)
     }
 
     // Password methods
-    fun onPasswordChange(password: String) {
-        this.password = password
-        isPasswordValid = password.isNotEmpty() && password == confirmPassword
+    private fun onPasswordChange(password: String) {
+        this.password.value = password
+        isPasswordValid.value = password.isNotEmpty() && password == confirmPassword.value
 
     }
     private fun onSendPasswordToVerify(email : String, password : String, code : String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                isLoading = true
+                isLoading.value = true
                 Log.d("code in view model", code)
-                resCode = async { userRp.forgetPasswordUpdatePwd(email, password, code) }.await()
-                onNavigate = async { resCode == 200 }.await()
+                resCode.value = async { userRp.forgetPasswordUpdatePwd(email, password, code) }.await()
+                onNavigate.value = async { resCode.value == 200 }.await()
             }
             catch (e: Exception){
-                onNavigate = false
+                onNavigate.value = false
             }
             finally {
-                isLoading = false
+                isLoading.value = false
             }
         }
     }
     fun onPasswordVerify(){
-        onPasswordChange(this.password)
-        if (isPasswordValid)
-            onSendPasswordToVerify(email, password, code)
+        onPasswordChange(this.password.value)
+        if (isPasswordValid.value)
+            onSendPasswordToVerify(email.value, password.value, code.value)
     }
 }
 

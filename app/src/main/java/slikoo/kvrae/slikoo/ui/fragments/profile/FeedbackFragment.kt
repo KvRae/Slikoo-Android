@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -166,9 +164,8 @@ fun MealsSection(
     if (isExpanded.value){
         ModalBottomSheet(
             modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding()
-                .navigationBarsPadding(),
+                .fillMaxSize(),
+            containerColor = LightSecondary,
             sheetState = rememberModalBottomSheetState(),
             onDismissRequest = { isExpanded.value = false },
             content = {
@@ -253,9 +250,7 @@ fun InvitationsSection(
     if (isExpanded.value){
         ModalBottomSheet(
             modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding()
-                .navigationBarsPadding(),
+                .fillMaxSize(),
             sheetState = rememberModalBottomSheetState(),
             onDismissRequest = { isExpanded.value = false },
             content = {
@@ -312,12 +307,14 @@ fun FeedbackContent(
     }
     Surface(
         modifier = Modifier
-            .background(color = LightSecondary),
+            .background(color = LightSecondary)
+                .fillMaxSize(),
         shape = RoundedCornerShape(16.dp),
         elevation = 4.dp,
     ) {
         Column(
             modifier = Modifier
+                .fillMaxSize(1f)
                 .background(color = LightSecondary)
                 .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -90,7 +90,7 @@ fun SignUpSecondForm(onChange: (String) -> Unit) {
             CustomTextField(
                 onChange = { userViewModel.user.value= userViewModel.user.value.copy(adressepostal = it) },
                 value = userViewModel.user.value.adressepostal,
-                label = stringResource(id = R.string.postal_code),
+                label = stringResource(id = R.string.postal_address),
                 keyboardType = KeyboardType.Text,
                 leadingIcon = Icons.Rounded.Place,
                 errorMessage = userViewModel.onValidatePostalCode(),

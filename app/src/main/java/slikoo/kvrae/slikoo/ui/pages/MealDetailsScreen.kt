@@ -73,17 +73,22 @@ fun MealsDetailScreen(navController: NavController, id: Int) {
     var toastMsg by remember {
         mutableStateOf("")
     }
-
-    DisposableEffect(Unit) {
-        mealsViewModel.getMealById(id)
-        mealsViewModel.checkIfParticipating(
-            idrepas = id,
-            iduser = TempSession.user.id
-        )
-        onDispose {
-            mealsViewModel.isLoading.value = false
+    if (id <= 0 || id.toString().isEmpty())
+        DisposableEffect(Unit ){
+            navController.navigateUp()
+            onDispose {}
         }
-    }
+    if (id != 0)
+        DisposableEffect(Unit) {
+            mealsViewModel.getMealById(id)
+            mealsViewModel.checkIfParticipating(
+                idrepas = id,
+                iduser = TempSession.user.id
+            )
+            onDispose {
+                mealsViewModel.isLoading.value = false
+            }
+        }
 
     if (mealsViewModel.meal.value.id != 0) {
         Box(

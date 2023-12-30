@@ -28,14 +28,12 @@ import slikoo.kvrae.slikoo.viewmodels.NotificationViewModel
 
 @Composable
 fun NotificationScreen(navController: NavController) {
-    val notificationViewModel: NotificationViewModel = viewModel()
     val scrollState = rememberScrollState()
-
-        DisposableEffect(notificationViewModel.notifications) {
-            notificationViewModel.isLoading.value = true
-            notificationViewModel.getNotifications()
-            onDispose { }
-        }
+    val notificationViewModel: NotificationViewModel = viewModel()
+    DisposableEffect(key1 = notificationViewModel.notifications.value?.size) {
+        notificationViewModel.getNotifications()
+        onDispose { }
+    }
 
     Box(
         modifier = Modifier
@@ -45,27 +43,15 @@ fun NotificationScreen(navController: NavController) {
     ) {
         when {
             notificationViewModel.isLoading.value -> {
-                SwipeRefresh(
-                    state = rememberSwipeRefreshState(
-                        isRefreshing = notificationViewModel.isLoading.value
-                    ),
-                    onRefresh = {
-                        notificationViewModel.getNotifications()
-                    }
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        items(6) {
-                            NotificationItemShimmer()
-                        }
+                    items(6) {
+                        NotificationItemShimmer()
                     }
                 }
             }
-
-
-
             notificationViewModel.notifications.value!!.isNotEmpty() -> {
                 SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = notificationViewModel.isLoading.value),
                     onRefresh = { notificationViewModel.getNotifications()}) {
@@ -77,7 +63,7 @@ fun NotificationScreen(navController: NavController) {
                     ) {
                         items(notificationViewModel.notifications.value?.size ?: 0, key = { it }) {
                             NotificationItem(
-                                notification = notificationViewModel.notifications?.value!![it]
+                                notification = notificationViewModel.notifications.value!![it]
                                     ?: return@items
                             )
                         }

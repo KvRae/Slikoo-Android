@@ -207,6 +207,8 @@
     <string name="invalid_link">Renseignez un lien valide</string>
     <string name="canceled">Annulée</string>
     <string name="meal_update">Mettre a jour le repas</string>
+    <string name="postal_address">Adresse Postal</string>
+    <string name="no_internet_connection">Vous n\'etes pas connecté(e)</string>
 
 
 </resources>

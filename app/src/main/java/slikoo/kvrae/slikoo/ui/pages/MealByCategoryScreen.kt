@@ -52,7 +52,7 @@ fun MealsByCategory(
     ) {
         EditProfileTopBar(
             navController = navController,
-            title = stringResource(id = R.string.meal_for) + filter
+            title = stringResource(id = R.string.meal_for) + " " + filter
         )
         Box(
             modifier = Modifier

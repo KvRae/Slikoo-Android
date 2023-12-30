@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.typography
@@ -39,6 +41,7 @@ import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.CustomTextField
 import slikoo.kvrae.slikoo.ui.components.PasswordTextField
 import slikoo.kvrae.slikoo.ui.fragments.profile.makeToast
+import slikoo.kvrae.slikoo.ui.theme.LightGrey
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.viewmodels.ForgetPasswordViewModel
@@ -116,18 +119,27 @@ fun EmailInput(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
+            Icon(
+                imageVector =  Icons.Rounded.Email,
+                contentDescription =  stringResource(id = R.string.email),
+                tint = LightGrey,
+                modifier = Modifier
+                    .size(200.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(16.dp)
+            )
             Text(
                 text = stringResource(R.string.enter_the_email_address_associated_with_your_account),
                 style = typography.titleLarge
             )
             Spacer(modifier = Modifier.padding(16.dp))
-            CustomTextField(onChange = { viewModel.email = it },
-                value = viewModel.email,
+            CustomTextField(onChange = { viewModel.email.value = it },
+                value = viewModel.email.value,
                 label = stringResource(id = R.string.email),
                 keyboardType = KeyboardType.Email,
-                isError = viewModel.isEmailValid,
+                isError = viewModel.isEmailValid.value,
                 errorMessage =
-                if (viewModel.email.isEmpty()) stringResource(id = R.string.email_is_empty)
+                if (viewModel.email.value.isEmpty()) stringResource(id = R.string.email_is_empty)
                 else stringResource(id = R.string.emailInvalid),
                 leadingIcon = Icons.Rounded.Email)
             Spacer(modifier = Modifier.padding(16.dp))
@@ -139,18 +151,19 @@ fun EmailInput(
                 text = stringResource(id = R.string.send_email)
             )
         }
-        if (viewModel.onNavigate){
+
+        if (viewModel.onNavigate.value){
             val toastMsg = stringResource(id = R.string.email_sent)
             DisposableEffect(Unit){
                 onScreenChange("OTP")
                 makeToast(context, toastMsg)
-                viewModel.onNavigate = false
                 onDispose {
-                    viewModel.onNavigate = false
+                    viewModel.onNavigate.value = false
                 }
             }
         }
-        if (viewModel.isLoading) LoadingScreen()
+
+        if (viewModel.isLoading.value) LoadingScreen()
     }
 }
 
@@ -173,19 +186,28 @@ fun OtpInput(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Icon(
+                imageVector = Icons.Rounded.Info,
+                contentDescription = stringResource(id = R.string.code),
+                tint = LightGrey,
+                modifier = Modifier
+                    .size(200.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(16.dp)
+            )
             Text(
                 text = stringResource(R.string.enter_the_code_sent_to_your_email_address),
                 style = typography.titleLarge
             )
             Spacer(modifier = Modifier.padding(16.dp))
             CustomTextField(
-                onChange = { viewModel.code = it },
-                value = viewModel.code ,
+                onChange = { viewModel.code.value = it },
+                value = viewModel.code.value ,
                 label = stringResource(id = R.string.code),
                 keyboardType = KeyboardType.Text,
-                isError = viewModel.isEmailValid,
+                isError = viewModel.isEmailValid.value,
                 errorMessage =
-                if (viewModel.code.isEmpty()) stringResource(id = R.string.code_is_empty)
+                if (viewModel.code.value.isEmpty()) stringResource(id = R.string.code_is_empty)
                 else stringResource(id = R.string.codeInvalid),
                 leadingIcon = Icons.Rounded.Info
             )
@@ -194,20 +216,19 @@ fun OtpInput(
                 text = stringResource(id = R.string.verify),
                 onClick = {
                     viewModel.onCodeVerify()
-                    onMakeToast(context, viewModel.codeError)
                 })
         }
-        if (viewModel.onNavigate){
+        if (viewModel.onNavigate.value){
             val toastMsg = stringResource(id = R.string.code_verified)
             DisposableEffect(Unit){
                 onScreenChange("PASSWORD")
-                viewModel.onNavigate = false
+                makeToast(context, toastMsg)
                 onDispose {
-                    viewModel.onNavigate = false
+                    viewModel.onNavigate.value = false
                 }
             }
         }
-        if (viewModel.isLoading) LoadingScreen()
+        if (viewModel.isLoading.value) LoadingScreen()
     }
 }
 
@@ -227,24 +248,33 @@ fun PasswordReset(
             .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Icon (
+            imageVector = Icons.Rounded.Lock,
+            contentDescription = stringResource(id = R.string.reset_password),
+            tint = LightGrey,
+            modifier = Modifier
+                .size(200.dp)
+                .align(Alignment.CenterHorizontally)
+                .padding(16.dp)
+        )
         Text(text = stringResource(id = R.string.reset_password)   ,
             style = typography.titleLarge)
         PasswordTextField(
-            value = viewModel.password,
+            value = viewModel.password.value,
             label = stringResource(id = R.string.password),
-            placeHolder = viewModel.password,
-            onChange = { viewModel.password = it },
-            isError = viewModel.isPasswordValid,
-            errorMessage = if (viewModel.password.isEmpty()) stringResource(id = R.string.password_is_empty)
+            placeHolder = viewModel.password.value,
+            onChange = { viewModel.password.value = it },
+            isError = viewModel.isPasswordValid.value,
+            errorMessage = if (viewModel.password.value.isEmpty()) stringResource(id = R.string.password_is_empty)
             else stringResource(id = R.string.password_short)
         )
         PasswordTextField(
-            value = viewModel.confirmPassword,
+            value = viewModel.confirmPassword.value,
             label = stringResource(id = R.string.confirm_password),
-            placeHolder = viewModel.password,
-            onChange = { viewModel.confirmPassword = it },
-            isError = viewModel.isPasswordValid,
-            errorMessage = if (viewModel.confirmPassword.isEmpty()) stringResource(id = R.string.password_is_empty)
+            placeHolder = viewModel.password.value,
+            onChange = { viewModel.confirmPassword.value = it },
+            isError = viewModel.isPasswordValid.value,
+            errorMessage = if (viewModel.confirmPassword.value.isEmpty()) stringResource(id = R.string.password_is_empty)
             else stringResource(id = R.string.password_short)
         )
         Spacer(modifier = Modifier.padding(16.dp))
@@ -254,7 +284,7 @@ fun PasswordReset(
             },
             text = stringResource(id = R.string.verify)
         )
-        if (viewModel.onNavigate){
+        if (viewModel.onNavigate.value){
             val toastMsg = stringResource(id = R.string.password_changed)
             DisposableEffect(Unit){
                 onNavigateTo(navController, AppScreenNavigator
@@ -262,13 +292,13 @@ fun PasswordReset(
                     .route)
                 makeToast(navController.context, toastMsg)
                 onDispose {
-                    viewModel.onNavigate = false
+                    viewModel.onNavigate.value = false
                     onScreenChange("EMAIL")
                 }
             }
         }
     }
-    if (viewModel.isLoading) LoadingScreen()
+    if (viewModel.isLoading.value) LoadingScreen()
 
 }
 
