@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -44,9 +45,7 @@ fun HomeScreen(navController: NavController) {
     val mealsViewModel : MealsViewModel  = viewModel()
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = mealsViewModel.isLoading.value),
-        onRefresh = {
-            mealsViewModel.getAllMeals()
-        }
+        onRefresh = { mealsViewModel.getAllMeals() }
     ) {
         Box(
             modifier = Modifier
@@ -60,26 +59,37 @@ fun HomeScreen(navController: NavController) {
                     .padding(8.dp)
             ) {
                 Spacer(modifier = Modifier.padding(8.dp))
-                if (mealsViewModel.meals.value.isNotEmpty()) OnlineRecipes(
-                    navController,
-                    mealsViewModel
-                )
+
+                if (mealsViewModel.meals.isNotEmpty())
+                    OnlineRecipes(navController, mealsViewModel)
+
                 Spacer(modifier = Modifier.padding(8.dp))
+
                 ThemeListSection(navController)
+
                 Spacer(modifier = Modifier.padding(8.dp))
+
                 RecipesCategorySection(navController)
             }
         }
     }
 
-    if (mealsViewModel.meals.value.isEmpty() && mealsViewModel.isLoading.value) LoadingScreen()
+    if (mealsViewModel.meals.isEmpty() && mealsViewModel.isLoading.value) LoadingScreen()
 }
 
 
 @Composable
-fun OnlineRecipes(navController: NavController,mealsViewModel : MealsViewModel ) {
-    val meals = mealsViewModel.meals
-    val size = if (meals.value.size > 6) 6 else meals.value.size
+fun OnlineRecipes(
+    navController: NavController,
+    mealsViewModel : MealsViewModel
+) {
+    val meals = remember {
+        mealsViewModel.meals.ifEmpty {
+            mealsViewModel.getAllMeals()
+            mealsViewModel.meals
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -89,8 +99,8 @@ fun OnlineRecipes(navController: NavController,mealsViewModel : MealsViewModel )
             SectionHeader(title = stringResource(R.string.online_recipes))
             Spacer(modifier = Modifier.padding(8.dp))
             LazyRow(modifier = Modifier.fillMaxWidth()) {
-                items(size) {
-                    RecipeCardContent(meals.value[it], navController = navController)
+                items(meals.size) {
+                    RecipeCardContent(meals[it], navController = navController)
                 }
             }
         }

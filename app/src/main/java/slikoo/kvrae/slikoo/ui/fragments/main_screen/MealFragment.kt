@@ -38,6 +38,10 @@ fun RecipeScreen(navController: NavController) {
     val mealsViewModel: MealsViewModel = viewModel()
     val scrollState = rememberLazyGridState()
 
+    val filteredMeals = remember {
+        mealsViewModel.filteredMeals
+    }
+
     DisposableEffect(mealsViewModel.meals) {
         mealsViewModel.getAllMeals()
         onDispose { }
@@ -67,7 +71,7 @@ fun RecipeScreen(navController: NavController) {
                                     },
                     onFilter = { }
                     )
-            if (mealsViewModel.filteredMeals.isEmpty() && !mealsViewModel.searchText.value.isEmpty())
+            if (filteredMeals.isEmpty() && !mealsViewModel.searchText.value.isEmpty())
                 TextWithImageScreen(
                     imageVector = ImageVector.vectorResource(id = R.drawable.no_meals),
                     text = stringResource(id = R.string.no_element_found),
@@ -84,10 +88,10 @@ fun RecipeScreen(navController: NavController) {
                     userScrollEnabled = true,
                     state = scrollState,
                     content = {
-                        if (mealsViewModel.filteredMeals.isEmpty() && mealsViewModel.isLoading.value) items(
+                        if (filteredMeals.isEmpty() && mealsViewModel.isLoading.value) items(
                             6
                         ) { ShimmerRecipeCard() }
-                        items(mealsViewModel.filteredMeals.size) {
+                        items(filteredMeals.size) {
                             RecipeCardContent(
                                 meal = mealsViewModel.filteredMeals[it],
                                 navController = navController
@@ -96,7 +100,7 @@ fun RecipeScreen(navController: NavController) {
                     }
                 )
             }
-            if (mealsViewModel.filteredMeals.isEmpty() && !mealsViewModel.isLoading.value)
+            if (filteredMeals.isEmpty() && !mealsViewModel.isLoading.value)
                 TextWithImageScreen(
                     imageVector = ImageVector.vectorResource(id = R.drawable.no_food),
                     text = stringResource(id = R.string.no_meals),

@@ -122,7 +122,6 @@ fun MealOrganizeScreen(
                     EventFinalFragment(
                         onFragmentChange = { fragment = it },
                         navController = navController,
-                        idMeal = idMeal,
                     )
                 }
                 else -> EventFirstFragment(

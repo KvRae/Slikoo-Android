@@ -58,9 +58,7 @@ fun FeedbackFragment(navController: NavController) {
 
     DisposableEffect(key1 = viewModel.invitations, key2 = viewModel.reservations) {
         viewModel.getFeedbacks()
-        onDispose {
-            viewModel.isLoading = false
-        }
+        onDispose {}
     }
 
     Box(
@@ -71,17 +69,8 @@ fun FeedbackFragment(navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            if (!(viewModel.reservations.size <= 0 && viewModel.reservations.isEmpty()))
-                MealsSection(
-                    vm = viewModel
-                )
-            if (!(viewModel.invitations.size <= 0 && viewModel.invitations.isEmpty()))
-                InvitationsSection(
-                    vm = viewModel
-                )
-
-
-
+            if (!(viewModel.reservations.size <= 0 && viewModel.reservations.isEmpty())) MealsSection(vm = viewModel)
+            if (!(viewModel.invitations.size <= 0 && viewModel.invitations.isEmpty())) InvitationsSection(vm = viewModel)
         }
         if (viewModel.reservations.isEmpty() && viewModel.invitations.isEmpty())
             TextWithImageScreen(

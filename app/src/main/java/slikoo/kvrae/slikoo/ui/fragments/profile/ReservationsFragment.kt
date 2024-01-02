@@ -61,10 +61,7 @@ fun ReservationFragment(
 
     DisposableEffect(key1 = viewModel.reservations) {
         viewModel.getAllReservations()
-        onDispose {
-            viewModel.isLoading = false
-            viewModel.isError = false
-        }
+        onDispose {}
     }
 
 

@@ -139,7 +139,7 @@ fun RecipeCardContent(meal : Meal, navController: NavController) {
                         color = LightPrimaryVariant
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Text(text = "${meal.prix} $", modifier = Modifier.padding(end = 8.dp),
+                    Text(text = "${meal.prix} £", modifier = Modifier.padding(end = 8.dp),
                         style = TextStyle(fontSize = 12.sp,
                             fontWeight = FontWeight.Medium),
                         color = LightPrimaryVariant)

@@ -40,7 +40,6 @@ import java.io.InputStream
 
 @Composable
 fun EventFinalFragment(
-    idMeal : Int = 0,
     onFragmentChange: (String) -> Unit,
     navController: NavController,
 
@@ -68,8 +67,8 @@ fun EventFinalFragment(
         Spacer(modifier = Modifier.height(32.dp))
 
         ImagePickerField(
-            onImageSelected = { mealsVm.mealUri = it!! },
-            imageUrl = mealsVm.mealUri,
+            onImageSelected = { mealsVm.mealUri.value = it!! },
+            imageUrl = mealsVm.mealUri.value,
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -79,7 +78,7 @@ fun EventFinalFragment(
                 val mealFile =
                     compressFile(
                         navController.context,
-                        File(getRealPathFromURI(mealsVm.mealUri, navController.context)!!)
+                        File(getRealPathFromURI(mealsVm.mealUri.value, navController.context)!!)
                     )
                 mealsVm.onAddMeal(mealFile!!)
             }
@@ -92,7 +91,7 @@ fun EventFinalFragment(
             )
         }
         if (mealsVm.isLoading.value) LoadingDialog()
-        if (mealsVm.navigate)
+        if (mealsVm.navigate.value)
             DisposableEffect(key1 = mealsVm.navigate) {
                 makeToast(
                     navController.context,
@@ -103,7 +102,7 @@ fun EventFinalFragment(
                         inclusive = true
                     }
                 }
-                onDispose { mealsVm.navigate = false }
+                onDispose { mealsVm.navigate.value = false }
             }
 
 

@@ -31,27 +31,27 @@ import slikoo.kvrae.slikoo.ui.components.UserEventCard
 import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
 import slikoo.kvrae.slikoo.ui.pages.TextWithImageScreen
 import slikoo.kvrae.slikoo.ui.theme.LightError
-import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
+import slikoo.kvrae.slikoo.viewmodels.MyMealsViewModel
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun UserOffersList(navController: NavController) {
-    val viewModel : MealsViewModel = viewModel()
+
+    val viewModel : MyMealsViewModel = viewModel()
+
     val myMeals = remember {
-        mutableStateOf(viewModel.myMeals)
+        viewModel.myMeals
     }
+
     val scrollState = rememberLazyGridState()
+
     var isOpen by remember { mutableStateOf(false) }
     var mealId by remember { mutableStateOf(0) }
 
 
     DisposableEffect(key1 = viewModel.myMeals.size) {
         viewModel.getMyMeals()
-        myMeals.value = viewModel.myMeals
-        onDispose {
-            viewModel.isLoading.value = false
-            viewModel.isDeleted = false
-        }
+        onDispose {}
     }
 
     Box(
@@ -74,26 +74,24 @@ fun UserOffersList(navController: NavController) {
                         viewModel.getMyMeals()
                     }
                 ) {
-                    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp),
+                    LazyVerticalGrid(columns = GridCells.Fixed(2),
                         userScrollEnabled = true,
                         state = scrollState,
                         content = {
-                            items(myMeals.value.size,
-                                key =  { index -> myMeals.value[index].id }
-                            ) {
-                                UserEventCard(meal = myMeals.value[it],
+                            items(myMeals.size) {
+                                UserEventCard(meal = myMeals[it],
                                     navController = navController,
                                     onDelete = {
                                         isOpen = true
-                                        mealId = myMeals.value[it].id
+                                        mealId = myMeals[it].id
                                     },
                                     onEdit = {
-                                        navController.navigate("edit_meal_screen/${myMeals.value[it].id}")
+                                        navController
+                                            .navigate("edit_meal_screen/${myMeals[it].id}")
                                     }
                                 )
                             }
-                        },
-
+                        }
                     )
                 }
             if (isOpen) CustomAlertDialog(
@@ -110,7 +108,7 @@ fun UserOffersList(navController: NavController) {
                 }
             )
         }
-        if (myMeals.value.isEmpty() && !viewModel.isLoading.value) TextWithImageScreen(
+        if (myMeals.isEmpty() && !viewModel.isLoading.value) TextWithImageScreen(
             imageVector = ImageVector.vectorResource(id =R.drawable.no_food),
             text = stringResource(id = R.string.no_meals),
             background = LightError)

@@ -2,13 +2,11 @@ package slikoo.kvrae.slikoo.viewmodels
 
 import android.net.Uri
 import android.util.Log
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
@@ -22,40 +20,39 @@ class MealsViewModel: ViewModel() {
 
     private val mealRemoteDataSource = MealRemoteDataSource()
     // Objects
-    var user = mutableStateOf(User())
-    var meal = mutableStateOf(Meal())
+    val user = mutableStateOf(User())
+    val meal = mutableStateOf(Meal())
 
-    var motif by mutableStateOf("")
-    // Lists
-    var myMeals = mutableStateListOf<Meal>()
-    var meals = mutableStateOf(mutableListOf<Meal>())
-    var filteredMeals by mutableStateOf(mutableListOf<Meal>())
+    val motif = mutableStateOf("")
+    val meals = mutableStateListOf<Meal>()
+
+    val filteredMeals = mutableStateListOf<Meal>()
     // Boolean mutable variables
-    var isDialogOpen by mutableStateOf(false)
-    var isLoading = mutableStateOf(true)
-    var isParticipating by mutableStateOf(false)
-    var isError by mutableStateOf(false)
-    var isDeleted by mutableStateOf(false)
-    var navigate by mutableStateOf(false)
+    val isDialogOpen = mutableStateOf(false)
+    val isLoading = mutableStateOf(true)
+    val isParticipating = mutableStateOf(false)
+    val isError = mutableStateOf(false)
+    private val isDeleted = mutableStateOf(false)
+    val navigate = mutableStateOf(false)
     // String mutable variables
-    var searchText = mutableStateOf("")
-    var dialogContext by mutableStateOf("")
-    var resCode by mutableStateOf(0)
+    val searchText = mutableStateOf("")
+    val dialogContext = mutableStateOf("")
+    private val resCode = mutableStateOf(0)
     // Uri mutable variables
-    var mealUri: Uri by mutableStateOf(Uri.parse(meal.value.avatarUrl.plus(meal.value.avatar)))
+    val mealUri: MutableState<Uri> = mutableStateOf(Uri.parse(meal.value.avatarUrl.plus(meal.value.avatar)))
 
     init {
         getAllMeals()
     }
 
     fun filterMealsList(filter: String) {
-        filteredMeals.clear()
+        filteredMeals.removeAll(filteredMeals)
         if (filter.isEmpty()) {
             filteredMeals.clear()
-            filteredMeals.addAll(meals.value)
+            filteredMeals.addAll(meals)
         }
         if (filter.isNotEmpty())
-            for (meal in meals.value) {
+            for (meal in meals) {
                 if (
                     meal.localisation.contains(filter, ignoreCase = true)
                     || meal.theme.contains(filter, ignoreCase = true)
@@ -74,40 +71,44 @@ class MealsViewModel: ViewModel() {
     fun getAllMeals()  {
         viewModelScope.launch {
             try {
-                navigate = false
-                isError = false
+                navigate.value = false
+                isError.value  = false
                 isLoading.value = true
-                meals.value.clear()
-                meals.value = async {mealRemoteDataSource.getAllMeals()}.await()
+                val allMeals = async { mealRemoteDataSource.getAllMeals() }.await()
+                meals.clear()
+                meals.addAll(allMeals)
                 filteredMeals.clear()
-                filteredMeals.addAll(async { (meals.value) }.await())
+                filteredMeals.addAll(allMeals)
+
+
 
             } catch (e: Exception) {
-                meals.value.clear()
-                isError = true
+                meals.clear()
+                isError.value  = true
             }
             finally {
                 isLoading.value = false
-                if (meals.value.isNotEmpty()){meals.value.shuffle()}
+                if (meals.isNotEmpty()){meals.shuffle()}
 
             }
         }
     }
 
     fun getMealById(id : Int)  {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             meal.value = Meal()
             if (id != 0) {
                 try {
-                    navigate = false
-                    isError = false
+                    navigate.value  = false
+                    isError.value  = false
                     isLoading.value = true
                     meal.value = async { mealRemoteDataSource.getMealById(id = id) }.await()
-                    user.value = async { mealRemoteDataSource.getUserById(id = meal.value.iduser.toInt() , token = TempSession.token) }.await()
-
+                    user.value = async { mealRemoteDataSource.getUserById(
+                        id = meal.value.iduser.toInt() ,
+                        token = TempSession.token) }.await()
                 } catch (e: Exception) {
                     Log.e("Meals Error", e.message.toString())
-                    isError = true
+                    isError.value  = true
                 }
                 finally {
                     isLoading.value = false
@@ -117,37 +118,14 @@ class MealsViewModel: ViewModel() {
     }
 
 
-    fun getMyMeals() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                isLoading.value = true
-                isError = false
-                val result = async {
-                    myMeals.clear()
-                    mealRemoteDataSource.getMyMeals(
-                        meals = myMeals,
-                        token = TempSession.token, id = TempSession.user.id
-                    )
-                }
-                result.await()
-            } catch (e: Exception) {
-                isError = true
-                myMeals.clear()
-            } finally {
-                isLoading.value = false
-            }
-
-        }
-    }
-
 
 
     fun deleteMeal(id: Int) {
-        resCode = 0
-        viewModelScope.launch(Dispatchers.IO) {
-            resCode = try {
-                isDeleted = false
-                navigate = false
+        resCode.value  = 0
+        viewModelScope.launch {
+            resCode.value  = try {
+                isDeleted.value  = false
+                navigate.value  = false
                 async {
                     mealRemoteDataSource.deleteMeal(
                         token = TempSession.token,
@@ -158,48 +136,44 @@ class MealsViewModel: ViewModel() {
             } catch (e: Exception) {
                 500
             } finally {
-                if (resCode in 200..299) {
-                    meals.value.remove(meal.value)
-                    isDeleted = true
+                if (resCode.value  in 200..299) {
+                    meals.remove(meal.value)
+                    isDeleted.value  = true
                 }
             }
         }
     }
 
     fun onAddMeal(mealBanner: File) {
-        resCode = 0
-        viewModelScope.launch(Dispatchers.IO) {
+        resCode.value  = 0
+        viewModelScope.launch {
             try {
-                navigate = false
-                isError = false
+                navigate.value  = false
+                isError.value  = false
                 isLoading.value = true
-                resCode = async { mealRemoteDataSource
+                resCode.value  = async { mealRemoteDataSource
                     .createMeal(
                         token = TempSession.token,
                         meal = meal.value,
                         mealBanner = mealBanner,
                     ) }.await()
-                val asyncList =async {
-                    getAllMeals()
-                }
-                asyncList.await()
             } catch (e: Exception) {
-                resCode = 500
+                resCode.value  = 500
             }
             finally {
                 isLoading.value = false
-                navigate = (resCode in 200..299)
+                navigate.value  = (resCode.value in 200..299)
             }
         }
     }
 
     fun onUpdateMeal(mealBanner: File, id: Int) {
-        resCode = 0
-        viewModelScope.launch(Dispatchers.IO) {
+        resCode.value  = 0
+        viewModelScope.launch {
             try {
-                isError = false
+                isError.value = false
                 isLoading.value = true
-                resCode = async { mealRemoteDataSource
+                resCode.value = async { mealRemoteDataSource
                     .updateMeal(
                         token = TempSession.token,
                         meal = meal.value,
@@ -207,7 +181,7 @@ class MealsViewModel: ViewModel() {
                         id = id
                     ) }.await()
             } catch (e: Exception) {
-                resCode = 500
+                resCode.value = 500
             }
             finally {
                 isLoading.value = false
@@ -215,29 +189,30 @@ class MealsViewModel: ViewModel() {
         }
     }
 
-    fun participateMeal(idrepas: Int, iduserOwner: Int) {
-        resCode = 0
-        viewModelScope.launch(Dispatchers.IO) {
-            navigate = false
+    fun participateMeal(idMeal: Int, idUserOwner: Int) {
+        resCode.value = 0
+        viewModelScope.launch {
+            navigate.value = false
             isLoading.value = true
-            resCode = try {
-                isError = false
+            resCode.value = try {
+                isError.value = false
                 async { mealRemoteDataSource.participate(
                     token = TempSession.token,
-                    mealId = idrepas,
+                    mealId = idMeal,
                     userId = TempSession.user.id,
-                    ownerId = iduserOwner,
-                    motif= motif
+                    ownerId = idUserOwner,
+                    motif= motif.value
                 )
                 }.await()
             } catch (e: Exception) {
-                isError = true
+                isError.value = true
                 500
             }
             finally {
-                if (resCode == 200) {
-                    isParticipating = true
-                    navigate = true
+                if (resCode.value == 200) {
+                    isParticipating.value = true
+                    navigate.value = true
+                    meal.value = async { mealRemoteDataSource.getMealById(id = idMeal) }.await()
                 }
                 isLoading.value = false
             }
@@ -245,9 +220,9 @@ class MealsViewModel: ViewModel() {
     }
 
     fun getMealsByLocalisation(filter: String, mealsFiltered: MutableList<Meal>) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
-                isError = false
+                isError.value = false
                 isLoading.value = true
 
                 mealsFiltered.clear()
@@ -265,7 +240,7 @@ class MealsViewModel: ViewModel() {
                 mealsFiltered.addAll(filteredMeals)
 
             } catch (e: Exception) {
-                isError = true
+                isError.value = true
                 mealsFiltered.clear()
             } finally {
                 isLoading.value = false
@@ -273,18 +248,18 @@ class MealsViewModel: ViewModel() {
         }
     }
 
-    fun checkIfParticipating(idrepas: Int, iduser: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun checkIfParticipating(idMeal: Int, idUser: Int) {
+        viewModelScope.launch {
             try {
-                isError = false
+                isError.value = false
                 val isParticipatingResponse  = async { mealRemoteDataSource.ifUserParticipated(
                     token = TempSession.token,
-                    mealId = idrepas,
-                    userId = iduser)
+                    mealId = idMeal,
+                    userId = idUser)
                 }.await()
-                isParticipating = async { isParticipatingResponse.result }.await()
+                isParticipating.value = async { isParticipatingResponse.result }.await()
             } catch (e: Exception) {
-                isError = true
+                isError.value = true
             }
         }
     }
@@ -317,4 +292,3 @@ class MealsViewModel: ViewModel() {
         return "$day $month $year à $hour:$minute"
     }
 }
-

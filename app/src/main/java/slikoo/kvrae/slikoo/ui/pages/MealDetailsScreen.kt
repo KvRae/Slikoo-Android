@@ -82,8 +82,8 @@ fun MealsDetailScreen(navController: NavController, id: Int) {
         DisposableEffect(Unit) {
             mealsViewModel.getMealById(id)
             mealsViewModel.checkIfParticipating(
-                idrepas = id,
-                iduser = TempSession.user.id
+                idMeal = id,
+                idUser = TempSession.user.id
             )
             onDispose {
                 mealsViewModel.isLoading.value = false
@@ -144,36 +144,36 @@ fun MealsDetailScreen(navController: NavController, id: Int) {
     }
     if (mealsViewModel.isLoading.value) LoadingScreen()
 
-    if (mealsViewModel.isDialogOpen && mealsViewModel.dialogContext == "delete") CustomAlertDialog(
+    if (mealsViewModel.isDialogOpen.value && mealsViewModel.dialogContext.value == "delete") CustomAlertDialog(
         title = stringResource(id = R.string.delete),
         message = stringResource(id = R.string.delete_meal_description),
         confirmText = stringResource(id = R.string.yes),
         dismissText = stringResource(id = R.string.no),
-        onDismiss = { mealsViewModel.isDialogOpen = false },
+        onDismiss = { mealsViewModel.isDialogOpen.value = false },
         onConfirm = {
             mealsViewModel.deleteMeal(mealsViewModel.meal.value.id)
-            mealsViewModel.isDialogOpen = false
+            mealsViewModel.isDialogOpen.value = false
             toastMsg = "Repas supprimé"
         }
     )
-    if (mealsViewModel.isDialogOpen && mealsViewModel.dialogContext == "book") CustomAlertDialog(
+    if (mealsViewModel.isDialogOpen.value && mealsViewModel.dialogContext.value == "book") CustomAlertDialog(
         title = stringResource(id = R.string.participate),
         message = stringResource(id = R.string.book_meal_description),
         confirmText = stringResource(id = R.string.yes),
         dismissText = stringResource(id = R.string.no),
-        onDismiss = { mealsViewModel.isDialogOpen = false },
+        onDismiss = { mealsViewModel.isDialogOpen.value = false },
         onConfirm = {
-            if (mealsViewModel.motif.isNotEmpty() && mealsViewModel.motif.length > 5) {
+            if (mealsViewModel.motif.value.isNotEmpty() && mealsViewModel.motif.value.length > 5) {
                 mealsViewModel.participateMeal(
                     mealsViewModel.meal.value.id,
                     mealsViewModel.meal.value.iduser.toInt()
                 )
                 toastMsg = "Vous participez a cet evenement"
-                mealsViewModel.isDialogOpen = false
+                mealsViewModel.isDialogOpen.value = false
             }
         }
     )
-    if (mealsViewModel.navigate) {
+    if (mealsViewModel.navigate.value) {
         toastMsg = stringResource(id = R.string.meal_deleted)
         DisposableEffect(Unit) {
             makeToast(navController.context, toastMsg)
@@ -421,7 +421,7 @@ fun ContentBody(mealsViewModel: MealsViewModel, navController: NavController) {
         )
         Spacer(modifier = Modifier.height(8.dp))
         when{
-            mealsViewModel.isParticipating && mealsViewModel.meal.value.iduser != TempSession.user.id.toString() ->
+            mealsViewModel.isParticipating.value && mealsViewModel.meal.value.iduser != TempSession.user.id.toString() ->
                 DetailsContentParticipation(mealsViewModel = mealsViewModel)
 
             mealsViewModel.meal.value.iduser != TempSession.user.id.toString() ->
@@ -459,11 +459,11 @@ fun DetailsContentBodyWithTextField(
         Spacer(modifier = Modifier.height(8.dp))
         DescriptionTextField(
             onChange = {
-                viewModel.motif = it
+                viewModel.motif.value = it
             },
-            value = viewModel.motif,
+            value = viewModel.motif.value,
             placeHolder = stringResource(id = R.string.motif_user),
-            errorMessage = if (viewModel.motif.length>5) stringResource(id = R.string.text_is_empty) else "",
+            errorMessage = if (viewModel.motif.value.length>5) stringResource(id = R.string.text_is_empty) else "",
             label = stringResource(R.string.motif_user)
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -473,12 +473,12 @@ fun DetailsContentBodyWithTextField(
                     !TempSession.user.Hasdetails -> {
                         makeToast(navController.context, msg)
                     }
-                    viewModel.motif.length<5 -> {
+                    viewModel.motif.value.length<5 -> {
                         makeToast(navController.context,msg2 )
                     }
                     else ->{
-                        viewModel.dialogContext = "book"
-                        viewModel.isDialogOpen = true
+                        viewModel.dialogContext.value = "book"
+                        viewModel.isDialogOpen.value = true
                     }
                 }
             })
@@ -525,8 +525,8 @@ fun DetailsContentBodyWithButtons(
                 contentColor = LightPrimaryVariant
             ),
             onClick = {
-                viewModel.dialogContext = "delete"
-                viewModel.isDialogOpen = true
+                viewModel.dialogContext.value = "delete"
+                viewModel.isDialogOpen.value = true
             }
         ) {
             Text(
