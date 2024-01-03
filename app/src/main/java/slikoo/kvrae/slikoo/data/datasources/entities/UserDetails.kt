@@ -5,32 +5,32 @@ import com.google.gson.annotations.SerializedName
 
 data class UserDetails(
     @SerializedName("id")
-    var id: Int? = null,
+    val id: Int? = null,
     @SerializedName("idusermain")
-    var idusermain: String? = "",
+    val idusermain: String? = "",
     @SerializedName("iduser")
-    var iduser: String? = "",
+    val iduser: String? = "",
     @SerializedName("fumeur")
-    var fumeur: String? = "",
+    val fumeur: String? = "",
     @SerializedName("alcohol")
-    var alcohol: String? = "",
+    val alcohol: String? = "",
     @SerializedName("cherche")
-    var cherche: MutableList<String> = mutableListOf(),
+    val cherche: List<String> = listOf(),
     @SerializedName("algalimentaire")
-    var algalimentaire: MutableList<String> = mutableListOf(),
+    val algalimentaire: List<String> = listOf(),
     @SerializedName("centreinteret")
-    var centreinteret: MutableList<String> = mutableListOf(),
+    val centreinteret: List<String> = listOf(),
     @SerializedName("langues")
-    var langues: MutableList<String> = mutableListOf(),
+    val langues: List<String> = listOf(),
     @SerializedName("chercherplus")
-    var chercherplus: MutableList<String> = mutableListOf(),
+    val chercherplus: List<String> = listOf(),
     @SerializedName("Facebooklink")
-    var Facebooklink: String? = "",
+    val facebooklink: String? = "",
     @SerializedName("InstagramLink")
-    var InstagramLink: String? = "",
+    val InstagramLink: String? = "",
     @SerializedName("TwitterLink")
-    var TwitterLink: String? = "",
+    val TwitterLink: String? = "",
     @SerializedName("LinkedinLink")
-    var LinkedinLink: String? = ""
+    val LinkedinLink: String? = ""
 
 )

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.datasources.entities.Meal
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.MealRemoteDataSource
@@ -30,7 +31,7 @@ class MealsViewModel: ViewModel() {
     // Boolean mutable variables
     val isDialogOpen = mutableStateOf(false)
     val isLoading = mutableStateOf(true)
-    val isParticipating = mutableStateOf(false)
+    private val isParticipating = mutableStateOf(false)
     val isError = mutableStateOf(false)
     private val isDeleted = mutableStateOf(false)
     val navigate = mutableStateOf(false)
@@ -38,6 +39,8 @@ class MealsViewModel: ViewModel() {
     val searchText = mutableStateOf("")
     val dialogContext = mutableStateOf("")
     private val resCode = mutableStateOf(0)
+    val participationState = mutableStateOf("")
+    val navigationMessage = mutableStateOf(R.string.empty_string)
     // Uri mutable variables
     val mealUri: MutableState<Uri> = mutableStateOf(Uri.parse(meal.value.avatarUrl.plus(meal.value.avatar)))
 
@@ -134,12 +137,15 @@ class MealsViewModel: ViewModel() {
                 }.await()
 
             } catch (e: Exception) {
+                navigationMessage.value = R.string.server_error
                 500
             } finally {
                 if (resCode.value  in 200..299) {
                     meals.remove(meal.value)
                     isDeleted.value  = true
+                    navigationMessage.value = R.string.meal_deleted
                 }
+                navigate.value  = true
             }
         }
     }
@@ -209,12 +215,13 @@ class MealsViewModel: ViewModel() {
                 500
             }
             finally {
-                if (resCode.value == 200) {
+                if (resCode.value in 200 .. 299) {
                     isParticipating.value = true
-                    navigate.value = true
                     meal.value = async { mealRemoteDataSource.getMealById(id = idMeal) }.await()
+                    navigationMessage.value = R.string.participate_msg
                 }
                 isLoading.value = false
+                navigate.value = true
             }
         }
     }
@@ -290,5 +297,19 @@ class MealsViewModel: ViewModel() {
             "12" -> month = "Decembre"
         }
         return "$day $month $year à $hour:$minute"
+    }
+
+    fun checkParticipationState() : String {
+        return when{
+            isParticipating.value && meal.value.iduser != TempSession.user.id.toString()-> {
+                 "Participated"
+            }
+            meal.value.iduser == TempSession.user.id.toString() -> {
+                 "Owner"
+            }
+            else -> {
+                 "Not Participated"
+            }
+        }
     }
 }

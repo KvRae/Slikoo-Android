@@ -198,7 +198,7 @@
     <string name="congratulations">Félicitations!</string>
     <string name="proceed">Procéder</string>
     <string name="meal_deleted">Repas supprimé</string>
-    <string name="participate_msg">Vous participez a cet evenement</string>
+    <string name="participate_msg">Votre demande est en attente</string>
     <string name="reservation_rejected">Reservation rejetée</string>
     <string name="your_feedback">Votre avis</string>
     <string name="comment">Votre commentaire</string>
@@ -209,6 +209,7 @@
     <string name="meal_update">Mettre a jour le repas</string>
     <string name="postal_address">Adresse Postal</string>
     <string name="no_internet_connection">Vous n\'etes pas connecté(e)</string>
+    <string name="empty_string" />
 
 
 </resources>

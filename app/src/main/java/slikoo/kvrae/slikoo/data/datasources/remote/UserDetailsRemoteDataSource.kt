@@ -43,7 +43,7 @@ class UserDetailsRemoteDataSource {
                         cherche = userDetails.cherche.joinToString(),
                         langues = userDetails.langues.joinToString(),
                         chercherplus = userDetails.chercherplus.joinToString(),
-                        Facebooklink = userDetails.Facebooklink,
+                        Facebooklink = userDetails.facebooklink,
                         InstagramLink = userDetails.InstagramLink,
                         TwitterLink = userDetails.TwitterLink,
                         LinkedinLink = userDetails.LinkedinLink
@@ -74,7 +74,7 @@ class UserDetailsRemoteDataSource {
                         cherche = userDetails.cherche.joinToString(),
                         langues = userDetails.langues.joinToString(),
                         chercherplus = userDetails.chercherplus.joinToString(),
-                        Facebooklink = userDetails.Facebooklink,
+                        Facebooklink = userDetails.facebooklink,
                         InstagramLink = userDetails.InstagramLink,
                         TwitterLink = userDetails.TwitterLink,
                         LinkedinLink = userDetails.LinkedinLink

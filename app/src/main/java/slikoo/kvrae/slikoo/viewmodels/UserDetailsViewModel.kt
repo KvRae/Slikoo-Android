@@ -2,6 +2,7 @@ package slikoo.kvrae.slikoo.viewmodels
 
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -27,7 +28,7 @@ class UserDetailsViewModel : ViewModel() {
     val areaOfInterest = listOf(
         "Sport: football, basketball, tennis, etc.",
         "Musique: piano, guitare, chant, etc.",
-        "Voyaage: Europe, Asie, Afrique, etc.",
+        "Voyage: Europe, Asie, Afrique, etc.",
         "Art: peinture, sculpture, etc.",
         "Lecture: romans, poésie, etc.",
         "Cuisine: française, italienne, etc.",
@@ -50,9 +51,9 @@ class UserDetailsViewModel : ViewModel() {
     private val feedbackRDS = FeedbackRemoteDataSource()
 
 
-    var feedbacks by mutableStateOf(mutableListOf<Feedback>())
+    val feedbacks = mutableStateListOf<Feedback>()
 
-    var userDetails by mutableStateOf(
+    val userDetails = mutableStateOf(
         UserDetails(
             iduser = TempSession.user.id.toString(),
         )
@@ -71,7 +72,7 @@ class UserDetailsViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isLoading = true
-                userDetails = async { userDetailsRDS.getUserDetails(
+                userDetails.value = async { userDetailsRDS.getUserDetails(
                     TempSession.token,
                     id
 
@@ -89,7 +90,7 @@ class UserDetailsViewModel : ViewModel() {
     }
 
     fun addUserDetails(userDetails: UserDetails) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch() {
             try {
                 navigate = false
                 isLoading = true
@@ -145,14 +146,16 @@ class UserDetailsViewModel : ViewModel() {
     }
 
     fun getFeedbacks(id : Int = TempSession.user.id) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch() {
             try {
                 isLoading = true
-                feedbacks = async { feedbackRDS
+                val newFeedbacks = async { feedbackRDS
                     .getMyReceivedFeedbacks(
                     token = TempSession.token,
                     id = id
                 ) }.await()
+                feedbacks.clear()
+                feedbacks.addAll(newFeedbacks)
             } catch (e: Exception) {
                 e.printStackTrace()
                 isError = true
@@ -165,78 +168,56 @@ class UserDetailsViewModel : ViewModel() {
     }
 
 
-    fun onFoodAlergiesChange(foodAlergies: String) {
-        val list = userDetails.algalimentaire.toMutableList()
-        userDetails.algalimentaire.clear()
-        list.removeAll{
-            it == foodAlergies
-        }
-        list.add(foodAlergies)
+    fun onFoodAllergiesChange(foodAllergies: String) {
+        val stringList = userDetails.value.algalimentaire.joinToString()
+        val list = userDetails.value.algalimentaire.toMutableList()
 
-        userDetails = userDetails.copy(algalimentaire = list)
+        if (!stringList.contains(foodAllergies, ignoreCase = true)) list.add(foodAllergies)
+        else list.clear()
+
+        userDetails.value = userDetails.value.copy(algalimentaire = list)
     }
 
-    fun onLanguagesChange(languages: String) {
-        val list = userDetails.langues.toMutableList()
-        userDetails = userDetails.copy(langues = mutableListOf())
+    fun onLanguagesChange(language: String) {
+        val stringList = userDetails.value.langues.joinToString()
+        val list = userDetails.value.langues.toMutableList()
 
-        if (list.contains(languages)) {
-            list.remove(languages)
-        }
-        else {
-            list.removeAll{
-                it == languages
-            }
-            list.add(languages)
-        }
-        userDetails = userDetails.copy(langues = list)
+        if (!stringList.contains(language, ignoreCase = true)) list.add(language)
+        else list.clear()
+
+        userDetails.value = userDetails.value.copy(langues = list)
+
     }
 
     fun onAreaOfInterestChange(areaOfInterest: String) {
-        val list = userDetails.centreinteret.toMutableList()
-        userDetails = userDetails.copy(centreinteret = mutableListOf())
-        if (list.contains(areaOfInterest)) {
-            list.remove(areaOfInterest)
-        }
-        else {
-            list.removeAll{
-                it == areaOfInterest
-            }
-            list.add(areaOfInterest)
-        }
-        userDetails = userDetails.copy(centreinteret = list)
+       val stringList = userDetails.value.centreinteret.joinToString()
+        val list = userDetails.value.centreinteret.toMutableList()
+
+        if (!stringList.contains(areaOfInterest, ignoreCase = true)) list.add(areaOfInterest)
+        else list.clear()
+
+        userDetails.value = userDetails.value.copy(centreinteret = list)
+
     }
 
     fun onLookingForChange(lookingFor: String) {
-        val list = userDetails.cherche.toMutableList()
-        userDetails = userDetails.copy(cherche = mutableListOf())
+        val stringList = userDetails.value.cherche.joinToString()
+        val list = userDetails.value.cherche.toMutableList()
 
-        if (list.contains(lookingFor)) {
-            list.remove(lookingFor)
-        }
-        else {
-            list.removeAll{
-                it == lookingFor
-            }
-            list.add(lookingFor)
-        }
-        userDetails = userDetails.copy(cherche = list)
+        if (!stringList.contains(lookingFor, ignoreCase = true)) list.add(lookingFor)
+        else list.clear()
+
+        userDetails.value = userDetails.value.copy(cherche = list)
     }
 
     fun onLookingPlusChange(lookingPlus:String) {
-        val list = userDetails.chercherplus.toMutableList()
-        userDetails = userDetails.copy(chercherplus = mutableListOf())
+        val stringList = userDetails.value.chercherplus.joinToString()
+        val list = userDetails.value.chercherplus.toMutableList()
 
-        if (list.contains(lookingPlus, )) {
-            list.remove(lookingPlus)
-        }
-        else {
-            list.removeAll{
-                it == lookingPlus
-            }
-            list.add(lookingPlus)
-        }
-        userDetails = userDetails.copy(chercherplus = list)
+        if (!stringList.contains(lookingPlus, ignoreCase = true)) list.add(lookingPlus)
+        else list.clear()
+
+        userDetails.value = userDetails.value.copy(chercherplus = list)
     }
 
     fun onValidateFacebookLink(link: String) : Boolean {

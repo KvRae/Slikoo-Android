@@ -174,7 +174,7 @@ fun MealsDetailScreen(navController: NavController, id: Int) {
         }
     )
     if (mealsViewModel.navigate.value) {
-        toastMsg = stringResource(id = R.string.meal_deleted)
+        toastMsg = stringResource(id = mealsViewModel.navigationMessage.value)
         DisposableEffect(Unit) {
             makeToast(navController.context, toastMsg)
             navController.navigate(AppScreenNavigator.MainAppScreen.route) {
@@ -371,6 +371,7 @@ fun ContentHeader(mealsViewModel: MealsViewModel) {
 
 @Composable
 fun ContentSubHeader(mealsViewModel: MealsViewModel) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -403,7 +404,13 @@ fun ContentSubHeader(mealsViewModel: MealsViewModel) {
 }
 
 @Composable
-fun ContentBody(mealsViewModel: MealsViewModel, navController: NavController) {
+fun ContentBody(
+    mealsViewModel: MealsViewModel,
+    navController: NavController
+) {
+    val participateState by remember {
+        mutableStateOf(mealsViewModel.checkParticipationState())
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -420,16 +427,19 @@ fun ContentBody(mealsViewModel: MealsViewModel, navController: NavController) {
             )
         )
         Spacer(modifier = Modifier.height(8.dp))
-        when{
-            mealsViewModel.isParticipating.value && mealsViewModel.meal.value.iduser != TempSession.user.id.toString() ->
+        when(participateState
+        ){
+            "Participated" ->
                 DetailsContentParticipation(mealsViewModel = mealsViewModel)
 
-            mealsViewModel.meal.value.iduser != TempSession.user.id.toString() ->
+            "Not Participated"->
                 DetailsContentBodyWithTextField(viewModel = mealsViewModel, navController = navController)
 
-            mealsViewModel.meal.value.iduser == TempSession.user.id.toString() ->
+            "Owner" ->
                 DetailsContentBodyWithButtons(viewModel = mealsViewModel, navController = navController)
         }
+
+
 
     }
 }

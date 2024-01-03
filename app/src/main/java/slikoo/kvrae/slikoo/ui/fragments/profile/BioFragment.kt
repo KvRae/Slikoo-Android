@@ -53,7 +53,7 @@ fun BioFragment(user: User) {
         }
     }
 
-    if (user.Hasdetails && viewModel.userDetails.id != 0)
+    if (user.Hasdetails && viewModel.userDetails.value.id != 0)
         Column(
             modifier = Modifier
                 .fillMaxSize(1f)
@@ -64,7 +64,7 @@ fun BioFragment(user: User) {
                 )
         ) {
             SocialMediaSection(
-                userDetail = viewModel.userDetails
+                userDetail = viewModel.userDetails.value
             )
             Spacer(modifier = Modifier.padding(16.dp))
             Divider(
@@ -75,7 +75,7 @@ fun BioFragment(user: User) {
             BioHeaderSection(
                 icon = R.drawable.fork_knife_icon,
                 title = stringResource(R.string.allergies_alimentaires),
-                description = viewModel.userDetails.algalimentaire.joinToString { it }
+                description = viewModel.userDetails.value.algalimentaire.joinToString { it }
             )
             Divider(
                 modifier = Modifier
@@ -85,7 +85,7 @@ fun BioFragment(user: User) {
             BioHeaderSection(
                 icon = R.drawable.heart_icon,
                 title = stringResource(R.string.centres_d_interet),
-                description = viewModel.userDetails.centreinteret.joinToString { it }
+                description = viewModel.userDetails.value.centreinteret.joinToString { it }
             )
             Divider(
                 modifier = Modifier
@@ -95,14 +95,14 @@ fun BioFragment(user: User) {
             BioHeaderSection(
                 icon = R.drawable.language_icon,
                 title = stringResource(R.string.languages),
-                description = viewModel.userDetails.langues.joinToString { it }
+                description = viewModel.userDetails.value.langues.joinToString { it }
             )
             Divider(
                 modifier = Modifier
                     .padding(4.dp)
                     .fillMaxWidth()
             )
-            BioDescriptionSection(userDetail = viewModel.userDetails)
+            BioDescriptionSection(userDetail = viewModel.userDetails.value)
             BioHeaderSection(
                 icon = R.drawable.feedback,
                 title = stringResource(R.string.comments),
@@ -264,7 +264,7 @@ fun SocialMediaSection(
         IconButton(
             onClick = {
                 try {
-                    uriHandler.openUri(userDetail.Facebooklink?:"https://www.facebook.com/")
+                    uriHandler.openUri(userDetail.facebooklink?:"https://www.facebook.com/")
                 }
                 catch (e : Exception) {
                     uriHandler.openUri("https://www.facebook.com/")
