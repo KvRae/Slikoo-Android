@@ -37,6 +37,7 @@ import slikoo.kvrae.slikoo.ui.components.UserRatingBar
 import slikoo.kvrae.slikoo.ui.pages.TextElementScreen
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
+import slikoo.kvrae.slikoo.ui.theme.LightGrey
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.viewmodels.UserDetailsViewModel
 
@@ -227,12 +228,13 @@ fun BioDescriptionSection(userDetail: UserDetails) {
                         color = LightBackground,
                         fontSize = 12.sp,
                         maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = userDescriptionList[it].description,
-                        color = Color.Gray,
+                        color = LightGrey,
                         fontSize = 10.sp,
                         maxLines = 1,
                         fontWeight = FontWeight.Medium

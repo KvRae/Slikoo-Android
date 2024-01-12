@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,6 +33,7 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.data.datasources.entities.Theme
 import slikoo.kvrae.slikoo.ui.components.AreaFilterCard
 import slikoo.kvrae.slikoo.ui.components.RecipeCardContent
+import slikoo.kvrae.slikoo.ui.components.SearchBar
 import slikoo.kvrae.slikoo.ui.components.ThemeCard
 import slikoo.kvrae.slikoo.ui.pages.LoadingScreen
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
@@ -43,6 +45,7 @@ import slikoo.kvrae.slikoo.viewmodels.MealsViewModel
 @Composable
 fun HomeScreen(navController: NavController) {
     val mealsViewModel : MealsViewModel  = viewModel()
+    val searchText = remember { mutableStateOf("") }
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = mealsViewModel.isLoading.value),
         onRefresh = { mealsViewModel.getAllMeals() }
@@ -59,6 +62,15 @@ fun HomeScreen(navController: NavController) {
                     .padding(8.dp)
             ) {
                 Spacer(modifier = Modifier.padding(8.dp))
+
+                SearchBar(
+                    searchText = searchText.value,
+                    onSearch = {
+                        if (searchText.value.isNotEmpty()) navController
+                            .navigate("category_screen/${searchText.value}")
+                    },
+                    onValueChange = { searchText.value = it },
+                )
 
                 if (mealsViewModel.meals.isNotEmpty())
                     OnlineRecipes(navController, mealsViewModel)

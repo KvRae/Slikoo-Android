@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,6 +25,7 @@ import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomButton
 import slikoo.kvrae.slikoo.ui.components.DescriptionTextField
 import slikoo.kvrae.slikoo.ui.components.ExpandableCard
+import slikoo.kvrae.slikoo.ui.components.ImagePickerField
 import slikoo.kvrae.slikoo.ui.fragments.meal.getRealPathFromURI
 import slikoo.kvrae.slikoo.utils.compressFile
 import slikoo.kvrae.slikoo.viewmodels.EditMealViewModel
@@ -39,13 +39,14 @@ fun EditMealScreen(
 ) {
     val viewModel : EditMealViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
-    var meal by remember {
+    val meal by remember {
         mutableStateOf(viewModel.meal)
     }
 
     if (idMeal != 0) {
         DisposableEffect(Unit){
             viewModel.getMealById(idMeal)
+
             onDispose {
                 viewModel.isLoading = false
                 viewModel.isError = false
@@ -60,7 +61,7 @@ fun EditMealScreen(
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
-        if (viewModel.meal.id > 0)
+        if (viewModel.meal.value.id > 0)
             Column(
                 modifier = Modifier.fillMaxSize(1f),
                 horizontalAlignment = Alignment.Start,
@@ -81,29 +82,35 @@ fun EditMealScreen(
 
                     ExpandableCard(
                         items = viewModel.genres,
-                        onTitleChange = { meal = meal.copy(genre = it) },
+                        onTitleChange = { meal.value = meal.value.copy(genre = it) },
                         label = stringResource(id = R.string.genre_holder),
-                        placeholder = viewModel.meal.genre,
-                        value = meal.genre,
+                        placeholder = viewModel.meal.value.genre,
+                        value = meal.value.genre,
                     )
                     ExpandableCard(
                         items = viewModel.invitationTypes,
-                        onTitleChange = { meal = meal.copy(type = it) },
-                        value = meal.type,
-                        placeholder = viewModel.meal.type,
+                        onTitleChange = { meal.value = meal.value.copy(type = it) },
+                        value = meal.value.type,
+                        placeholder = viewModel.meal.value.type,
                     )
                     ExpandableCard(
                         items = viewModel.themes,
-                        onTitleChange = { meal = meal.copy(theme = it) },
-                        placeholder = viewModel.meal.theme,
+                        onTitleChange = { meal.value = meal.value.copy(theme = it) },
+                        placeholder = viewModel.meal.value.theme,
                         label = stringResource(id = R.string.theme_holder),
-                        value = meal.theme,
+                        value = meal.value.theme,
                     )
 
                     DescriptionTextField(
                         onChange = {},
-                        value = meal.description,
+                        value = meal.value.description,
                         label = stringResource(id = R.string.description),
+                    )
+
+                    ImagePickerField(
+                        imageUrl = viewModel.banner.value,
+                        onImageSelected = { viewModel.banner.value = it!! },
+                        modifier = Modifier.padding(8.dp),
                     )
 
                     CustomButton(
@@ -128,6 +135,7 @@ fun EditMealScreen(
                                         )
                                 viewModel.onUpdateMeal(
                                     mealBanner = mealBanner,
+                                    meal = meal.value,
                                     id = idMeal
                                 )
                             }

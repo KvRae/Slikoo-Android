@@ -295,4 +295,19 @@ class UserRemoteDataSource {
             500
         }
     }
+
+
+    suspend fun deleteUser(token: String): Int{
+        return try {
+             val response = RetrofitInstance
+                 .getRetrofitInstance()
+                 .create(ApiServices::class.java)
+                 .deleteUser("Bearer $token")
+                if (response.isSuccessful) 200
+                else 400
+        }
+        catch (e : Exception){
+            500
+        }
+    }
 }

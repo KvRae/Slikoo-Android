@@ -32,6 +32,8 @@ class ForgetPasswordViewModel: ViewModel() {
 
 
     // Navigation and loading
+    val onNavigateToCode= mutableStateOf(false)
+    val onNavigateToPassword= mutableStateOf(false)
     val onNavigate = mutableStateOf(false)
     val isLoading = mutableStateOf(false)
 
@@ -51,7 +53,7 @@ class ForgetPasswordViewModel: ViewModel() {
 
                 isLoading.value = true
                 resCode.value = async { userRp.forgotPasswordEmailVerify(email) }.await()
-                onNavigate.value = async { resCode.value == 200 }.await()
+                onNavigateToCode.value = async { resCode.value == 200 }.await()
             }
             catch (e: Exception){
                 isEmailValid.value = false
@@ -77,10 +79,10 @@ class ForgetPasswordViewModel: ViewModel() {
             try {
                 isLoading.value = true
                 resCode.value = async { userRp.forgetPasswordDcVerify(email, code) }.await()
-                onNavigate.value = async { resCode.value == 200 }.await()
+                onNavigateToPassword.value = async { resCode.value == 200 }.await()
             }
             catch (e: Exception){
-                onNavigate.value = false
+                onNavigateToPassword.value = false
             }
             finally {
                 isLoading.value = false

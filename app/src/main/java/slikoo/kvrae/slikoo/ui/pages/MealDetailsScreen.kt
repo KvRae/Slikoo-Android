@@ -29,6 +29,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Warning
@@ -357,7 +358,7 @@ fun ContentHeader(mealsViewModel: MealsViewModel) {
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        Text(text = mealsViewModel.meal.value.prix + " £",
+        Text(text = mealsViewModel.meal.value.prix + " €",
             style = TextStyle(
                 color = LightBackground,
                 fontWeight = FontWeight.Bold,
@@ -418,19 +419,17 @@ fun ContentBody(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(
-            text = mealsViewModel.meal.value.description,
-            style = TextStyle(
-                color = LightBackground,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-            )
+        DescriptionTextField(
+            onChange = {},
+            readOnly = true,
+            leadingIcon = Icons.Rounded.Info,
+            value = mealsViewModel.meal.value.description,
+            label =  stringResource(id = R.string.meal_description)
         )
         Spacer(modifier = Modifier.height(8.dp))
-        when(participateState
-        ){
+        when(participateState){
             "Participated" ->
-                DetailsContentParticipation(mealsViewModel = mealsViewModel)
+                DetailsContentParticipation()
 
             "Not Participated"->
                 DetailsContentBodyWithTextField(viewModel = mealsViewModel, navController = navController)
@@ -555,7 +554,7 @@ fun DetailsContentBodyWithButtons(
 
 @Composable
 fun DetailsContentParticipation(
-    mealsViewModel: MealsViewModel
+
 ) {
     Column(
         modifier = Modifier

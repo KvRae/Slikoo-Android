@@ -16,8 +16,6 @@ import java.io.File
 
 class EditMealViewModel: ViewModel() {
     private val mealRemoteDataSource = MealRemoteDataSource()
-
-
     val invitationTypes = listOf("Anniversaire", "Mariage", "Soirée", "Fête", "Réunion", "Autre")
     val themes = listOf("Cocktail", "Dîner", "Déjeuner", "Brunch", "Goûter", "Autre")
     val preferences = listOf("Halal", "Casher", "Végétarien", "Végétalien", "Autre")
@@ -25,10 +23,10 @@ class EditMealViewModel: ViewModel() {
 
 
     private val mealRDS = MealRemoteDataSource()
-    var meal by mutableStateOf(Meal())
-    var bannerUrl = (meal.avatarUrl.plus(meal.avatar)).toUri()
+    val meal = mutableStateOf(Meal())
+    private var bannerUrl = (meal.value.avatarUrl.plus(meal.value.avatar)).toUri()
     val banner  = mutableStateOf(bannerUrl)
-    var resCode by mutableStateOf(0)
+    private var resCode by mutableStateOf(0)
 
     var isLoading by mutableStateOf(false)
     var isError by mutableStateOf(false)
@@ -40,7 +38,7 @@ class EditMealViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isLoading = true
-                meal = async { mealRDS.getMealById(id) }.await()
+                meal.value = async { mealRDS.getMealById(id) }.await()
             }catch (e : Exception) {
                 e.message
                 isError = true
@@ -51,17 +49,8 @@ class EditMealViewModel: ViewModel() {
         }
     }
 
-    fun onUpdateMeal(mealBanner: File?, id: Int) {
+    fun onUpdateMeal(mealBanner: File?, id: Int, meal: Meal) {
         resCode = 0
-//        meal.nom.ifEmpty { m.nom = TempSession.user.nom }
-//        user.prenom.ifEmpty { user.prenom = TempSession.user.prenom }
-//        user.numtel.ifEmpty { user.numtel = TempSession.user.numtel }
-//        user.codepostal.ifEmpty { user.codepostal = TempSession.user.codepostal }
-//        user.ville.ifEmpty { user.ville = TempSession.user.ville }
-//        user.adressepostal.ifEmpty { user.adressepostal = TempSession.user.adressepostal }
-//        user.sexe.ifEmpty { user.sexe = TempSession.user.sexe }
-//        user.ville.ifEmpty { user.ville = TempSession.user.ville }
-//        user.description.ifEmpty { user.description = TempSession.user.description }
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isError = false

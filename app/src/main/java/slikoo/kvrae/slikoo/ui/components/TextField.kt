@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -36,20 +37,8 @@ import androidx.compose.ui.unit.sp
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
+import slikoo.kvrae.slikoo.ui.theme.LightGrey
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
-
-/*data class TextField(
-    val label: String,
-    val value: String,
-    val placeHolder: String,
-    val leadingIcon: Icon? = null,
-    val trailingIcon: Icon? = null,
-    val modifier: Modifier = Modifier,
-    val onChange: (String) -> Unit,
-    val keyboardType: KeyboardType = KeyboardType.Text,
-)*/
-
-
 
 
 //******************************* Custom Text Field *******************************************************//
@@ -79,22 +68,26 @@ fun CustomTextField(
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = LightPrimary,
+                unfocusedLabelColor = LightGrey,
                 textColor = LightBackground,
+                placeholderColor = LightGrey,
+                focusedLabelColor = LightBackground,
                 errorBorderColor = LightPrimary,
                 errorCursorColor = LightPrimary,
                 cursorColor = LightPrimary,
-                unfocusedBorderColor = if (value?.isEmpty() == true) Color.Transparent else Color.Gray.copy(
-                    alpha = 0.3f
-                ),
+                unfocusedBorderColor = if (value?.isEmpty() == true) Color.Transparent
+                else LightGrey.copy(alpha = 0.3f),
                 backgroundColor = LightError,
                 disabledBorderColor = Color.Transparent,
             ),
-            placeholder = { Text(text = placeHolder) },
+            placeholder = { Text(
+                text = placeHolder
+            ) },
             label = {
                 Text(
                     text = label,
                     overflow = TextOverflow.Ellipsis,
-                    style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary),
+                    style = TextStyle(color = if (!isFocused) LightGrey else LightPrimary),
                     maxLines = 1
                 )
             },
@@ -112,15 +105,15 @@ fun CustomTextField(
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.Clear,
-                            contentDescription = "Clear Icon",
-                            tint = if (!isFocused) Color.Gray else LightPrimary
+                            contentDescription = stringResource(R.string.clear_icon),
+                            tint = if (!isFocused) LightGrey else LightPrimary
                         )
                     }
                 } else if (trailingIcon != null) {
                     Icon(
                         imageVector = trailingIcon,
                         contentDescription = "",
-                        tint = if (!isFocused) Color.Gray else LightPrimary
+                        tint = if (!isFocused) LightGrey else LightPrimary
                     )
                 }
             },
@@ -132,7 +125,7 @@ fun CustomTextField(
                     modifier = Modifier
                         .padding(end = 8.dp)
                         .size(24.dp),
-                    tint = if (!isFocused) Color.Gray else LightPrimary
+                    tint = if (!isFocused) LightGrey else LightPrimary
                 )
             },
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
@@ -163,7 +156,7 @@ fun PasswordTextField(
     errorMessage: String = "",
 ) {
     var passwordVisibility by remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
     var isFocused by remember {
         mutableStateOf(false)
@@ -175,16 +168,16 @@ fun PasswordTextField(
             label = {
                 Text(
                     text = label,
-                    style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary)
+                    style = TextStyle(color = if (!isFocused) LightGrey else LightPrimary)
                 )
             },
             isError = isError,
-            //placeholder = { Text(text = placeHolder) },
+            placeholder = { Text(text = placeHolder) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Rounded.Lock,
                     contentDescription = "lock icon",
-                    tint = if (!isFocused) Color.Gray else LightPrimary
+                    tint = if (!isFocused) LightGrey else LightPrimary
                 )
             },
             trailingIcon = {
@@ -192,11 +185,12 @@ fun PasswordTextField(
                     passwordVisibility = !passwordVisibility
                 }) {
                     Icon(
-                        painter = if (passwordVisibility) painterResource(id = R.drawable.visibility_icon) else painterResource(
+                        painter = if (passwordVisibility) painterResource(id = R.drawable.visibility_icon) else
+                            painterResource(
                             id = R.drawable.visibility_off_icon
                         ),
                         contentDescription = "Clear Icon",
-                        tint = if (!isFocused) Color.Gray else LightPrimary
+                        tint = if (!isFocused) LightGrey else LightPrimary
                     )
 
                 }
@@ -213,7 +207,7 @@ fun PasswordTextField(
                 backgroundColor = LightError,
                 textColor = LightBackground,
                 cursorColor = LightPrimary,
-                unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(alpha = 0.3f),
+                unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else LightGrey.copy(alpha = 0.3f),
                 disabledBorderColor = Color.Transparent,
             ),
             shape = RoundedCornerShape(8.dp),
@@ -232,77 +226,6 @@ fun PasswordTextField(
         }
     }
 
-// ********************************* OtpView ********************************* //
-
-
-    /*const val PIN_VIEW_TYPE_UNDERLINE = 0
-    const val PIN_VIEW_TYPE_BORDER = 1
-
-    @Composable
-    fun PinView(
-        pinText: String,
-        onPinTextChange: (String) -> Unit,
-        digitColor: Color = LightBackground,
-        digitSize: TextUnit = 16.sp,
-        containerSize: Dp = digitSize.value.dp * 2,
-        digitCount: Int = 4,
-        type: Int = PIN_VIEW_TYPE_UNDERLINE,
-    ) {
-        BasicTextField(value = pinText,
-            onValueChange = onPinTextChange,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            decorationBox = {
-                Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                    repeat(digitCount) { index ->
-                        DigitView(index, pinText, digitColor, digitSize, containerSize, type = type)
-                        Spacer(modifier = Modifier.width(5.dp))
-                    }
-                }
-            })
-    }
-
-
-    @Composable
-    private fun DigitView(
-        index: Int,
-        pinText: String,
-        digitColor: Color = LightBackground,
-        digitSize: TextUnit,
-        containerSize: Dp,
-        type: Int = PIN_VIEW_TYPE_UNDERLINE,
-    ) {
-        val modifier = if (type == PIN_VIEW_TYPE_BORDER) {
-            Modifier
-                .width(containerSize)
-                .border(
-                    width = 1.dp, color = digitColor, shape = MaterialTheme.shapes.medium
-                )
-                .padding(bottom = 3.dp)
-        } else Modifier.width(containerSize)
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = if (index >= pinText.length) "" else pinText[index].toString(),
-                color = digitColor,
-                modifier = modifier,
-                style = MaterialTheme.typography.body1,
-                fontSize = digitSize,
-                textAlign = TextAlign.Center
-            )
-            if (type == PIN_VIEW_TYPE_UNDERLINE) {
-                Spacer(modifier = Modifier.height(2.dp))
-                Box(
-                    modifier = Modifier
-                        .background(digitColor)
-                        .height(1.dp)
-                        .width(containerSize)
-                )
-            }
-        }
-    }*/
 
 
     /************************* Description Text Field *************************************/
@@ -313,6 +236,7 @@ fun PasswordTextField(
         value: String, label: String,
         modifier: Modifier = Modifier,
         placeHolder: String = "",
+        readOnly: Boolean = false,
         keyboardType: KeyboardType = KeyboardType.Text,
         keyboardActions: KeyboardActions = KeyboardActions(),
         leadingIcon: ImageVector? = null,
@@ -329,12 +253,13 @@ fun PasswordTextField(
                 onValueChange = {
                     onChange(it)
                 },
+                readOnly = readOnly,
                 shape = RoundedCornerShape(8.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = LightPrimary,
                     textColor = LightBackground,
                     cursorColor = LightPrimary,
-                    unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else Color.Gray.copy(
+                    unfocusedBorderColor = if (value.isEmpty()) Color.Transparent else LightGrey.copy(
                         alpha = 0.3f
                     ),
                     backgroundColor = LightError,
@@ -345,7 +270,7 @@ fun PasswordTextField(
                     Text(
                         text = label,
                         overflow = TextOverflow.Ellipsis,
-                        style = TextStyle(color = if (!isFocused) Color.Gray else LightPrimary),
+                        style = TextStyle(color = if (!isFocused) LightGrey else LightPrimary),
                         maxLines = 4
                     )
                 },
@@ -357,14 +282,14 @@ fun PasswordTextField(
                 visualTransformation = VisualTransformation.None,
                 isError = errorMessage.isNotEmpty(),
                 trailingIcon = {
-                    if (value.isNotEmpty()) {
+                    if (value.isNotEmpty() && !readOnly) {
                         IconButton(onClick = {
                             onChange("")
                         }) {
                             Icon(
                                 imageVector = Icons.Rounded.Clear,
                                 contentDescription = "Clear Icon",
-                                tint = if (!isFocused) Color.Gray else LightPrimary
+                                tint = if (!isFocused) LightGrey else LightPrimary
                             )
                         }
                     }
@@ -374,7 +299,7 @@ fun PasswordTextField(
                     if (leadingIcon != null) Icon(
                         imageVector = leadingIcon,
                         contentDescription = "",
-                        tint = if (!isFocused) Color.Gray else LightPrimary
+                        tint = if (!isFocused) LightGrey else LightPrimary
                     )
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
@@ -390,4 +315,92 @@ fun PasswordTextField(
             }
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ********************************* OtpView ********************************* //
+
+
+/*const val PIN_VIEW_TYPE_UNDERLINE = 0
+const val PIN_VIEW_TYPE_BORDER = 1
+
+@Composable
+fun PinView(
+    pinText: String,
+    onPinTextChange: (String) -> Unit,
+    digitColor: Color = LightBackground,
+    digitSize: TextUnit = 16.sp,
+    containerSize: Dp = digitSize.value.dp * 2,
+    digitCount: Int = 4,
+    type: Int = PIN_VIEW_TYPE_UNDERLINE,
+) {
+    BasicTextField(value = pinText,
+        onValueChange = onPinTextChange,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        decorationBox = {
+            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                repeat(digitCount) { index ->
+                    DigitView(index, pinText, digitColor, digitSize, containerSize, type = type)
+                    Spacer(modifier = Modifier.width(5.dp))
+                }
+            }
+        })
+}
+
+
+@Composable
+private fun DigitView(
+    index: Int,
+    pinText: String,
+    digitColor: Color = LightBackground,
+    digitSize: TextUnit,
+    containerSize: Dp,
+    type: Int = PIN_VIEW_TYPE_UNDERLINE,
+) {
+    val modifier = if (type == PIN_VIEW_TYPE_BORDER) {
+        Modifier
+            .width(containerSize)
+            .border(
+                width = 1.dp, color = digitColor, shape = MaterialTheme.shapes.medium
+            )
+            .padding(bottom = 3.dp)
+    } else Modifier.width(containerSize)
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = if (index >= pinText.length) "" else pinText[index].toString(),
+            color = digitColor,
+            modifier = modifier,
+            style = MaterialTheme.typography.body1,
+            fontSize = digitSize,
+            textAlign = TextAlign.Center
+        )
+        if (type == PIN_VIEW_TYPE_UNDERLINE) {
+            Spacer(modifier = Modifier.height(2.dp))
+            Box(
+                modifier = Modifier
+                    .background(digitColor)
+                    .height(1.dp)
+                    .width(containerSize)
+            )
+        }
+    }
+}*/
 

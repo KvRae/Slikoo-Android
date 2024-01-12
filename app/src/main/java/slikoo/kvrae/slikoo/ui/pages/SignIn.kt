@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -44,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.R
 import slikoo.kvrae.slikoo.ui.components.CustomAlertDialog
 import slikoo.kvrae.slikoo.ui.components.CustomButton
@@ -57,8 +58,6 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimaryVariant
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
 import slikoo.kvrae.slikoo.ui.theme.LightSurface
 import slikoo.kvrae.slikoo.utils.AppScreenNavigator
-import slikoo.kvrae.slikoo.utils.SessionDataStore
-import slikoo.kvrae.slikoo.utils.TempSession
 
 
 @Composable
@@ -69,6 +68,7 @@ fun LoginForm(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .navigationBarsPadding()
             .background(LightPrimary.copy(alpha = 1f))
     ) {
@@ -140,13 +140,11 @@ fun LoginContent(
         color = LightSecondary,
         border = BorderStroke(1.dp, LightSecondary),
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize(1f)
                 .padding(16.dp)
                 .clip(shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
                 .background(LightSecondary),
@@ -210,12 +208,9 @@ fun LoginContent(
                     onDispose { signInViewModel.navigate = false }
                 }
             }
-            Spacer(modifier = Modifier.weight(1f))
-
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
@@ -249,6 +244,7 @@ fun LoginContent(
             }
 
             if (signInViewModel.isLoading) LoadingDialog()
+
             if (signInViewModel.isError) CustomAlertDialog(
                 title = stringResource(id = R.string.form_error),
                 message = signInViewModel.errorMessage,

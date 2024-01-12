@@ -152,7 +152,7 @@ fun EmailInput(
             )
         }
 
-        if (viewModel.onNavigate.value){
+        if (viewModel.onNavigateToCode.value){
             val toastMsg = stringResource(id = R.string.email_sent)
             DisposableEffect(Unit){
                 onScreenChange("OTP")
@@ -218,7 +218,7 @@ fun OtpInput(
                     viewModel.onCodeVerify()
                 })
         }
-        if (viewModel.onNavigate.value){
+        if (viewModel.onNavigateToPassword.value){
             val toastMsg = stringResource(id = R.string.code_verified)
             DisposableEffect(Unit){
                 onScreenChange("PASSWORD")

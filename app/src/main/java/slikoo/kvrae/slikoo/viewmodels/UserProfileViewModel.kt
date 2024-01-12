@@ -1,8 +1,6 @@
 package slikoo.kvrae.slikoo.viewmodels
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -14,24 +12,52 @@ import slikoo.kvrae.slikoo.utils.TempSession
 
 class UserProfileViewModel: ViewModel() {
 
-    var user by mutableStateOf(User())
+    val user = mutableStateOf(User())
     private val userRDS = UserRemoteDataSource()
-    var isError by mutableStateOf(false)
-    var isLoading by mutableStateOf(false)
+
+    val isError = mutableStateOf(false)
+    val isLoading = mutableStateOf(false)
+    val navigate = mutableStateOf(false)
 
     fun getUserById(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                isError = false
-                isLoading = true
-                user = async {
+                isError.value = false
+                isLoading.value = true
+                user.value = async {
                     userRDS.getUserById(token = TempSession.token,id = id)
                 }.await()
             } catch (e: Exception) {
-                isError = true
+                isError.value = true
             }
             finally {
-                isLoading =  false
+                isLoading.value =  false
+            }
+        }
+    }
+
+    fun deleteUser() {
+        var resCode = 0
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                isError.value = false
+                isLoading.value = true
+                resCode = async {
+                    userRDS.deleteUser(token = TempSession.token,)
+                }.await()
+            } catch (e: Exception) {
+                isError.value= true
+            }
+            finally {
+                isLoading.value =  false
+                when (resCode) {
+                    200 -> {
+                        navigate.value = true
+                    }
+                    else -> {
+                        isError.value = true
+                    }
+                }
             }
         }
     }

@@ -59,12 +59,15 @@ import slikoo.kvrae.slikoo.ui.fragments.profile.FeedbackFragment
 import slikoo.kvrae.slikoo.ui.fragments.profile.InvitationsFragment
 import slikoo.kvrae.slikoo.ui.fragments.profile.ReservationFragment
 import slikoo.kvrae.slikoo.ui.fragments.profile.UserOffersList
+import slikoo.kvrae.slikoo.ui.fragments.profile.makeToast
 import slikoo.kvrae.slikoo.ui.theme.LightBackground
 import slikoo.kvrae.slikoo.ui.theme.LightError
 import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondary
+import slikoo.kvrae.slikoo.utils.AppScreenNavigator
 import slikoo.kvrae.slikoo.utils.TempSession
 import slikoo.kvrae.slikoo.viewmodels.MainScreenViewModel
+import slikoo.kvrae.slikoo.viewmodels.UserProfileViewModel
 
 
 @SuppressLint("SuspiciousIndentation")
@@ -93,7 +96,8 @@ fun ProfileScreen(navController: NavController) {
         // Profile Row Menu List
         ProfileRowMenuList(
             selectedMenuIndex = selectedMenuIndex,
-            onMenuSelected = { selectedMenuIndex = it })
+            onMenuSelected = { selectedMenuIndex = it }
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -120,10 +124,12 @@ fun ProfileScreen(navController: NavController) {
     }
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun ProfileAppBar(
     navController: NavController,
-    user : User
+    user : User,
+     viewModel: UserProfileViewModel = viewModel()
 ) {
     TopAppBar(
         modifier = Modifier.statusBarsPadding(),
@@ -131,6 +137,9 @@ fun ProfileAppBar(
         actions = {
             var showMenu by remember { mutableStateOf(false) }
             var showAlertDialog by remember { mutableStateOf(false) }
+            var alertContext by remember { mutableStateOf("") }
+
+
             IconButton(onClick = { showMenu = !showMenu }) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
@@ -139,7 +148,10 @@ fun ProfileAppBar(
                 )
                 DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
                     if (user.id != TempSession.user.id)
-                    DropdownMenuItem(onClick = { showAlertDialog = true }) {
+                    DropdownMenuItem(onClick = {
+                        showAlertDialog = true
+                        alertContext = "report"
+                    }) {
                         ItemMenu(
                             text = stringResource(R.string.report),
                             icon = Icons.Default.Warning
@@ -147,7 +159,8 @@ fun ProfileAppBar(
                     }
                     if (user.id == TempSession.user.id){
                         DropdownMenuItem(onClick = {
-                            //TODO: Delete Account
+                            showAlertDialog = true
+                            alertContext = "delete"
                         }) {
                             ItemMenu(
                                 text = stringResource(R.string.delete_account),
@@ -157,9 +170,25 @@ fun ProfileAppBar(
                     }
                 }
                 CustomAlertDialog(
+                    confirmText = stringResource(R.string.yes),
+                    title = stringResource(R.string.delete_account),
+                    dismissText = stringResource(R.string.no),
+                    message = if (alertContext == "delete") stringResource(R.string.delete_account_message)
+                    else stringResource(R.string.report_message),
                     showDialog = showAlertDialog,
                     onDismiss = { showAlertDialog = false },
-                    onConfirm = { showAlertDialog = false })
+                    onConfirm = {
+                        showAlertDialog = false
+                        when (alertContext) {
+                            "delete" -> {
+                                viewModel.deleteUser()
+                            }
+                            "report" -> {
+                                makeToast(navController.context, "Votre demande a été envoyée")
+                            }
+                        }
+                    }
+                )
             }
         },
         title = {},
@@ -177,6 +206,21 @@ fun ProfileAppBar(
             }
         },
     )
+
+    if (viewModel.navigate.value){
+        val toastMessage = stringResource(R.string.account_deleted)
+        DisposableEffect(Unit) {
+            navController.navigate(AppScreenNavigator.SignInAppScreen.route){
+                popUpTo(AppScreenNavigator.SignInAppScreen.route){
+                    inclusive = true
+                }
+                makeToast(navController.context, toastMessage)
+            }
+            onDispose {}
+
+        }
+        if (viewModel.isLoading.value) LoadingScreen()
+    }
 }
 
 @Composable

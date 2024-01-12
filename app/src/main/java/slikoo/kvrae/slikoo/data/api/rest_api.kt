@@ -86,12 +86,6 @@ interface ApiServices {
         @Path("id") id: Int
     ): Response<UserResponse>
 
-    @Headers("Content-Type: application/json")
-    @GET("getUsetdetailsbyId/{id}")
-    suspend fun getUserDetailsById(
-        @Header("Authorization") token: String,
-        @Path("id") id: Int
-    ): Response<UserResponse>
 
     //----------------------- Invitations ----------------------------------//
     @Headers("Content-Type: application/json")
@@ -340,6 +334,12 @@ interface ApiServices {
     suspend fun deleteMeal(
         @Header("Authorization") token: String,
         @Path("idrepas") id: Int
+    ): Response<ResponseSlk>
+
+    @Headers("Content-Type: application/json")
+    @DELETE("deleteUser")
+    suspend fun deleteUser(
+        @Header("Authorization") token: String,
     ): Response<ResponseSlk>
 }
 

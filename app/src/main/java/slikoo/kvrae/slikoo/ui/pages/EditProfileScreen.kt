@@ -216,10 +216,11 @@ fun EditProfileScreen(navController: NavController) {
                     CustomAlertDialogWithContent(
                         title = stringResource(id = R.string.add_rib),
                         content = {
+                            user.RIB = "FR2030004500550060667077899"
                             CustomTextField(
                                 onChange = { user = user.copy(RIB = it) },
                                 value = user.RIB ?: "",
-                                isError = !viewModel.verifyRib(user.RIB ?: ""),
+                                isError = !viewModel.verifyRib(user.RIB),
                                 errorMessage = stringResource(id = R.string.invalid_rib),
                                 placeHolder = stringResource(id = R.string.add_rib),
                                 label = viewModel.user.RIB ?: stringResource(id = R.string.add_rib),

@@ -144,8 +144,36 @@ class MealRemoteDataSource {
 
     }
 
-    fun updateMeal(token: String, meal: Meal, mealBanner: File, id: Int): Int {
-        TODO("Not yet implemented")
+    suspend fun updateMeal(token: String, meal: Meal, mealBanner: File, id: Int): Int {
+        val bannerRequestBody = mealBanner.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+        return try {
+            val response = RetrofitInstance
+                .getRetrofitInstance()
+                .create(ApiServices::class.java)
+                .createMeal(token= "Bearer $token",
+                    localisation = meal.localisation.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    type = meal.type.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    theme = meal.theme.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    genres = meal.genre.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    genrenourriture = meal.genrenourriture.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    description = meal.description.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    prix = meal.prix.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    nbrPersonne = meal.nbr.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    date = meal.date.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    heure = meal.heure.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    avatar = MultipartBody.Part.createFormData("avatar", mealBanner.name, bannerRequestBody),)
+            if (response.isSuccessful) {
+                200
+            }
+            else {
+                Log.e("Meals Error", response.errorBody().toString())
+                400
+            }
+        }
+        catch (e: Exception){
+            Log.e("Meals Error", e.message.toString())
+            500
+        }
     }
 
     suspend fun ifUserParticipated(token: String, mealId: Int, userId: Int): ResponseSlk {

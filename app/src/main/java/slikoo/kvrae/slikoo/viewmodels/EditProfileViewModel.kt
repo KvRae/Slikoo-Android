@@ -75,9 +75,9 @@ class EditProfileViewModel : ViewModel() {
         }
     }
 
-    fun verifyRib(rib: String) : Boolean {
+    fun verifyRib(rib: String?) : Boolean {
         val ribRegex = Regex("^FR/d{2}/s?/d{5}/s?/d{5}/s?/d{11}/s?/d{2}$")
-        return ribRegex.matches(rib)
+        return ribRegex.matches(rib ?: "")
 
     }
 

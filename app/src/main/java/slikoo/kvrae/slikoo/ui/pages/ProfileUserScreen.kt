@@ -36,7 +36,7 @@ fun UserProfileScreen(
             onDispose { }
         }
     }
-    if (viewModel.user.id > 0)
+    if (viewModel.user.value.id > 0)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -44,7 +44,7 @@ fun UserProfileScreen(
                 .background(LightSecondary)
         ) {
             // Profile Header
-            ProfileHeader(navController = navController, user = viewModel.user)
+            ProfileHeader(navController = navController, user = viewModel.user.value)
             Spacer(modifier = Modifier.height(8.dp))
             // Profile Content
             Column(
@@ -55,14 +55,14 @@ fun UserProfileScreen(
                     .padding(16.dp),
             ) {
 
-                BioFragment(user = viewModel.user)
+                BioFragment(user = viewModel.user.value)
                 Spacer(modifier = Modifier.weight(1f))
             }
         }
-    if (viewModel.user.id == 0)
+    if (viewModel.user.value.id == 0)
         TextElementScreen(
             backgound = LightSecondary,
             text = stringResource(R.string.no_user_text)
         )
-    if (viewModel.isLoading) LoadingScreen()
+    if (viewModel.isLoading.value) LoadingScreen()
 }

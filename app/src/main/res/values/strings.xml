@@ -211,4 +211,9 @@
     <string name="postal_address">Adresse Postal</string>
     <string name="no_internet_connection">Vous n\'etes pas connecté(e)</string>
     <string name="empty_string" />
+    <string name="clear_icon">Clear Icon</string>
+    <string name="meal_description">Description du repas</string>
+    <string name="delete_account_message">Veuillez-vous supprimer \nvotre compte définitivement? \nToutes vos données seront supprimées!</string>
+    <string name="report_message">Êtes-vous sûr que \nvous allez signaler \ncet utilisateur ?</string>
+    <string name="account_deleted">Vos compte a eté supprimer</string>
 </resources>

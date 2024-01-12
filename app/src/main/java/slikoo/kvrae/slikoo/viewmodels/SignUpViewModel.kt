@@ -11,7 +11,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import slikoo.kvrae.slikoo.data.datasources.entities.User
 import slikoo.kvrae.slikoo.data.datasources.remote.UserRemoteDataSource
-import slikoo.kvrae.slikoo.utils.TempSession
 import java.io.File
 
 class SignUpViewModel: ViewModel() {
@@ -25,7 +24,7 @@ class SignUpViewModel: ViewModel() {
     var registerResult by mutableStateOf("")
 
 
-    var user = mutableStateOf(TempSession.user)
+    var user = mutableStateOf(User())
 
     var confirmPassword = mutableStateOf("")
 

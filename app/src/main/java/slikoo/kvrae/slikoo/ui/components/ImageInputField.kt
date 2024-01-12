@@ -44,20 +44,22 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 @Composable
 fun ImagePickerField(
     imageUrl : Uri? = null ,
-    onImageSelected: (Uri?) -> Unit
+    onImageSelected: (Uri?) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var selectedImageUrl by remember { mutableStateOf(imageUrl) }
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { pickedUri ->
-            // Update the local variable with the picked URI or keep the existing one
             selectedImageUrl = pickedUri ?: selectedImageUrl
             onImageSelected(selectedImageUrl)
         }
-        )
+    )
+
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(LightError)
@@ -109,9 +111,6 @@ fun ImagePickerField(
                 }
         }
     }
-//    BackHandler {
-//        onImageSelected(imageUrl)
-//    }
 }
 
 

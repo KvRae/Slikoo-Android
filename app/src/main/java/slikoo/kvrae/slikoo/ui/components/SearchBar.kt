@@ -46,12 +46,16 @@ import slikoo.kvrae.slikoo.ui.theme.LightPrimary
 import slikoo.kvrae.slikoo.ui.theme.LightSecondaryVariant
 
 @Composable
-fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
-    var searchText by remember { mutableStateOf("") }
+fun SearchBar(
+    onSearch: (String) -> Unit,
+    onValueChange: (String) -> Unit,
+    searchText: String = "",
+    modifier: Modifier = Modifier) {
+
     val focusManager = LocalFocusManager.current
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(65.dp)
             .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
@@ -66,8 +70,8 @@ fun SearchBar(onSearch: (String) -> Unit, modifier: Modifier = Modifier) {
         ) {
             TextField(
                 value = searchText,
-                onValueChange = { text ->
-                    searchText = text
+                onValueChange = {
+                    onValueChange(it)
                 },
                 modifier = Modifier
                     .fillMaxWidth(),
