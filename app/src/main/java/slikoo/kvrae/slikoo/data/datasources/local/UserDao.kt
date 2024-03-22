@@ -5,10 +5,10 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import slikoo.kvrae.slikoo.data.datasources.entities.UserDb
 
 @Dao
 interface UserDao {
+    /*
     @Insert
     fun insertUser(user : UserDb)
 
@@ -22,5 +22,5 @@ interface UserDao {
     fun deleteUser(user : UserDb)
 
 
-
+*/
 }

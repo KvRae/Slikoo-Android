@@ -1,6 +1,5 @@
 package slikoo.kvrae.slikoo.data.repository
 
-import slikoo.kvrae.slikoo.data.datasources.entities.UserDb
 import slikoo.kvrae.slikoo.data.datasources.local.UserDao
 
 class UserRepository(private val userDao: UserDao) {
@@ -18,9 +17,9 @@ class UserRepository(private val userDao: UserDao) {
 //        return session.getUserToken()
 //    }
 
-    suspend fun getUser(email :String) : UserDb {
-        return userDao.getUser(email)
-    }
+//    suspend fun getUser(email :String) : UserDb {
+//        return userDao.getUser(email)
+//    }
 
 
 

@@ -34,29 +34,28 @@ data class User(
     var ville: String= ""
 )
 
-@Entity(tableName = "user")
-data class UserDb (
-    val Hasdetails: Boolean,
-    val RIB: String,
-    val adressepostal: String,
-    val avatar: String,
-    val avatarbanner: String,
-    val cinavatar: String,
-    val codepostal: String,
-    val datecreation: String,
-    val description: String,
-    val diplome: String,
-    val email: String,
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val nom: String,
-    val numtel: String,
-    var password: String,
-    val pays: String,
-    val prenom: String,
-    //val roles: List<String>,
-    val sexe: String,
-    val specialite: String,
-    val userIdentifier: String,
-    val verified: Boolean,
-    val ville: String)
+//@Entity(tableName = "user")
+//data class UserDb (
+//    val Hasdetails: Boolean,
+//    val RIB: String,
+//    val adressepostal: String,
+//    val avatar: String,
+//    val avatarbanner: String,
+//    val cinavatar: String,
+//    val codepostal: String,
+//    val datecreation: String,
+//    val description: String,
+//    val diplome: String,
+//    val email: String,
+//    @PrimaryKey(autoGenerate = true)
+//    val id: Int,
+//    val nom: String,
+//    val numtel: String,
+//    var password: String,
+//    val pays: String,
+//    val prenom: String,
+//    val sexe: String,
+//    val specialite: String,
+//    val userIdentifier: String,
+//    val verified: Boolean,
+//    val ville: String)
