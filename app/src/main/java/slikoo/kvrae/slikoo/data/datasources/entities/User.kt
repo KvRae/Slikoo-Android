@@ -30,7 +30,7 @@ data class User(
     var sexe: String= "",
     var specialite: String= "",
     var userIdentifier: String= "",
-    var verified: Boolean= false,
+    var isVerified: Boolean= false,
     var ville: String= ""
 )
 

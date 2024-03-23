@@ -53,7 +53,7 @@ fun SettingsScreen(navController: NavController, user: User) {
             content = {
                 item {
                     SettingCard(title = user.nom + " " + user.prenom,
-                        subtitle = if (user.verified) stringResource(R.string.verified)
+                        subtitle = if (user.isVerified) stringResource(R.string.verified)
                         else stringResource(R.string.not_verified),
                         actionIcon = Icons.Filled.Person,
                         avatar = if (user.avatar != "") user.avatarUrl + user.avatar else "",

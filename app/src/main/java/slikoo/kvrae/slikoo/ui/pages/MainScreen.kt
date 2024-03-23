@@ -144,7 +144,7 @@ fun MainScreen(navController: NavController,
                 )
         },
         floatingActionButton = {
-            if (title == MainScreenNavigator.RecipeScreen.route && viewModel.user.verified && viewModel.user.Hasdetails)
+            if (title == MainScreenNavigator.RecipeScreen.route && viewModel.user.isVerified && viewModel.user.Hasdetails)
                 FloatingActionButton(
                     onClick = { navController.navigate("Organiser" ) },
                     backgroundColor = LightPrimary,
@@ -172,7 +172,7 @@ fun MainScreen(navController: NavController,
                 }
 
 
-                if (!viewModel.user.verified) {
+                if (!viewModel.user.isVerified) {
                     val msg = stringResource(id = R.string.complete_profile)
                     val msgAction = stringResource(id = R.string.ok)
                     DisposableEffect(scaffoldState.snackbarHostState) {
