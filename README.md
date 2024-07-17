@@ -127,7 +127,8 @@ package | description
 ## Download the app
 
 You can download the latest version of Slikoo from both:
-[Google Play Store](https://play.google.com/store/apps/details?id=com.example.slikoo)  
+[Google Play Store](https://play.google.com/store/apps/details?id=com.slikoo.slikoo&hl=en)
+
 [HUAWEI AppGallery](https://www.amazon.com/dp/B08Z3JQZQD).
 
 
